@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body,
+html,
+body > div {
+  transform: none !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: 255, 255, 255;
+  --primary-100: 242, 245, 246;
+  --primary-200: 231, 234, 235;
+  --primary-300: 226, 229, 229;
+  --primary-400: 206, 209, 209;
+  --primary-action: 7, 124, 224;
+  --primary-success: 21, 172, 137;
+  --primary-error: 243, 89, 89;
+  --primary-warning: 233, 207, 74;
+  --primary-warning-light: 243, 231, 168;
+}
+.dark {
+  --primary: 7, 11, 15;
+  --primary-100: 21, 26, 41;
+  --primary-200: 32, 41, 58;
+  --primary-300: 54, 65, 83;
+  --primary-400: 78, 95, 113;
+  --primary-action: 7, 124, 224;
+  --primary-success: 21, 172, 137;
+  --primary-error: 243, 89, 89;
+  --primary-warning: 233, 207, 74;
+  --primary-warning-light: 243, 231, 168;
+}
+
+/* REACT TOSTIFY */
+
+.toastify-error-container {
+  background-color: #ef4444 !important;
+}
+
+.toastify-error-container > button {
+  color: white !important;
+  opacity: 1;
+}
