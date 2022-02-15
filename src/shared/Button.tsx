@@ -32,6 +32,7 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
       ]}
       onClick={props.onClick}
     >
+      {/* TODO: make icon color respond to theme */}
       {LeftIcon && (
         <LeftIcon size={16} color={primary ? '#070B0F' : '#F2F5F6'} tw='mr-2' />
       )}
@@ -39,12 +40,13 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
         md
         css={[
           tw`flex-grow`,
-          primary && tw`text-secondary-100`,
+          primary && tw`text-secondary`,
           props.action && tw`text-primary-100`,
         ]}
       >
         {props.text}
       </Txt>
+      {/* TODO: make icon color respond to theme */}
       {RightIcon && (
         <RightIcon
           size={16}

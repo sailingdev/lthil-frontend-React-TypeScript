@@ -45,6 +45,8 @@ module.exports = {
         DEFAULT: generateColorClass('secondary'),
         100: generateColorClass('secondary-100'),
         200: generateColorClass('secondary-200'),
+        300: generateColorClass('secondary-300'),
+        400: generateColorClass('secondary-400'),
       },
       error: {
         DEFAULT:  generateColorClass('primary-error'),
