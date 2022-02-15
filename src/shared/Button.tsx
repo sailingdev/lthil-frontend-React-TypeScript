@@ -7,10 +7,10 @@ import tw from 'twin.macro'
 interface IButtonProps extends ICSSProps {
   type?: any
   primary?: boolean | undefined
-  light?: boolean | undefined
-  cancel?: boolean | undefined
+  action?: boolean | undefined
   full?: boolean | undefined
   flat?: boolean | undefined
+  order?: 'iconleft' | 'iconright'
   icon?: any
   text: string
   onClick?: MouseEventHandler<HTMLButtonElement>
@@ -18,7 +18,8 @@ interface IButtonProps extends ICSSProps {
 }
 
 export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
-  const primary = !props.light && !props.cancel && !props.flat
+  const primary = !props.action && !props.flat
+  const order = !props.order ? 'iconleft' : props.order
   const Icon = props.icon
   return (
     <button
@@ -26,22 +27,16 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
       className={props.className}
       css={[
         tw`border-0 rounded-md cursor-pointer flex flex-row items-center px-3 py-2.5`,
-        // primary && tw`bg-primary-600  hover:bg-primary-700`,
-        // props.light &&
-        //   tw`bg-primary-100  hover:bg-primary-200  border-gray-200 border-0`,
-        // props.cancel &&
-        //   tw`bg-white hover:bg-gray-50 border-gray-200 border-width[1.5px]`,
-        // props.flat && tw`bg-none`,
-        // props.full && tw`w-full`,
+        primary && tw`bg-primary  hover:bg-primary-300`,
+        props.action &&
+          tw`bg-action  hover:bg-primary-200  border-primary-200 border-0`,
+        props.flat && tw`bg-none`,
+        props.full && tw`w-full`,
       ]}
       onClick={props.onClick}
     >
       {Icon && (
-        <Icon
-          width={20}
-          color={primary ? 'white' : props.light ? '#39749B' : '#6B7280'}
-          tw='mr-3'
-        />
+        <Icon width={20} color={primary ? 'white' : '#39749B'} tw='mr-3' />
       )}
       <Txt
         md
