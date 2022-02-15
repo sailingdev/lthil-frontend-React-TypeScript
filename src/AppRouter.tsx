@@ -3,7 +3,6 @@ import 'twin.macro'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
 import { DashboardPage } from './pages/DashboardPage'
-import { isMobile } from './utils'
 import tw from 'twin.macro'
 
 /** @jsxImportSource @emotion/react */
@@ -22,7 +21,7 @@ const PrivateRouter = () => {
     <div
       css={[
         tw`flex bg-primary min-h-screen`,
-        isMobile ? tw`flex-col` : tw`flex-row`,
+        // isMobile ? tw`flex-col` : tw`flex-row`,
       ]}
     >
       {/* <Sidebar /> */}

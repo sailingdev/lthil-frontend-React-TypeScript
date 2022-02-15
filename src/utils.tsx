@@ -16,5 +16,11 @@ export const formatDate = (date: Date, options?: IFormatDateOptions): any => {
   return uppercase ? startDate.toUpperCase() : startDate
 }
 
-export const MOBILE_BREAKPOINT = 800
-export const isMobile = window.screen.width < MOBILE_BREAKPOINT
+export const TABLET_BREAKPOINT = 480
+export const DESKTOP_BREAKPOINT = 1024
+export const isDesktop = window.screen.width >= DESKTOP_BREAKPOINT
+export const isTablet = window.screen.width >= TABLET_BREAKPOINT
+
+export interface IBaseProps {
+  className?: string | undefined
+}
