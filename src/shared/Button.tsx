@@ -9,47 +9,49 @@ interface IButtonProps extends ICSSProps {
   primary?: boolean | undefined
   action?: boolean | undefined
   full?: boolean | undefined
-  flat?: boolean | undefined
-  order?: 'iconleft' | 'iconright'
-  icon?: any
+  leftIcon?: any
+  rightIcon?: any
   text: string
   onClick?: MouseEventHandler<HTMLButtonElement>
   className?: string | undefined
 }
 
 export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
-  const primary = !props.action && !props.flat
-  const order = !props.order ? 'iconleft' : props.order
-  const Icon = props.icon
+  const primary = !props.action
+  const LeftIcon = props.leftIcon
+  const RightIcon = props.rightIcon
   return (
     <button
       type={props.type ?? 'button'}
       className={props.className}
       css={[
         tw`border-0 rounded-md cursor-pointer flex flex-row items-center px-3 py-2.5`,
-        primary && tw`bg-primary  hover:bg-primary-300`,
-        props.action &&
-          tw`bg-action  hover:bg-primary-200  border-primary-200 border-0`,
-        props.flat && tw`bg-none`,
+        primary && tw`bg-primary-200`,
+        props.action && tw`bg-action`,
         props.full && tw`w-full`,
       ]}
       onClick={props.onClick}
     >
-      {Icon && (
-        <Icon width={20} color={primary ? 'white' : '#39749B'} tw='mr-3' />
+      {LeftIcon && (
+        <LeftIcon size={16} color={primary ? '#070B0F' : '#F2F5F6'} tw='mr-2' />
       )}
       <Txt
         md
         css={[
           tw`flex-grow`,
-          // primary && tw`text-white`,
-          // props.light && tw`text-primary-700`,
-          // props.cancel && tw`text-gray-700`,
-          // props.flat && tw`text-gray-500`,
+          primary && tw`text-secondary-100`,
+          props.action && tw`text-primary-100`,
         ]}
       >
         {props.text}
       </Txt>
+      {RightIcon && (
+        <RightIcon
+          size={16}
+          color={primary ? '#070B0F' : '#F2F5F6'}
+          tw='ml-2'
+        />
+      )}
     </button>
   )
 }

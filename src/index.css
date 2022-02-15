@@ -16,6 +16,9 @@ body > div {
   --primary-200: 231, 234, 235;
   --primary-300: 226, 229, 229;
   --primary-400: 206, 209, 209;
+  --secondary: 7, 11, 15;
+  --secondary-100: 78, 95, 113;
+  --secondary-200: 164, 177, 190;
   --primary-action: 7, 124, 224;
   --primary-success: 21, 172, 137;
   --primary-error: 243, 89, 89;
@@ -28,6 +31,9 @@ body > div {
   --primary-200: 32, 41, 58;
   --primary-300: 54, 65, 83;
   --primary-400: 78, 95, 113;
+  --secondary: 242, 245, 246;
+  --secondary-100: 164, 177, 190;
+  --secondary-200: 164, 177, 190;
   --primary-action: 7, 124, 224;
   --primary-success: 21, 172, 137;
   --primary-error: 243, 89, 89;
