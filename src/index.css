@@ -21,6 +21,9 @@ body > div {
   --secondary-200: 164, 177, 190;
   --secondary-300: 32, 41, 58;
   --secondary-400: 78, 95, 113;
+  --font: 7, 11, 15;
+  --font-100: 78, 95, 113;
+  --font-200: 164, 177, 190;
   --primary-action: 7, 124, 224;
   --primary-success: 21, 172, 137;
   --primary-error: 243, 89, 89;
@@ -41,6 +44,9 @@ body > div {
   --secondary-200: 231, 234, 235;
   --secondary-300: 226, 229, 229;
   --secondary-400: 206, 209, 209;
+  --font: 242, 245, 246;
+  --font-100: 164, 177, 190;
+  --font-200: 164, 177, 190;
   --primary-action: 7, 124, 224;
   --primary-success: 21, 172, 137;
   --primary-error: 243, 89, 89;
