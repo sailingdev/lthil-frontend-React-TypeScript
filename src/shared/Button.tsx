@@ -33,8 +33,13 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
       onClick={props.onClick}
     >
       {/* TODO: make icon color respond to theme */}
+      {/* TODO BUTTON COLOR */}
       {LeftIcon && (
-        <LeftIcon size={16} color={primary ? '#070B0F' : '#F2F5F6'} tw='mr-2' />
+        <LeftIcon
+          size={16}
+          // color={primary ? '#070B0F' : '#F2F5F6'}
+          tw='mr-2 text-primary'
+        />
       )}
       <Txt
         md
