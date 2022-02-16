@@ -1,6 +1,6 @@
 import 'twin.macro'
 
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 
 import { DashboardPage } from './pages/DashboardPage'
 import tw from 'twin.macro'
@@ -9,10 +9,10 @@ import tw from 'twin.macro'
 
 const PublicRouter = () => {
   return (
-    <Switch>
-      {/* <Route path='/login' component={LoginPage} /> */}
-      <Redirect to='/login' />
-    </Switch>
+    <Routes>
+      {/* <Route path='/login' element={<LoginPage />} /> */}
+      {/* <Route path='*' element={<Navigate to='/' />} /> */}
+    </Routes>
   )
 }
 
@@ -26,11 +26,10 @@ const PrivateRouter = () => {
     >
       {/* <Sidebar /> */}
       <div tw='flex-grow'>
-        <Switch>
-          <Route exact path='/' component={DashboardPage} />
-
-          <Redirect to='/' />
-        </Switch>
+        <Routes>
+          <Route path='/' element={<DashboardPage />} />
+          <Route path='*' element={<Navigate to='/' />} />
+        </Routes>
       </div>
     </div>
   )
