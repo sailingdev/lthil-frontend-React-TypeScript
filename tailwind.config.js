@@ -4,8 +4,8 @@ const generateColorClass = (variable) => {
       ? `rgba(var(--${variable}), ${opacityValue})`
       : `rgb(var(--${variable}))`
 }
-const generateFont = (variable) => {
-  return () => [`var(--${variable})`]
+const generateFont = (device, variable) => {
+  return [`var(--${device}-font-fontsize-${variable})`, `var(--${device}-font-lineheight-${variable})`]
 }
 
 module.exports = {
@@ -19,14 +19,22 @@ module.exports = {
       sans: ['Raleway', 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'],
     },
     fontSize: {
-      'caption-medium': generateFont('font-caption-medium')
-    //   xs: ['12px', '16px'],
-    //   sm: ['14px', '20px'],
-    //   md: ['14px', '20px'],
-    //   l: ['16px', '24px'],
-    //  'xl': ['18px', '24px'],
-    //  '2xl': ['24px', '32px'],
-    //  '3xl': ['30px', '36px'],
+      mobile: {
+        'caption-medium': generateFont('mobile', 'caption-medium')
+      },
+      tablet: {
+        'caption-medium': generateFont('tablet', 'caption-medium')
+      },
+      desktop: {
+        'caption-medium': generateFont('desktop', 'caption-medium')
+      }
+      //   xs: ['12px', '16px'],
+      //   sm: ['14px', '20px'],
+      //   md: ['14px', '20px'],
+      //   l: ['16px', '24px'],
+      //  'xl': ['18px', '24px'],
+      //  '2xl': ['24px', '32px'],
+      //  '3xl': ['30px', '36px'],
     },
     // // TODO
     // screens: {

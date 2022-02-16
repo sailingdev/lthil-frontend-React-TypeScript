@@ -4,6 +4,7 @@ import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
 /** @jsxImportSource @emotion/react */
 import { Cube } from 'phosphor-react'
+import { Txt } from '../shared/Txt'
 
 export const DashboardPage = () => {
   return (
@@ -17,6 +18,9 @@ export const DashboardPage = () => {
         <Button text='button' action leftIcon={Cube} />
         <Button text='button' action rightIcon={Cube} />
         <Button text='button' action leftIcon={Cube} rightIcon={Cube} />
+        <div tw='bg-primary'>
+          <Txt.CaptionMedium>drek</Txt.CaptionMedium>
+        </div>
       </div>
     </ContentContainer>
   )

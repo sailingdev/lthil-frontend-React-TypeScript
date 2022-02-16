@@ -16,7 +16,11 @@ export const Txt = {
   CaptionMedium: (props: ITxtProps) => (
     <InnerText
       {...props}
-      css={[tw`text-error`, tw`tablet:font-bold`, tw`desktop:text-success`]}
+      css={[
+        tw`text-secondary font-medium text-mobile-caption-medium`,
+        tw`tablet:text-tablet-caption-medium`,
+        tw`desktop:text-desktop-caption-medium`,
+      ]}
     />
   ),
 }
