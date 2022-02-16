@@ -19,7 +19,8 @@ export const DashboardPage = () => {
         <Button text='button' action rightIcon={Cube} />
         <Button text='button' action leftIcon={Cube} rightIcon={Cube} />
         <div tw='bg-primary'>
-          <Txt.CaptionMedium>drek</Txt.CaptionMedium>
+          <Txt.CaptionMedium>Sample text</Txt.CaptionMedium>
+          <Txt.CaptionMedium>Sample text</Txt.CaptionMedium>
         </div>
       </div>
     </ContentContainer>
