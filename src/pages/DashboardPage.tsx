@@ -5,6 +5,7 @@ import { ContentContainer } from '../shared/ContentContainer'
 /** @jsxImportSource @emotion/react */
 import { Cube } from 'phosphor-react'
 import { Txt } from '../shared/Txt'
+import { NavigationMenu } from '../shared/NavigationMenu'
 
 export const DashboardPage = () => {
   return (
@@ -22,6 +23,7 @@ export const DashboardPage = () => {
           <Txt.CaptionMedium>Sample text</Txt.CaptionMedium>
           <Txt.CaptionMedium>Sample text</Txt.CaptionMedium>
         </div>
+        <NavigationMenu />
       </div>
     </ContentContainer>
   )
