@@ -4,6 +4,7 @@ import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
 /** @jsxImportSource @emotion/react */
 import { Cube } from 'phosphor-react'
+import { NavigationMenu } from '../shared/NavigationMenu'
 
 export const DashboardPage = () => {
   return (
@@ -17,6 +18,7 @@ export const DashboardPage = () => {
         <Button text='button' action leftIcon={Cube} />
         <Button text='button' action rightIcon={Cube} />
         <Button text='button' action leftIcon={Cube} rightIcon={Cube} />
+        <NavigationMenu />
       </div>
     </ContentContainer>
   )
