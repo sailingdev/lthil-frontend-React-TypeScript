@@ -27,14 +27,8 @@ body > div {
   --primary-warning: 233, 207, 74;
   --primary-warning-light: 243, 231, 168;
 
-  --desktop-font-fontsize-caption-medium: 14px;
-  --desktop-font-lineheight-caption-medium: 22.4px;
-  --tablet-font-fontsize-caption-medium: 12px;
-  --tablet-font-lineheight-caption-medium: 19.2px;
-  --mobile-font-fontsize-caption-medium: 12px;
-  --mobile-font-lineheight-caption-medium: 19.2px;
-
-  --font-caption-medium: '12px', '16px';
+  --fontsize-caption-medium: 12px;
+  --lineheight-caption-medium: 19.2px;
 }
 .dark {
   --primary: 7, 11, 15;
@@ -52,6 +46,20 @@ body > div {
   --primary-error: 243, 89, 89;
   --primary-warning: 233, 207, 74;
   --primary-warning-light: 243, 231, 168;
+}
+
+@media screen and (min-width: 480px) {
+  :root {
+   --fontsize-caption-medium: 12px;
+   --lineheight-caption-medium: 19.2px;
+ }
+}
+
+@media screen and (min-width: 1024px) {
+   :root {
+    --fontsize-caption-medium: 14px;
+    --lineheight-caption-medium: 22.4px;
+  }
 }
 
 /* REACT TOSTIFY */

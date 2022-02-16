@@ -17,9 +17,9 @@ export const Txt = {
     <InnerText
       {...props}
       css={[
-        tw`text-secondary font-medium text-mobile-caption-medium`,
-        tw`tablet:text-tablet-caption-medium`,
-        tw`desktop:text-desktop-caption-medium`,
+        tw`text-secondary font-medium text-caption-medium`,
+        tw`tablet:`,
+        tw`desktop:`,
       ]}
     />
   ),
