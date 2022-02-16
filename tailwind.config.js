@@ -4,6 +4,9 @@ const generateColorClass = (variable) => {
       ? `rgba(var(--${variable}), ${opacityValue})`
       : `rgb(var(--${variable}))`
 }
+const generateFont = (variable) => {
+  return () => [`var(--${variable})`]
+}
 
 module.exports = {
   purge: [],
@@ -13,18 +16,17 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      // TODO
-      // sans: ['Inter', 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'],
+      sans: ['Raleway', 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'],
     },
-    // TODO
     fontSize: {
-      xs: ['12px', '16px'],
-      sm: ['14px', '20px'],
-      md: ['14px', '20px'],
-      l: ['16px', '24px'],
-     'xl': ['18px', '24px'],
-     '2xl': ['24px', '32px'],
-     '3xl': ['30px', '36px'],
+      'caption-medium': generateFont('font-caption-medium')
+    //   xs: ['12px', '16px'],
+    //   sm: ['14px', '20px'],
+    //   md: ['14px', '20px'],
+    //   l: ['16px', '24px'],
+    //  'xl': ['18px', '24px'],
+    //  '2xl': ['24px', '32px'],
+    //  '3xl': ['30px', '36px'],
     },
     // // TODO
     // screens: {
@@ -69,10 +71,11 @@ module.exports = {
     extend: {
       maxWidth: {
         1920: '1920px'
-      }
-      
-    
-      
+      },
+      screens: {
+        'tablet': '480px',
+        'desktop': '1024px'
+      },
     },
   },
   variants: {

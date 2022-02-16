@@ -1,13 +1,9 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { ContentContainer } from '../shared/ContentContainer'
-
 import { Button } from '../shared/Button'
-
+import { ContentContainer } from '../shared/ContentContainer'
+/** @jsxImportSource @emotion/react */
 import { Cube } from 'phosphor-react'
-
-// document.documentElement.classList.toggle('dark')
 
 export const DashboardPage = () => {
   return (

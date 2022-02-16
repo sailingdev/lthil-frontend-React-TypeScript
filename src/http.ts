@@ -7,11 +7,6 @@ export const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use((req) => {
-  const token = window.localStorage.getItem('token')
-  if (token) {
-    // @ts-ignore
-    req.headers['Authorization'] = `Bearer ${token}`
-  }
   return req
 })
 
