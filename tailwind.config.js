@@ -19,7 +19,16 @@ module.exports = {
       sans: ['Raleway', 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'],
     },
     fontSize: {
-      'caption-medium': generateFont('caption-medium')
+      'mobile-medium': generateFont('caption-medium'),
+      'caption-medium': generateFont('caption-medium'),
+      'body2-regular': generateFont('body2-regular'),
+      'body2-bold': generateFont('body2-bold'),
+      'body1-regular': generateFont('body1-regular'),
+      'button-medium': generateFont('button-medium'),
+      'body1-bold': generateFont('body1-bold'),
+      'input-text': generateFont('input-text'),
+      'heading2': generateFont('heading2'),
+      'heading1': generateFont('heading1'),
       //   xs: ['12px', '16px'],
       //   sm: ['14px', '20px'],
       //   md: ['14px', '20px'],
