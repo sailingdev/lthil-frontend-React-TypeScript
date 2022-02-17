@@ -36,7 +36,7 @@ export const NavigationMenu = (props: { onItemClick?(): void }) => {
               to={i.url}
               key={i.url}
               css={[
-                tw`text-secondary flex flex-col align-items[center] py-4 cursor-pointer px-2 rounded-md w-auto`,
+                tw`text-secondary flex flex-col align-items[center] cursor-pointer px-2 rounded-md w-auto`,
                 isSelected && tw`font-bold`,
               ]}
               onClick={() => props.onItemClick && props.onItemClick()}
