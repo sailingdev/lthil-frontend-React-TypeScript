@@ -1,30 +1,26 @@
-/** @jsxImportSource @emotion/react */
-import { useState } from 'react'
-import tw from 'twin.macro'
-import Switch from 'react-switch'
-import { Button } from './Button'
-import { ArrowDown } from 'phosphor-react'
+import { useCallback, useState } from 'react'
 
-import { NavigationMenu } from './NavigationMenu'
-import { ReactComponent as Logo } from '../assets/logoLight.svg'
+/** @jsxImportSource @emotion/react */
+import { ArrowDown } from 'phosphor-react'
+import { Button } from './Button'
 import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
+import { ReactComponent as Logo } from '../assets/logoLight.svg'
+import { NavigationMenu } from './NavigationMenu'
+import Switch from 'react-switch'
 import { ReactComponent as SwitchDark } from '../assets/switchDark.svg'
 import { ReactComponent as SwitchLight } from '../assets/switchLight.svg'
-import { Txt } from './Txt'
+import tw from 'twin.macro'
 
 export const Header = () => {
   const [isLightMode, setLightMode] = useState(true)
 
-  const onThemeChange = () => {
+  const onThemeChange = useCallback(() => {
     document.documentElement.classList.toggle('dark')
     setLightMode(!isLightMode)
-    // checked
-    //   ? (document.getElementById('svg-logo-text')!.style.fill = '#F2F5F6')
-    //   : (document.getElementById('svg-logo-text')!.style.fill = '#2A333C')
-  }
+  }, [isLightMode])
 
   return (
-    <div tw='max-w-1920 w-[calc(100% - 3rem)] my-6 mx-auto flex flex-row items-start justify-between'>
+    <div tw='max-w-1920 w-[calc(100% - 9rem)] my-6 mx-auto flex flex-row items-start justify-between'>
       <span tw='flex flex-row items-start'>
         <Logo css={[tw`width[128px] height[32px]`]} />
         <span tw='mt-1 ml-24'>
@@ -53,7 +49,6 @@ export const Header = () => {
       <span tw='flex flex-row items-center gap-2'>
         <Button text='Ethereum' leftIcon={CurrEth} rightIcon={ArrowDown} />
         <Button text='Connect wallet' action />
-        <Txt.CaptionMedium>TODO:menu</Txt.CaptionMedium>
       </span>
     </div>
   )

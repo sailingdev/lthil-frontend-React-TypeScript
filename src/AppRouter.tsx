@@ -1,22 +1,17 @@
 import 'twin.macro'
-import tw from 'twin.macro'
-import { Route, Routes, Navigate } from 'react-router-dom'
 
+import { Navigate, Route, Routes } from 'react-router-dom'
+
+import { ChartsPage } from './pages/ChartsPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { Header } from './shared/Header'
+import { StakePage } from './pages/StakePage'
+import { TradePage } from './pages/TradePage'
+import tw from 'twin.macro'
 
 /** @jsxImportSource @emotion/react */
 
-const PublicRouter = () => {
-  return (
-    <Routes>
-      {/* <Route path='/login' element={<LoginPage />} /> */}
-      {/* <Route path='*' element={<Navigate to='/' />} /> */}
-    </Routes>
-  )
-}
-
-const PrivateRouter = () => {
+export const AppRouter = () => {
   return (
     <div
       css={[
@@ -28,16 +23,14 @@ const PrivateRouter = () => {
       <div tw='flex-grow'>
         <Header />
         <Routes>
-          <Route path='/' element={<DashboardPage />} />
-          <Route path='*' element={<Navigate to='/' />} />
+          <Route path='/' element={<TradePage />} />
+          <Route path='/dashboard' element={<DashboardPage />} />
+          <Route path='/stake' element={<StakePage />} />
+          <Route path='/charts' element={<ChartsPage />} />
+
+          <Route path='*' element={<Navigate to='/trade' />} />
         </Routes>
       </div>
     </div>
   )
-}
-
-export const AppRouter = () => {
-  // const user = useLoggedInUser()
-  const user = true
-  return !user ? <PublicRouter /> : <PrivateRouter />
 }
