@@ -29,7 +29,6 @@ module.exports = {
       'input-text': generateFont('input-text'),
       'heading2': generateFont('heading2'),
       'heading1': generateFont('heading1'),
-     
     },
     colors: {
       primary: {
