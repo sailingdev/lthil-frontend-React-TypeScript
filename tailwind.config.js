@@ -5,7 +5,7 @@ const generateColorClass = (variable) => {
       : `rgb(var(--${variable}))`
 }
 const generateFont = (variable) => {
-  return () => [`var(--${variable})`]
+  return [`var(--fontsize-${variable})`, `var(--lineheight-${variable})`]
 }
 
 module.exports = {
@@ -19,14 +19,23 @@ module.exports = {
       sans: ['Raleway', 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'],
     },
     fontSize: {
-      'caption-medium': generateFont('font-caption-medium')
-    //   xs: ['12px', '16px'],
-    //   sm: ['14px', '20px'],
-    //   md: ['14px', '20px'],
-    //   l: ['16px', '24px'],
-    //  'xl': ['18px', '24px'],
-    //  '2xl': ['24px', '32px'],
-    //  '3xl': ['30px', '36px'],
+      'mobile-medium': generateFont('caption-medium'),
+      'caption-medium': generateFont('caption-medium'),
+      'body2-regular': generateFont('body2-regular'),
+      'body2-bold': generateFont('body2-bold'),
+      'body1-regular': generateFont('body1-regular'),
+      'button-medium': generateFont('button-medium'),
+      'body1-bold': generateFont('body1-bold'),
+      'input-text': generateFont('input-text'),
+      'heading2': generateFont('heading2'),
+      'heading1': generateFont('heading1'),
+      //   xs: ['12px', '16px'],
+      //   sm: ['14px', '20px'],
+      //   md: ['14px', '20px'],
+      //   l: ['16px', '24px'],
+      //  'xl': ['18px', '24px'],
+      //  '2xl': ['24px', '32px'],
+      //  '3xl': ['30px', '36px'],
     },
     // // TODO
     // screens: {
@@ -49,6 +58,11 @@ module.exports = {
         200: generateColorClass('secondary-200'),
         300: generateColorClass('secondary-300'),
         400: generateColorClass('secondary-400'),
+      },
+      font: {
+        DEFAULT: generateColorClass('font'),
+        100: generateColorClass('font-100'),
+        200: generateColorClass('font-200'),
       },
       error: {
         DEFAULT:  generateColorClass('primary-error'),
