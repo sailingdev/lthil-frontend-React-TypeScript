@@ -1,38 +1,46 @@
 /** @jsxImportSource @emotion/react */
-import { MouseEventHandler } from 'react'
-import { Txt } from './Txt'
+import { useState } from 'react'
 import tw from 'twin.macro'
-import { ICSSProps } from '../types'
 
 import { NavigationMenu } from './NavigationMenu'
-import Logo from '../assets/logo_dark.svg'
-import CurrencyLogo from '../assets/currencyLogo.jpg' // COMMENT: This is a jpg exported from figma, not sure if this is how we want to use it? We'd need to make some modifications to Button component I think
+import { ReactComponent as Logo } from '../assets/logoLight.svg'
 import { Button } from './Button'
-import { ArrowDown, CurrencyEth } from 'phosphor-react'
-
-// interface IButtonProps extends ICSSProps {
-//   type?: any
-//   primary?: boolean | undefined
-//   action?: boolean | undefined
-//   full?: boolean | undefined
-//   leftIcon?: any
-//   rightIcon?: any
-//   text: string
-//   onClick?: MouseEventHandler<HTMLButtonElement>
-//   className?: string | undefined
-// }
+import { ArrowDown } from 'phosphor-react'
+import Switch from 'react-switch'
+import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
 
 export const Header = () => {
+  const [checked, setChecked] = useState(true)
+
+  const onThemeChange = () => {
+    document.documentElement.classList.toggle('dark')
+    setChecked(!checked)
+    checked
+      ? (document.getElementById('svg-logo-text')!.style.fill = '#F2F5F6')
+      : (document.getElementById('svg-logo-text')!.style.fill = '#2A333C')
+  }
+
   return (
     <div tw='flex flex-row items-start justify-between'>
       <span tw='flex flex-row items-start'>
-        <img tw='height[32px] mr-24' src={Logo} alt='logo image' />
+        <Logo tw='width[128px] height[32px]' />
         <span tw='mt-1'>
           <NavigationMenu />
         </span>
+        <Switch
+          css={[tw`mt-1`]}
+          onChange={onThemeChange}
+          uncheckedIcon={false}
+          checkedIcon={false}
+          checked={checked}
+          onColor='#F2F5F6'
+          offColor='#20293A'
+          onHandleColor='#FB8E51'
+          offHandleColor='#F3E7A8'
+        />
       </span>
       <span tw='flex flex-row items-center gap-2'>
-        <Button text='Ethereum' leftIcon={CurrencyEth} rightIcon={ArrowDown} />
+        <Button text='Ethereum' leftIcon={CurrEth} rightIcon={ArrowDown} />
         <Button text='Connect wallet' action />
         TODO:menu
       </span>
