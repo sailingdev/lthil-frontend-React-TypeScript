@@ -1,9 +1,9 @@
 import 'twin.macro'
-
+import tw from 'twin.macro'
 import { Route, Routes, Navigate } from 'react-router-dom'
 
 import { DashboardPage } from './pages/DashboardPage'
-import tw from 'twin.macro'
+import { Header } from './shared/Header'
 
 /** @jsxImportSource @emotion/react */
 
@@ -26,6 +26,7 @@ const PrivateRouter = () => {
     >
       {/* <Sidebar /> */}
       <div tw='flex-grow'>
+        <Header />
         <Routes>
           <Route path='/' element={<DashboardPage />} />
           <Route path='*' element={<Navigate to='/' />} />

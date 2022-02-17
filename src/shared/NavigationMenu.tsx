@@ -28,7 +28,7 @@ export const NavigationMenu = (props: { onItemClick?(): void }) => {
 
   return (
     <div tw='flex flex-row min-width[256px] bg-primary'>
-      <div tw='flex px-3'>
+      <div tw='flex px-3 gap-3'>
         {items.map((i) => {
           const isSelected = i.url === selectedRoute?.url
           return (

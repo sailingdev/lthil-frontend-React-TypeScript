@@ -6,13 +6,11 @@ import { ContentContainer } from '../shared/ContentContainer'
 import { Cube } from 'phosphor-react'
 import { Txt } from '../shared/Txt'
 import { NavigationMenu } from '../shared/NavigationMenu'
-import { Header } from '../shared/Header'
 
 export const DashboardPage = () => {
   return (
     <ContentContainer>
       <div tw='bg-primary'>
-        <Header />
         <Button text='button' primary />
         <Button text='button' primary leftIcon={Cube} />
         <Button text='button' primary rightIcon={Cube} />
