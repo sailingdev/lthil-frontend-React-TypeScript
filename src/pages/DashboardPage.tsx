@@ -10,49 +10,81 @@ const data = [
   {
     name: { value: 24, format: 'en-US' },
     position: { value: 13.1, format: 'en-US' },
-    profit: 293842398,
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
     trend: 'abcdef',
   },
   {
     name: { value: 24991, format: 'en-US' },
     position: { value: 13.1, format: 'en-US' },
-    profit: 29384239,
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
     trend: 'abcd99e0f',
   },
   {
     name: { value: 24, format: 'en-US' },
     position: { value: 13.1, format: 'en-US' },
-    profit: 293842398,
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
     trend: 'abcdef',
   },
   {
     name: { value: 24, format: 'en-US' },
     position: { value: 13.1, format: 'en-US' },
-    profit: 293842398,
+    profit: {
+      currencyValue: -13422.4,
+      percentageValue: -68.342,
+      format: 'en-US',
+    },
     trend: 'abcdef',
   },
   {
     name: { value: 24, format: 'en-US' },
     position: { value: 13.1, format: 'en-US' },
-    profit: 293842398,
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 131.422, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
     trend: 'abcdef',
   },
   {
     name: { value: 24, format: 'en-US' },
     position: { value: 13.1, format: 'en-US' },
-    profit: 293842398,
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
     trend: 'abcdef',
   },
   {
     name: { value: 24, format: 'en-US' },
     position: { value: 13.1, format: 'en-US' },
-    profit: 293842398,
-    trend: 'abcdef',
-  },
-  {
-    name: { value: 24, format: 'en-US' },
-    position: { value: 13.1, format: 'en-US' },
-    profit: 293842398,
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
     trend: 'abcdef',
   },
 ]
@@ -76,40 +108,54 @@ export const DashboardPage = () => {
         totalCount={8}
         mobileColumns={[
           {
-            Header: 'Currency',
-            accessor: 'name',
-            cell: (l) => (
-              <TableCell.Currency value={l.name.value} format={l.name.format} />
-            ),
+            Header: 'Trend',
+            accessor: 'trend',
+            cell: (l) => <TableCell.Text value={l.trend} />,
           },
           {
             Header: 'Percentage',
             accessor: 'position',
-            cell: (l) => <TableCell.Percentage value={l.position} />,
+            cell: (l) => (
+              <TableCell.Percentage
+                value={l.position.value}
+                format={l.position.format}
+              />
+            ),
           },
         ]}
         columns={[
           {
+            Header: 'Trend',
+            accessor: 'trend',
+            cell: (l) => <TableCell.Text value={l.trend} />,
+          },
+          {
+            Header: 'Percentage',
+            accessor: 'position',
+            cell: (l) => (
+              <TableCell.Percentage
+                value={l.position.value}
+                format={l.position.format}
+              />
+            ),
+          },
+          {
+            Header: 'Profit',
+            accessor: 'profit',
+            cell: (l) => (
+              <TableCell.Profit
+                currencyValue={l.profit.currencyValue}
+                percentageValue={l.profit.percentageValue}
+                format={l.profit.format}
+              />
+            ),
+          },
+          {
             Header: 'Currency',
             accessor: 'name',
             cell: (l) => (
               <TableCell.Currency value={l.name.value} format={l.name.format} />
             ),
-          },
-          {
-            Header: 'Percentage',
-            accessor: 'position',
-            cell: (l) => <TableCell.Percentage value={l.position} />,
-          },
-          {
-            Header: 'Profit',
-            accessor: 'profit',
-            cell: (l) => <TableCell.Text value={l.trend} />,
-          },
-          {
-            Header: 'Trend',
-            accessor: 'trend',
-            cell: (l) => <TableCell.Text value={l.trend} />,
           },
         ]}
       />
