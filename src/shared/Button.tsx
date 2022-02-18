@@ -47,7 +47,7 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
         css={[
           tw`flex-grow`,
           primary && tw`text-secondary`,
-          props.action && tw`text-primary-100`,
+          props.action && tw`text-white`,
         ]}
       >
         {props.text}

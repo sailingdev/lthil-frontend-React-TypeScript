@@ -29,21 +29,7 @@ module.exports = {
       'input-text': generateFont('input-text'),
       'heading2': generateFont('heading2'),
       'heading1': generateFont('heading1'),
-      //   xs: ['12px', '16px'],
-      //   sm: ['14px', '20px'],
-      //   md: ['14px', '20px'],
-      //   l: ['16px', '24px'],
-      //  'xl': ['18px', '24px'],
-      //  '2xl': ['24px', '32px'],
-      //  '3xl': ['30px', '36px'],
     },
-    // // TODO
-    // screens: {
-    //   sm: '480px',
-    //   md: '768px',
-    //   lg: '976px',
-    //   xl: '1440px',
-    // },
     colors: {
       primary: {
         DEFAULT: generateColorClass('primary'),
@@ -79,9 +65,18 @@ module.exports = {
       'warning-light': {
         DEFAULT:  generateColorClass('primary-warning-light'),
       },
-    
+      white: {
+        DEFAULT:  '#FFFFFF',
+        100: '#F2F5F6',
+        200: '#E7EAEB',
+        300: '#E2E5E5',
+        400: '#4E5F71'
+      },
+      // TODO ADD BLACK
+      // black: {
+      //   DEFAULT: 
+      // }
     },
-   
     extend: {
       maxWidth: {
         1920: '1920px'

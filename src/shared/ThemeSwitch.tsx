@@ -16,6 +16,7 @@ export const ThemeSwitch = () => {
 
   return (
     <Switch
+      // tw='mt-1'
       onChange={onThemeChange}
       uncheckedIcon={
         <div tw='flex justify-center items-center height[100%]'>

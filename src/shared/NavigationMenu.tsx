@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 
-import tw from 'twin.macro'
 import { Link, useLocation } from 'react-router-dom'
 
+import tw from 'twin.macro'
+
 const items = [
-  { url: '/trade', label: 'Trade' },
+  { url: '/', label: 'Trade' },
   {
     url: '/stake',
     label: 'Stake',
@@ -27,8 +28,8 @@ export const NavigationMenu = (props: { onItemClick?(): void }) => {
     items.find((i) => new RegExp(`${i.url}/.*`).test(path)) ?? items[0]
 
   return (
-    <div tw='flex flex-row bg-primary'>
-      <div tw='flex gap-1'>
+    <div tw='flex flex-row min-width[256px] bg-primary'>
+      <div tw='flex px-3 gap-3'>
         {items.map((i) => {
           const isSelected = i.url === selectedRoute?.url
           return (

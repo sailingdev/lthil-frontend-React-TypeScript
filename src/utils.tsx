@@ -20,6 +20,7 @@ export const TABLET_BREAKPOINT = 480
 export const DESKTOP_BREAKPOINT = 1024
 export const isDesktop = window.screen.width >= DESKTOP_BREAKPOINT
 export const isTablet = window.screen.width >= TABLET_BREAKPOINT
+export const isMobile = !isDesktop && !isTablet
 
 export interface IBaseProps {
   className?: string | undefined
