@@ -27,8 +27,8 @@ export const NavigationMenu = (props: { onItemClick?(): void }) => {
     items.find((i) => new RegExp(`${i.url}/.*`).test(path)) ?? items[0]
 
   return (
-    <div tw='flex flex-row min-width[256px] bg-primary'>
-      <div tw='flex px-3'>
+    <div tw='flex flex-row bg-primary'>
+      <div tw='flex gap-1'>
         {items.map((i) => {
           const isSelected = i.url === selectedRoute?.url
           return (
@@ -36,7 +36,7 @@ export const NavigationMenu = (props: { onItemClick?(): void }) => {
               to={i.url}
               key={i.url}
               css={[
-                tw`text-secondary flex flex-col align-items[center] py-4 cursor-pointer px-2 rounded-md w-auto`,
+                tw`text-secondary flex flex-col align-items[center] cursor-pointer px-2 rounded-md w-auto`,
                 isSelected && tw`font-bold`,
               ]}
               onClick={() => props.onItemClick && props.onItemClick()}
