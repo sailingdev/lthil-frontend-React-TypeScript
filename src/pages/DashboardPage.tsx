@@ -8,50 +8,50 @@ import { useSearch } from '../shared/hooks/useSearch'
 
 const data = [
   {
-    name: 'ETH',
-    position: 'ABCDEF',
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
     profit: 293842398,
     trend: 'abcdef',
   },
   {
-    name: 'ETH2',
-    position: 'ABCkjDEF1',
+    name: { value: 24991, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
     profit: 29384239,
     trend: 'abcd99e0f',
   },
   {
-    name: 'ETyyH',
-    position: 'ABkjCDEF',
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
     profit: 293842398,
     trend: 'abcdef',
   },
   {
-    name: 'E99TH',
-    position: 'ABkjCDEF',
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
     profit: 293842398,
     trend: 'abcdef',
   },
   {
-    name: 'ET0H',
-    position: 'ABkjCDEF',
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
     profit: 293842398,
     trend: 'abcdef',
   },
   {
-    name: 'ET6H',
-    position: 'ABCDkjEF',
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
     profit: 293842398,
     trend: 'abcdef',
   },
   {
-    name: 'ET8H',
-    position: 'ABCDEF',
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
     profit: 293842398,
     trend: 'abcdef',
   },
   {
-    name: 'ET0H',
-    position: 'ABC87DEF',
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
     profit: 293842398,
     trend: 'abcdef',
   },
@@ -76,36 +76,40 @@ export const DashboardPage = () => {
         totalCount={8}
         mobileColumns={[
           {
-            Header: 'Token pair',
+            Header: 'Currency',
             accessor: 'name',
-            cell: (l) => <TableCell.Text value={l.name} />,
+            cell: (l) => (
+              <TableCell.Currency value={l.name.value} format={l.name.format} />
+            ),
           },
           {
-            Header: 'Position',
+            Header: 'Percentage',
             accessor: 'position',
-            cell: (l) => <TableCell.Text value={l.name} />,
+            cell: (l) => <TableCell.Percentage value={l.position} />,
           },
         ]}
         columns={[
           {
-            Header: 'Token pair',
+            Header: 'Currency',
             accessor: 'name',
-            cell: (l) => <TableCell.Text value={l.name} />,
+            cell: (l) => (
+              <TableCell.Currency value={l.name.value} format={l.name.format} />
+            ),
           },
           {
-            Header: 'Position',
+            Header: 'Percentage',
             accessor: 'position',
-            cell: (l) => <TableCell.Text value={l.name} />,
+            cell: (l) => <TableCell.Percentage value={l.position} />,
           },
           {
             Header: 'Profit',
             accessor: 'profit',
-            cell: (l) => <TableCell.Text value={l.name} />,
+            cell: (l) => <TableCell.Text value={l.trend} />,
           },
           {
             Header: 'Trend',
             accessor: 'trend',
-            cell: (l) => <TableCell.Text value={l.name} />,
+            cell: (l) => <TableCell.Text value={l.trend} />,
           },
         ]}
       />
