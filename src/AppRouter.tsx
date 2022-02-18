@@ -9,18 +9,12 @@ import { StakePage } from './pages/StakePage'
 import { TradePage } from './pages/TradePage'
 import tw from 'twin.macro'
 import { Footer } from './shared/Footer'
-import { isMobile, isTablet, isDesktop } from './utils'
 
 /** @jsxImportSource @emotion/react */
 
 export const AppRouter = () => {
   return (
-    <div
-      css={[
-        tw`flex bg-primary min-h-screen`,
-        isMobile || (isTablet && !isDesktop) ? tw`flex-col` : tw`flex-row`, // COMMENT: Is this a good way of handling this?
-      ]}
-    >
+    <div css={[tw`flex flex-col bg-primary min-h-screen desktop:flex-row`]}>
       <div tw='flex-grow'>
         <Header />
         <Routes>
@@ -28,7 +22,6 @@ export const AppRouter = () => {
           <Route path='/dashboard' element={<DashboardPage />} />
           <Route path='/stake' element={<StakePage />} />
           <Route path='/charts' element={<ChartsPage />} />
-
           <Route path='*' element={<Navigate to='/trade' />} />
         </Routes>
       </div>
