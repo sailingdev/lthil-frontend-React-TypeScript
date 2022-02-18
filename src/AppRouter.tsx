@@ -8,18 +8,13 @@ import { Header } from './shared/Header'
 import { StakePage } from './pages/StakePage'
 import { TradePage } from './pages/TradePage'
 import tw from 'twin.macro'
+import { Footer } from './shared/Footer'
 
 /** @jsxImportSource @emotion/react */
 
 export const AppRouter = () => {
   return (
-    <div
-      css={[
-        tw`flex bg-primary min-h-screen`,
-        // isMobile ? tw`flex-col` : tw`flex-row`,
-      ]}
-    >
-      {/* <Sidebar /> */}
+    <div css={[tw`flex flex-col bg-primary min-h-screen desktop:flex-row`]}>
       <div tw='flex-grow'>
         <Header />
         <Routes>
@@ -27,10 +22,10 @@ export const AppRouter = () => {
           <Route path='/dashboard' element={<DashboardPage />} />
           <Route path='/stake' element={<StakePage />} />
           <Route path='/charts' element={<ChartsPage />} />
-
           <Route path='*' element={<Navigate to='/trade' />} />
         </Routes>
       </div>
+      <Footer />
     </div>
   )
 }
