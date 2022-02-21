@@ -42,8 +42,7 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
           size={16}
         />
       )}
-      {/* TODO USE CORRECT FONT */}
-      <Txt.CaptionMedium
+      <Txt.ButtonMedium
         css={[
           tw`flex-grow`,
           primary && tw`text-secondary`,
@@ -51,7 +50,7 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
         ]}
       >
         {props.text}
-      </Txt.CaptionMedium>
+      </Txt.ButtonMedium>
       {RightIcon && (
         <RightIcon
           css={[

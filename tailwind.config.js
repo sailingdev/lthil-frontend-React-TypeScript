@@ -72,10 +72,13 @@ module.exports = {
         300: '#E2E5E5',
         400: '#4E5F71'
       },
-      // TODO ADD BLACK
-      // black: {
-      //   DEFAULT: 
-      // }
+      black: {
+        DEFAULT: '#070B0F',
+        100: '#151A29',
+        200: '#20293A',
+        300: '#364153',
+        400: '#4E5F71'
+      }
     },
     extend: {
       maxWidth: {

@@ -5,10 +5,11 @@ import {
   useSortBy,
   useTable,
 } from 'react-table'
-import { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 import { CustomTablePagination } from './CustomTablePagination'
+import { Txt } from '../Txt'
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { isMobile } from '../../utils'
@@ -16,42 +17,55 @@ import tw from 'twin.macro'
 
 const tableContainerStyle = css`
   .table {
-    box-shadow: 0px 1px 2px 0px #0000000f, 0px 1px 3px 0px #0000001a;
+    ${tw`mb-4`}
     tr {
-      background-color: white;
+      ${tw`bg-primary-100`}
     }
 
     /* tr:hover > td {
       ${tw`bg-primary-100`}
     } */
+    tr:first-of-type {
+      ${tw`pt-3`}
+    }
+    tr:last-of-type {
+      ${tw`pb-3`}
+    }
     tr > th:first-of-type {
-      ${tw`rounded-tl-xl border-l-2 `}
+      ${tw`rounded-tl-xl ml-6`}
     }
     tr > th:last-of-type {
-      ${tw`rounded-tr-xl border-r-2 `}
-    }
-    tr:nth-of-type(even) {
-      ${tw`bg-primary-300`}
+      ${tw`rounded-tr-xl mr-6`}
     }
     tr:not(:last-child) > td:first-of-type {
-      ${tw`border-l-2 `}
+      ${tw``}
     }
     tr:not(:last-child) > td:last-of-type {
-      ${tw`border-r-2 `}
+      ${tw``}
     }
     thead {
-      ${tw`border-b-2 `}
+      ${tw``}
+    }
+
+    tr:last-of-type {
+      ${tw`bg-primary-100`}
     }
 
     tbody > tr:last-of-type {
-      ${tw`border-b-2 border-l-2 rounded-bl-xl rounded-br-xl border-r-2`}
+      ${tw`rounded-bl-xl rounded-br-xl`}/*This is last row */
     }
     th {
-      ${tw`border-t-2`}
+      ${tw``}/* This is where the top row border is */
     }
     /* TODO THIS IS CAUSING WEIRD BORDER BEHAVIOUR BUT WE NEED IT */
     td {
-      align-self: center;
+      ${tw`self-center`}
+    }
+    td:first-of-type {
+      ${tw`ml-6`}
+    }
+    td:last-of-type {
+      ${tw`mr-6`}
     }
   }
 `
@@ -62,7 +76,7 @@ const tdSkeletonStyle = css`
 
 const thStyle = [
   css`
-    ${tw`bg-primary-100 font-sans font-semibold text-primary-400 uppercase`}
+    ${tw`bg-primary-100 font-sans font-semibold text-primary-400`}
     ${tw`px-6 py-4`}
   `,
 ]
@@ -70,6 +84,7 @@ const thStyle = [
 export type ICustomColumnProps<T extends object> = Omit<Column<T>, 'Cell'> & {
   cell(data: T): ReactNode
   accessor: keyof T
+  align?: 'left' | 'right' | 'middle'
 }
 
 interface ICustomTableProps<T extends object> {
@@ -80,7 +95,6 @@ interface ICustomTableProps<T extends object> {
   columns: ICustomColumnProps<T>[]
   mobileColumns?: ICustomColumnProps<T>[]
   pageSize: number
-  totalCount: number
   onRowClick?: (data: T, index?: number) => void
   loading: boolean
 }
@@ -96,10 +110,10 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
 
     pageSize,
     maxPage,
-    totalCount,
     loading,
     onRowClick,
   } = props
+
   const table = useTable(
     {
       columns: (isMobile ? mobileColumns ?? columns : columns) as Column[],
@@ -108,7 +122,6 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
         pageIndex: currentPage - 1,
         pageSize,
       },
-      manualPagination: true,
       pageCount: maxPage,
       manualSortBy: true,
       disableMultiSort: true,
@@ -138,15 +151,22 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()} tw='rounded-t-xl'>
                 {headerGroup.headers.map((column) => {
+                  const { style, ...rest } = column.getHeaderProps(
+                    column.getSortByToggleProps(),
+                  )
                   return (
                     <th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                      className='group'
+                      {...rest}
                       css={thStyle}
+                      style={{
+                        ...style,
+                        // @ts-ignore
+                        textAlign: column.align ?? 'left',
+                      }}
                     >
-                      <div tw='flex items-center justify-between'>
+                      <Txt.Body2Regular>
                         {column.render('Header')}
-                      </div>
+                      </Txt.Body2Regular>
                     </th>
                   )
                 })}
@@ -190,29 +210,51 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
             </tbody>
           ) : (
             <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
+              {page.map((row, index) => {
                 prepareRow(row)
                 return (
-                  <tr
-                    {...row.getRowProps()}
-                    css={css`
-                      ${tw`cursor-pointer`}
-                    `}
-                    onClick={() => {
-                      onRowClick && onRowClick(row.original as any, row.index)
-                    }}
-                    // @ts-ignore
-                  >
-                    {row.cells.map((cell) => {
-                      /* eslint-disable no-debugger */
-                      return (
-                        <td {...cell.getCellProps()} css={tw`px-6 py-4`}>
-                          {/* @ts-ignore */}
-                          {cell.column.cell(cell.row.original)}
-                        </td>
-                      )
-                    })}
-                  </tr>
+                  <React.Fragment>
+                    <tr
+                      {...row.getRowProps()}
+                      css={css`
+                        ${tw`cursor-pointer`}
+                      `}
+                      onClick={() => {
+                        onRowClick && onRowClick(row.original as any, row.index)
+                      }}
+                      // @ts-ignore
+                    >
+                      {row.cells.map((cell) => {
+                        const { style, ...rest } = cell.getCellProps()
+                        /* eslint-disable no-debugger */
+                        return (
+                          <td
+                            {...rest}
+                            style={{
+                              ...style,
+                              // @ts-ignore
+                              textAlign: cell.column.align ?? 'left',
+                            }}
+                            css={tw`px-6 py-4`}
+                          >
+                            {/* @ts-ignore */}
+                            {cell.column.cell(cell.row.original)}
+                          </td>
+                        )
+                      })}
+                    </tr>
+                    <tr tw='h-0.5 bg-primary-100 flex justify-center flex-row'>
+                      <div
+                        css={[
+                          tw`h-0.5 w-full mx-10 bg-primary-300`,
+                          index === page.length - 1 && tw`bg-primary-100`,
+                        ]}
+                      ></div>
+                    </tr>
+                    {/* <div tw='h-0.5 bg-primary-100 flex justify-center flex-row'>
+                      <div tw='bg-primary-300 h-0.5 w-full mx-10'></div>
+                    </div> */}
+                  </React.Fragment>
                 )
               })}
             </tbody>
@@ -222,7 +264,6 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
       {maxPage > 1 && (
         <CustomTablePagination
           totalOnPage={data.length}
-          totalCount={totalCount}
           pageSize={pageSize}
           maxPage={table.pageCount}
           currentPage={currentPage}
