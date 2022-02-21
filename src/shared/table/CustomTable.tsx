@@ -13,45 +13,60 @@ import { CustomTablePagination } from './CustomTablePagination'
 import { css } from '@emotion/react'
 import { isMobile } from '../../utils'
 import tw from 'twin.macro'
+import { Txt } from '../Txt'
+import { isDesktop } from '../../utils'
 
 const tableContainerStyle = css`
   .table {
-    box-shadow: 0px 1px 2px 0px #0000000f, 0px 1px 3px 0px #0000001a;
+    ${tw``}
     tr {
-      background-color: white;
+      ${tw`bg-primary-100 border-b-2 border-primary-300`}
     }
 
     /* tr:hover > td {
       ${tw`bg-primary-100`}
     } */
+    tr:first-of-type {
+      ${tw`pt-3`}
+    }
+    tr:last-of-type {
+      ${tw`pb-3`}
+    }
     tr > th:first-of-type {
-      ${tw`rounded-tl-xl border-l-2 `}
+      ${tw`rounded-tl-xl ml-6`}
     }
     tr > th:last-of-type {
-      ${tw`rounded-tr-xl border-r-2 `}
-    }
-    tr:nth-of-type(even) {
-      ${tw`bg-primary-300`}
+      ${tw`rounded-tr-xl mr-6`}
     }
     tr:not(:last-child) > td:first-of-type {
-      ${tw`border-l-2 `}
+      ${tw``}
     }
     tr:not(:last-child) > td:last-of-type {
-      ${tw`border-r-2 `}
+      ${tw``}
     }
     thead {
-      ${tw`border-b-2 `}
+      ${tw``}
+    }
+
+    tr:last-of-type {
+      ${tw`border-b-0`}
     }
 
     tbody > tr:last-of-type {
-      ${tw`border-b-2 border-l-2 rounded-bl-xl rounded-br-xl border-r-2`}
+      ${tw`rounded-bl-xl rounded-br-xl`}/*This is last row */
     }
     th {
-      ${tw`border-t-2`}
+      ${tw``}/* This is where the top row border is */
     }
     /* TODO THIS IS CAUSING WEIRD BORDER BEHAVIOUR BUT WE NEED IT */
     td {
-      align-self: center;
+      ${tw`self-center`}
+    }
+    td:first-of-type {
+      ${tw`ml-6`}
+    }
+    td:last-of-type {
+      ${tw`mr-6`}
     }
   }
 `
@@ -62,7 +77,7 @@ const tdSkeletonStyle = css`
 
 const thStyle = [
   css`
-    ${tw`bg-primary-100 font-sans font-semibold text-primary-400 uppercase`}
+    ${tw`bg-primary-100 font-sans font-semibold text-primary-400`}
     ${tw`px-6 py-4`}
   `,
 ]
@@ -100,6 +115,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
     loading,
     onRowClick,
   } = props
+
   const table = useTable(
     {
       columns: (isMobile ? mobileColumns ?? columns : columns) as Column[],
@@ -145,7 +161,15 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                       css={thStyle}
                     >
                       <div tw='flex items-center justify-between'>
-                        {column.render('Header')}
+                        {isDesktop ? (
+                          <Txt.Body2Regular>
+                            {column.render('Header')}
+                          </Txt.Body2Regular>
+                        ) : (
+                          <Txt.Body1Regular>
+                            {column.render('Header')}
+                          </Txt.Body1Regular>
+                        )}
                       </div>
                     </th>
                   )

@@ -1,13 +1,10 @@
-import {
-  ArrowNarrowLeftIcon,
-  ArrowNarrowRightIcon,
-} from '@heroicons/react/solid'
-
 /** @jsxImportSource @emotion/react */
 import React from 'react'
-import { isMobile } from '../../utils'
+import { MouseEventHandler } from 'react'
 import tw from 'twin.macro'
 
+import { ArrowLeft, ArrowRight } from 'phosphor-react'
+import { isMobile } from '../../utils'
 interface ICustomTablePaginationProps {
   currentPage: number
   maxPage: number
@@ -53,6 +50,32 @@ const createPaginationItems = (p: number, pageCount: number) => {
   }
 }
 
+const PaginationButton = (props: {
+  icon?: any
+  text?: string
+  active: boolean
+  onClick?: MouseEventHandler<HTMLButtonElement>
+}) => {
+  const Icon = props.icon
+  const text = props.text
+  const active = props.active
+
+  return (
+    <button
+      css={[
+        tw`border-0 rounded-md cursor-pointer flex flex-row items-center px-2.5 py-2.5 bg-primary-200 width[36px] height[36px] flex justify-center items-center mx-1`,
+        active && tw`bg-action text-primary-100`,
+      ]}
+      onClick={props.onClick}
+    >
+      {Icon && (
+        <Icon css={[tw`text-secondary`, active && tw`text-primary-100`]} />
+      )}
+      {text && text}
+    </button>
+  )
+}
+
 export const CustomTablePagination = (props: ICustomTablePaginationProps) => {
   const { setPage, currentPage, maxPage } = props
 
@@ -62,14 +85,11 @@ export const CustomTablePagination = (props: ICustomTablePaginationProps) => {
     maxPage > 3 && paginationItems[2] + 1 != paginationItems[3]
 
   return (
-    <div css={tw`text-secondary  flex justify-between items-center`}>
+    <div css={tw`text-secondary  flex justify-center items-center`}>
       <button onClick={() => setPage(Math.max(1, currentPage - 1))}>
+        {/* TODO: Button is inside another button! Refactor this. */}
         <span tw='text-warning py-4'>
-          <ArrowNarrowLeftIcon
-            color='#6B7280'
-            css={tw`h-5 w-5 mr-3.5 inline`}
-          />
-          Previous
+          <PaginationButton active={false} icon={ArrowLeft} />
         </span>
       </button>
       {!isMobile && (
@@ -79,20 +99,14 @@ export const CustomTablePagination = (props: ICustomTablePaginationProps) => {
               <React.Fragment key={`${i}-${page}`}>
                 <div>
                   <div onClick={() => setPage(page)}>
-                    <span
-                      tw='text-warning'
-                      css={[
-                        tw`px-4 py-4 text-left -mt-0 font-normal cursor-pointer hover:text-primary border-t-2 border-action`,
-                        page === currentPage &&
-                          tw`border-primary-200 text-primary-200 cursor-default`,
-                      ]}
-                    >
-                      {page}
-                    </span>
+                    <PaginationButton
+                      active={page === currentPage}
+                      text={page.toString()}
+                    />
                   </div>
                 </div>
                 {showDivider && i == 2 && (
-                  <span tw='text-action px-4 py-4'>...</span>
+                  <span tw='text-action px-4 py-4 text-secondary'>...</span>
                 )}
               </React.Fragment>
             )
@@ -101,11 +115,7 @@ export const CustomTablePagination = (props: ICustomTablePaginationProps) => {
       )}
       <button onClick={() => setPage(Math.min(maxPage, currentPage + 1))}>
         <span tw='text-action py-4'>
-          Next
-          <ArrowNarrowRightIcon
-            color='#6B7280'
-            css={tw`h-5 w-5 ml-3.5 inline`}
-          />
+          <PaginationButton active={false} icon={ArrowRight} />
         </span>
       </button>
     </div>

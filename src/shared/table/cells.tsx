@@ -9,9 +9,9 @@ import { Txt } from '../Txt'
 
 const Text = (props: { value: string | number }) => {
   return isDesktop ? (
-    <Txt.Body2Regular>{props.value}</Txt.Body2Regular>
+    <Txt.Body2Regular tw='text-secondary'>{props.value}</Txt.Body2Regular>
   ) : (
-    <Txt.Body1Regular>{props.value}</Txt.Body1Regular>
+    <Txt.Body1Regular tw='text-secondary'>{props.value}</Txt.Body1Regular>
   )
 }
 
@@ -25,9 +25,9 @@ const Currency = (props: { value: number; format: string }) => {
       }).format(value)
     : ''
   return isDesktop ? (
-    <Txt.Body2Regular>{currency}</Txt.Body2Regular>
+    <Txt.Body2Regular tw='text-secondary'>{currency}</Txt.Body2Regular>
   ) : (
-    <Txt.Body1Regular>{currency}</Txt.Body1Regular>
+    <Txt.Body1Regular tw='text-secondary'>{currency}</Txt.Body1Regular>
   )
 }
 
@@ -39,9 +39,9 @@ const Percentage = (props: { value: number; format: string }) => {
       }).format(value * 10)
     : ''
   return isDesktop ? (
-    <Txt.Body2Regular>{percentage}</Txt.Body2Regular>
+    <Txt.Body2Regular tw='text-secondary'>{percentage}</Txt.Body2Regular>
   ) : (
-    <Txt.Body1Regular>{percentage}</Txt.Body1Regular>
+    <Txt.Body1Regular tw='text-secondary'>{percentage}</Txt.Body1Regular>
   )
 }
 
