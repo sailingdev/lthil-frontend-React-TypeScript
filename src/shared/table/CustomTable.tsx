@@ -17,7 +17,7 @@ import tw from 'twin.macro'
 
 const tableContainerStyle = css`
   .table {
-    ${tw``}
+    ${tw`mb-4`}
     tr {
       ${tw`bg-primary-100`}
     }
@@ -48,7 +48,7 @@ const tableContainerStyle = css`
     }
 
     tr:last-of-type {
-      ${tw`border-b-0`}
+      ${tw`bg-primary-100`}
     }
 
     tbody > tr:last-of-type {
@@ -210,7 +210,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
             </tbody>
           ) : (
             <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
+              {page.map((row, index) => {
                 prepareRow(row)
                 return (
                   <React.Fragment>
@@ -243,12 +243,17 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                         )
                       })}
                     </tr>
-                    {/* TODO */}
-                    <tr tw='bg-primary-300 h-0.5 px-6'>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                    <tr tw='h-0.5 bg-primary-100 flex justify-center flex-row'>
+                      <div
+                        css={[
+                          tw`h-0.5 w-full mx-10 bg-primary-300`,
+                          index === page.length - 1 && tw`bg-primary-100`,
+                        ]}
+                      ></div>
                     </tr>
+                    {/* <div tw='h-0.5 bg-primary-100 flex justify-center flex-row'>
+                      <div tw='bg-primary-300 h-0.5 w-full mx-10'></div>
+                    </div> */}
                   </React.Fragment>
                 )
               })}

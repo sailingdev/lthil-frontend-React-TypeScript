@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
-
-import { Link, useLocation } from 'react-router-dom'
-
 import tw from 'twin.macro'
+import { Link, useLocation } from 'react-router-dom'
+import { Txt } from './Txt'
 
 const items = [
   { url: '/', label: 'Trade' },
@@ -36,14 +35,14 @@ export const NavigationMenu = (props: { onItemClick?(): void }) => {
             <Link
               to={i.url}
               key={i.url}
-              css={[
-                tw`text-secondary flex flex-col align-items[center] cursor-pointer px-2 rounded-md w-auto`,
-                isSelected && tw`font-bold`,
-              ]}
+              tw='text-secondary flex flex-col align-items[center] cursor-pointer px-2 rounded-md w-auto'
               onClick={() => props.onItemClick && props.onItemClick()}
             >
-              {/* TODO FONT */}
-              <span>{i.label}</span>
+              <Txt.Body1Regular
+                css={[tw`text-secondary`, isSelected && tw`font-bold`]}
+              >
+                {i.label}
+              </Txt.Body1Regular>
               {isSelected && <span>&#8226;</span>}
             </Link>
           )

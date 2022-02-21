@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { MouseEventHandler } from 'react'
-
+import { ArrowLeft, ArrowRight } from 'phosphor-react'
 import { isMobile } from '../../utils'
 import tw from 'twin.macro'
 
@@ -59,32 +59,30 @@ export const CustomTablePagination = (props: ICustomTablePaginationProps) => {
 
   return (
     <div css={tw`text-secondary  flex justify-center items-center`}>
-      {/* <button onClick={() => setPage(Math.max(1, currentPage - 1))}>
+      <button onClick={() => setPage(Math.max(1, currentPage - 1))}>
         <span tw='text-warning py-4'>
           <PaginationButton active={false} icon={ArrowLeft} />
         </span>
-      </button> */}
-      {!isMobile && (
-        <div tw='flex flex-row items-center'>
-          {paginationItems.map((page, i) => {
-            return (
-              <React.Fragment key={`${i}-${page}`}>
-                <div onClick={() => setPage(page)}>
-                  <PaginationButton
-                    active={page === currentPage}
-                    text={page.toString()}
-                  />
-                </div>
-              </React.Fragment>
-            )
-          })}
-        </div>
-      )}
-      {/* <button onClick={() => setPage(Math.min(maxPage, currentPage + 1))}>
+      </button>
+      <div tw='flex flex-row items-center'>
+        {paginationItems.map((page, i) => {
+          return (
+            <React.Fragment key={`${i}-${page}`}>
+              <div onClick={() => setPage(page)}>
+                <PaginationButton
+                  active={page === currentPage}
+                  text={page.toString()}
+                />
+              </div>
+            </React.Fragment>
+          )
+        })}
+      </div>
+      <button onClick={() => setPage(Math.min(maxPage, currentPage + 1))}>
         <span tw='text-action py-4'>
           <PaginationButton active={false} icon={ArrowRight} />
         </span>
-      </button> */}
+      </button>
     </div>
   )
 }
