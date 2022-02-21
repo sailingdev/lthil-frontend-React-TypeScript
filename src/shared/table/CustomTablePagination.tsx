@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react'
-import { MouseEventHandler } from 'react'
+import React, { MouseEventHandler } from 'react'
+
+import { isMobile } from '../../utils'
 import tw from 'twin.macro'
 
-import { ArrowLeft, ArrowRight } from 'phosphor-react'
-import { isMobile } from '../../utils'
 interface ICustomTablePaginationProps {
   currentPage: number
   maxPage: number
@@ -13,41 +12,18 @@ interface ICustomTablePaginationProps {
   canNextPage: boolean
   pageSize: number
   totalOnPage: number
-  totalCount: number
 }
 
 const createPaginationItems = (p: number, pageCount: number) => {
-  const items = [
-    p - 4,
-    p - 3,
-    p - 2,
-    p - 1,
-    p,
-    p + 1,
-    p + 2,
-    Math.max(pageCount - 1, p + 3),
-    Math.max(pageCount, p + 4),
-  ].filter((i) => i > 0 && i <= pageCount)
+  const filterByPageCount = (i: number) => i > 0 && i <= pageCount
 
-  if (pageCount <= 5) {
-    return items
+  if (p === 1) {
+    return [1, 2, 3].filter(filterByPageCount)
   }
-
-  const currentPageIndex = items.indexOf(p)
-  const endIndex = items.length
-  const inLastTwo = currentPageIndex + 2 >= endIndex
-  if (inLastTwo) {
-    return items.slice(endIndex - 5, endIndex)
-  } else {
-    const lastPart = items.slice(endIndex - 2, endIndex)
-    const isLastOnFirstPart = p + 1 === lastPart[0]
-    const index = isLastOnFirstPart
-      ? currentPageIndex - 2
-      : Math.max(0, currentPageIndex - 1)
-
-    const firstPart = items.slice(index, index + 3)
-    return [...firstPart, ...lastPart]
+  if (p === pageCount) {
+    return [pageCount - 2, pageCount - 1, pageCount].filter(filterByPageCount)
   }
+  return [p - 1, p, p + 1]
 }
 
 const PaginationButton = (props: {
@@ -81,43 +57,34 @@ export const CustomTablePagination = (props: ICustomTablePaginationProps) => {
 
   const paginationItems = createPaginationItems(currentPage, maxPage)
 
-  const showDivider =
-    maxPage > 3 && paginationItems[2] + 1 != paginationItems[3]
-
   return (
     <div css={tw`text-secondary  flex justify-center items-center`}>
-      <button onClick={() => setPage(Math.max(1, currentPage - 1))}>
-        {/* TODO: Button is inside another button! Refactor this. */}
+      {/* <button onClick={() => setPage(Math.max(1, currentPage - 1))}>
         <span tw='text-warning py-4'>
           <PaginationButton active={false} icon={ArrowLeft} />
         </span>
-      </button>
+      </button> */}
       {!isMobile && (
         <div tw='flex flex-row items-center'>
           {paginationItems.map((page, i) => {
             return (
               <React.Fragment key={`${i}-${page}`}>
-                <div>
-                  <div onClick={() => setPage(page)}>
-                    <PaginationButton
-                      active={page === currentPage}
-                      text={page.toString()}
-                    />
-                  </div>
+                <div onClick={() => setPage(page)}>
+                  <PaginationButton
+                    active={page === currentPage}
+                    text={page.toString()}
+                  />
                 </div>
-                {showDivider && i == 2 && (
-                  <span tw='text-action px-4 py-4 text-secondary'>...</span>
-                )}
               </React.Fragment>
             )
           })}
         </div>
       )}
-      <button onClick={() => setPage(Math.min(maxPage, currentPage + 1))}>
+      {/* <button onClick={() => setPage(Math.min(maxPage, currentPage + 1))}>
         <span tw='text-action py-4'>
           <PaginationButton active={false} icon={ArrowRight} />
         </span>
-      </button>
+      </button> */}
     </div>
   )
 }

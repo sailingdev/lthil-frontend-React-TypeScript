@@ -17,7 +17,7 @@ export const Txt = {
     <InnerText
       {...props}
       css={[
-        tw`text-font-200 font-medium text-mobile-medium`,
+        tw`font-sans text-font-200 font-medium text-mobile-medium`,
         tw`tablet:`,
         tw`desktop:`,
       ]}
@@ -27,7 +27,7 @@ export const Txt = {
     <InnerText
       {...props}
       css={[
-        tw`text-font-100 font-medium text-caption-medium`,
+        tw`font-sans text-font-100 font-medium text-caption-medium`,
         tw`tablet:`,
         tw`desktop:`,
       ]}
@@ -37,7 +37,7 @@ export const Txt = {
     <InnerText
       {...props}
       css={[
-        tw`text-font font-normal text-body2-regular`,
+        tw`font-sans text-font font-normal text-body2-regular`,
         tw`tablet:`,
         tw`desktop:`,
       ]}
@@ -47,7 +47,7 @@ export const Txt = {
     <InnerText
       {...props}
       css={[
-        tw`text-font-100 font-bold text-body2-bold`,
+        tw`font-sans text-font-100 font-bold text-body2-bold`,
         tw`tablet:`,
         tw`desktop:`,
       ]}
@@ -57,7 +57,7 @@ export const Txt = {
     <InnerText
       {...props}
       css={[
-        tw`text-font-100 font-normal text-body1-regular`,
+        tw`font-sans text-font-100 font-normal text-body1-regular`,
         tw`tablet:`,
         tw`desktop:`,
       ]}
@@ -67,7 +67,7 @@ export const Txt = {
     <InnerText
       {...props}
       css={[
-        tw`text-font font-normal text-button-medium`,
+        tw`font-sans text-font font-normal text-button-medium`,
         tw`tablet:`,
         tw`desktop:`,
       ]}
@@ -76,14 +76,18 @@ export const Txt = {
   Body1Bold: (props: ITxtProps) => (
     <InnerText
       {...props}
-      css={[tw`text-font font-bold text-body1-bold`, tw`tablet:`, tw`desktop:`]}
+      css={[
+        tw`font-sans text-font font-bold text-body1-bold`,
+        tw`tablet:`,
+        tw`desktop:`,
+      ]}
     />
   ),
   InputText: (props: ITxtProps) => (
     <InnerText
       {...props}
       css={[
-        tw`text-font font-normal text-input-text`,
+        tw`font-sans text-font font-normal text-input-text`,
         tw`tablet:`,
         tw`desktop:`,
       ]}
@@ -93,8 +97,7 @@ export const Txt = {
     <InnerText
       {...props}
       css={[
-        tw`text-font
-        font-semibold text-heading2`,
+        tw`font-sans text-font font-semibold text-heading2`,
         tw`tablet:`,
         tw`desktop:`,
       ]}
@@ -104,8 +107,7 @@ export const Txt = {
     <InnerText
       {...props}
       css={[
-        tw`text-font
-        font-normal text-heading1`,
+        tw`font-sans text-font font-normal text-heading1`,
         tw`tablet:`,
         tw`desktop:`,
       ]}

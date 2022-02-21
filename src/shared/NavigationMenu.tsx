@@ -42,6 +42,7 @@ export const NavigationMenu = (props: { onItemClick?(): void }) => {
               ]}
               onClick={() => props.onItemClick && props.onItemClick()}
             >
+              {/* TODO FONT */}
               <span>{i.label}</span>
               {isSelected && <span>&#8226;</span>}
             </Link>

@@ -42,7 +42,6 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
           size={16}
         />
       )}
-      {/* TODO USE CORRECT FONT */}
       <Txt.CaptionMedium
         css={[
           tw`flex-grow`,

@@ -5,22 +5,21 @@ import {
   useSortBy,
   useTable,
 } from 'react-table'
-import { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 import { CustomTablePagination } from './CustomTablePagination'
+import { Txt } from '../Txt'
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { isMobile } from '../../utils'
 import tw from 'twin.macro'
-import { Txt } from '../Txt'
-import { isDesktop } from '../../utils'
 
 const tableContainerStyle = css`
   .table {
     ${tw``}
     tr {
-      ${tw`bg-primary-100 border-b-2 border-primary-300`}
+      ${tw`bg-primary-100`}
     }
 
     /* tr:hover > td {
@@ -85,6 +84,7 @@ const thStyle = [
 export type ICustomColumnProps<T extends object> = Omit<Column<T>, 'Cell'> & {
   cell(data: T): ReactNode
   accessor: keyof T
+  align?: 'left' | 'right' | 'middle'
 }
 
 interface ICustomTableProps<T extends object> {
@@ -95,7 +95,6 @@ interface ICustomTableProps<T extends object> {
   columns: ICustomColumnProps<T>[]
   mobileColumns?: ICustomColumnProps<T>[]
   pageSize: number
-  totalCount: number
   onRowClick?: (data: T, index?: number) => void
   loading: boolean
 }
@@ -111,7 +110,6 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
 
     pageSize,
     maxPage,
-    totalCount,
     loading,
     onRowClick,
   } = props
@@ -124,7 +122,6 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
         pageIndex: currentPage - 1,
         pageSize,
       },
-      manualPagination: true,
       pageCount: maxPage,
       manualSortBy: true,
       disableMultiSort: true,
@@ -154,23 +151,22 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()} tw='rounded-t-xl'>
                 {headerGroup.headers.map((column) => {
+                  const { style, ...rest } = column.getHeaderProps(
+                    column.getSortByToggleProps(),
+                  )
                   return (
                     <th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                      className='group'
+                      {...rest}
                       css={thStyle}
+                      style={{
+                        ...style,
+                        // @ts-ignore
+                        textAlign: column.align ?? 'left',
+                      }}
                     >
-                      <div tw='flex items-center justify-between'>
-                        {isDesktop ? (
-                          <Txt.Body2Regular>
-                            {column.render('Header')}
-                          </Txt.Body2Regular>
-                        ) : (
-                          <Txt.Body1Regular>
-                            {column.render('Header')}
-                          </Txt.Body1Regular>
-                        )}
-                      </div>
+                      <Txt.Body2Regular>
+                        {column.render('Header')}
+                      </Txt.Body2Regular>
                     </th>
                   )
                 })}
@@ -217,26 +213,43 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
               {page.map((row) => {
                 prepareRow(row)
                 return (
-                  <tr
-                    {...row.getRowProps()}
-                    css={css`
-                      ${tw`cursor-pointer`}
-                    `}
-                    onClick={() => {
-                      onRowClick && onRowClick(row.original as any, row.index)
-                    }}
-                    // @ts-ignore
-                  >
-                    {row.cells.map((cell) => {
-                      /* eslint-disable no-debugger */
-                      return (
-                        <td {...cell.getCellProps()} css={tw`px-6 py-4`}>
-                          {/* @ts-ignore */}
-                          {cell.column.cell(cell.row.original)}
-                        </td>
-                      )
-                    })}
-                  </tr>
+                  <React.Fragment>
+                    <tr
+                      {...row.getRowProps()}
+                      css={css`
+                        ${tw`cursor-pointer`}
+                      `}
+                      onClick={() => {
+                        onRowClick && onRowClick(row.original as any, row.index)
+                      }}
+                      // @ts-ignore
+                    >
+                      {row.cells.map((cell) => {
+                        const { style, ...rest } = cell.getCellProps()
+                        /* eslint-disable no-debugger */
+                        return (
+                          <td
+                            {...rest}
+                            style={{
+                              ...style,
+                              // @ts-ignore
+                              textAlign: cell.column.align ?? 'left',
+                            }}
+                            css={tw`px-6 py-4`}
+                          >
+                            {/* @ts-ignore */}
+                            {cell.column.cell(cell.row.original)}
+                          </td>
+                        )
+                      })}
+                    </tr>
+                    {/* TODO */}
+                    <tr tw='bg-primary-300 h-0.5 px-6'>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </React.Fragment>
                 )
               })}
             </tbody>
@@ -246,7 +259,6 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
       {maxPage > 1 && (
         <CustomTablePagination
           totalOnPage={data.length}
-          totalCount={totalCount}
           pageSize={pageSize}
           maxPage={table.pageCount}
           currentPage={currentPage}

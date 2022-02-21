@@ -207,6 +207,406 @@ const data = [
     },
     trend: 'Last one',
   },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
+  {
+    name: { value: 24, format: 'en-US' },
+    position: { value: 13.1, format: 'en-US' },
+    profit: {
+      currencyValue: 13422.4,
+      percentageValue: 68.342,
+      format: 'en-US',
+    },
+    trend: 'abcdef',
+  },
 ]
 
 const initialSearchParams: Partial<ISearchParams> = {
@@ -221,12 +621,11 @@ export const DashboardPage = () => {
     <ContentContainer>
       <CustomTable
         loading={false}
-        maxPage={8}
+        maxPage={data.length / searchParams.size}
         currentPage={searchParams.page}
         setPage={setPage}
         pageSize={searchParams.size}
         data={data}
-        totalCount={8}
         mobileColumns={[
           {
             Header: 'Trend',
@@ -234,7 +633,7 @@ export const DashboardPage = () => {
             cell: (l) => <TableCell.Text value={l.trend} />,
           },
           {
-            Header: 'Percentage',
+            Header: 'Percentagkaskahsakhse',
             accessor: 'position',
             cell: (l) => (
               <TableCell.Percentage
@@ -248,11 +647,13 @@ export const DashboardPage = () => {
           {
             Header: 'Trend',
             accessor: 'trend',
+
             cell: (l) => <TableCell.Text value={l.trend} />,
           },
           {
             Header: 'Percentage',
             accessor: 'position',
+
             cell: (l) => (
               <TableCell.Percentage
                 value={l.position.value}
@@ -274,6 +675,7 @@ export const DashboardPage = () => {
           {
             Header: 'Currency',
             accessor: 'name',
+            align: 'right',
             cell: (l) => (
               <TableCell.Currency value={l.name.value} format={l.name.format} />
             ),
