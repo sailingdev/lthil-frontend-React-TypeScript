@@ -1,4 +1,5 @@
 import 'twin.macro'
+import { useState } from 'react'
 
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
@@ -6,6 +7,8 @@ import { ISearchParams } from '../types'
 import { TableCell } from '../shared/table/cells'
 import { useSearch } from '../shared/hooks/useSearch'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
+import { Button } from '../shared/Button'
+import { CenteredModal } from '../shared/CenteredModal'
 
 const data = [
   {
@@ -616,6 +619,12 @@ const initialSearchParams: Partial<ISearchParams> = {
   term: '',
 }
 export const DashboardPage = () => {
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  const onModalChange = (value: boolean) => {
+    setModalIsOpen(value)
+  }
+
   const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
     useSearch(initialSearchParams)
   return (
@@ -684,6 +693,11 @@ export const DashboardPage = () => {
         ]}
       />
       <PositionDetailsCard />
+      <Button
+        text='Toggle modal'
+        onClick={() => setModalIsOpen(!modalIsOpen)}
+      />
+      <CenteredModal modalIsOpen={modalIsOpen} onChange={onModalChange} />
     </ContentContainer>
   )
 }
