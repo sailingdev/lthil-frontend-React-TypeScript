@@ -5,6 +5,7 @@ import { CustomTable } from '../shared/table/CustomTable'
 import { ISearchParams } from '../types'
 import { TableCell } from '../shared/table/cells'
 import { useSearch } from '../shared/hooks/useSearch'
+import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 
 const data = [
   {
@@ -682,6 +683,7 @@ export const DashboardPage = () => {
           },
         ]}
       />
+      <PositionDetailsCard />
     </ContentContainer>
   )
 }
