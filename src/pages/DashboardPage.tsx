@@ -718,7 +718,9 @@ export const DashboardPage = () => {
         text='Toggle modal'
         onClick={() => setModalIsOpen(!modalIsOpen)}
       />
-      <CenteredModal modalIsOpen={modalIsOpen} onChange={onModalChange} />
+      <CenteredModal modalIsOpen={modalIsOpen} onChange={onModalChange}>
+        <span>im a modal and this is some text</span>
+      </CenteredModal>
     </ContentContainer>
   )
 }
