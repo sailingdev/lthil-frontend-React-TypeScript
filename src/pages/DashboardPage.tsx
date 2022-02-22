@@ -622,11 +622,11 @@ const initialSearchParams: Partial<ISearchParams> = {
 }
 export const DashboardPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [sliderValue, setSliderValue] = useState(1)
 
   const onModalChange = (value: boolean) => {
     setModalIsOpen(value)
   }
-  const [sliderValue, setSliderValue] = useState(1)
 
   const onSliderChange = (value: number) => {
     setSliderValue(value)
@@ -718,8 +718,15 @@ export const DashboardPage = () => {
         text='Toggle modal'
         onClick={() => setModalIsOpen(!modalIsOpen)}
       />
-      <CenteredModal modalIsOpen={modalIsOpen} onChange={onModalChange}>
-        <span>im a modal and this is some text</span>
+      <CenteredModal isOpen={modalIsOpen} onChange={onModalChange}>
+        <div tw='w-full'>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+        </div>
       </CenteredModal>
     </ContentContainer>
   )

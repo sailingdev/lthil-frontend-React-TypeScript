@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import tw from 'twin.macro'
-import { useState } from 'react'
+import { useState, ReactNode } from 'react'
 import Modal from 'react-modal'
 
 import { Button } from './Button'
@@ -10,23 +10,23 @@ import { Txt } from './Txt'
 Modal.setAppElement('#root')
 
 export const CenteredModal = (props: {
-  modalIsOpen: boolean
+  isOpen: boolean
   onChange: (st: boolean) => void
-  children: any
+  children: ReactNode
 }) => {
-  const handleCloseEvent = () => {
-    props.onChange(false)
+  const { isOpen, onChange, children } = props
+
+  const closeModal = () => {
+    onChange(false)
   }
   return (
     <Modal
-      isOpen={props.modalIsOpen}
-      // onAfterOpen={afterOpenModal}
-      // onRequestClose={closeModal}
-      // style={customStyles}
+      tw='top-1/2 left-1/2 marginRight[-50%] transform[translate(-50%, -50%)] bg-primary flex flex-col justify-center items-center sticky desktop:rounded-xl desktop:border-2 p-4 desktop:min-width[256px] desktop:min-height[64px] desktop:max-width[50%] desktop:border-primary-300 desktop:w-auto desktop:h-auto'
+      isOpen={isOpen}
       contentLabel='Example Modal'
     >
-      <Button text='Close modal' onClick={handleCloseEvent} />
-      {props.children}
+      {children}
+      <Button text='Close modal' onClick={closeModal} />
     </Modal>
   )
 }
