@@ -21,7 +21,7 @@ export const CenteredModal = (props: {
   }
   return (
     <Modal
-      tw='top-1/2 left-1/2 marginRight[-50%] transform[translate(-50%, -50%)] bg-primary flex flex-col justify-center items-center sticky desktop:rounded-xl desktop:border-2 p-4 desktop:min-width[256px] desktop:min-height[64px] desktop:max-width[50%] desktop:border-primary-300 desktop:w-auto desktop:h-auto'
+      tw='w-screen h-screen top-1/2 left-1/2 marginRight[-50%] transform[translate(-50%, -50%)] bg-primary flex flex-col justify-center items-center fixed desktop:rounded-xl desktop:border-2 p-4 desktop:min-width[256px] desktop:min-height[64px] desktop:max-width[50%] desktop:border-primary-300 desktop:w-auto desktop:h-auto'
       isOpen={isOpen}
       contentLabel='Example Modal'
     >
