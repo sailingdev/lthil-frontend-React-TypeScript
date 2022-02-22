@@ -2,25 +2,22 @@
 import tw from 'twin.macro'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
-import { forwardRef } from 'react'
 
 interface ISliderProps {
   min: number
   max: number
-  defaultValue: number
-  dots?: boolean
   marks?: any
+  onChange?: (value: number) => void
 }
 
 export const SliderBar = (props: ISliderProps) => {
-  const { min, max, defaultValue, dots, marks } = props
+  const { min, max, marks, onChange } = props
   return (
-    <div>
+    <div tw='my-6'>
       <Slider
+        onChange={onChange}
         min={min}
         max={max}
-        defaultValue={defaultValue}
-        dots={dots}
         railStyle={tw`bg-primary-300 height[3px]`}
         trackStyle={tw`bg-primary-300 height[3px]`}
         handleStyle={tw`bg-secondary border-0 shadow-none`}

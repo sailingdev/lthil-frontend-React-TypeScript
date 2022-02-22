@@ -618,6 +618,10 @@ const initialSearchParams: Partial<ISearchParams> = {
   term: '',
 }
 export const DashboardPage = () => {
+  const logSliderValue = (value: number) => {
+    console.log(value)
+  }
+
   const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
     useSearch(initialSearchParams)
   return (
@@ -685,11 +689,11 @@ export const DashboardPage = () => {
           },
         ]}
       />
-      <SliderBar min={500} max={1500} defaultValue={1000} />
+      <SliderBar min={500} max={1500} onChange={logSliderValue} />
       <SliderBar
+        onChange={logSliderValue}
         min={1}
         max={5}
-        defaultValue={1}
         marks={{
           1: <Txt.CaptionMedium>1x</Txt.CaptionMedium>,
           2: <Txt.CaptionMedium>2x</Txt.CaptionMedium>,
