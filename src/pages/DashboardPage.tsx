@@ -5,6 +5,8 @@ import { CustomTable } from '../shared/table/CustomTable'
 import { ISearchParams } from '../types'
 import { TableCell } from '../shared/table/cells'
 import { useSearch } from '../shared/hooks/useSearch'
+import { SliderBar } from '../shared/Slider'
+import { Txt } from '../shared/Txt'
 
 const data = [
   {
@@ -681,6 +683,19 @@ export const DashboardPage = () => {
             ),
           },
         ]}
+      />
+      <SliderBar min={500} max={1500} defaultValue={1000} />
+      <SliderBar
+        min={1}
+        max={5}
+        defaultValue={1}
+        marks={{
+          1: <Txt.CaptionMedium>1x</Txt.CaptionMedium>,
+          2: <Txt.CaptionMedium>2x</Txt.CaptionMedium>,
+          3: <Txt.CaptionMedium>3x</Txt.CaptionMedium>,
+          4: <Txt.CaptionMedium>4x</Txt.CaptionMedium>,
+          5: <Txt.CaptionMedium>5x</Txt.CaptionMedium>,
+        }}
       />
     </ContentContainer>
   )
