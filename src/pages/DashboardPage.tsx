@@ -1,4 +1,5 @@
 import 'twin.macro'
+import { useState } from 'react'
 
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
@@ -618,8 +619,10 @@ const initialSearchParams: Partial<ISearchParams> = {
   term: '',
 }
 export const DashboardPage = () => {
-  const logSliderValue = (value: number) => {
-    console.log(value)
+  const [sliderValue, setSliderValue] = useState(1)
+
+  const onSliderChange = (value: number) => {
+    setSliderValue(value)
   }
 
   const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
@@ -689,9 +692,10 @@ export const DashboardPage = () => {
           },
         ]}
       />
-      <SliderBar min={500} max={1500} onChange={logSliderValue} />
+      {/* <SliderBar min={500} max={1500} /> */}
       <SliderBar
-        onChange={logSliderValue}
+        value={sliderValue}
+        onChange={onSliderChange}
         min={1}
         max={5}
         marks={{

@@ -8,16 +8,18 @@ interface ISliderProps {
   max: number
   marks?: any
   onChange?: (value: number) => void
+  value: number
 }
 
 export const SliderBar = (props: ISliderProps) => {
-  const { min, max, marks, onChange } = props
+  const { min, max, marks, onChange, value } = props
   return (
     <div tw='my-6'>
       <Slider
         onChange={onChange}
         min={min}
         max={max}
+        value={value}
         railStyle={tw`bg-primary-300 height[3px]`}
         trackStyle={tw`bg-primary-300 height[3px]`}
         handleStyle={tw`bg-secondary border-0 shadow-none`}
