@@ -7,6 +7,7 @@ import { TableCell } from '../shared/table/cells'
 import { useSearch } from '../shared/hooks/useSearch'
 import { SliderBar } from '../shared/Slider'
 import { Txt } from '../shared/Txt'
+import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 
 const data = [
   {
@@ -697,6 +698,7 @@ export const DashboardPage = () => {
           5: <Txt.CaptionMedium>5x</Txt.CaptionMedium>,
         }}
       />
+      <PositionDetailsCard />
     </ContentContainer>
   )
 }
