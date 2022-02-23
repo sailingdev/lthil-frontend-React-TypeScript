@@ -10,6 +10,8 @@ import { SliderBar } from '../shared/Slider'
 import { Txt } from '../shared/Txt'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabsSwitch } from '../shared/TabsSwitch'
+import { Button } from '../shared/Button'
+import { CenteredModal } from '../shared/CenteredModal'
 
 const data = [
   {
@@ -620,7 +622,12 @@ const initialSearchParams: Partial<ISearchParams> = {
   term: '',
 }
 export const DashboardPage = () => {
+  const [modalIsOpen, setModalIsOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState(1)
+
+  const onModalChange = (value: boolean) => {
+    setModalIsOpen(value)
+  }
 
   const onSliderChange = (value: number) => {
     setSliderValue(value)
@@ -720,6 +727,20 @@ export const DashboardPage = () => {
           },
         ]}
       />
+      <Button
+        text='Toggle modal'
+        onClick={() => setModalIsOpen(!modalIsOpen)}
+      />
+      <CenteredModal isOpen={modalIsOpen} onChange={onModalChange}>
+        <div tw='w-full'>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+          <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
+        </div>
+      </CenteredModal>
     </ContentContainer>
   )
 }
