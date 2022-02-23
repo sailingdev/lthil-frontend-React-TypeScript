@@ -52,6 +52,7 @@ export const TabsSwitch = (props: ITabsProps) => {
       >
         {props.items.map((t, i) => (
           <TabButton
+            key={`tabbutton-${i}`}
             text={t.title}
             active={i === activeIndex}
             onClick={() => setActiveIndex(i)}

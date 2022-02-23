@@ -12,6 +12,7 @@ import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { Button } from '../shared/Button'
 import { CenteredModal } from '../shared/CenteredModal'
+import { InputField } from '../shared/InputField'
 
 const data = [
   {
@@ -624,6 +625,7 @@ const initialSearchParams: Partial<ISearchParams> = {
 export const DashboardPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState(1)
+  const [inputValue, setInputValue] = useState('')
 
   const onModalChange = (value: boolean) => {
     setModalIsOpen(value)
@@ -631,6 +633,10 @@ export const DashboardPage = () => {
 
   const onSliderChange = (value: number) => {
     setSliderValue(value)
+  }
+
+  const onInputChange = (event: any) => {
+    setInputValue(event.target.value)
   }
 
   const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
@@ -741,6 +747,11 @@ export const DashboardPage = () => {
           <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
         </div>
       </CenteredModal>
+      <InputField
+        label='Principal'
+        value={inputValue}
+        onChange={onInputChange}
+      />
     </ContentContainer>
   )
 }
