@@ -14,7 +14,7 @@ interface ITabsProps {
   items: ITab[]
 }
 
-const Button = (props: {
+const TabButton = (props: {
   text: string
   onClick: MouseEventHandler<HTMLButtonElement>
   active?: boolean
@@ -24,7 +24,7 @@ const Button = (props: {
       css={[
         tw`border-0 rounded-md cursor-pointer flex flex-row items-center justify-center px-3 py-2`,
         tw`bg-none text-secondary w-1/2`,
-        props.active && tw`bg-secondary-200`,
+        props.active && tw`bg-font-100 dark:bg-font`,
       ]}
       onClick={props.onClick}
     >
@@ -47,13 +47,11 @@ export const TabsSwitch = (props: ITabsProps) => {
     <div>
       <div
         css={[
-          tw`flex flex-row items-center gap-2 border-2 border-secondary-200 rounded-xl p-1`,
-          document.documentElement.classList.contains('dark') && // TODO: This works only after you switch the theme AND click a button in this component (only when you switch the theme for the first time, later it works perfectly...), so it doesn't update automatically. This needs to be fixed
-            tw`border-primary-400`,
+          tw`flex flex-row items-center gap-2 border-2 border-font-200 rounded-xl p-1 dark:border-primary-400`,
         ]}
       >
         {props.items.map((t, i) => (
-          <Button
+          <TabButton
             text={t.title}
             active={i === activeIndex}
             onClick={() => setActiveIndex(i)}
