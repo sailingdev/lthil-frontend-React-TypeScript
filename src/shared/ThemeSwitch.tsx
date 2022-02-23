@@ -1,17 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react'
 import tw from 'twin.macro'
+import { useEffect } from 'react'
 import Switch from 'react-switch'
 
+import useLocalStorage from './hooks/useLocalStorage'
 import { ReactComponent as SwitchDark } from '../assets/switchDark.svg'
 import { ReactComponent as SwitchLight } from '../assets/switchLight.svg'
 
 export const ThemeSwitch = () => {
-  const [isLightMode, setLightMode] = useState(true)
+  const [darkMode, setDarkMode] = useLocalStorage('darkMode', false)
 
   const onThemeChange = () => {
     document.documentElement.classList.toggle('dark')
-    setLightMode(!isLightMode)
+    setDarkMode(!darkMode)
   }
 
   return (
@@ -28,7 +30,7 @@ export const ThemeSwitch = () => {
           <SwitchLight />
         </div>
       }
-      checked={isLightMode}
+      checked={!darkMode}
       onColor='#F2F5F6'
       offColor='#20293A'
       onHandleColor='#FB8E51'
