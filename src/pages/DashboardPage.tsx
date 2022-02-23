@@ -6,12 +6,13 @@ import { CustomTable } from '../shared/table/CustomTable'
 import { ISearchParams } from '../types'
 import { TableCell } from '../shared/table/cells'
 import { useSearch } from '../shared/hooks/useSearch'
-import { SliderBar } from '../shared/Slider'
+import { SliderBar } from '../shared/SliderBar'
 import { Txt } from '../shared/Txt'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { Button } from '../shared/Button'
 import { CenteredModal } from '../shared/CenteredModal'
+import { CollateralCard } from '../shared/CollateralCard'
 
 const data = [
   {
@@ -624,6 +625,7 @@ const initialSearchParams: Partial<ISearchParams> = {
 export const DashboardPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState(1)
+  const [collateralValue, setCollateralValue] = useState(100)
 
   const onModalChange = (value: boolean) => {
     setModalIsOpen(value)
@@ -631,6 +633,10 @@ export const DashboardPage = () => {
 
   const onSliderChange = (value: number) => {
     setSliderValue(value)
+  }
+
+  const onCollateralValueChange = (value: number) => {
+    setCollateralValue(value)
   }
 
   const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
@@ -741,6 +747,7 @@ export const DashboardPage = () => {
           <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
         </div>
       </CenteredModal>
+      <CollateralCard />
     </ContentContainer>
   )
 }
