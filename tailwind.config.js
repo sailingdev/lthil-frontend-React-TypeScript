@@ -10,7 +10,7 @@ const generateFont = (variable) => {
 
 module.exports = {
   purge: [],
-  darkMode: 'media', 
+  darkMode: 'class', 
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],

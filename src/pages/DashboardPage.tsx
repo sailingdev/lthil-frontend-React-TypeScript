@@ -9,6 +9,7 @@ import { useSearch } from '../shared/hooks/useSearch'
 import { SliderBar } from '../shared/Slider'
 import { Txt } from '../shared/Txt'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
+import { TabsSwitch } from '../shared/TabsSwitch'
 import { Button } from '../shared/Button'
 import { CenteredModal } from '../shared/CenteredModal'
 
@@ -714,6 +715,18 @@ export const DashboardPage = () => {
         }}
       />
       <PositionDetailsCard />
+      <TabsSwitch
+        items={[
+          {
+            title: 'tab 1',
+            content: <Txt.Body2Regular>content from tab 1</Txt.Body2Regular>,
+          },
+          {
+            title: 'tab 2',
+            content: <Txt.Body2Regular>content from tab 2</Txt.Body2Regular>,
+          },
+        ]}
+      />
       <Button
         text='Toggle modal'
         onClick={() => setModalIsOpen(!modalIsOpen)}
