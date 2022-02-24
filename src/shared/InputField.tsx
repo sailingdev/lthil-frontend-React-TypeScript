@@ -16,7 +16,7 @@ interface IInputFieldProps {
   label: string
   onChange: (value: string) => void
   value: string
-  renderRight: any
+  renderRight: React.ReactNode
 }
 
 export const InputField = (props: IInputFieldProps) => {
