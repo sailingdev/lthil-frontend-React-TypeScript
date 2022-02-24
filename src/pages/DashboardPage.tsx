@@ -643,6 +643,7 @@ export const DashboardPage = () => {
         label='Principal'
         value={inputValue}
         onChange={(value) => setInputValue(() => value)}
+        renderRight={<div>ABC</div>}
       />
       <CustomTable
         loading={false}
