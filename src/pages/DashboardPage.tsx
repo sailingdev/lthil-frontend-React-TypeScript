@@ -1,4 +1,5 @@
 import 'twin.macro'
+import { useRef } from 'react'
 
 import { Button } from '../shared/Button'
 import { CenteredModal } from '../shared/CenteredModal'
@@ -637,13 +638,16 @@ export const DashboardPage = () => {
 
   const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
     useSearch(initialSearchParams)
+
   return (
     <ContentContainer>
       <InputField
         label='Principal'
         value={inputValue}
         onChange={(value) => setInputValue(() => value)}
-        renderRight={<div>ABC</div>}
+        symbol='%'
+        button
+        secondaryButton
       />
       <CustomTable
         loading={false}
