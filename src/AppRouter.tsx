@@ -10,10 +10,18 @@ import { StakePage } from './pages/StakePage'
 import { TradePage } from './pages/TradePage'
 import { isDesktop } from './utils'
 import tw from 'twin.macro'
+import { useEffect } from 'react'
+import { useLocalStorage } from 'react-use'
 
 /** @jsxImportSource @emotion/react */
 
 export const AppRouter = () => {
+  const [darkMode] = useLocalStorage('darkMode', false)
+
+  useEffect(() => {
+    if (darkMode) document.documentElement.classList.toggle('dark')
+  }, [])
+
   return (
     <div css={[tw`flex flex-col bg-primary min-h-screen desktop:flex-row`]}>
       <div tw='flex-grow flex flex-col'>

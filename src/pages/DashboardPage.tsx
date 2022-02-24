@@ -7,13 +7,14 @@ import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
 import { ISearchParams } from '../types'
 import { InputField } from '../shared/InputField'
-import { PositionDetailsCard } from '../shared/PositionDetailsCard'
-import { SliderBar } from '../shared/Slider'
 import { TableCell } from '../shared/table/cells'
+import { useSearch } from '../shared/hooks/useSearch'
+import { SliderBar } from '../shared/SliderBar'
+import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { Txt } from '../shared/Txt'
-import { useSearch } from '../shared/hooks/useSearch'
 import { useState } from 'react'
+import { CollateralCard } from '../shared/CollateralCard'
 
 const data = [
   {
@@ -627,6 +628,7 @@ export const DashboardPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState(1)
   const [inputValue, setInputValue] = useState('')
+  const [collateralValue, setCollateralValue] = useState(100)
 
   const onModalChange = (value: boolean) => {
     setModalIsOpen(value)
@@ -634,6 +636,10 @@ export const DashboardPage = () => {
 
   const onSliderChange = (value: number) => {
     setSliderValue(value)
+  }
+
+  const onCollateralValueChange = (value: number) => {
+    setCollateralValue(value)
   }
 
   const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
@@ -753,6 +759,7 @@ export const DashboardPage = () => {
           <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
         </div>
       </CenteredModal>
+      <CollateralCard />
     </ContentContainer>
   )
 }
