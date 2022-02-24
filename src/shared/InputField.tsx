@@ -10,30 +10,13 @@ import {
   MutableRefObject,
 } from 'react'
 
-import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
-import { ArrowDown } from 'phosphor-react'
-import { Button } from './Button'
 import { Txt } from './Txt'
-
-const Symbol = (props: { symbol: string }) => {
-  return <Txt.InputText tw='text-font-100'>{props.symbol}</Txt.InputText>
-}
 
 interface IInputFieldProps {
   label: string
   onChange: (value: string) => void
   value: string
-  secondaryButton?: boolean
-  symbol?: string
-  button?: boolean
-}
-
-const SecondaryButton = (props: { label: string }) => {
-  return (
-    <button tw='border-primary-400 dark:border-primary-300 rounded-md border-2 h-8 px-2'>
-      <Txt.Body2Regular>{props.label}</Txt.Body2Regular>
-    </button>
-  )
+  renderRight: any
 }
 
 export const InputField = (props: IInputFieldProps) => {
@@ -70,16 +53,7 @@ export const InputField = (props: IInputFieldProps) => {
             props.onChange(value)
           }}
         />
-        {props.secondaryButton && <SecondaryButton label='Max' />}
-        {props.button && (
-          <Button
-            css={[tw`h-8 bg-primary-400 dark:bg-primary-300`]}
-            text='USDC'
-            leftIcon={CurrEth}
-            rightIcon={ArrowDown}
-          />
-        )}
-        {props.symbol && <Symbol symbol={props.symbol} />}
+        {props.renderRight}
       </div>
     </div>
   )

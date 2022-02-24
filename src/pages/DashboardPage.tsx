@@ -1,5 +1,5 @@
 import 'twin.macro'
-import { useRef } from 'react'
+import tw from 'twin.macro'
 
 import { Button } from '../shared/Button'
 import { CenteredModal } from '../shared/CenteredModal'
@@ -628,7 +628,6 @@ export const DashboardPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState(1)
   const [inputValue, setInputValue] = useState('')
-  const [collateralValue, setCollateralValue] = useState(100)
 
   const onModalChange = (value: boolean) => {
     setModalIsOpen(value)
@@ -636,10 +635,6 @@ export const DashboardPage = () => {
 
   const onSliderChange = (value: number) => {
     setSliderValue(value)
-  }
-
-  const onCollateralValueChange = (value: number) => {
-    setCollateralValue(value)
   }
 
   const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
@@ -651,9 +646,12 @@ export const DashboardPage = () => {
         label='Principal'
         value={inputValue}
         onChange={(value) => setInputValue(() => value)}
-        symbol='%'
-        button
-        secondaryButton
+        renderRight={
+          <>
+            <Txt.Body2Regular>renderRight</Txt.Body2Regular>
+            <Txt.Body2Regular>renderRight</Txt.Body2Regular>
+          </>
+        }
       />
       <CustomTable
         loading={false}
