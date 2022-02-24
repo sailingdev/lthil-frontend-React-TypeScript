@@ -15,6 +15,8 @@ import { TabsSwitch } from '../shared/TabsSwitch'
 import { Txt } from '../shared/Txt'
 import { useState } from 'react'
 import { CollateralCard } from '../shared/CollateralCard'
+import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
+import { ArrowDown } from 'phosphor-react'
 
 const data = [
   {
@@ -648,8 +650,19 @@ export const DashboardPage = () => {
         onChange={(value) => setInputValue(() => value)}
         renderRight={
           <>
-            <Txt.Body2Regular>renderRight</Txt.Body2Regular>
-            <Txt.Body2Regular>renderRight</Txt.Body2Regular>
+            <button
+              css={[
+                tw`border-primary-400 dark:border-primary-300 rounded-md border-2 h-8 px-2`,
+              ]}
+            >
+              <Txt.Body2Regular>Max</Txt.Body2Regular>
+            </button>
+            <Button
+              css={[tw`h-8 bg-primary-400 dark:bg-primary-300`]}
+              text='USDC'
+              leftIcon={CurrEth}
+              rightIcon={ArrowDown}
+            />
           </>
         }
       />
