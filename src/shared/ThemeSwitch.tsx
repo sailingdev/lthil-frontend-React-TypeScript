@@ -1,14 +1,13 @@
-/** @jsxImportSource @emotion/react */
-import { useState } from 'react'
-import tw from 'twin.macro'
-import { useEffect } from 'react'
-import Switch from 'react-switch'
+import 'twin.macro'
 
-import useLocalStorage from './hooks/useLocalStorage'
+import { IBaseProps } from '../utils'
+/** @jsxImportSource @emotion/react */
+import Switch from 'react-switch'
 import { ReactComponent as SwitchDark } from '../assets/switchDark.svg'
 import { ReactComponent as SwitchLight } from '../assets/switchLight.svg'
+import { useLocalStorage } from 'react-use'
 
-export const ThemeSwitch = () => {
+export const ThemeSwitch = (props: IBaseProps) => {
   const [darkMode, setDarkMode] = useLocalStorage('darkMode', false)
 
   const onThemeChange = () => {
@@ -18,7 +17,7 @@ export const ThemeSwitch = () => {
 
   return (
     <Switch
-      // tw='mt-1'
+      className={props.className}
       onChange={onThemeChange}
       uncheckedIcon={
         <div tw='flex justify-center items-center height[100%]'>

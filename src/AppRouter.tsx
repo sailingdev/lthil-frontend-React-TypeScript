@@ -1,9 +1,7 @@
 import 'twin.macro'
-import tw from 'twin.macro'
-import { useEffect } from 'react'
+
 import { Navigate, Route, Routes } from 'react-router-dom'
 
-import useLocalStorage from './shared/hooks/useLocalStorage'
 import { ChartsPage } from './pages/ChartsPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { Footer } from './shared/Footer'
@@ -11,6 +9,9 @@ import { Header } from './shared/Header'
 import { StakePage } from './pages/StakePage'
 import { TradePage } from './pages/TradePage'
 import { isDesktop } from './utils'
+import tw from 'twin.macro'
+import { useEffect } from 'react'
+import { useLocalStorage } from 'react-use'
 
 /** @jsxImportSource @emotion/react */
 
