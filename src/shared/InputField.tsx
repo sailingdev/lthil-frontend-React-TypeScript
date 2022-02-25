@@ -1,7 +1,7 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 import tw from 'twin.macro'
 
-/** @jsxImportSource @emotion/react */
 import {
   useEffect,
   useState,

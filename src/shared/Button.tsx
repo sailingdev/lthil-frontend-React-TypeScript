@@ -1,8 +1,9 @@
-import { ICSSProps } from '../types'
 /** @jsxImportSource @emotion/react */
+import 'twin.macro'
+import tw from 'twin.macro'
+import { ICSSProps } from '../types'
 import { MouseEventHandler } from 'react'
 import { Txt } from './Txt'
-import tw from 'twin.macro'
 
 interface IButtonProps extends ICSSProps {
   type?: any
