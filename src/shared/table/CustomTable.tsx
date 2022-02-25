@@ -5,7 +5,7 @@ import {
   useSortBy,
   useTable,
 } from 'react-table'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 import { CustomTablePagination } from './CustomTablePagination'
@@ -95,11 +95,10 @@ interface ICustomTableProps<T extends object> {
   columns: ICustomColumnProps<T>[]
   mobileColumns?: ICustomColumnProps<T>[]
   pageSize: number
-  // onRowClick?: (data: T, index?: number) => void
   loading: boolean
   renderExpanded?: React.ReactNode
   onActiveRowChange?: (row: T) => void
-  activeRow: any
+  activeRow?: T | undefined
 }
 // TODO TABLE EMPTY STATE
 
@@ -224,7 +223,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                       ]}
                       onClick={() => {
                         props.onActiveRowChange &&
-                          props.onActiveRowChange(row.original as any) //.original as any, row.index
+                          props.onActiveRowChange(row.original as T)
                       }}
                       // @ts-ignore
                     >
@@ -248,10 +247,12 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                           )
                         })}
                       </div>
-                      <div tw='w-full h-full flex flex-row justify-center items-center'>
-                        {row.original == props.activeRow &&
-                          props.renderExpanded}
-                      </div>
+                      {row.original == props.activeRow &&
+                        props.renderExpanded && (
+                          <div tw='w-full h-full flex flex-row justify-center items-center'>
+                            {props.renderExpanded}
+                          </div>
+                        )}
                     </tr>
                     <tr tw='h-0.5 bg-primary-100'>
                       <div
