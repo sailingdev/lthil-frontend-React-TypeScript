@@ -2,13 +2,7 @@
 import 'twin.macro'
 import tw from 'twin.macro'
 
-import {
-  useEffect,
-  useState,
-  forwardRef,
-  useRef,
-  MutableRefObject,
-} from 'react'
+import { useEffect, useState } from 'react'
 
 import { Txt } from './Txt'
 
@@ -22,10 +16,6 @@ interface IInputFieldProps {
 export const InputField = (props: IInputFieldProps) => {
   const [value, setValue] = useState(props.value)
   const [inputIsFocused, setInputIsFocused] = useState(false)
-
-  const inputRef = useRef<HTMLInputElement>(
-    null,
-  ) as MutableRefObject<HTMLInputElement>
 
   useEffect(() => {
     setValue(props.value)
@@ -44,7 +34,6 @@ export const InputField = (props: IInputFieldProps) => {
         <input
           onFocus={() => setInputIsFocused(true)}
           onBlur={() => setInputIsFocused(false)}
-          ref={inputRef}
           tw='flex-grow bg-primary-200 rounded-md text-input-text font-sans text-font font-normal focus:outline-none'
           type='text'
           value={value}
