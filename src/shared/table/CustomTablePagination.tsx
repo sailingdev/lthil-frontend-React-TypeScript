@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React, { MouseEventHandler } from 'react'
+
 import { ArrowLeft, ArrowRight } from 'phosphor-react'
-import { isMobile } from '../../utils'
+import 'twin.macro'
 import tw from 'twin.macro'
 
 interface ICustomTablePaginationProps {
@@ -31,6 +32,7 @@ const PaginationButton = (props: {
   text?: string
   active: boolean
   onClick?: MouseEventHandler<HTMLButtonElement>
+  currentPage?: number
 }) => {
   const Icon = props.icon
   const text = props.text
@@ -39,13 +41,20 @@ const PaginationButton = (props: {
   return (
     <button
       css={[
-        tw`border-0 rounded-md cursor-pointer flex flex-row items-center px-2.5 py-2.5 bg-primary-200 width[36px] height[36px] flex justify-center items-center mx-1`,
-        active && tw`bg-action text-primary-100`,
+        tw`border-0 rounded-md cursor-pointer flex flex-row items-center px-2.5 py-2.5 bg-primary-200 width[36px] height[36px] flex justify-center items-center mx-1 font-sans font-sans`,
+        active &&
+          tw`bg-action text-primary-100 font-bold dark:text-secondary-100`,
       ]}
       onClick={props.onClick}
     >
       {Icon && (
-        <Icon css={[tw`text-secondary`, active && tw`text-primary-100`]} />
+        <Icon
+          css={[
+            tw`text-secondary`,
+            active && tw`text-primary-100`,
+            props.currentPage == 0 && tw`bg-primary`, // text-font-200
+          ]}
+        />
       )}
       {text && text}
     </button>
@@ -80,7 +89,11 @@ export const CustomTablePagination = (props: ICustomTablePaginationProps) => {
       </div>
       <button onClick={() => setPage(Math.min(maxPage, currentPage + 1))}>
         <span tw='text-action py-4'>
-          <PaginationButton active={false} icon={ArrowRight} />
+          <PaginationButton
+            currentPage={currentPage}
+            active={false}
+            icon={ArrowRight}
+          />
         </span>
       </button>
     </div>

@@ -167,7 +167,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                         textAlign: column.align ?? 'left',
                       }}
                     >
-                      <Txt.Body2Regular>
+                      <Txt.Body2Regular tw='text-font-100'>
                         {column.render('Header')}
                       </Txt.Body2Regular>
                     </th>
