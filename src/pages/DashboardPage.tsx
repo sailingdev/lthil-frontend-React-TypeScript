@@ -1,18 +1,23 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import { useState } from 'react'
+import tw from 'twin.macro'
 
+import { Button } from '../shared/Button'
+import { CenteredModal } from '../shared/CenteredModal'
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
 import { ISearchParams } from '../types'
+import { InputField } from '../shared/InputField'
 import { TableCell } from '../shared/table/cells'
 import { useSearch } from '../shared/hooks/useSearch'
 import { SliderBar } from '../shared/SliderBar'
-import { Txt } from '../shared/Txt'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabsSwitch } from '../shared/TabsSwitch'
-import { Button } from '../shared/Button'
-import { CenteredModal } from '../shared/CenteredModal'
+import { Txt } from '../shared/Txt'
+import { useState } from 'react'
 import { CollateralCard } from '../shared/CollateralCard'
+import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
+import { ArrowDown } from 'phosphor-react'
 
 const data = [
   {
@@ -625,7 +630,7 @@ const initialSearchParams: Partial<ISearchParams> = {
 export const DashboardPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState(1)
-  const [collateralValue, setCollateralValue] = useState(100)
+  const [inputValue, setInputValue] = useState('')
 
   const onModalChange = (value: boolean) => {
     setModalIsOpen(value)
@@ -635,14 +640,34 @@ export const DashboardPage = () => {
     setSliderValue(value)
   }
 
-  const onCollateralValueChange = (value: number) => {
-    setCollateralValue(value)
-  }
-
   const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
     useSearch(initialSearchParams)
+
   return (
     <ContentContainer>
+      <InputField
+        label='Principal'
+        value={inputValue}
+        onChange={(value) => setInputValue(() => value)}
+        renderRight={
+          <>
+            <button
+              css={[
+                tw`border-primary-400 dark:border-primary-300 rounded-md border-2 h-8 px-2`,
+              ]}
+            >
+              <Txt.Body2Regular>Max</Txt.Body2Regular>
+            </button>
+            <Button
+              css={[tw`h-8 bg-primary-400 dark:bg-primary-300`]}
+              text='USDC'
+              leftIcon={CurrEth}
+              rightIcon={ArrowDown}
+            />
+            <Txt.InputText tw='text-font-100'>%</Txt.InputText>
+          </>
+        }
+      />
       <CustomTable
         loading={false}
         maxPage={data.length / searchParams.size}

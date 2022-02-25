@@ -34,8 +34,8 @@ body > div {
   --lineheight-mobile-medium: 16px;
   --fontsize-caption-medium: 12px;
   --lineheight-caption-medium: 19.2px;
-  --fontsize-body2-regular: 12px;
-  --lineheight-body2-regular: 19.2px;
+  --fontsize-body2-regular: 16px;
+  --lineheight-body2-regular: 25.6px;
   --fontsize-body2-bold: 12px;
   --lineheight-body2-bold: 19.2px;
   --fontsize-body1-regular: 14px;
@@ -46,10 +46,10 @@ body > div {
   --lineheight-body1-bold: 22.4px;
   --fontsize-input-text: 16px;
   --lineheight-input-text: 18.78px;
-  --fontsize-heading2: 16px;
-  --lineheight-heading2: 25.6px;
-  --fontsize-heading1: 24px;
-  --lineheight-heading1: 38.4px;
+  --fontsize-heading2: 20px;
+  --lineheight-heading2: 32px;
+  --fontsize-heading1: 32px;
+  --lineheight-heading1: 51.2px;
 }
 .dark {
   --primary: 7, 11, 15;
@@ -88,10 +88,10 @@ body > div {
     --lineheight-body1-bold: 25.6px;
     --fontsize-input-text: 18px;
     --lineheight-input-text: 21.13px;
-    --fontsize-heading2: 18px;
-    --lineheight-heading2: 23.8px;
-    --fontsize-heading1: 32px;
-    --lineheight-heading1: 51.2px;
+    --fontsize-heading2: 16px;
+    --lineheight-heading2: 25.6px;
+    --fontsize-heading1: 24px;
+    --lineheight-heading1: 38.4px;
   }
 }
 
@@ -111,8 +111,8 @@ body > div {
     --lineheight-body1-bold: 28.8px;
     --fontsize-input-text: 20px;
     --lineheight-input-text: 23.48px;
-    --fontsize-heading2: 20px;
-    --lineheight-heading2: 32px;
+    --fontsize-heading2: 18px;
+    --lineheight-heading2: 28.8px;
     --fontsize-heading1: 32px;
     --lineheight-heading1: 51.2px;
   }
