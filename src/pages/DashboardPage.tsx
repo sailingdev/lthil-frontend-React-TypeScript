@@ -624,6 +624,12 @@ const initialSearchParams: Partial<ISearchParams> = {
 export const DashboardPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState(1)
+  const [activeRow, setActiveRow] = useState<any | undefined>()
+
+  const onRowClick = (row: any) => {
+    console.log('rowclick', row)
+    setActiveRow(row)
+  }
 
   const onModalChange = (value: boolean) => {
     setModalIsOpen(value)
@@ -644,6 +650,9 @@ export const DashboardPage = () => {
         setPage={setPage}
         pageSize={searchParams.size}
         data={data}
+        renderExpanded={<PositionDetailsCard />}
+        activeRow={activeRow}
+        onActiveRowChange={onRowClick}
         mobileColumns={[
           {
             Header: 'Trend',
@@ -651,7 +660,7 @@ export const DashboardPage = () => {
             cell: (l) => <TableCell.Text value={l.trend} />,
           },
           {
-            Header: 'Percentagkaskahsakhse',
+            Header: 'Percentage',
             accessor: 'position',
             cell: (l) => (
               <TableCell.Percentage
