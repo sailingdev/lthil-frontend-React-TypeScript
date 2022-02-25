@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import tw from 'twin.macro'
+import 'twin.macro'
+
 import { NavigationMenu } from './NavigationMenu'
 import { ThemeSwitch } from './ThemeSwitch'
-import { Txt } from './Txt'
 
 export const Footer = () => {
   return (
