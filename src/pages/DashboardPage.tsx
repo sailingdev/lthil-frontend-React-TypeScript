@@ -664,6 +664,7 @@ export const DashboardPage = () => {
               leftIcon={CurrEth}
               rightIcon={ArrowDown}
             />
+            <Txt.InputText tw='text-font-100'>%</Txt.InputText>
           </>
         }
       />
