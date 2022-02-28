@@ -18,6 +18,8 @@ import { useState } from 'react'
 import { CollateralCard } from '../shared/CollateralCard'
 import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
 import { ArrowDown } from 'phosphor-react'
+import { TokenModal } from '../shared/TokenModal'
+import TokenList from '../assets/tokenlist.json'
 
 const data = [
   {
@@ -629,11 +631,16 @@ const initialSearchParams: Partial<ISearchParams> = {
 }
 export const DashboardPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [tokenModalIsOpen, setTokenModalIsOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState(1)
   const [inputValue, setInputValue] = useState('')
 
   const onModalChange = (value: boolean) => {
     setModalIsOpen(value)
+  }
+
+  const onTokenModalChange = (value: boolean) => {
+    setTokenModalIsOpen(value)
   }
 
   const onSliderChange = (value: number) => {
@@ -762,6 +769,10 @@ export const DashboardPage = () => {
         text='Toggle modal'
         onClick={() => setModalIsOpen(!modalIsOpen)}
       />
+      <Button
+        text='Toggle token modal'
+        onClick={() => setTokenModalIsOpen(!tokenModalIsOpen)}
+      />
       <CenteredModal isOpen={modalIsOpen} onChange={onModalChange}>
         <div tw='w-full'>
           <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
@@ -772,6 +783,13 @@ export const DashboardPage = () => {
           <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
         </div>
       </CenteredModal>
+      <TokenModal
+        modalIsOpen={tokenModalIsOpen}
+        onChange={setTokenModalIsOpen}
+        tokenList={TokenList.tokens}
+      >
+        <div>Im the token modal</div>
+      </TokenModal>
       <CollateralCard />
     </ContentContainer>
   )
