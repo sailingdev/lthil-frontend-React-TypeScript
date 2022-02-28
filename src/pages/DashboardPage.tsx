@@ -18,6 +18,7 @@ import { Txt } from '../shared/Txt'
 import tw from 'twin.macro'
 import { useSearch } from '../shared/hooks/useSearch'
 import { useState } from 'react'
+import { TokenModal } from '../shared/TokenModal'
 
 const data = [
   {
@@ -629,6 +630,7 @@ const initialSearchParams: Partial<ISearchParams> = {
 }
 export const DashboardPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [tokenModalIsOpen, setTokenModalIsOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState(1)
   // TODO REPLACE ANY WHEN THE REAL TYPE IS CREATED
   const [activeRow, setActiveRow] = useState<any>()
@@ -637,6 +639,10 @@ export const DashboardPage = () => {
 
   const onModalChange = (value: boolean) => {
     setModalIsOpen(value)
+  }
+
+  const onTokenModalChange = (value: boolean) => {
+    setTokenModalIsOpen(value)
   }
 
   const onSliderChange = (value: number) => {
@@ -774,6 +780,10 @@ export const DashboardPage = () => {
         text='Toggle modal'
         onClick={() => setModalIsOpen(!modalIsOpen)}
       />
+      <Button
+        text='Toggle token modal'
+        onClick={() => setTokenModalIsOpen(!tokenModalIsOpen)}
+      />
       <CenteredModal isOpen={modalIsOpen} onChange={onModalChange}>
         <div tw='w-full'>
           <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
@@ -784,6 +794,10 @@ export const DashboardPage = () => {
           <Txt.Body2Regular>I&apos;m text</Txt.Body2Regular>
         </div>
       </CenteredModal>
+      <TokenModal
+        modalIsOpen={tokenModalIsOpen}
+        onChange={setTokenModalIsOpen}
+      />
       <CollateralCard />
     </ContentContainer>
   )

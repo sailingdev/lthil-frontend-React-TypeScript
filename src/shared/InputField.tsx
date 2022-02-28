@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react'
 import { Txt } from './Txt'
 
 interface IInputFieldProps {
-  label: string
+  label?: string
   onChange: (value: string) => void
   value: string
-  renderRight: React.ReactNode
+  renderRight?: React.ReactNode
 }
 
 export const InputField = (props: IInputFieldProps) => {
@@ -22,11 +22,11 @@ export const InputField = (props: IInputFieldProps) => {
   }, [props.value])
 
   return (
-    <div tw='flex flex-col justify-center gap-1 my-2'>
-      <Txt.Body2Regular>{props.label}</Txt.Body2Regular>
+    <div tw='flex flex-col justify-center gap-1 my-2 w-full'>
+      {props.label && <Txt.Body2Regular>{props.label}</Txt.Body2Regular>}
       <div
         css={[
-          tw`flex flex-row items-center bg-primary-200 rounded-md tablet:height[48px] height[43px] px-3 gap-3`,
+          tw`flex flex-row items-center bg-primary-200 rounded-md tablet:height[48px] height[43px] px-3 gap-1`,
           inputIsFocused &&
             tw`outline-[#4E5F71 solid] dark:outline-[#A4B1BE solid]`,
         ]}
@@ -34,7 +34,7 @@ export const InputField = (props: IInputFieldProps) => {
         <input
           onFocus={() => setInputIsFocused(true)}
           onBlur={() => setInputIsFocused(false)}
-          tw='flex-grow bg-primary-200 rounded-md text-input-text font-sans text-font font-normal focus:outline-none'
+          tw='flex-grow bg-primary-200 rounded-md text-input-text font-sans text-font font-normal focus:outline-none max-w-none'
           type='text'
           value={value}
           onChange={({ target: { value } }) => {
