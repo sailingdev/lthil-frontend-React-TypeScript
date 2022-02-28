@@ -7,6 +7,7 @@ import { CenteredModal } from './CenteredModal'
 import { Txt } from './Txt'
 import { MagnifyingGlass } from 'phosphor-react'
 import { InputField } from './InputField'
+import TokenList from '../assets/tokenlist.json'
 
 interface IToken {
   name: string
@@ -20,28 +21,22 @@ interface IToken {
 interface ITokenModal {
   modalIsOpen: boolean
   onChange: (st: boolean) => void
-  children: React.ReactNode
-  tokenList: IToken[]
 }
 
 export const TokenModal = (props: ITokenModal) => {
   const [search, setSearch] = useState('')
   const [filteredTokenList, setFilteredTokenList] = useState<IToken[]>(
-    props.tokenList,
+    TokenList.tokens,
   )
 
   const searchOnChange = (value: string) => {
     setSearch(value)
     let filteredTokens: IToken[] = []
-    value === ''
-      ? (filteredTokens = props.tokenList)
-      : (filteredTokens = props.tokenList.filter((token) =>
-          token.name
-            .trim()
-            .toLowerCase()
-            .startsWith(value.trim().toLowerCase()),
-        )),
-      setFilteredTokenList(filteredTokens.slice(0, 6))
+
+    filteredTokens = TokenList.tokens.filter((token) =>
+      token.name.trim().toLowerCase().startsWith(value.trim().toLowerCase()),
+    )
+    setFilteredTokenList(filteredTokens.slice(0, 6))
   }
 
   return (

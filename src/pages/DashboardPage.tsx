@@ -19,7 +19,6 @@ import tw from 'twin.macro'
 import { useSearch } from '../shared/hooks/useSearch'
 import { useState } from 'react'
 import { TokenModal } from '../shared/TokenModal'
-import TokenList from '../assets/tokenlist.json'
 
 const data = [
   {
@@ -798,10 +797,7 @@ export const DashboardPage = () => {
       <TokenModal
         modalIsOpen={tokenModalIsOpen}
         onChange={setTokenModalIsOpen}
-        tokenList={TokenList.tokens}
-      >
-        <div>Im the token modal</div>
-      </TokenModal>
+      />
       <CollateralCard />
     </ContentContainer>
   )
