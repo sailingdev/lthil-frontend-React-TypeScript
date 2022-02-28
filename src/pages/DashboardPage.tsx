@@ -1,23 +1,23 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
 
+/** @jsxImportSource @emotion/react */
+import { ArrowDown } from 'phosphor-react'
 import { Button } from '../shared/Button'
 import { CenteredModal } from '../shared/CenteredModal'
+import { CollateralCard } from '../shared/CollateralCard'
 import { ContentContainer } from '../shared/ContentContainer'
+import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
 import { CustomTable } from '../shared/table/CustomTable'
 import { ISearchParams } from '../types'
 import { InputField } from '../shared/InputField'
-import { TableCell } from '../shared/table/cells'
-import { useSearch } from '../shared/hooks/useSearch'
-import { SliderBar } from '../shared/SliderBar'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
+import { SliderBar } from '../shared/SliderBar'
+import { TableCell } from '../shared/table/cells'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { Txt } from '../shared/Txt'
+import tw from 'twin.macro'
+import { useSearch } from '../shared/hooks/useSearch'
 import { useState } from 'react'
-import { CollateralCard } from '../shared/CollateralCard'
-import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
-import { ArrowDown } from 'phosphor-react'
 import { TokenModal } from '../shared/TokenModal'
 import TokenList from '../assets/tokenlist.json'
 
@@ -633,6 +633,9 @@ export const DashboardPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [tokenModalIsOpen, setTokenModalIsOpen] = useState(false)
   const [sliderValue, setSliderValue] = useState(1)
+  // TODO REPLACE ANY WHEN THE REAL TYPE IS CREATED
+  const [activeRow, setActiveRow] = useState<any>()
+
   const [inputValue, setInputValue] = useState('')
 
   const onModalChange = (value: boolean) => {
@@ -682,6 +685,15 @@ export const DashboardPage = () => {
         setPage={setPage}
         pageSize={searchParams.size}
         data={data}
+        renderExpanded={<PositionDetailsCard />}
+        activeRow={activeRow}
+        onActiveRowChange={(row) => {
+          if (activeRow == row) {
+            setActiveRow(undefined)
+          } else {
+            setActiveRow(row)
+          }
+        }}
         mobileColumns={[
           {
             Header: 'Trend',
@@ -689,7 +701,7 @@ export const DashboardPage = () => {
             cell: (l) => <TableCell.Text value={l.trend} />,
           },
           {
-            Header: 'Percentagkaskahsakhse',
+            Header: 'Percentage',
             accessor: 'position',
             cell: (l) => (
               <TableCell.Percentage

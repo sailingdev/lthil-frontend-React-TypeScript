@@ -95,8 +95,10 @@ interface ICustomTableProps<T extends object> {
   columns: ICustomColumnProps<T>[]
   mobileColumns?: ICustomColumnProps<T>[]
   pageSize: number
-  onRowClick?: (data: T, index?: number) => void
   loading: boolean
+  renderExpanded?: React.ReactNode
+  onActiveRowChange?: (row: T) => void
+  activeRow?: T | undefined
 }
 // TODO TABLE EMPTY STATE
 
@@ -111,7 +113,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
     pageSize,
     maxPage,
     loading,
-    onRowClick,
+    // onRowClick,
   } = props
 
   const table = useTable(
@@ -164,7 +166,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                         textAlign: column.align ?? 'left',
                       }}
                     >
-                      <Txt.Body2Regular>
+                      <Txt.Body2Regular tw='text-font-100'>
                         {column.render('Header')}
                       </Txt.Body2Regular>
                     </th>
@@ -216,44 +218,50 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                   <React.Fragment>
                     <tr
                       {...row.getRowProps()}
-                      css={css`
-                        ${tw`cursor-pointer`}
-                      `}
+                      css={[
+                        tw`cursor-pointer flex flex-col justify-between items-center`,
+                      ]}
                       onClick={() => {
-                        onRowClick && onRowClick(row.original as any, row.index)
+                        props.onActiveRowChange &&
+                          props.onActiveRowChange(row.original as T)
                       }}
                       // @ts-ignore
                     >
-                      {row.cells.map((cell) => {
-                        const { style, ...rest } = cell.getCellProps()
-                        /* eslint-disable no-debugger */
-                        return (
-                          <td
-                            {...rest}
-                            style={{
-                              ...style,
-                              // @ts-ignore
-                              textAlign: cell.column.align ?? 'left',
-                            }}
-                            css={tw`px-6 py-4`}
-                          >
-                            {/* @ts-ignore */}
-                            {cell.column.cell(cell.row.original)}
-                          </td>
-                        )
-                      })}
+                      <div tw='w-full flex flex-row justify-between'>
+                        {row.cells.map((cell) => {
+                          const { style, ...rest } = cell.getCellProps()
+                          /* eslint-disable no-debugger */
+                          return (
+                            <td
+                              {...rest}
+                              style={{
+                                ...style,
+                                // @ts-ignore
+                                textAlign: cell.column.align ?? 'left',
+                              }}
+                              css={tw`px-6 py-4`}
+                            >
+                              {/* @ts-ignore */}
+                              {cell.column.cell(cell.row.original)}
+                            </td>
+                          )
+                        })}
+                      </div>
+                      {row.original == props.activeRow &&
+                        props.renderExpanded && (
+                          <div tw='w-full h-full flex flex-row justify-center items-center'>
+                            {props.renderExpanded}
+                          </div>
+                        )}
                     </tr>
-                    <tr tw='h-0.5 bg-primary-100 flex justify-center flex-row'>
+                    <tr tw='h-0.5 bg-primary-100'>
                       <div
                         css={[
-                          tw`h-0.5 w-full mx-10 bg-primary-300`,
+                          tw`h-0.5 mx-10 bg-primary-300`,
                           index === page.length - 1 && tw`bg-primary-100`,
                         ]}
                       ></div>
                     </tr>
-                    {/* <div tw='h-0.5 bg-primary-100 flex justify-center flex-row'>
-                      <div tw='bg-primary-300 h-0.5 w-full mx-10'></div>
-                    </div> */}
                   </React.Fragment>
                 )
               })}
