@@ -18,6 +18,9 @@ import { Txt } from '../shared/Txt'
 import tw from 'twin.macro'
 import { useSearch } from '../shared/hooks/useSearch'
 import { useState } from 'react'
+//@ts-ignore
+import TradingViewWidget, { Themes } from 'react-tradingview-widget'
+import { BasicChart } from '../shared/BasicChart'
 
 const data = [
   {
@@ -645,9 +648,37 @@ export const DashboardPage = () => {
 
   const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
     useSearch(initialSearchParams)
+  //@ts-ignore
 
   return (
     <ContentContainer>
+      <BasicChart />
+      {/* <TradingViewWidget
+        tw=''
+        symbol='NASDAQ:AAPL'
+        locale='us'
+        allow_symbol_change={false}
+        autosize={false}
+        enable_publishing={false}
+        height='610'
+        hideideas={true}
+        hide_legend={true}
+        hide_side_toolbar={true}
+        hide_top_toolbar={false}
+        interval='D'
+        save_image={true}
+        show_popup_button={false}
+        style={2}
+        theme='Light'
+        timezone='Etc/UTC'
+        toolbar_bg='#FF7300'
+        widgetType='MediumWidget'
+        width='800'
+        withdateranges={false}
+        hotlist={false}
+        details={false}
+        range={['1d', '1m']}
+      /> */}
       <InputField
         label='Principal'
         value={inputValue}
@@ -671,6 +702,7 @@ export const DashboardPage = () => {
           </>
         }
       />
+      <span id='chartid'></span>
       <CustomTable
         loading={false}
         maxPage={data.length / searchParams.size}
