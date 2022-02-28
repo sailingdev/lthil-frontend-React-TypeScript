@@ -1,13 +1,12 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
-import { useState } from 'react'
 
 import { CenteredModal } from './CenteredModal'
-import { Txt } from './Txt'
-import { MagnifyingGlass } from 'phosphor-react'
 import { InputField } from './InputField'
-import TokenList from '../assets/tokenlist.json'
+/** @jsxImportSource @emotion/react */
+import { MagnifyingGlass } from 'phosphor-react'
+import { Txt } from './Txt'
+import { tokens } from '../assets/tokenlist.json'
+import { useState } from 'react'
 
 interface IToken {
   name: string
@@ -25,18 +24,17 @@ interface ITokenModal {
 
 export const TokenModal = (props: ITokenModal) => {
   const [search, setSearch] = useState('')
-  const [filteredTokenList, setFilteredTokenList] = useState<IToken[]>(
-    TokenList.tokens,
-  )
+  const [filteredTokenList, setFilteredTokenList] = useState<IToken[]>(tokens)
 
   const searchOnChange = (value: string) => {
     setSearch(value)
-    let filteredTokens: IToken[] = []
 
-    filteredTokens = TokenList.tokens.filter((token) =>
-      token.name.trim().toLowerCase().startsWith(value.trim().toLowerCase()),
+    const val = value.trim().toLowerCase()
+    setFilteredTokenList(
+      tokens
+        .filter(({ name }) => name.trim().toLowerCase().startsWith(val))
+        .slice(0, 6),
     )
-    setFilteredTokenList(filteredTokens.slice(0, 6))
   }
 
   return (
