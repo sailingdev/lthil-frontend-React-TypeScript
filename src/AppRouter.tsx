@@ -19,7 +19,9 @@ export const AppRouter = () => {
   const [darkMode] = useLocalStorage('darkMode', false)
 
   useEffect(() => {
-    if (darkMode) document.documentElement.classList.toggle('dark')
+    if (darkMode) {
+      document.documentElement.classList.toggle('dark')
+    }
   }, [])
 
   return (
