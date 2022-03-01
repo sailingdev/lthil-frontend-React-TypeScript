@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
-import { CollateralCard } from '../shared/CollateralCard'
 
+import { BasicChart } from '../shared/BasicChart'
+import { CollateralCard } from '../shared/CollateralCard'
 import { ContentContainer } from '../shared/ContentContainer'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { Txt } from '../shared/Txt'
@@ -26,8 +26,11 @@ export const PositionPage = () => {
                 <Txt.Body2Regular>Placeholder-Position value</Txt.Body2Regular>
               </div>
             </div>
-            <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100'>
-              <Txt.Body2Regular>Placeholder-Chart</Txt.Body2Regular>
+            <div
+              id='chart'
+              tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100'
+            >
+              <BasicChart containerId='chart' />
             </div>
           </div>
         </div>

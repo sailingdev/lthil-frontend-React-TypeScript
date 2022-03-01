@@ -1,17 +1,13 @@
+import 'twin.macro'
+
+import { ContentContainer } from '../shared/ContentContainer'
+import { CustomTable } from '../shared/table/CustomTable'
+import { ISearchParams } from '../types'
+import { TableCell } from '../shared/table/cells'
+import { Txt } from '../shared/Txt'
+import { useSearch } from '../shared/hooks/useSearch'
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react'
-import 'twin.macro'
-import { ContentContainer } from '../shared/ContentContainer'
-import { useSearch } from '../shared/hooks/useSearch'
-import { CustomTable } from '../shared/table/CustomTable'
-import { Txt } from '../shared/Txt'
-import { ISearchParams } from '../types'
-
-<<<<<<< HEAD
-=======
-import { TableCell } from '../shared/table/cells'
-import { MagnifyingGlass } from 'phosphor-react'
->>>>>>> develop
 
 const data = [
   {

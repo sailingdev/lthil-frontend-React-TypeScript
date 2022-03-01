@@ -1,13 +1,17 @@
-export const BasicChart = () => {
-  //@ts-ignore
-  new TradingView.MediumWidget({
-    symbols: [['Apple', 'AAPL']],
-    chartOnly: false,
-    width: 1000,
-    height: 400,
-    locale: 'in',
-    container_id: 'chartid',
-  })
+import { useEffect } from 'react'
 
-  return <div id='chartid'></div>
+export const BasicChart = (props: { containerId: string }) => {
+  useEffect(() => {
+    // @ts-ignore
+    new window.TradingView.MediumWidget({
+      symbols: [['Apple', 'AAPL']],
+      chartOnly: false,
+      width: '100%',
+      height: 400,
+      locale: 'in',
+      container_id: props.containerId,
+    })
+  }, [])
+
+  return null
 }
