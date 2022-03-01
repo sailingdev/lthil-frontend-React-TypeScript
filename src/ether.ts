@@ -3,6 +3,7 @@ import { ContractFactory, ethers } from 'ethers'
 import { BaseStrategyInterface } from './config/typings'
 
 // VALENTIN move this to separate json file
+
 export const abi = [
   {
     inputs: [
@@ -338,25 +339,6 @@ export const abi = [
     name: 'addStrategy',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-    ],
-    name: 'apy',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {
