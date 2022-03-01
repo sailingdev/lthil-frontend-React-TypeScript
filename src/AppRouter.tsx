@@ -12,6 +12,7 @@ import { isDesktop } from './utils'
 import tw from 'twin.macro'
 import { useEffect } from 'react'
 import { useLocalStorage } from 'react-use'
+import { PositionPage } from './pages/PositionPage'
 
 /** @jsxImportSource @emotion/react */
 
@@ -32,6 +33,7 @@ export const AppRouter = () => {
           <Routes>
             <Route path='/' element={<TradePage />} />
             <Route path='/dashboard' element={<DashboardPage />} />
+            <Route path='/dashboard/:position' element={<PositionPage />} />
             <Route path='/stake' element={<StakePage />} />
             <Route path='/charts' element={<ChartsPage />} />
             <Route path='*' element={<Navigate to='/trade' />} />
