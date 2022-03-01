@@ -27,7 +27,7 @@ export const CollateralCard = () => {
   }
 
   return (
-    <div tw='flex flex-col justify-between items-center max-width[432px] rounded-xl p-5 bg-primary-100'>
+    <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100'>
       <div tw='w-full flex flex-row justify-between'>
         <div tw='flex flex-row items-center'>
           <Text value='Collateral' />

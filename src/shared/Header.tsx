@@ -4,10 +4,13 @@ import 'twin.macro'
 import { ArrowDown } from 'phosphor-react'
 import { Button } from './Button'
 import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
-import { ReactComponent as Logo } from '../assets/logoLight.svg'
+import { ReactComponent as LogoLight } from '../assets/logoLight.svg'
+import { ReactComponent as LogoDark } from '../assets/logoDark.svg'
 import { NavigationMenu } from './NavigationMenu'
 import { ThemeSwitch } from './ThemeSwitch'
 import WalletConnectProvider from '@walletconnect/web3-provider'
+import { useLocalStorage } from 'react-use'
+
 // import Web3 from 'web3'
 import Web3Modal from 'web3modal'
 import { ether } from '../ether'
@@ -17,7 +20,7 @@ export const Header = () => {
   return (
     <div tw='max-w-1920 w-[calc(100% - 9rem)] my-6 mx-auto flex flex-row items-start justify-between'>
       <span tw='flex flex-row items-start'>
-        <Logo css={[tw`w-32 h-8`]} />
+        <LogoLight css={[tw`w-32 h-8`]} />
         <span tw='mt-1 ml-24 flex flex-row'>
           <NavigationMenu />
           <ThemeSwitch />

@@ -28,14 +28,14 @@ export const NavigationMenu = (props: { onItemClick?(): void }) => {
 
   return (
     <div tw='flex flex-row min-width[256px] bg-primary'>
-      <div tw='flex px-3 gap-3'>
+      <div tw='flex px-3 gap-3 desktop:gap-6'>
         {items.map((i) => {
           const isSelected = i.url === selectedRoute?.url
           return (
             <Link
               to={i.url}
               key={i.url}
-              tw='text-secondary flex flex-col align-items[center] cursor-pointer px-2 rounded-md w-auto'
+              tw='text-secondary flex flex-col align-items[center] cursor-pointer rounded-md w-auto'
               onClick={() => props.onItemClick && props.onItemClick()}
             >
               <Txt.Body1Regular
