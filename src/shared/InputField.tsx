@@ -11,6 +11,8 @@ interface IInputFieldProps {
   onChange: (value: string) => void
   value: string
   renderRight?: React.ReactNode
+  placeholder?: string
+  className?: string | undefined
 }
 
 export const InputField = (props: IInputFieldProps) => {
@@ -22,7 +24,10 @@ export const InputField = (props: IInputFieldProps) => {
   }, [props.value])
 
   return (
-    <div tw='flex flex-col justify-center gap-1 my-2 w-full'>
+    <div
+      className={props.className}
+      tw='flex flex-col justify-center gap-1 my-2 w-full'
+    >
       {props.label && <Txt.Body2Regular>{props.label}</Txt.Body2Regular>}
       <div
         css={[
@@ -32,6 +37,7 @@ export const InputField = (props: IInputFieldProps) => {
         ]}
       >
         <input
+          placeholder={props.placeholder}
           onFocus={() => setInputIsFocused(true)}
           onBlur={() => setInputIsFocused(false)}
           tw='flex-grow bg-primary-200 rounded-md text-input-text font-sans text-font font-normal focus:outline-none max-w-none'
