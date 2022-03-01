@@ -28,7 +28,7 @@ export const useSearch = (
       order,
       orderField,
       page,
-      size: initial?.size ?? isMobile ? 5 : 10,
+      size: initial?.size ?? isMobile ? 5 : 5,
       term,
     },
     {
