@@ -1,16 +1,13 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
-import { useState } from 'react'
 
 import { ContentContainer } from '../shared/ContentContainer'
-import { Txt } from '../shared/Txt'
 import { CustomTable } from '../shared/table/CustomTable'
 import { ISearchParams } from '../types'
-import { InputField } from '../shared/InputField'
-import { useSearch } from '../shared/hooks/useSearch'
 import { TableCell } from '../shared/table/cells'
-import { MagnifyingGlass } from 'phosphor-react'
+import { Txt } from '../shared/Txt'
+import { useSearch } from '../shared/hooks/useSearch'
+/** @jsxImportSource @emotion/react */
+import { useState } from 'react'
 
 const data = [
   {
@@ -175,6 +172,7 @@ export const DashboardPage = () => {
   const [search, setSearch] = useState('')
   const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
     useSearch(initialSearchParams)
+  //@ts-ignore
 
   return (
     <ContentContainer>
