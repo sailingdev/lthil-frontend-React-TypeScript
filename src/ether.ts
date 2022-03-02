@@ -6,7 +6,6 @@ import ABI from './assets/abi.json'
 import addresses from './assets/addresses.json'
 
 export const abi = ABI
-
 class Ether {
   private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner

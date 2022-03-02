@@ -5,21 +5,67 @@ import Fortmatic from 'fortmatic'
 import { ArrowDown } from 'phosphor-react'
 import { Button } from './Button'
 import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
-import { ReactComponent as Logo } from '../assets/logoLight.svg'
+import { ReactComponent as LogoLight } from '../assets/logoLight.svg'
 import { NavigationMenu } from './NavigationMenu'
 import { ThemeSwitch } from './ThemeSwitch'
 import WalletConnectProvider from '@walletconnect/web3-provider'
-// import Web3 from 'web3'
 import Web3Modal from 'web3modal'
 import { ether } from '../ether'
 import tw from 'twin.macro'
 import { ethers } from 'ethers'
+import { useState } from 'react'
 
 export const Header = () => {
+  const [web3Modal] = useState(
+    new Web3Modal({
+      network: 'kovan',
+      cacheProvider: true,
+      // We will use this to stylize the modal
+      // theme: {
+      //   background: 'rgb(39, 49, 56)',
+      //   main: 'rgb(199, 199, 199)',
+      //   secondary: 'rgb(136, 136, 136)',
+      //   border: 'rgba(195, 195, 195, 0.14)',
+      //   hover: 'rgb(16, 26, 32)',
+      // },
+      providerOptions: {
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            infuraId: '4a06377afcb842f394dc13f47f6cac54',
+          },
+        },
+        // Fortmatic returns 403 when accessing PRC URL. Are we sure this is the right data?
+        fortmatic: {
+          package: Fortmatic,
+          options: {
+            key: 'pk_test_9E56112919F5EFA6', // This is Valentin's API key
+            network: {
+              rpcUrl: 'https://kovan.infura.io',
+              chainId: 42,
+            },
+          },
+        },
+      },
+    }),
+  )
+  const [connected, setConnected] = useState(() => !!web3Modal.cachedProvider)
+  // console.log(connected)
+
+  // useAsync here
+  // useEffect(async ()=>{
+  //   const provider = await web3Modal.connect()
+  //   setConnected(true)
+
+  //   console.log('provider:', provider)
+  //   await ether.initializeProvider(provider)
+
+  // }, [])
+
   return (
     <div tw='max-w-1920 w-[calc(100% - 9rem)] my-6 mx-auto flex flex-row items-start justify-between'>
       <span tw='flex flex-row items-start'>
-        <Logo css={[tw`w-32 h-8`]} />
+        <LogoLight css={[tw`w-32 h-8`]} />
         <span tw='mt-1 ml-24 flex flex-row'>
           <NavigationMenu />
           <ThemeSwitch />
@@ -28,45 +74,18 @@ export const Header = () => {
       <span tw='flex flex-row items-center gap-2'>
         <Button text='Ethereum' leftIcon={CurrEth} rightIcon={ArrowDown} />
         <Button
-          text='Connect wallet'
+          text={connected ? 'Disconnect wallet' : `Connect wallet`}
           action
           onClick={async () => {
+            if (connected) {
+              await web3Modal.clearCachedProvider()
+              return window.location.reload()
+            }
             try {
-              const web3Modal = new Web3Modal({
-                network: 'kovan',
-                // cacheProvider: true,
-                // We will use this to stylize the modal
-                // theme: {
-                //   background: 'rgb(39, 49, 56)',
-                //   main: 'rgb(199, 199, 199)',
-                //   secondary: 'rgb(136, 136, 136)',
-                //   border: 'rgba(195, 195, 195, 0.14)',
-                //   hover: 'rgb(16, 26, 32)',
-                // },
-                providerOptions: {
-                  walletconnect: {
-                    package: WalletConnectProvider,
-                    options: {
-                      infuraId: '4a06377afcb842f394dc13f47f6cac54',
-                    },
-                  },
-                  // Fortmatic returns 403 when accessing PRC URL. Are we sure this is the right data?
-                  fortmatic: {
-                    package: Fortmatic,
-                    options: {
-                      key: 'pk_test_9E56112919F5EFA6', // This is Valentin's API key
-                      network: {
-                        rpcUrl: 'https://kovan.infura.io',
-                        chainId: 42,
-                      },
-                    },
-                  },
-                },
-              })
-
               const instance = await web3Modal.connect()
               const provider = new ethers.providers.Web3Provider(instance)
               const signer = provider.getSigner()
+              setConnected(true)
 
               console.log('Network: ', (await provider.getNetwork()).name)
               //@ts-ignore
@@ -112,7 +131,7 @@ export const Header = () => {
               console.log('Contact: ', c)
             } catch (e) {
               console.log('error----------------------')
-              console.log(e)
+              console.error(e)
             }
           }}
         />

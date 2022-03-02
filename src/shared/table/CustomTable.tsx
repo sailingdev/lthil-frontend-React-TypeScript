@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import {
   Column,
   useFlexLayout,
@@ -10,7 +11,6 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 import { CustomTablePagination } from './CustomTablePagination'
 import { Txt } from '../Txt'
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { isMobile } from '../../utils'
 import tw from 'twin.macro'
@@ -19,11 +19,11 @@ const tableContainerStyle = css`
   .table {
     ${tw`mb-4`}
     tr {
-      ${tw`bg-primary-100`}
+      ${tw`bg-primary-100 desktop:py-3`}
     }
 
     /* tr:hover > td {
-      ${tw`bg-primary-100`}
+      ${tw`bg-primary-300`}
     } */
     tr:first-of-type {
       ${tw`pt-3`}
@@ -32,10 +32,10 @@ const tableContainerStyle = css`
       ${tw`pb-3`}
     }
     tr > th:first-of-type {
-      ${tw`rounded-tl-xl ml-6`}
+      ${tw` ml-6`}
     }
     tr > th:last-of-type {
-      ${tw`rounded-tr-xl mr-6`}
+      ${tw` mr-6 rounded-tr-xl`}/* rounded-tr-xl */
     }
     tr:not(:last-child) > td:first-of-type {
       ${tw``}
@@ -52,8 +52,14 @@ const tableContainerStyle = css`
     }
 
     tbody > tr:last-of-type {
-      ${tw`rounded-bl-xl rounded-br-xl`}/*This is last row */
+      ${tw`rounded-b-xl rounded-bl-xl rounded-br-xl`}/*This is last row rounded-bl-xl rounded-br-md */
     }
+    /* tbody > tr:nth-last-child(2) {
+      ${tw`rounded-b-xl`}
+    }
+    tbody > tr:nth-last-child(1) {
+      ${tw``}
+    } */
     th {
       ${tw``}/* This is where the top row border is */
     }
@@ -71,13 +77,13 @@ const tableContainerStyle = css`
 `
 
 const tdSkeletonStyle = css`
-  ${tw`px-4 py-3 text-left font-normal`}
+  ${tw`py-3 text-left font-normal`}
 `
 
 const thStyle = [
   css`
     ${tw`bg-primary-100 font-sans font-semibold text-primary-400`}
-    ${tw`px-6 py-4`}
+    ${tw`py-4`}
   `,
 ]
 
@@ -146,8 +152,8 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
   }, [currentPage])
 
   return (
-    <div>
-      <div tw='overflow-x-auto' css={tableContainerStyle}>
+    <div tw='w-full'>
+      <div tw='overflow-x-auto rounded-xl' css={tableContainerStyle}>
         <table {...getTableProps()} css={tw`w-full`} className='table'>
           <thead>
             {headerGroups.map((headerGroup) => (
@@ -216,6 +222,14 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                 prepareRow(row)
                 return (
                   <React.Fragment>
+                    <tr tw='h-0.5 bg-primary-100'>
+                      <div
+                        css={[
+                          tw`h-0.5 mx-10 bg-primary-300`,
+                          // index === page.length - 1 && tw`bg-primary-100`,
+                        ]}
+                      ></div>
+                    </tr>
                     <tr
                       {...row.getRowProps()}
                       css={[
@@ -239,7 +253,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                                 // @ts-ignore
                                 textAlign: cell.column.align ?? 'left',
                               }}
-                              css={tw`px-6 py-4`}
+                              css={tw`py-4`}
                             >
                               {/* @ts-ignore */}
                               {cell.column.cell(cell.row.original)}
@@ -247,20 +261,6 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                           )
                         })}
                       </div>
-                      {row.original == props.activeRow &&
-                        props.renderExpanded && (
-                          <div tw='w-full h-full flex flex-row justify-center items-center'>
-                            {props.renderExpanded}
-                          </div>
-                        )}
-                    </tr>
-                    <tr tw='h-0.5 bg-primary-100'>
-                      <div
-                        css={[
-                          tw`h-0.5 mx-10 bg-primary-300`,
-                          index === page.length - 1 && tw`bg-primary-100`,
-                        ]}
-                      ></div>
                     </tr>
                   </React.Fragment>
                 )

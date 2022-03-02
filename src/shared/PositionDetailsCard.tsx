@@ -42,7 +42,7 @@ const InfoItem = (props: {
 
 export const PositionDetailsCard = () => {
   return (
-    <div tw='flex flex-col justify-between items-center max-width[432px] rounded-xl p-5 bg-primary-100'>
+    <div tw='flex flex-col justify-between items-center w-full rounded-xl p-5 bg-primary-100'>
       <Txt.Heading2>Position details</Txt.Heading2>
       <div tw='flex flex-col justify-between w-full px-2 mt-6 gap-2'>
         <InfoItem label='Position' details={'ETH 2x Long'} value={'2.00'} />
