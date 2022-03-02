@@ -1,6 +1,6 @@
-import { ContractFactory, ethers } from 'ethers'
+import { Contract, ethers } from 'ethers'
 
-import { BaseStrategyInterface } from './config/typings'
+import { VaultInterface } from './config/typings'
 
 // VALENTIN move this to separate json file
 
@@ -704,6 +704,7 @@ class Ether {
 
   async initializeProvider(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
+    debugger
     this.signer = await this.provider.getSigner(this.address)
   }
   getProvider() {
@@ -721,9 +722,9 @@ class Ether {
     return accounts.length > 0 ? accounts[0] : null
   }
 
-  async getContract(): Promise<BaseStrategyInterface> {
+  async getContract(): Promise<VaultInterface> {
     // @ts-ignore
-    return ContractFactory.getContract(this.address, abi, await this.signer)
+    return new Contract(this.address, abi, await this.signer)
   }
 }
 

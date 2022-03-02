@@ -16,8 +16,8 @@ import { useState } from 'react'
 export const Header = () => {
   const [web3Modal] = useState(
     new Web3Modal({
-      network: 'kovan',
-      cacheProvider: true,
+      network: 'rinkeby',
+      // cacheProvider: true,
       // theme: {
       //   background: 'rgb(39, 49, 56)',
       //   main: 'rgb(199, 199, 199)',
@@ -60,30 +60,38 @@ export const Header = () => {
       <span tw='flex flex-row items-center gap-2'>
         <Button text='Ethereum' leftIcon={CurrEth} rightIcon={ArrowDown} />
         <Button
-          text={connected ? 'Disconnect wallet' : `Connect wallet`}
+          text={`Connect wallet`}
           action
           onClick={async () => {
-            if (connected) {
-              await web3Modal.clearCachedProvider()
-              return window.location.reload()
-            }
+            // if (connected) {
+            //   await web3Modal.clearCachedProvider()
+            //   return window.location.reload()
+            // }
             try {
               const provider = await web3Modal.connect()
               setConnected(true)
+              debugger
 
               console.log('provider:', provider)
               await ether.initializeProvider(provider)
               const signer = ether.getSigner()
               console.log(await signer.getBalance())
 
+              console.log(await ether.getNetwork())
+
               // console.log(await signer.getTransactionCount())
-              // const c = await ether.getContract()
+              const c = await ether.getContract()
 
               // const account = await ether.getAccount()
               // console.log(account)
               // debugger
-              // // @ts-ignore
               // console.log(await c.owner())
+              console.log(
+                // @ts-ignore
+                await c.stake('0x0B84D4B9fE423CED62E1eF836B4aE8130E35604E', 1, {
+                  gasLimit: 1000000,
+                }),
+              )
             } catch (e) {
               console.log('error----------------------')
               console.error(e)
