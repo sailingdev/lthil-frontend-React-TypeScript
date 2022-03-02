@@ -1,6 +1,7 @@
 import 'twin.macro'
 
 /** @jsxImportSource @emotion/react */
+import Fortmatic from 'fortmatic'
 import { ArrowDown } from 'phosphor-react'
 import { Button } from './Button'
 import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
@@ -11,7 +12,10 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import Web3Modal from 'web3modal'
 import { ether } from '../ether'
 import tw from 'twin.macro'
+import { ethers } from 'ethers'
 import { useState } from 'react'
+import VaultAbi from '../assets/abi.json'
+import ERC20 from '../assets/ERC20.json'
 
 export const Header = () => {
   const [web3Modal] = useState(
@@ -32,11 +36,22 @@ export const Header = () => {
             infuraId: '4a06377afcb842f394dc13f47f6cac54',
           },
         },
+        // Fortmatic returns 403 when accessing PRC URL. Are we sure this is the right data?
+        fortmatic: {
+          package: Fortmatic,
+          options: {
+            key: 'pk_test_9E56112919F5EFA6', // This is Valentin's API key
+            network: {
+              rpcUrl: 'https://kovan.infura.io',
+              chainId: 42,
+            },
+          },
+        },
       },
     }),
   )
   const [connected, setConnected] = useState(() => !!web3Modal.cachedProvider)
-  console.log(connected)
+  // console.log(connected)
 
   // useAsync here
   // useEffect(async ()=>{
@@ -68,30 +83,81 @@ export const Header = () => {
             //   return window.location.reload()
             // }
             try {
-              const provider = await web3Modal.connect()
+              const instance = await web3Modal.connect()
+              const provider = new ethers.providers.Web3Provider(instance)
+              const signer = provider.getSigner()
               setConnected(true)
-              debugger
+              // debugger
 
-              console.log('provider:', provider)
-              await ether.initializeProvider(provider)
-              const signer = ether.getSigner()
-              console.log(await signer.getBalance())
+              console.log('Network: ', (await provider.getNetwork()).name)
+              //@ts-ignore
+              console.log('Balance: ', parseInt(await signer.getBalance(), 10))
+              console.log(
+                'Transaction count: ',
+                await signer.getTransactionCount(),
+              )
+              console.log('Account address: ', await signer.getAddress())
+              console.log('ChainId: ', await signer.getChainId())
 
-              console.log(await ether.getNetwork())
+              // // const provider = await web3Modal.connect()
+              // provider.on('accountsChanged', (accounts: string[]) => {
+              //   console.log(accounts)
+              // })
+              // // Subscribe to chainId change
+              // provider.on('chainChanged', (chainId: number) => {
+              //   console.log(chainId)
+              // })
+              // // Subscribe to provider connection
+              // provider.on('connect', (info: { chainId: number }) => {
+              //   console.log(info)
+              // })
+              // // Subscribe to provider disconnection
+              // provider.on(
+              //   'disconnect',
+              //   (error: { code: number; message: string }) => {
+              //     console.log(error)
+              //   },
+              // )
 
-              // console.log(await signer.getTransactionCount())
-              const c = await ether.getContract()
+              const address = '0xBEeB7Aa057aec50c30c93c893086B9c0eDc157Dd' // Vault
+              const tokenAddress = '0x1C51De870718801E745482b25d3bB2Bd3b86e08C' // MockTaxedToken
+
+              // Vault contract
+              const c = ethers.ContractFactory.getContract(
+                address,
+                VaultAbi.abi,
+                await signer,
+              )
+              console.log('Contact: ', c)
+
+              const erc20 = new ethers.Contract(tokenAddress, ERC20.abi, signer)
+              console.log(
+                'Approve: ',
+                await erc20.approve(address, ethers.constants.MaxUint256),
+              )
+
+              console.log(
+                'Stake: ',
+                await c.stake(tokenAddress, 10, { gasLimit: 1000000 }),
+              )
+
+              // console.log('ERC20: ', erc20)
+
+              // console.log(await ether.getNetwork())
+
+              // // console.log(await signer.getTransactionCount())
+              // const c = await ether.getContract()
 
               // const account = await ether.getAccount()
               // console.log(account)
               // debugger
               // console.log(await c.owner())
-              console.log(
-                // @ts-ignore
-                await c.stake('0x0B84D4B9fE423CED62E1eF836B4aE8130E35604E', 1, {
-                  gasLimit: 1000000,
-                }),
-              )
+              // console.log(
+              //   // @ts-ignore
+              //   await c.stake('0x0B84D4B9fE423CED62E1eF836B4aE8130E35604E', 1, {
+              //     gasLimit: 1000000,
+              //   }),
+              // )
             } catch (e) {
               console.log('error----------------------')
               console.error(e)
