@@ -152,12 +152,12 @@ export const Header = () => {
               // console.log(account)
               // debugger
               // console.log(await c.owner())
-              console.log(
-                // @ts-ignore
-                await c.stake('0x0B84D4B9fE423CED62E1eF836B4aE8130E35604E', 1, {
-                  gasLimit: 1000000,
-                }),
-              )
+              // console.log(
+              //   // @ts-ignore
+              //   await c.stake('0x0B84D4B9fE423CED62E1eF836B4aE8130E35604E', 1, {
+              //     gasLimit: 1000000,
+              //   }),
+              // )
             } catch (e) {
               console.log('error----------------------')
               console.error(e)
