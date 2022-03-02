@@ -1,6 +1,7 @@
 import 'twin.macro'
 
 /** @jsxImportSource @emotion/react */
+import Fortmatic from 'fortmatic'
 import { ArrowDown } from 'phosphor-react'
 import { Button } from './Button'
 import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
@@ -12,6 +13,7 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import Web3Modal from 'web3modal'
 import { ether } from '../ether'
 import tw from 'twin.macro'
+import { ethers } from 'ethers'
 
 export const Header = () => {
   return (
@@ -33,6 +35,7 @@ export const Header = () => {
               const web3Modal = new Web3Modal({
                 network: 'kovan',
                 // cacheProvider: true,
+                // We will use this to stylize the modal
                 // theme: {
                 //   background: 'rgb(39, 49, 56)',
                 //   main: 'rgb(199, 199, 199)',
@@ -47,40 +50,66 @@ export const Header = () => {
                       infuraId: '4a06377afcb842f394dc13f47f6cac54',
                     },
                   },
+                  // Fortmatic returns 403 when accessing PRC URL. Are we sure this is the right data?
+                  fortmatic: {
+                    package: Fortmatic,
+                    options: {
+                      key: 'pk_test_9E56112919F5EFA6', // This is Valentin's API key
+                      network: {
+                        rpcUrl: 'https://kovan.infura.io',
+                        chainId: 42,
+                      },
+                    },
+                  },
                 },
               })
 
-              const provider = await web3Modal.connect()
-              provider.on('accountsChanged', (accounts: string[]) => {
-                console.log(accounts)
-              })
+              const instance = await web3Modal.connect()
+              const provider = new ethers.providers.Web3Provider(instance)
+              const signer = provider.getSigner()
 
-              // Subscribe to chainId change
-              provider.on('chainChanged', (chainId: number) => {
-                console.log(chainId)
-              })
-
-              // Subscribe to provider connection
-              provider.on('connect', (info: { chainId: number }) => {
-                console.log(info)
-              })
-
-              // Subscribe to provider disconnection
-              provider.on(
-                'disconnect',
-                (error: { code: number; message: string }) => {
-                  console.log(error)
-                },
+              console.log('Network: ', (await provider.getNetwork()).name)
+              //@ts-ignore
+              console.log('Balance: ', parseInt(await signer.getBalance(), 10))
+              console.log(
+                'Transaction count: ',
+                await signer.getTransactionCount(),
               )
-              console.log('provider:', provider)
-              await ether.initializeProvider(provider)
-              const signer = ether.getSigner()
-              console.log(await signer.getBalance())
-              console.log(await ether.getAccount())
+              console.log('Account address: ', await signer.getAddress())
+              console.log('ChainId: ', await signer.getChainId())
 
-              console.log(await signer.getTransactionCount())
+              // // const provider = await web3Modal.connect()
+              // provider.on('accountsChanged', (accounts: string[]) => {
+              //   console.log(accounts)
+              // })
+              // // Subscribe to chainId change
+              // provider.on('chainChanged', (chainId: number) => {
+              //   console.log(chainId)
+              // })
+              // // Subscribe to provider connection
+              // provider.on('connect', (info: { chainId: number }) => {
+              //   console.log(info)
+              // })
+              // // Subscribe to provider disconnection
+              // provider.on(
+              //   'disconnect',
+              //   (error: { code: number; message: string }) => {
+              //     console.log(error)
+              //   },
+              // )
+
+              // This code doesn't work:
+
+              // console.log('provider:', provider)
+              // await ether.initializeProvider(provider)
+              // // const signer = ether.getSigner()
+              // console.log(await signer.getBalance())
+              // console.log(await ether.getAccount())
+              // console.log(await signer.getTransactionCount())
+
+              // Getting custom contract data
               const c = await ether.getContract()
-              console.log(c)
+              console.log('Contact: ', c)
             } catch (e) {
               console.log('error----------------------')
               console.log(e)
