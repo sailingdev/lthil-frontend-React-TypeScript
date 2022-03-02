@@ -14,6 +14,8 @@ import { ether } from '../ether'
 import tw from 'twin.macro'
 import { ethers } from 'ethers'
 import { useState } from 'react'
+import VaultAbi from '../assets/abi.json'
+import ERC20 from '../assets/ERC20.json'
 
 export const Header = () => {
   const [web3Modal] = useState(
@@ -85,7 +87,7 @@ export const Header = () => {
               const provider = new ethers.providers.Web3Provider(instance)
               const signer = provider.getSigner()
               setConnected(true)
-              debugger
+              // debugger
 
               console.log('Network: ', (await provider.getNetwork()).name)
               //@ts-ignore
@@ -117,12 +119,34 @@ export const Header = () => {
               //   },
               // )
 
-              // This code doesn't work:
+              const address = '0xBEeB7Aa057aec50c30c93c893086B9c0eDc157Dd' // Vault
+              const tokenAddress = '0x1C51De870718801E745482b25d3bB2Bd3b86e08C' // MockTaxedToken
 
-              console.log(await ether.getNetwork())
+              // Vault contract
+              const c = ethers.ContractFactory.getContract(
+                address,
+                VaultAbi.abi,
+                await signer,
+              )
+              console.log('Contact: ', c)
 
-              // console.log(await signer.getTransactionCount())
-              const c = await ether.getContract()
+              const erc20 = new ethers.Contract(tokenAddress, ERC20.abi, signer)
+              console.log(
+                'Approve: ',
+                await erc20.approve(address, ethers.constants.MaxUint256),
+              )
+
+              console.log(
+                'Stake: ',
+                await c.stake(tokenAddress, 10, { gasLimit: 1000000 }),
+              )
+
+              // console.log('ERC20: ', erc20)
+
+              // console.log(await ether.getNetwork())
+
+              // // console.log(await signer.getTransactionCount())
+              // const c = await ether.getContract()
 
               // const account = await ether.getAccount()
               // console.log(account)

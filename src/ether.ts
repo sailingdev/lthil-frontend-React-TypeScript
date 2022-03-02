@@ -13,7 +13,7 @@ class Ether {
 
   async initializeProvider(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
-    debugger
+    // debugger
     this.signer = await this.provider.getSigner(this.address)
   }
   getProvider() {
