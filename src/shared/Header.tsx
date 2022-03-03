@@ -5,26 +5,40 @@ import { ArrowDown } from 'phosphor-react'
 import { Button } from './Button'
 import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
 import { ReactComponent as LogoLight } from '../assets/logoLight.svg'
+import { ReactComponent as LogoDark } from '../assets/logoDark.svg'
 import { NavigationMenu } from './NavigationMenu'
 import { ThemeSwitch } from './ThemeSwitch'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import Web3Modal from 'web3modal'
 import { ether } from '../ether'
 import tw from 'twin.macro'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { ThemeContext } from '../AppRouter'
 
 export const Header = () => {
+  const { themeContext, setThemeContext } = useContext(ThemeContext)
+
+  const lightTheme = {
+    background: 'rgb(255, 255, 255)',
+    main: 'rgb(7, 11, 15)',
+    secondary: 'rgb(78, 95, 113)',
+    border: 'rgba(195, 195, 195, 0.14)',
+    hover: 'rgb(242, 245, 246)',
+  }
+
+  const darkTheme = {
+    background: 'rgb(21, 26, 41)',
+    main: 'rgb(242, 245, 246)',
+    secondary: 'rgb(164, 177, 190)',
+    border: 'rgba(195, 195, 195, 0.14)',
+    hover: 'rgb(32, 41, 58)',
+  }
+
   const [web3Modal] = useState(
     new Web3Modal({
       network: 'kovan',
       cacheProvider: true,
-      // theme: {
-      //   background: 'rgb(39, 49, 56)',
-      //   main: 'rgb(199, 199, 199)',
-      //   secondary: 'rgb(136, 136, 136)',
-      //   border: 'rgba(195, 195, 195, 0.14)',
-      //   hover: 'rgb(16, 26, 32)',
-      // },
+      theme: themeContext ? darkTheme : lightTheme,
       providerOptions: {
         walletconnect: {
           package: WalletConnectProvider,
@@ -51,7 +65,11 @@ export const Header = () => {
   return (
     <div tw='max-w-1920 w-[calc(100% - 9rem)] my-6 mx-auto flex flex-row items-start justify-between'>
       <span tw='flex flex-row items-start'>
-        <LogoLight css={[tw`w-32 h-8`]} />
+        {themeContext ? (
+          <LogoDark css={[tw`w-32 h-8`]} />
+        ) : (
+          <LogoLight css={[tw`w-32 h-8`]} />
+        )}
         <span tw='mt-1 ml-24 flex flex-row'>
           <NavigationMenu />
           <ThemeSwitch />
