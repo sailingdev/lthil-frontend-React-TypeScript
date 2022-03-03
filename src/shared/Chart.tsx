@@ -4,29 +4,14 @@ import 'twin.macro'
 import tw from 'twin.macro'
 import { useEffect, useRef, useState } from 'react'
 import { BasicChart } from '../shared/BasicChart'
+import { isDesktop } from '../utils'
+import { TabButton } from './TabButton'
 
-const TabButton = (props: {
-  text: string
-  onClick?: React.MouseEventHandler<HTMLButtonElement>
-  active?: boolean
-  intervalButton?: boolean
-  className?: string | undefined
-}) => {
-  return (
-    <button
-      css={[
-        tw`bg-primary-300 border-0 rounded-md cursor-pointer flex flex-row items-center px-8 py-2.5`,
-        props.active && tw`bg-action`,
-        props.intervalButton && tw`px-2.5 py-0.5`,
-      ]}
-      onClick={props.onClick}
-    >
-      <Txt.Body2Regular
-        css={[tw`text-secondary`, props.active && tw`text-primary-100`]}
-      >
-        {props.text}
-      </Txt.Body2Regular>
-    </button>
+const CurrentTokenValue = (props: { value: number }) => {
+  return isDesktop ? (
+    <Txt.CaptionMedium tw='text-font-100'>{props.value}</Txt.CaptionMedium>
+  ) : (
+    <Txt.Body1Regular tw='text-font-100'>{props.value}</Txt.Body1Regular>
   )
 }
 
@@ -63,6 +48,20 @@ export const Chart = (props: { containerId: string }) => {
           />
         </div>
       </div>
+      {/* <div tw='w-full flex flex-row justify-start'>
+        <CurrentTokenValue value={0.124348} />
+      </div>
+      <div tw='w-full flex flex-row justify-between'>
+        <Txt.Body2Regular>
+          +0.00032 (0.17%) – Jan 24, 2022, 10:00 AM
+        </Txt.Body2Regular>
+        {isDesktop && (
+          <div tw='flex gap-4'>
+            <Txt.CaptionMedium>Low: 0.00023</Txt.CaptionMedium>
+            <Txt.CaptionMedium>High: 1.2331</Txt.CaptionMedium>
+          </div>
+        )}
+      </div> */}
       <div tw='flex flex-row w-full gap-2 justify-start'>
         <TabButton active intervalButton text='1h' />
         <TabButton intervalButton text='1d' />
@@ -78,19 +77,5 @@ export const Chart = (props: { containerId: string }) => {
         />
       )}
     </div>
-    // {/* <div tw='w-full flex flex-row justify-start'>
-    // <SomeText value='0.124348' />
-    // </div> */}
-    // {/* <div tw='w-full flex flex-row justify-between'>
-    // <Txt.Body2Regular>
-    // +0.00032 (0.17%) – Jan 24, 2022, 10:00 AM
-    // </Txt.Body2Regular>
-    // {isDesktop && (
-    // <div tw='flex gap-4'>
-    // <Txt.CaptionMedium>Low: 0.00023</Txt.CaptionMedium>
-    // <Txt.CaptionMedium>High: 1.2331</Txt.CaptionMedium>
-    // </div>
-    // )}
-    // </div> */}
   )
 }

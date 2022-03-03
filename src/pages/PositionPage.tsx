@@ -7,16 +7,7 @@ import { CollateralCard } from '../shared/CollateralCard'
 import { ContentContainer } from '../shared/ContentContainer'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { Txt } from '../shared/Txt'
-import { isDesktop } from '../utils'
 import { Chart } from '../shared/Chart'
-
-const SomeText = (props: { value: string | number }) => {
-  return isDesktop ? (
-    <Txt.CaptionMedium tw='text-font-100'>{props.value}</Txt.CaptionMedium>
-  ) : (
-    <Txt.Body1Regular tw='text-font-100'>{props.value}</Txt.Body1Regular>
-  )
-}
 
 export const PositionPage = () => {
   return (
