@@ -7,8 +7,9 @@ import { BasicChart } from '../shared/BasicChart'
 
 const TabButton = (props: {
   text: string
-  onClick: React.MouseEventHandler<HTMLButtonElement>
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
   active?: boolean
+  intervalButton?: boolean
   className?: string | undefined
 }) => {
   return (
@@ -16,6 +17,7 @@ const TabButton = (props: {
       css={[
         tw`bg-primary-300 border-0 rounded-md cursor-pointer flex flex-row items-center px-8 py-2.5`,
         props.active && tw`bg-action`,
+        props.intervalButton && tw`px-2.5 py-0.5`,
       ]}
       onClick={props.onClick}
     >
@@ -43,7 +45,7 @@ export const Chart = (props: { containerId: string }) => {
   return (
     <div
       ref={divRef}
-      tw='w-full h-14 flex flex-col gap-2 justify-center items-center'
+      tw='w-full h-14 flex flex-col gap-2 justify-center items-center pt-10'
     >
       <div tw='w-full flex flex-row justify-between pb-5 '>
         <Txt.Heading2>ETH/USDC</Txt.Heading2>
@@ -60,6 +62,12 @@ export const Chart = (props: { containerId: string }) => {
             onClick={() => setActiveChart('trading')}
           />
         </div>
+      </div>
+      <div tw='flex flex-row w-full gap-2 justify-start'>
+        <TabButton active intervalButton text='1h' />
+        <TabButton intervalButton text='1d' />
+        <TabButton intervalButton text='1w' />
+        <TabButton intervalButton text='1m' />
       </div>
       {/* <div id='chart'></div> */}
       {divRef.current && (

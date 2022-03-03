@@ -14,7 +14,7 @@ export const BasicChart = (props: {
     symbols: [['Apple', 'AAPL']],
     chartOnly: true,
     width: `${props.width}px`,
-    height: '600px',
+    height: '550px',
     locale: 'in',
     colorTheme: themeContext ? 'dark' : 'light',
     gridLineColor: 'rgba(244, 204, 204, 0)',
