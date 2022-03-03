@@ -28,7 +28,7 @@ const TabButton = (props: {
   )
 }
 
-export const Chart = () => {
+export const Chart = (props: { containerId: string }) => {
   const divRef = useRef<HTMLDivElement>(null)
   const [chartDimensions, setChartDimensions] = useState([0, 0])
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
@@ -61,12 +61,12 @@ export const Chart = () => {
           />
         </div>
       </div>
-      <div id='chart'></div>
+      {/* <div id='chart'></div> */}
       {divRef.current && (
         <BasicChart
           type={activeChart}
           width={chartDimensions[0]}
-          containerId='chart'
+          containerId={props.containerId}
         />
       )}
     </div>
