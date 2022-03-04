@@ -31,15 +31,15 @@ export const BasicChart = (props: { width: number }) => {
         locale: 'en',
         dateRange: opts.dateRange,
         colorTheme: themeContext ? 'dark' : 'light',
-        trendLineColor: 'rgba(41, 98, 255, 1)',
-        underLineColor: 'rgba(41, 98, 255, 0.3)',
-        underLineBottomColor: 'rgba(41, 98, 255, 0)',
-        isTransparent: false,
+        trendLineColor: 'rgba(7, 124, 224, 1)',
+        underLineColor: 'rgba(7, 124, 224, 0.3)',
+        underLineBottomColor: 'rgba(7, 124, 224, 0)',
+        isTransparent: true,
         autosize: false,
       })
       return script
     },
-    [interval],
+    [interval, themeContext],
   )
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export const BasicChart = (props: { width: number }) => {
     rootNode.classList.add('tradingview-widget-container__widget')
     ref.current.appendChild(rootNode)
     ref.current.appendChild(script)
-  }, [interval])
+  }, [interval, themeContext])
 
   return (
     <React.Fragment>
