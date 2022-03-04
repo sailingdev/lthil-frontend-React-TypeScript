@@ -20,10 +20,7 @@ export const TabButton = (props: {
       onClick={props.onClick}
     >
       <Txt.Body2Regular
-        css={[
-          tw`text-secondary`,
-          props.active && tw`text-primary-100 line-height[0]`,
-        ]}
+        css={[tw`text-secondary`, props.active && tw`text-primary-100`]}
       >
         {props.text}
       </Txt.Body2Regular>
