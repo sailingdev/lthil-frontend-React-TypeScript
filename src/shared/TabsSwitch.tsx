@@ -44,7 +44,7 @@ export const TabsSwitch = (props: ITabsProps) => {
   const [activeIndex, setActiveIndex] = useState(0)
 
   return (
-    <div>
+    <div tw='w-full'>
       <div
         css={[
           tw`flex flex-row items-center gap-2 border-2 border-font-200 rounded-xl p-1 dark:border-primary-400`,

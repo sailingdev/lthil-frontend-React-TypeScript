@@ -13,6 +13,7 @@ import tw from 'twin.macro'
 import { useEffect, createContext } from 'react'
 import { useLocalStorage } from 'react-use'
 import { PositionPage } from './pages/PositionPage'
+import { MarginTradingPage } from './pages/MarginTradingPage'
 
 /** @jsxImportSource @emotion/react */
 
@@ -37,6 +38,7 @@ export const AppRouter = () => {
           <div tw='flex-grow'>
             <Routes>
               <Route path='/' element={<TradePage />} />
+              <Route path='/margintrading' element={<MarginTradingPage />} />
               <Route path='/dashboard' element={<DashboardPage />} />
               <Route path='/dashboard/:position' element={<PositionPage />} />
               <Route path='/stake' element={<StakePage />} />
