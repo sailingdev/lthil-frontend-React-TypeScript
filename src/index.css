@@ -76,10 +76,10 @@ body > div {
   :root {
     --fontsize-caption-medium: 12px;
     --lineheight-caption-medium: 19.2px;
-    --fontsize-body2-regular: 14px;
-    --lineheight-body2-regular: 22.4px;
-    --fontsize-body2-bold: 14px;
-    --lineheight-body2-bold: 22.4px;
+    --fontsize-body2-regular: 12px;
+    --lineheight-body2-regular: 19.2px;
+    --fontsize-body2-bold: 12px;
+    --lineheight-body2-bold: 19.2px;
     --fontsize-body1-regular: 16px;
     --lineheight-body1-regular: 25.6px;
     --fontsize-button-medium: 16px;
