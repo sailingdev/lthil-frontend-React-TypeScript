@@ -172,6 +172,7 @@ export const MarginTradingPage = () => {
                     </button>
                   )}
                 </div>
+                <Button text='Buy / Long TKN' full action bold />
               </div>
             </div>
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>

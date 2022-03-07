@@ -15,6 +15,7 @@ interface IButtonProps extends ICSSProps {
   text: string
   onClick?: MouseEventHandler<HTMLButtonElement>
   className?: string | undefined
+  bold?: boolean | undefined
 }
 
 export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
@@ -48,6 +49,7 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
           tw`flex-grow`,
           primary && tw`text-secondary`,
           props.action && tw`text-white`,
+          props.bold && tw`font-bold`,
         ]}
       >
         {props.text}
