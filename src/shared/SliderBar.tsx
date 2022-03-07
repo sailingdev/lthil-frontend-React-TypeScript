@@ -24,7 +24,7 @@ export const SliderBar = (props: ISliderProps) => {
         {props.label && (
           <Txt.Body2Regular tw='self-start'>{props.label}</Txt.Body2Regular>
         )}
-        {props.tooltip && <Question />}
+        {props.tooltip && <Question tw='dark:text-font-200' />}
       </div>
       <span tw='px-2'>
         <Slider
