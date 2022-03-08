@@ -1,6 +1,6 @@
 import 'twin.macro'
 
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { ChartsPage } from './pages/ChartsPage'
 import { DashboardPage } from './pages/DashboardPage'
@@ -11,19 +11,16 @@ import { StakePage } from './pages/StakePage'
 import { TradePage } from './pages/TradePage'
 import { isDesktop } from './utils'
 import tw from 'twin.macro'
-import { useEffect } from 'react'
-import { useTheme } from './state/hooks'
+import { useBlockNumberListener } from './shared/hooks/useBlockNumberListener'
+import { useInitSetup } from './shared/hooks/useInitSetup'
+import { useNetworkListener } from './shared/hooks/useNetworkListener'
 
 /** @jsxImportSource @emotion/react */
 
 export const AppRouter = () => {
-  const theme = useTheme()
-
-  useEffect(() => {
-    if (theme) {
-      document.documentElement.classList.toggle('dark')
-    }
-  }, [])
+  useNetworkListener()
+  useBlockNumberListener()
+  useInitSetup()
 
   return (
     <div css={[tw`flex flex-col bg-primary min-h-screen desktop:flex-row`]}>
@@ -36,7 +33,7 @@ export const AppRouter = () => {
             <Route path='/dashboard/:position' element={<PositionPage />} />
             <Route path='/stake' element={<StakePage />} />
             <Route path='/charts' element={<ChartsPage />} />
-            <Route path='*' element={<Navigate to='/trade' />} />
+            {/* <Route path='*' element={<Navigate to='/trade' />} /> */}
           </Routes>
         </div>
         {!isDesktop && <Footer />}
