@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
-
 import { RootState } from '../../state/store'
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
 export const TradingChart = (props: {}) => {

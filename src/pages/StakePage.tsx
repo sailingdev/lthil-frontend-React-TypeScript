@@ -1,16 +1,15 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
-import { useState } from 'react'
 
 import { ContentContainer } from '../shared/ContentContainer'
-import { Txt } from '../shared/Txt'
 import { CustomTable } from '../shared/table/CustomTable'
 import { ISearchParams } from '../types'
 import { InputField } from '../shared/InputField'
-import { useSearch } from '../shared/hooks/useSearch'
-import { TableCell } from '../shared/table/cells'
+/** @jsxImportSource @emotion/react */
 import { MagnifyingGlass } from 'phosphor-react'
+import { TableCell } from '../shared/table/cells'
+import { Txt } from '../shared/Txt'
+import { useSearch } from '../shared/hooks/useSearch'
+import { useState } from 'react'
 
 const data = [
   {
@@ -155,8 +154,7 @@ const initialSearchParams: Partial<ISearchParams> = {
 
 export const StakePage = () => {
   const [search, setSearch] = useState('')
-  const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
-    useSearch(initialSearchParams)
+  const [searchParams, { setPage }] = useSearch(initialSearchParams)
 
   return (
     <ContentContainer>

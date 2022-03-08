@@ -6,8 +6,6 @@ import { ISearchParams } from '../types'
 import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
 import { useSearch } from '../shared/hooks/useSearch'
-/** @jsxImportSource @emotion/react */
-import { useState } from 'react'
 
 const data = [
   {
@@ -169,10 +167,8 @@ const initialSearchParams: Partial<ISearchParams> = {
 }
 
 export const DashboardPage = () => {
-  const [search, setSearch] = useState('')
-  const [searchParams, { setSearchParams, setOrder, setOrderField, setPage }] =
-    useSearch(initialSearchParams)
-  //@ts-ignore
+  // const [search, setSearch] = useState('')
+  const [searchParams, { setPage }] = useSearch(initialSearchParams)
 
   return (
     <ContentContainer>

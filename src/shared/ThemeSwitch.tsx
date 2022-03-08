@@ -1,13 +1,13 @@
 import 'twin.macro'
 
+import { useDispatch, useSelector } from 'react-redux'
+
 import { IBaseProps } from '../utils'
+import { RootState } from '../state/store'
 /** @jsxImportSource @emotion/react */
 import Switch from 'react-switch'
 import { ReactComponent as SwitchDark } from '../assets/switchDark.svg'
 import { ReactComponent as SwitchLight } from '../assets/switchLight.svg'
-
-import { RootState } from '../state/store'
-import { useSelector, useDispatch } from 'react-redux'
 import { toggle } from '../state/theme/theme.actions'
 
 export const ThemeSwitch = (props: IBaseProps) => {

@@ -1,12 +1,9 @@
-import 'twin.macro'
-
 /** @jsxImportSource @emotion/react */
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-
-import { TabButton } from '../TabButton'
-
-import { RootState } from '../../state/store'
 import { useSelector } from 'react-redux'
+import 'twin.macro'
+import { RootState } from '../../state/store'
+import { TabButton } from '../TabButton'
 
 export const BasicChart = (props: { width: number }) => {
   const theme = useSelector((state: RootState) => state.theme.value)

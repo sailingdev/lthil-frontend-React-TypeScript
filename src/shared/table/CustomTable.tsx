@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import {
   Column,
   useFlexLayout,
@@ -11,6 +10,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 import { CustomTablePagination } from './CustomTablePagination'
 import { Txt } from '../Txt'
+/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { isMobile } from '../../utils'
 import tw from 'twin.macro'
@@ -218,7 +218,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
             </tbody>
           ) : (
             <tbody {...getTableBodyProps()}>
-              {page.map((row, index) => {
+              {page.map((row) => {
                 prepareRow(row)
                 return (
                   <React.Fragment>

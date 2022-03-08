@@ -1,8 +1,8 @@
 import { Contract, ethers } from 'ethers'
 
-import { VaultInterface } from './config/typings'
-
 import ABI from './assets/abi.json'
+import ERC20 from './assets/ERC20.json'
+import { VaultInterface } from './config/typings'
 import addresses from './assets/addresses.json'
 
 export const abi = ABI
@@ -13,8 +13,7 @@ class Ether {
 
   async initializeProvider(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
-    // debugger
-    this.signer = await this.provider.getSigner(this.address)
+    this.signer = await this.provider.getSigner()
   }
   getProvider() {
     return this.provider
@@ -31,9 +30,12 @@ class Ether {
     return accounts.length > 0 ? accounts[0] : null
   }
 
-  async getContract(): Promise<VaultInterface> {
+  getContract(): Promise<VaultInterface> {
     // @ts-ignore
-    return new Contract(this.address, abi, await this.signer)
+    return new Contract(this.address, abi, this.signer)
+  }
+  getERC20Contract() {
+    return new Contract(this.address, ERC20.abi, this.signer)
   }
 }
 
