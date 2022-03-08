@@ -7,7 +7,7 @@ import { RootState } from '../../state/store'
 import { TabButton } from '../TabButton'
 import { useSelector } from 'react-redux'
 
-export const BasicChart = (props: { width: number }) => {
+export const BasicChart = () => {
   const theme = useSelector((state: RootState) => state.theme.value)
   const ref = useRef<any>()
   const [isMounted, setIsMounted] = useState(false)

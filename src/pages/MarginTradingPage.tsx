@@ -1,20 +1,21 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
-import { useState } from 'react'
+
+/** @jsxImportSource @emotion/react */
 import { ArrowDown, FadersHorizontal } from 'phosphor-react'
-import { Button } from '../shared/Button'
 
 import { BasicChart } from '../shared/charts/BasicChart'
+import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
+import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
+import { InputField } from '../shared/InputField'
+import { RadioGroup } from '../shared/RadioGroup'
+import { SliderBar } from '../shared/SliderBar'
 import { TabButton } from '../shared/TabButton'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
-import { InputField } from '../shared/InputField'
-import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
-import { SliderBar } from '../shared/SliderBar'
-import { RadioGroup } from '../shared/RadioGroup'
+import tw from 'twin.macro'
+import { useState } from 'react'
 
 export const MarginTradingPage = () => {
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
@@ -193,11 +194,7 @@ export const MarginTradingPage = () => {
                 </div>
               </div>
               <div tw='w-full h-full  flex flex-col'>
-                {activeChart === 'basic' ? (
-                  <BasicChart width={0} />
-                ) : (
-                  <TradingChart />
-                )}
+                {activeChart === 'basic' ? <BasicChart /> : <TradingChart />}
               </div>
             </div>
           </div>
