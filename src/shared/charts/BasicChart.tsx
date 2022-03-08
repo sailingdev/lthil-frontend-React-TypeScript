@@ -12,7 +12,7 @@ import React, {
 import { TabButton } from '../TabButton'
 import { ThemeContext } from '../../AppRouter'
 
-export const BasicChart = (props: { width: number }) => {
+export const BasicChart = () => {
   const { themeContext } = useContext(ThemeContext)
   const ref = useRef<any>()
   const [isMounted, setIsMounted] = useState(false)

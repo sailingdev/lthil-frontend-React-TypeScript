@@ -3,11 +3,10 @@ import 'twin.macro'
 import { IBaseProps } from '../utils'
 /** @jsxImportSource @emotion/react */
 import Switch from 'react-switch'
-import { useContext } from 'react'
 import { ReactComponent as SwitchDark } from '../assets/switchDark.svg'
 import { ReactComponent as SwitchLight } from '../assets/switchLight.svg'
-import { useLocalStorage } from 'react-use'
 import { ThemeContext } from '../AppRouter'
+import { useContext } from 'react'
 
 export const ThemeSwitch = (props: IBaseProps) => {
   // const [darkMode, setDarkMode] = useLocalStorage('darkMode', false)

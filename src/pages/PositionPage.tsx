@@ -49,11 +49,7 @@ export const PositionPage = () => {
                 </div>
               </div>
               <div tw='w-full h-full  flex flex-col'>
-                {activeChart === 'basic' ? (
-                  <BasicChart width={0} />
-                ) : (
-                  <TradingChart />
-                )}
+                {activeChart === 'basic' ? <BasicChart /> : <TradingChart />}
               </div>
             </div>
           </div>

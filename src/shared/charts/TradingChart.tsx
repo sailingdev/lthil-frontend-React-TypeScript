@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 
 import { ThemeContext } from '../../AppRouter'
 
-export const TradingChart = (props: {}) => {
+export const TradingChart = () => {
   const { themeContext } = useContext(ThemeContext)
 
   const tradingChartProperites = {

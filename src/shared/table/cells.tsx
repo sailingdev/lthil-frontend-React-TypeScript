@@ -1,7 +1,8 @@
 import 'twin.macro'
-import tw from 'twin.macro'
-import { isMobile, isTablet, isDesktop } from '../../utils'
+
 import { Txt } from '../Txt'
+import { isDesktop } from '../../utils'
+import tw from 'twin.macro'
 
 /** @jsxImportSource @emotion/react */
 
