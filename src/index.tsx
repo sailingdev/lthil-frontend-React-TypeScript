@@ -3,6 +3,8 @@ import 'tailwindcss/dist/base.min.css'
 import './index.css'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { Provider } from 'react-redux'
+import { store } from './state/store'
 
 import { AppRouter } from './AppRouter'
 import { BrowserRouter } from 'react-router-dom'
@@ -35,7 +37,9 @@ ReactDOM.render(
       />
       <QueryClientProvider client={queryClient}>
         {/* <UserContext> */}
-        <AppRouter />
+        <Provider store={store}>
+          <AppRouter />
+        </Provider>
         {/* </UserContext> */}
       </QueryClientProvider>
     </BrowserRouter>
