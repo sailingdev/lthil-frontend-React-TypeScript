@@ -1,16 +1,17 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 
-import { ThemeContext } from '../../AppRouter'
+import { RootState } from '../../state/store'
+import { useSelector } from 'react-redux'
 
 export const TradingChart = (props: {}) => {
-  const { themeContext } = useContext(ThemeContext)
+  const theme = useSelector((state: RootState) => state.theme.value)
 
   const tradingChartProperites = {
     width: `100%`,
     height: '100%',
     symbol: 'NASDAQ:AAPL',
     timezone: 'Etc/UTC',
-    theme: themeContext ? 'dark' : 'light',
+    theme: theme ? 'dark' : 'light',
     style: 1,
     locale: 'en',
     toolbar_bg: '#f1f3f6',
@@ -27,7 +28,7 @@ export const TradingChart = (props: {}) => {
   useEffect(() => {
     // @ts-ignore
     new window.TradingView.widget(tradingChartProperites)
-  }, [themeContext])
+  }, [theme])
 
   return <div id='chart' />
 }

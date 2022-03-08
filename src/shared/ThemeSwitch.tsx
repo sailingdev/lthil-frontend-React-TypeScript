@@ -6,16 +6,18 @@ import Switch from 'react-switch'
 import { useContext } from 'react'
 import { ReactComponent as SwitchDark } from '../assets/switchDark.svg'
 import { ReactComponent as SwitchLight } from '../assets/switchLight.svg'
-import { useLocalStorage } from 'react-use'
-import { ThemeContext } from '../AppRouter'
+
+import { RootState } from '../state/store'
+import { useSelector, useDispatch } from 'react-redux'
+import { toggle } from '../state/theme/themeSlice'
 
 export const ThemeSwitch = (props: IBaseProps) => {
-  // const [darkMode, setDarkMode] = useLocalStorage('darkMode', false)
-  const { themeContext, setThemeContext } = useContext(ThemeContext)
+  const theme = useSelector((state: RootState) => state.theme.value)
+  const dispatch = useDispatch()
 
   const onThemeChange = () => {
     document.documentElement.classList.toggle('dark')
-    setThemeContext(!themeContext)
+    dispatch(toggle())
   }
 
   return (
@@ -32,7 +34,7 @@ export const ThemeSwitch = (props: IBaseProps) => {
           <SwitchLight />
         </div>
       }
-      checked={!themeContext}
+      checked={!theme}
       onColor='#F2F5F6'
       offColor='#20293A'
       onHandleColor='#FB8E51'

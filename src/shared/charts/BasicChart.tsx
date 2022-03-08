@@ -1,19 +1,15 @@
 import 'twin.macro'
 
 /** @jsxImportSource @emotion/react */
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { TabButton } from '../TabButton'
-import { ThemeContext } from '../../AppRouter'
+
+import { RootState } from '../../state/store'
+import { useSelector } from 'react-redux'
 
 export const BasicChart = (props: { width: number }) => {
-  const { themeContext } = useContext(ThemeContext)
+  const theme = useSelector((state: RootState) => state.theme.value)
   const ref = useRef<any>()
   const [isMounted, setIsMounted] = useState(false)
   const [interval, setInterval] = useState<'1d' | '1m' | '12m' | '60m'>('1d')
@@ -30,7 +26,7 @@ export const BasicChart = (props: { width: number }) => {
         height: '100%',
         locale: 'en',
         dateRange: opts.dateRange,
-        colorTheme: themeContext ? 'dark' : 'light',
+        colorTheme: theme ? 'dark' : 'light',
         trendLineColor: 'rgba(7, 124, 224, 1)',
         underLineColor: 'rgba(7, 124, 224, 0.3)',
         underLineBottomColor: 'rgba(7, 124, 224, 0)',
@@ -39,7 +35,7 @@ export const BasicChart = (props: { width: number }) => {
       })
       return script
     },
-    [interval, themeContext],
+    [interval, theme],
   )
 
   useEffect(() => {
@@ -64,7 +60,7 @@ export const BasicChart = (props: { width: number }) => {
     rootNode.classList.add('tradingview-widget-container__widget')
     ref.current.appendChild(rootNode)
     ref.current.appendChild(script)
-  }, [interval, themeContext])
+  }, [interval, theme])
 
   return (
     <React.Fragment>

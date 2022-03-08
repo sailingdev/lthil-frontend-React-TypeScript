@@ -13,14 +13,16 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import Web3Modal from 'web3modal'
 import { ether } from '../ether'
 import tw from 'twin.macro'
-import { useState, useContext } from 'react'
-import { ThemeContext } from '../AppRouter'
+import { useState } from 'react'
 import { ethers } from 'ethers'
 import VaultAbi from '../assets/abi.json'
 import ERC20 from '../assets/ERC20.json'
 
+import { RootState } from '../state/store'
+import { useSelector } from 'react-redux'
+
 export const Header = () => {
-  const { themeContext, setThemeContext } = useContext(ThemeContext)
+  const theme = useSelector((state: RootState) => state.theme.value)
 
   const lightTheme = {
     background: 'rgb(255, 255, 255)',
@@ -41,7 +43,7 @@ export const Header = () => {
   const [web3Modal] = useState(
     new Web3Modal({
       cacheProvider: true,
-      theme: themeContext ? darkTheme : lightTheme,
+      theme: theme ? darkTheme : lightTheme,
       network: 'rinkeby',
       // cacheProvider: true,
       // theme: {
@@ -88,7 +90,7 @@ export const Header = () => {
   return (
     <div tw='max-w-1920 w-[calc(100% - 9rem)] my-6 mx-auto flex flex-row items-start justify-between'>
       <span tw='flex flex-row items-start'>
-        {themeContext ? (
+        {theme ? (
           <LogoDark css={[tw`w-32 h-8`]} />
         ) : (
           <LogoLight css={[tw`w-32 h-8`]} />
