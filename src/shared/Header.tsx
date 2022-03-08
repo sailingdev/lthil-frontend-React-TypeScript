@@ -2,15 +2,15 @@ import 'twin.macro'
 
 import { ArrowDown } from 'phosphor-react'
 import { Button } from './Button'
-import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
+import { ReactComponent as CurrEth } from '../assets/images/currencyEthereum.svg'
 /** @jsxImportSource @emotion/react */
 import Fortmatic from 'fortmatic'
-import { ReactComponent as LogoDark } from '../assets/logoDark.svg'
-import { ReactComponent as LogoLight } from '../assets/logoLight.svg'
+import { ReactComponent as LogoDark } from '../assets/images/logoDark.svg'
+import { ReactComponent as LogoLight } from '../assets/images/logoLight.svg'
 import { NavigationMenu } from './NavigationMenu'
 import { RootState } from '../state/store'
 import { ThemeSwitch } from './ThemeSwitch'
-import VaultAbi from '../assets/abi.json'
+import VaultAbi from '../assets/abi/abi.json'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import Web3Modal from 'web3modal'
 import { ether } from '../ether'
@@ -20,14 +20,6 @@ import { useAsync } from 'react-use'
 import { useSelector } from 'react-redux'
 // @ts-nocheck
 import { useState } from 'react'
-
-const lightTheme = {
-  background: 'rgb(255, 255, 255)',
-  main: 'rgb(7, 11, 15)',
-  secondary: 'rgb(78, 95, 113)',
-  border: 'rgba(195, 195, 195, 0.14)',
-  hover: 'rgb(242, 245, 246)',
-}
 
 export const Header = () => {
   const theme = useSelector((state: RootState) => state.theme.value)
@@ -53,14 +45,6 @@ export const Header = () => {
       cacheProvider: true,
       theme: theme ? darkTheme : lightTheme,
       network: 'rinkeby',
-      // cacheProvider: true,
-      // theme: {
-      //   background: 'rgb(39, 49, 56)',
-      //   main: 'rgb(199, 199, 199)',
-      //   secondary: 'rgb(136, 136, 136)',
-      //   border: 'rgba(195, 195, 195, 0.14)',
-      //   hover: 'rgb(16, 26, 32)',
-      // },
       providerOptions: {
         walletconnect: {
           package: WalletConnectProvider,
@@ -89,26 +73,91 @@ export const Header = () => {
     setConnected(true)
     await ether.initializeProvider(provider)
 
-    const address = '0xBEeB7Aa057aec50c30c93c893086B9c0eDc157Dd' // Vault
-    const tokenAddress = '0x1C51De870718801E745482b25d3bB2Bd3b86e08C' // MockTaxedToken
-
-    // Vault contract
-    const c = ethers.ContractFactory.getContract(
-      address,
-      VaultAbi.abi,
-      ether.getSigner(),
-    )
     try {
-      const a = c.interface?.getFunction('owner')
+      // const a = c.interface?.getFunction('owner')
+
+      // console.log(
+      //   c.interface.encodeFunctionData(
+      //     c.interface?.getFunction('getEthBalance'),
+      //     [await ether.getAccount()],
+      //   ),
+      // )
+
+      console.log('account: ', await ether.getAccount())
+
+      const Vault = ether.getVaultContract()
+      // console.log(Vault)
+
+      const MarginTradingStrategy = ether.getMarginTradingStrategyContract()
+      console.log(MarginTradingStrategy)
+
+      // console.log(
+      //   //@ts-ignore
+      //   await Vault.stake('0x1C51De870718801E745482b25d3bB2Bd3b86e08C', 1, {
+      //     gasLimit: 1000000,
+      //   }),
+      // )
+
+      const openedPositions = await MarginTradingStrategy.queryFilter(
+        MarginTradingStrategy.filters.PositionWasOpened(),
+        '0x1',
+        'latest',
+      )
+      // const closedPositions = await MarginTradingStrategy.queryFilter(
+      //   MarginTradingStrategy.filters.PositionWasClosed(),
+      //   'earliest',
+      //   'latest',
+      // )
+      // const liquidatedPositions = await MarginTradingStrategy.queryFilter(
+      //   MarginTradingStrategy.filters.PositionWasLiquidated(),
+      //   'earliest',
+      //   'latest',
+      // )
+
+      console.log('Opened positions: ', openedPositions)
+      // console.log('Closed positions: ', closedPositions)
+      // console.log('Liquidated positions: ', liquidatedPositions)
+
+      // console.log(
+      //   'User deposited token to vault: ',
+      //   //@ts-ignore
+      //   await Vault.queryFilter(Vault.filters.Deposit(), 'earliest', 'latest'),
+      // )
+
+      const MockTaxedToken = ether.getMockTaxedTokenContract()
+
+      // console.log('token owner: ', await MockTaxedToken.owner())
+
+      // console.log(
+      //   //@ts-ignore
+      //   await Vault.claimable('0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b', {
+      //     gasLimit: 1000000,
+      //   }),
+      // )
 
       console.log(
-        c.interface.encodeFunctionData(
-          c.interface?.getFunction('getEthBalance'),
-          [await ether.getAccount()],
+        await MockTaxedToken.approve(
+          '0xBEeB7Aa057aec50c30c93c893086B9c0eDc157Dd',
+          ethers.constants.MaxUint256,
         ),
       )
 
-      const erc20 = ether.getERC20Contract()
+      // console.log(
+      //   await MockTaxedToken.approve(
+      //     '0x27001942d886573b4C68d77547143C4b98f3775C',
+      //     ethers.constants.MaxUint256,
+      //     {
+      //       gasLimit: 100000000000,
+      //     },
+      //   ),
+      // )
+
+      console.log(
+        //@ts-ignore
+        await Vault.stake('0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b', 100, {
+          gasLimit: 100000000000,
+        }),
+      )
     } catch (e) {
       console.error(e)
     }
@@ -153,16 +202,16 @@ export const Header = () => {
               // console.log('Account address: ', await signer.getAddress())
               // console.log('ChainId: ', await signer.getChainId())
 
-              const address = '0xBEeB7Aa057aec50c30c93c893086B9c0eDc157Dd' // Vault
-              // const tokenAddress = '0x1C51De870718801E745482b25d3bB2Bd3b86e08C' // MockTaxedToken
+              // const address = '0xBEeB7Aa057aec50c30c93c893086B9c0eDc157Dd' // Vault
+              // // const tokenAddress = '0x1C51De870718801E745482b25d3bB2Bd3b86e08C' // MockTaxedToken
 
-              // Vault contract
-              const c = ethers.ContractFactory.getContract(
-                address,
-                VaultAbi.abi,
-                ether.getSigner(),
-              )
-              console.log(c.filters, c.queryFilter)
+              // // Vault contract
+              // const c = ethers.ContractFactory.getContract(
+              //   address,
+              //   VaultAbi.abi,
+              //   ether.getSigner(),
+              // )
+              // // console.log(c.filters, c.queryFilter)
 
               // const filters = c.filters
 
@@ -186,7 +235,7 @@ export const Header = () => {
               // const account = await ether.getAccount()
               // console.log(account)
               // debugger
-              // console.log(await c.owner())
+              // console.log(await Vault.owner())
               // console.log(
               //   // @ts-ignore
               //   await c.stake('0x0B84D4B9fE423CED62E1eF836B4aE8130E35604E', 1, {
