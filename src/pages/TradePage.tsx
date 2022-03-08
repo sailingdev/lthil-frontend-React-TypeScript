@@ -1,11 +1,27 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react'
 import 'twin.macro'
-import tw from 'twin.macro'
+
+import { useAccountBalance, useLatestBlock } from '../state/hooks'
 
 import { ContentContainer } from '../shared/ContentContainer'
-import { Txt } from '../shared/Txt'
+import { useNetwork } from '../shared/hooks/useNetwork'
 
 export const TradePage = () => {
-  return <ContentContainer>TRADE</ContentContainer>
+  const block = useLatestBlock()
+  const balance = useAccountBalance()
+  const network = useNetwork()
+  console.log('Block', block)
+  console.log('Balance', balance)
+  console.log('Network', network)
+
+  return (
+    <ContentContainer>
+      <div>Block: {block}</div>
+      <div>Balance: {balance}</div>
+      <div>Network: {network?.name}</div>
+      <div>Chain Id: {network?.chainId}</div>
+
+      {balance}
+    </ContentContainer>
+  )
 }

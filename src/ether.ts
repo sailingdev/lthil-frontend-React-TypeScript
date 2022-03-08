@@ -6,17 +6,28 @@ import { VaultInterface } from './config/typings'
 import addresses from './assets/addresses.json'
 
 export const abi = ABI
-class Ether {
+
+// THIS GLOBAL INSTANCE IS USED TO SIMPLY ARHITECTURE
+export let etherGlobal: Ether
+
+export const initializeGlobalInstance = (instance: Ether) => {
+  etherGlobal = instance
+}
+export class Ether {
   private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner
   private address = addresses.addresses.Vault
 
-  async initializeProvider(baseProvider: any) {
+  constructor(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
-    this.signer = await this.provider.getSigner()
   }
+  // this.signer = await this.provider.getSigner()
+
   getProvider() {
     return this.provider
+  }
+  getBlockNumber() {
+    return this.provider.getBlockNumber()
   }
   getSigner() {
     return this.signer
@@ -24,6 +35,10 @@ class Ether {
 
   getNetwork() {
     return this.provider.getNetwork()
+  }
+  async getBalance() {
+    const account = await this.getAccount()
+    return this.provider.getBalance(account!)
   }
   async getAccount(): Promise<string | null> {
     const accounts = await this.provider.listAccounts()
@@ -38,5 +53,3 @@ class Ether {
     return new Contract(this.address, ERC20.abi, this.signer)
   }
 }
-
-export const ether = new Ether()
