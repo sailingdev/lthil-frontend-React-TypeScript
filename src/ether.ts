@@ -1,15 +1,25 @@
 import { Contract, ethers } from 'ethers'
 
-import ABI from './assets/abi.json'
-import ERC20 from './assets/ERC20.json'
-import { VaultInterface } from './config/typings'
+import VaultAbi from './assets/abi/abi.json'
+import MockTaxedTokenAbi from './assets/abi/MockTaxedToken.json'
+import MarginTradingStrategyAbi from './assets/abi/MarginTradingStrategy.json'
+import { Vault, VaultInterface } from './config/typings'
 import addresses from './assets/addresses.json'
 
-export const abi = ABI
+/* 
+NOTES:
+  - each contract takes it's own address and ABI
+*/
+
 class Ether {
   private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner
-  private address = addresses.addresses.Vault
+
+  // Addresses
+  private vaultAddress = addresses.addresses.Vault
+  private mockTaxedTokenAddress = addresses.addresses.MockTaxedToken
+  private marginTradingStrategyAddress =
+    addresses.addresses.MarginTradingStrategy
 
   async initializeProvider(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
@@ -30,12 +40,23 @@ class Ether {
     return accounts.length > 0 ? accounts[0] : null
   }
 
-  getContract(): Promise<VaultInterface> {
+  getVaultContract(): Promise<VaultInterface> {
     // @ts-ignore
-    return new Contract(this.address, abi, this.signer)
+    return new Contract(this.vaultAddress, VaultAbi.abi, this.signer)
   }
-  getERC20Contract() {
-    return new Contract(this.address, ERC20.abi, this.signer)
+  getMockTaxedTokenContract() {
+    return new Contract(
+      this.mockTaxedTokenAddress,
+      MockTaxedTokenAbi.abi,
+      this.signer,
+    )
+  }
+  getMarginTradingStrategyContract() {
+    return new Contract(
+      this.marginTradingStrategyAddress,
+      MarginTradingStrategyAbi.abi,
+      this.signer,
+    )
   }
 }
 

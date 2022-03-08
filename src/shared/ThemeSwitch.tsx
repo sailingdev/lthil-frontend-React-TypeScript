@@ -5,8 +5,8 @@ import { useTheme, useToggleTheme } from '../state/hooks'
 import { IBaseProps } from '../utils'
 /** @jsxImportSource @emotion/react */
 import Switch from 'react-switch'
-import { ReactComponent as SwitchDark } from '../assets/switchDark.svg'
-import { ReactComponent as SwitchLight } from '../assets/switchLight.svg'
+import { ReactComponent as SwitchDark } from '../assets/images/switchDark.svg'
+import { ReactComponent as SwitchLight } from '../assets/images/switchLight.svg'
 
 export const ThemeSwitch = (props: IBaseProps) => {
   const theme = useTheme()
