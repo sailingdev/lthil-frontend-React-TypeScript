@@ -8,7 +8,6 @@ import Fortmatic from 'fortmatic'
 import { ReactComponent as LogoDark } from '../assets/logoDark.svg'
 import { ReactComponent as LogoLight } from '../assets/logoLight.svg'
 import { NavigationMenu } from './NavigationMenu'
-import { RootState } from '../state/store'
 import { ThemeSwitch } from './ThemeSwitch'
 import VaultAbi from '../assets/abi.json'
 import WalletConnectProvider from '@walletconnect/web3-provider'
@@ -17,9 +16,9 @@ import { ether } from '../ether'
 import { ethers } from 'ethers'
 import tw from 'twin.macro'
 import { useAsync } from 'react-use'
-import { useSelector } from 'react-redux'
 // @ts-nocheck
 import { useState } from 'react'
+import { useTheme } from '../state/hooks'
 
 const lightTheme = {
   background: 'rgb(255, 255, 255)',
@@ -29,24 +28,15 @@ const lightTheme = {
   hover: 'rgb(242, 245, 246)',
 }
 
+const darkTheme = {
+  background: 'rgb(21, 26, 41)',
+  main: 'rgb(242, 245, 246)',
+  secondary: 'rgb(164, 177, 190)',
+  border: 'rgba(195, 195, 195, 0.14)',
+  hover: 'rgb(32, 41, 58)',
+}
 export const Header = () => {
-  const theme = useSelector((state: RootState) => state.theme.value)
-
-  const lightTheme = {
-    background: 'rgb(255, 255, 255)',
-    main: 'rgb(7, 11, 15)',
-    secondary: 'rgb(78, 95, 113)',
-    border: 'rgba(195, 195, 195, 0.14)',
-    hover: 'rgb(242, 245, 246)',
-  }
-
-  const darkTheme = {
-    background: 'rgb(21, 26, 41)',
-    main: 'rgb(242, 245, 246)',
-    secondary: 'rgb(164, 177, 190)',
-    border: 'rgba(195, 195, 195, 0.14)',
-    hover: 'rgb(32, 41, 58)',
-  }
+  const theme = useTheme()
 
   const [web3Modal] = useState(
     new Web3Modal({

@@ -1,9 +1,8 @@
-import { RootState } from '../../state/store'
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useTheme } from '../../state/hooks'
 
-export const TradingChart = (props: {}) => {
-  const theme = useSelector((state: RootState) => state.theme.value)
+export const TradingChart = () => {
+  const theme = useTheme()
 
   const tradingChartProperites = {
     width: `100%`,

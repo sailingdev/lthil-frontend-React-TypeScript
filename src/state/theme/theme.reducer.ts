@@ -1,17 +1,21 @@
-import { createReducer } from '@reduxjs/toolkit'
-
-import { toggle } from './theme.actions'
+import { createSlice } from '@reduxjs/toolkit'
+import { toggleTheme } from './theme.actions'
 
 export interface ThemeState {
   value: boolean
 }
 
-const initialState: ThemeState = {
+const initialState = {
   value: localStorage.getItem('darkMode') === 'true',
-}
+} as ThemeState
 
-export default createReducer<ThemeState>(initialState, (builder) => {
-  builder.addCase(toggle, (state) => {
-    state.value = !state.value
-  })
+export default createSlice({
+  name: 'theme',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(toggleTheme.fulfilled, (state) => {
+      state.value = !state.value
+    })
+  },
 })
