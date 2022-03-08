@@ -3,17 +3,16 @@ import 'twin.macro'
 import { IBaseProps } from '../utils'
 /** @jsxImportSource @emotion/react */
 import Switch from 'react-switch'
-import { useContext } from 'react'
 import { ReactComponent as SwitchDark } from '../assets/switchDark.svg'
 import { ReactComponent as SwitchLight } from '../assets/switchLight.svg'
 
 import { RootState } from '../state/store'
 import { useSelector, useDispatch } from 'react-redux'
-import { toggle } from '../state/theme/themeSlice'
+import { toggle } from '../state/theme/theme.actions'
 
 export const ThemeSwitch = (props: IBaseProps) => {
   const theme = useSelector((state: RootState) => state.theme.value)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<any>()
 
   const onThemeChange = () => {
     document.documentElement.classList.toggle('dark')
