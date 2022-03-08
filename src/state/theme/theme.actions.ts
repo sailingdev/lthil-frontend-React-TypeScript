@@ -1,3 +1,6 @@
-import { createAction } from '@reduxjs/toolkit'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 
-export const toggle = createAction('theme/toggle')
+export const toggleTheme = createAsyncThunk('theme/toggleTheme', async () => {
+  document.documentElement.classList.toggle('dark')
+  return null
+})

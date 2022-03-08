@@ -6,20 +6,18 @@ import { ChartsPage } from './pages/ChartsPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { Footer } from './shared/Footer'
 import { Header } from './shared/Header'
+import { PositionPage } from './pages/PositionPage'
 import { StakePage } from './pages/StakePage'
 import { TradePage } from './pages/TradePage'
 import { isDesktop } from './utils'
 import tw from 'twin.macro'
 import { useEffect } from 'react'
-import { PositionPage } from './pages/PositionPage'
-
-import { RootState } from './state/store'
-import { useSelector } from 'react-redux'
+import { useTheme } from './state/hooks'
 
 /** @jsxImportSource @emotion/react */
 
 export const AppRouter = () => {
-  const theme = useSelector((state: RootState) => state.theme.value)
+  const theme = useTheme()
 
   useEffect(() => {
     if (theme) {

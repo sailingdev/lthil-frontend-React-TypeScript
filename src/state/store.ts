@@ -1,17 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+
 import themeReducer from './theme/theme.reducer'
 
-export const store = configureStore({
-  reducer: {
-    theme: themeReducer,
-  },
+const reducer = combineReducers({
+  theme: themeReducer.reducer,
 })
 
-store.subscribe(() => {
-  localStorage.setItem('darkMode', store.getState().theme.value.toString())
-})
+export const store = configureStore({ reducer })
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
+store.subscribe(() => {})
+
 export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch

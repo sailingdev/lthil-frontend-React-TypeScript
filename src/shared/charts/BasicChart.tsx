@@ -3,12 +3,12 @@ import 'twin.macro'
 /** @jsxImportSource @emotion/react */
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
-import { RootState } from '../../state/store'
 import { TabButton } from '../TabButton'
-import { useSelector } from 'react-redux'
+import { useTheme } from '../../state/hooks'
 
 export const BasicChart = () => {
-  const theme = useSelector((state: RootState) => state.theme.value)
+  const theme = useTheme()
+
   const ref = useRef<any>()
   const [isMounted, setIsMounted] = useState(false)
   const [interval, setInterval] = useState<'1d' | '1m' | '12m' | '60m'>('1d')
