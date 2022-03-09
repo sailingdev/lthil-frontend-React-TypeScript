@@ -27,4 +27,8 @@ export const connectors = [
       chainId: supportedChainIds[0],
     }),
   },
+  {
+    name: 'MetaMask',
+    connector: injected,
+  },
 ]

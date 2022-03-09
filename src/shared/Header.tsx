@@ -3,6 +3,7 @@ import 'twin.macro'
 import { ArrowDown } from 'phosphor-react'
 import { Button } from './Button'
 import { ReactComponent as CurrEth } from '../assets/images/currencyEthereum.svg'
+import { ReactComponent as MetaMaskLogo } from '../assets/images/metamask.svg'
 import { ReactComponent as LogoDark } from '../assets/images/logoDark.svg'
 import { ReactComponent as LogoLight } from '../assets/images/logoLight.svg'
 import { NavigationMenu } from './NavigationMenu'
@@ -11,11 +12,16 @@ import { WalletModal } from './WalletModal'
 import tw from 'twin.macro'
 import { useState } from 'react'
 import { useTheme } from '../state/hooks'
+import { WalletIndicator } from './WalletIndicator'
+
+import { useAccountAddress } from '../state/hooks'
 
 /** @jsxImportSource @emotion/react */
 
 export const Header = () => {
   const theme = useTheme()
+  const address = useAccountAddress()
+
   const [isOpenWallet, setIsOpenWallet] = useState(false)
 
   return (
@@ -33,12 +39,22 @@ export const Header = () => {
       </span>
       <span tw='flex flex-row items-center gap-2'>
         <Button text='Ethereum' leftIcon={CurrEth} rightIcon={ArrowDown} />
-        <Button
-          // text={connected ? 'Disconnect' : `Connect wallet`}
-          text='Connect'
-          action
-          onClick={() => setIsOpenWallet(true)}
-        />
+
+        {address ? (
+          <WalletIndicator
+            currency='ETH'
+            address='0x4678820caa137EE5FDcE601E1963a3b487d8F1f4'
+            amount='0.9999572385'
+            providerIcon={<MetaMaskLogo />}
+          />
+        ) : (
+          <Button
+            // text={connected ? 'Disconnect' : `Connect wallet`}
+            text='Connect'
+            action
+            onClick={() => setIsOpenWallet(true)}
+          />
+        )}
       </span>
       <WalletModal
         modalIsOpen={isOpenWallet}

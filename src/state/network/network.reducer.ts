@@ -1,14 +1,20 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { initializeAccountBalance, updateBlockNumber } from './network.actions'
+import {
+  initializeAccountAddress,
+  initializeAccountBalance,
+  updateBlockNumber,
+} from './network.actions'
 
 export interface NetworkState {
   latestBlock: number | undefined
-  balance: number | undefined
+  accountAddress: string | undefined
+  accountBalance: string | undefined
 }
 
 const initialState = {
   latestBlock: undefined,
-  balance: undefined,
+  accountAddress: undefined,
+  accountBalance: undefined,
 } as NetworkState
 
 export default createSlice({
@@ -25,8 +31,14 @@ export default createSlice({
     )
     builder.addCase(
       initializeAccountBalance.fulfilled,
-      (state, { payload: balance }: PayloadAction<number>) => {
-        state.balance = balance
+      (state, { payload: balance }: PayloadAction<string | undefined>) => {
+        state.accountBalance = balance
+      },
+    )
+    builder.addCase(
+      initializeAccountAddress.fulfilled,
+      (state, { payload: address }: PayloadAction<string | undefined>) => {
+        state.accountAddress = address
       },
     )
   },

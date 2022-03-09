@@ -2,47 +2,97 @@
   "abi": [
     {
       "inputs": [
-        { "internalType": "address", "name": "_weth", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "_weth",
+          "type": "address"
+        }
       ],
       "stateMutability": "nonpayable",
       "type": "constructor"
     },
     {
-      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
       "name": "TransferHelper__Insufficient_Token_Allowance",
       "type": "error"
     },
     {
-      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
       "name": "TransferHelper__Insufficient_Token_Balance",
       "type": "error"
     },
-    { "inputs": [], "name": "Vault__ETH_Transfer_Failed", "type": "error" },
+    {
+      "inputs": [],
+      "name": "Vault__ETH_Transfer_Failed",
+      "type": "error"
+    },
     {
       "inputs": [
-        { "internalType": "address", "name": "", "type": "address" },
-        { "internalType": "uint256", "name": "", "type": "uint256" }
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
       ],
       "name": "Vault__Insufficient_Funds_Available",
       "type": "error"
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "", "type": "address" },
-        { "internalType": "address", "name": "", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
       ],
       "name": "Vault__Insufficient_Margin",
       "type": "error"
     },
     {
-      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
       "name": "Vault__Locked",
       "type": "error"
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "", "type": "address" },
-        { "internalType": "address", "name": "", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
       ],
       "name": "Vault__Max_Withdrawal",
       "type": "error"
@@ -52,15 +102,35 @@
       "name": "Vault__Maximum_Leverage_Exceeded",
       "type": "error"
     },
-    { "inputs": [], "name": "Vault__Null_Amount", "type": "error" },
-    { "inputs": [], "name": "Vault__Restricted_Access", "type": "error" },
     {
-      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "inputs": [],
+      "name": "Vault__Null_Amount",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Vault__Restricted_Access",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
       "name": "Vault__Token_Already_Supported",
       "type": "error"
     },
     {
-      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
       "name": "Vault__Unsupported_Token",
       "type": "error"
     },
@@ -255,7 +325,11 @@
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "strategy", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "strategy",
+          "type": "address"
+        }
       ],
       "name": "addStrategy",
       "outputs": [],
@@ -264,20 +338,50 @@
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "token", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        }
       ],
       "name": "balance",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "token", "type": "address" },
-        { "internalType": "uint256", "name": "amount", "type": "uint256" },
-        { "internalType": "uint256", "name": "collateral", "type": "uint256" },
-        { "internalType": "uint256", "name": "riskFactor", "type": "uint256" },
-        { "internalType": "address", "name": "borrower", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "collateral",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "riskFactor",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "borrower",
+          "type": "address"
+        }
       ],
       "name": "borrow",
       "outputs": [
@@ -286,32 +390,64 @@
           "name": "interestRate",
           "type": "uint256"
         },
-        { "internalType": "uint256", "name": "fees", "type": "uint256" },
-        { "internalType": "uint256", "name": "debt", "type": "uint256" },
-        { "internalType": "uint256", "name": "borrowed", "type": "uint256" }
+        {
+          "internalType": "uint256",
+          "name": "fees",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "debt",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "borrowed",
+          "type": "uint256"
+        }
       ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "token", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        }
       ],
       "name": "claimable",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [],
       "name": "owner",
-      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "strategy", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "strategy",
+          "type": "address"
+        }
       ],
       "name": "removeStrategy",
       "outputs": [],
@@ -327,11 +463,31 @@
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "token", "type": "address" },
-        { "internalType": "uint256", "name": "amount", "type": "uint256" },
-        { "internalType": "uint256", "name": "debt", "type": "uint256" },
-        { "internalType": "uint256", "name": "fees", "type": "uint256" },
-        { "internalType": "address", "name": "borrower", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "debt",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "fees",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "borrower",
+          "type": "address"
+        }
       ],
       "name": "repay",
       "outputs": [],
@@ -340,8 +496,16 @@
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "token", "type": "address" },
-        { "internalType": "uint256", "name": "amount", "type": "uint256" }
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
       ],
       "name": "stake",
       "outputs": [],
@@ -349,16 +513,36 @@
       "type": "function"
     },
     {
-      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
       "name": "strategies",
-      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        { "internalType": "bool", "name": "locked", "type": "bool" },
-        { "internalType": "address", "name": "token", "type": "address" }
+        {
+          "internalType": "bool",
+          "name": "locked",
+          "type": "bool"
+        },
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        }
       ],
       "name": "toggleLock",
       "outputs": [],
@@ -367,7 +551,11 @@
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "newOwner", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
       ],
       "name": "transferOwnership",
       "outputs": [],
@@ -376,8 +564,16 @@
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "token", "type": "address" },
-        { "internalType": "uint256", "name": "amount", "type": "uint256" }
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
       ],
       "name": "unstake",
       "outputs": [],
@@ -385,11 +581,25 @@
       "type": "function"
     },
     {
-      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
       "name": "vaults",
       "outputs": [
-        { "internalType": "bool", "name": "supported", "type": "bool" },
-        { "internalType": "bool", "name": "locked", "type": "bool" },
+        {
+          "internalType": "bool",
+          "name": "supported",
+          "type": "bool"
+        },
+        {
+          "internalType": "bool",
+          "name": "locked",
+          "type": "bool"
+        },
         {
           "internalType": "address",
           "name": "wrappedToken",
@@ -400,9 +610,21 @@
           "name": "creationTime",
           "type": "uint256"
         },
-        { "internalType": "uint256", "name": "baseFee", "type": "uint256" },
-        { "internalType": "uint256", "name": "fixedFee", "type": "uint256" },
-        { "internalType": "uint256", "name": "netLoans", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "baseFee",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "fixedFee",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "netLoans",
+          "type": "uint256"
+        },
         {
           "internalType": "uint256",
           "name": "insuranceReserveBalance",
@@ -414,9 +636,21 @@
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "token", "type": "address" },
-        { "internalType": "uint256", "name": "baseFee", "type": "uint256" },
-        { "internalType": "uint256", "name": "fixedFee", "type": "uint256" }
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "baseFee",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "fixedFee",
+          "type": "uint256"
+        }
       ],
       "name": "whitelistToken",
       "outputs": [],
@@ -425,16 +659,35 @@
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "token", "type": "address" },
-        { "internalType": "uint256", "name": "baseFee", "type": "uint256" },
-        { "internalType": "uint256", "name": "fixedFee", "type": "uint256" },
-        { "internalType": "bytes", "name": "data", "type": "bytes" }
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "baseFee",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "fixedFee",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
       ],
       "name": "whitelistTokenAndExec",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
-    { "stateMutability": "payable", "type": "receive" }
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
   ]
 }

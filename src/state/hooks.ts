@@ -1,5 +1,6 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import {
+  initializeAccountAddress,
   initializeAccountBalance,
   updateBlockNumber,
 } from './network/network.actions'
@@ -29,11 +30,19 @@ export const useUpdateBlock = () => {
 }
 
 export const useAccountBalance = () =>
-  useAppSelector((state) => state.network.balance)
+  useAppSelector((state) => state.network.accountBalance)
 
 export const useInitAccountBalance = () => {
   const dispatch = useDispatch()
   return () => dispatch(initializeAccountBalance())
+}
+
+export const useAccountAddress = () =>
+  useAppSelector((state) => state.network.accountAddress)
+
+export const useInitAccountAddress = () => {
+  const dispatch = useDispatch()
+  return () => dispatch(initializeAccountAddress())
 }
 
 // TODO MISLAV

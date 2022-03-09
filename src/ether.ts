@@ -2,16 +2,12 @@ import { Contract, ethers } from 'ethers'
 
 import MarginTradingStrategyAbi from './assets/abi/MarginTradingStrategy.json'
 import MockTaxedTokenAbi from './assets/abi/MockTaxedToken.json'
-import VaultAbi from './assets/abi/abi.json'
+import VaultAbi from './assets/abi/Vault.json'
+import MockWETHAbi from './assets/abi/MockWETH.json'
 import { VaultInterface } from './config/typings'
 import addresses from './assets/addresses.json'
 
-/* 
-NOTES:
-  - each contract takes it's own address and ABI
-*/
-
-// THIS GLOBAL INSTANCE IS USED TO SIMPLY ARHITECTURE
+// THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
 
 export const initializeGlobalInstance = (instance: Ether) => {
@@ -24,13 +20,18 @@ export class Ether {
   // Addresses
   private vaultAddress = addresses.addresses.Vault
   private mockTaxedTokenAddress = addresses.addresses.MockTaxedToken
+  private mockWETHTokenAddress = addresses.addresses.MockWETH
   private marginTradingStrategyAddress =
     addresses.addresses.MarginTradingStrategy
 
   constructor(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
+    this.initializeSigner()
   }
-  // this.signer = await this.provider.getSigner()
+
+  async initializeSigner() {
+    this.signer = await this.provider.getSigner()
+  }
 
   getProvider() {
     return this.provider
@@ -45,13 +46,21 @@ export class Ether {
   getNetwork() {
     return this.provider.getNetwork()
   }
+
   async getBalance() {
     const account = await this.getAccount()
-    return this.provider.getBalance(account!)
+    const balance = await this.provider.getBalance(account!)
+    // console.log('BALACNCEEE: ', balance._hex)
+    return balance._hex
   }
   async getAccount(): Promise<string | null> {
     const accounts = await this.provider.listAccounts()
     return accounts.length > 0 ? accounts[0] : null
+    // return await this.getAccount()
+  }
+
+  async getAccountAddress(): Promise<string | undefined> {
+    return (await this.getAccount()) as string
   }
 
   getVaultContract(): Promise<VaultInterface> {
@@ -64,6 +73,9 @@ export class Ether {
       MockTaxedTokenAbi.abi,
       this.signer,
     )
+  }
+  getMockWETHTokenContract() {
+    return new Contract(this.mockWETHTokenAddress, MockWETHAbi.abi, this.signer)
   }
   getMarginTradingStrategyContract() {
     return new Contract(

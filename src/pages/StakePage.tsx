@@ -10,6 +10,7 @@ import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
 import { useSearch } from '../shared/hooks/useSearch'
 import { useState } from 'react'
+import { etherGlobal } from '../ether'
 
 const data = [
   {
