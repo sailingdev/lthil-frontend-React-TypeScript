@@ -12,6 +12,7 @@ import { TradePage } from './pages/TradePage'
 import { isDesktop } from './utils'
 import tw from 'twin.macro'
 import { useBlockNumberListener } from './shared/hooks/useBlockNumberListener'
+import { useEffect } from 'react'
 import { useInitSetup } from './shared/hooks/useInitSetup'
 import { useNetworkListener } from './shared/hooks/useNetworkListener'
 
@@ -21,6 +22,12 @@ export const AppRouter = () => {
   useNetworkListener()
   useBlockNumberListener()
   useInitSetup()
+
+  useEffect(() => {
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.documentElement.classList.add('dark')
+    }
+  }, [])
 
   return (
     <div css={[tw`flex flex-col bg-primary min-h-screen desktop:flex-row`]}>
