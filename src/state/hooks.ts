@@ -4,9 +4,9 @@ import {
   initializeAccountBalance,
   updateBlockNumber,
 } from './network/network.actions'
-import { initializeUserStakes } from './stake/stake.actions'
 
 import { RootState } from './store'
+import { initializeUserStakes } from './stake/stake.actions'
 import { toggleTheme } from './theme/theme.actions'
 
 const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
@@ -38,8 +38,10 @@ export const useInitAccountBalance = () => {
   return () => dispatch(initializeAccountBalance())
 }
 
-export const useAccountAddress = () =>
-  useAppSelector((state) => state.network.accountAddress)
+export const useAccountAddress = () => {
+  // TODO VALENTIN ADD SUPPORT FOR SHORT ACCOUNT
+  return useAppSelector((state) => state.network.accountAddress)
+}
 
 export const useInitAccountAddress = () => {
   const dispatch = useDispatch()

@@ -1,9 +1,11 @@
 import { Contract, ethers } from 'ethers'
 
+import ERC20Abi from './assets/abi/ERC20.json'
 import MarginTradingStrategyAbi from './assets/abi/MarginTradingStrategy.json'
 import MockTaxedTokenAbi from './assets/abi/MockTaxedToken.json'
-import VaultAbi from './assets/abi/Vault.json'
 import MockWETHAbi from './assets/abi/MockWETH.json'
+import { TokenDetails } from './types'
+import VaultAbi from './assets/abi/Vault.json'
 import { VaultInterface } from './config/typings'
 import addresses from './assets/addresses.json'
 
@@ -48,19 +50,13 @@ export class Ether {
   }
 
   async getBalance() {
-    const account = await this.getAccount()
+    const account = await this.getAccountAddress()
     const balance = await this.provider.getBalance(account!)
-    // console.log('BALACNCEEE: ', balance._hex)
-    return balance._hex
+    return balance.toHexString()
   }
-  async getAccount(): Promise<string | null> {
+  async getAccountAddress(): Promise<string | null> {
     const accounts = await this.provider.listAccounts()
     return accounts.length > 0 ? accounts[0] : null
-    // return await this.getAccount()
-  }
-
-  async getAccountAddress(): Promise<string | undefined> {
-    return (await this.getAccount()) as string
   }
 
   getVaultContract(): Promise<VaultInterface> {
@@ -83,6 +79,19 @@ export class Ether {
       MarginTradingStrategyAbi.abi,
       this.signer,
     )
+  }
+  async getTokenInfo(
+    tokenAddres: string,
+    signer: any,
+    userAddress: string,
+  ): Promise<TokenDetails> {
+    const tokenContract = new Contract(tokenAddres, ERC20Abi.abi, signer)
+    const name = await tokenContract.name()
+    const symbol = await tokenContract.symbol()
+    const decimals = await tokenContract.decimals()
+    const balance = await tokenContract.balanceOf(userAddress)
+    // const userAllowance = await tokenContract.allowance(userAddress, destAddress TODO: figure out why we need this?
+    return { name, symbol, decimals, balance }
   }
 }
 

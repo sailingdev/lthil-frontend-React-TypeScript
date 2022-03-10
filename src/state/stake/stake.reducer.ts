@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+
 import { initializeUserStakes } from './stake.actions'
 
 export interface IStakeToken {

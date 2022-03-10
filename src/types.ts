@@ -31,3 +31,17 @@ export interface ISuccessModal {
   title: string
   content?: string
 }
+
+export interface IBaseProps {
+  className?: string | undefined
+}
+
+export type Maybe<T> = T | null | undefined
+
+export interface TokenDetails {
+  name: string
+  symbol: string
+   decimals: number
+    balance: string
+  
+}

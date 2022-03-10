@@ -32,6 +32,7 @@ export const WalletModal = (props: IWalletModal) => {
               key={name}
               tw='w-full flex flex-row justify-between cursor-pointer'
               onClick={async () => {
+                // TODO ADD INSTALL METAMASK MESSAGE
                 activate(connector)
                 props.onClose()
               }}

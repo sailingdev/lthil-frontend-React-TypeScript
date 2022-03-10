@@ -5,10 +5,12 @@ import {
   updateBlockNumber,
 } from './network.actions'
 
+import { Maybe } from '../../types'
+
 export interface NetworkState {
-  latestBlock: number | undefined
-  accountAddress: string | undefined
-  accountBalance: string | undefined
+  latestBlock: Maybe<number>
+  accountAddress: Maybe<string>
+  accountBalance: Maybe<string>
 }
 
 const initialState = {
@@ -37,7 +39,7 @@ export default createSlice({
     )
     builder.addCase(
       initializeAccountAddress.fulfilled,
-      (state, { payload: address }: PayloadAction<string | undefined>) => {
+      (state, { payload: address }: PayloadAction<string | null>) => {
         state.accountAddress = address
       },
     )
