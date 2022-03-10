@@ -1,16 +1,19 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import tw from 'twin.macro'
+import { useEffect } from 'react'
 
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
 import { ISearchParams } from '../types'
 import { InputField } from '../shared/InputField'
-/** @jsxImportSource @emotion/react */
 import { MagnifyingGlass } from 'phosphor-react'
 import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
 import { useSearch } from '../shared/hooks/useSearch'
 import { useState } from 'react'
 import { etherGlobal } from '../ether'
+import { useInitStakeTokens, useStakeTokens } from '../state/hooks'
 
 const data = [
   {
@@ -156,6 +159,9 @@ const initialSearchParams: Partial<ISearchParams> = {
 export const StakePage = () => {
   const [search, setSearch] = useState('')
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
+
+  // useInitStakeTokens()
+  // console.log(useStakeTokens())
 
   return (
     <ContentContainer>

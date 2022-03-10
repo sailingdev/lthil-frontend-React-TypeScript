@@ -4,6 +4,7 @@ import {
   initializeAccountBalance,
   updateBlockNumber,
 } from './network/network.actions'
+import { initializeUserStakes } from './stake/stake.actions'
 
 import { RootState } from './store'
 import { toggleTheme } from './theme/theme.actions'
@@ -43,6 +44,15 @@ export const useAccountAddress = () =>
 export const useInitAccountAddress = () => {
   const dispatch = useDispatch()
   return () => dispatch(initializeAccountAddress())
+}
+
+export const useStakeTokens = () => {
+  useAppSelector((state) => state.stake.tokenStakeData)
+}
+
+export const useInitStakeTokens = () => {
+  const dispatch = useDispatch()
+  return () => dispatch(initializeUserStakes())
 }
 
 // TODO MISLAV
