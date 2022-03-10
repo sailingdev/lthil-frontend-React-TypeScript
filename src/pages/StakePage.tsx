@@ -14,6 +14,7 @@ import { useSearch } from '../shared/hooks/useSearch'
 import { useState } from 'react'
 import { etherGlobal } from '../ether'
 import { useInitStakeTokens, useStakeTokens } from '../state/hooks'
+import { useAsync } from 'react-use'
 
 const data = [
   {
@@ -159,9 +160,13 @@ const initialSearchParams: Partial<ISearchParams> = {
 export const StakePage = () => {
   const [search, setSearch] = useState('')
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
+  const initStakeTokens = useInitStakeTokens()
 
-  // useInitStakeTokens()
-  // console.log(useStakeTokens())
+  useEffect(() => {
+    initStakeTokens()
+  }, [])
+  const stakeTokens = useStakeTokens()
+  console.log(stakeTokens)
 
   return (
     <ContentContainer>

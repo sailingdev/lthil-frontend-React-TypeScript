@@ -9,19 +9,12 @@ export interface IStakeToken {
 }
 
 export interface StakeState {
-  tokenStakeData: IStakeToken[]
+  tokenStakeData: IStakeToken[] | undefined
 }
 
 const initialState = {
   // TODO: Random state just for testing
-  tokenStakeData: [
-    {
-      name: 'daw',
-      apy: 2,
-      tvl: 2,
-      owned: 1,
-    },
-  ],
+  tokenStakeData: undefined,
 } as StakeState
 
 export default createSlice({
@@ -32,7 +25,7 @@ export default createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       initializeUserStakes.fulfilled,
-      (state, { payload: tokenStakeData }: PayloadAction<any>) => {
+      (state, { payload: tokenStakeData }: PayloadAction<IStakeToken[]>) => {
         state.tokenStakeData = tokenStakeData
       },
     )

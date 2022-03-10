@@ -5,6 +5,7 @@ import {
   useAccountAddress,
   useAccountBalance,
   useLatestBlock,
+  useStakeTokens,
 } from '../state/hooks'
 
 import { ContentContainer } from '../shared/ContentContainer'
@@ -17,10 +18,12 @@ export const TradePage = () => {
   const balance = useAccountBalance()
   const network = useNetwork()
   const address = useAccountAddress()
+  const stake = useStakeTokens()
   console.log('Block', block)
   console.log('Balance', balance)
   console.log('Network', network)
   console.log('Address', address)
+  console.log('Stake', stake)
 
   const runCode = async () => {
     try {
@@ -40,6 +43,7 @@ export const TradePage = () => {
       )
 
       console.log(
+        'User claimable WETH tokens from vault: ',
         //@ts-ignore
         await Vault.claimable('0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE', {
           gasLimit: 1000000,
@@ -47,12 +51,29 @@ export const TradePage = () => {
       )
 
       console.log(
-        'User deposited token to vault: ',
+        'Balance: ',
+        //@ts-ignore
+        await Vault.balance('0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE', {
+          gasLimit: 1000000,
+        }),
+      )
+
+      console.log(
+        'Vaults: ',
+        //@ts-ignore
+        await Vault.vaults('0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE', {
+          gasLimit: 1000000,
+        }),
+      )
+
+      console.log(
+        'User deposited token to vault (events): ',
         //@ts-ignore
         await Vault.queryFilter(Vault.filters.Deposit(), 'earliest', 'latest'),
       )
 
       console.log(
+        'Approve :',
         await MockWETHToken.approve(
           '0x27001942d886573b4C68d77547143C4b98f3775C',
           formattedAmount,
@@ -60,6 +81,7 @@ export const TradePage = () => {
       )
 
       console.log(
+        'Stake: ',
         //@ts-ignore
         await Vault.stake(
           '0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE',

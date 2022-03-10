@@ -11,7 +11,7 @@ export const getTokenInfo = async (
   const symbol = await tokenContract.symbol()
   const decimals = await tokenContract.decimals()
   const balance = await tokenContract.balanceOf(userAddress)
-  // const userAllowance = await tokenContract.allowance(userAddress, destAddress) // TODO: figure out why we need this?
+  // const userAllowance = await tokenContract.allowance(userAddress, destAddress TODO: figure out why we need this?
 
   return { name, symbol, decimals, balance }
 }

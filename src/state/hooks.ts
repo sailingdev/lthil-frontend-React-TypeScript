@@ -46,9 +46,10 @@ export const useInitAccountAddress = () => {
   return () => dispatch(initializeAccountAddress())
 }
 
-export const useStakeTokens = () => {
+// STAKE HOOKS
+
+export const useStakeTokens = () =>
   useAppSelector((state) => state.stake.tokenStakeData)
-}
 
 export const useInitStakeTokens = () => {
   const dispatch = useDispatch()

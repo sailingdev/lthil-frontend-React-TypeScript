@@ -11,11 +11,11 @@ export const initializeUserStakes = createAsyncThunk(
     tokenList.tokens.forEach((token) => {
       stakeTokenList.push({
         name: token.symbol,
-        apy: 1,
-        tvl: 2,
-        owned: 3,
+        apy: 1, // manually calculted
+        tvl: 2, // vault.balance(tokenAddress)
+        owned: 3, // vault.claimable(tokenAddress)
       })
     })
-    return []
+    return stakeTokenList
   },
 )
