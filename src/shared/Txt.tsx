@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { IBaseProps } from '../utils'
+import { IBaseProps } from '../types'
 import React from 'react'
 import tw from 'twin.macro'
 

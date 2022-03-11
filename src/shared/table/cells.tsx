@@ -6,8 +6,6 @@ import tw from 'twin.macro'
 
 /** @jsxImportSource @emotion/react */
 
-// TODO
-
 const Text = (props: { value: string | number }) => {
   return isDesktop ? (
     <Txt.Body2Regular tw='text-secondary'>{props.value}</Txt.Body2Regular>

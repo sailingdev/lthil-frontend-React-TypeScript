@@ -7,8 +7,10 @@ import { ReactComponent as LogoDark } from '../assets/images/logoDark.svg'
 import { ReactComponent as LogoLight } from '../assets/images/logoLight.svg'
 import { NavigationMenu } from './NavigationMenu'
 import { ThemeSwitch } from './ThemeSwitch'
+import { WalletIndicator } from './WalletIndicator'
 import { WalletModal } from './WalletModal'
 import tw from 'twin.macro'
+import { useIsConnected } from './hooks/useIsConnected'
 import { useState } from 'react'
 import { useTheme } from '../state/hooks'
 
@@ -16,6 +18,7 @@ import { useTheme } from '../state/hooks'
 
 export const Header = () => {
   const theme = useTheme()
+  const isConnected = useIsConnected()
   const [isOpenWallet, setIsOpenWallet] = useState(false)
 
   return (
@@ -33,12 +36,17 @@ export const Header = () => {
       </span>
       <span tw='flex flex-row items-center gap-2'>
         <Button text='Ethereum' leftIcon={CurrEth} rightIcon={ArrowDown} />
-        <Button
-          // text={connected ? 'Disconnect' : `Connect wallet`}
-          text='Connect'
-          action
-          onClick={() => setIsOpenWallet(true)}
-        />
+
+        {isConnected ? (
+          <WalletIndicator />
+        ) : (
+          <Button
+            // text={connected ? 'Disconnect' : `Connect wallet`}
+            text='Connect'
+            action
+            onClick={() => setIsOpenWallet(true)}
+          />
+        )}
       </span>
       <WalletModal
         modalIsOpen={isOpenWallet}

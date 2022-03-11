@@ -1,5 +1,5 @@
 import 'twin.macro'
-
+import tw from 'twin.macro'
 import { CenteredModal } from './CenteredModal'
 import { Txt } from './Txt'
 import { connectors } from './test/connectors'
@@ -26,22 +26,34 @@ export const WalletModal = (props: IWalletModal) => {
 
       <div tw='w-full height[1px] bg-primary-300 my-4'></div>
       <div tw='w-full height[384px]'>
-        {connectors.map(({ name, connector }) => {
+        {connectors.map(({ name, icon, connector }) => {
+          // @ts-ignore
+          const metamaskMissing = !window.ethereum && name === 'MetaMask'
+          const Icon = icon
+
           return (
             <div
               key={name}
               tw='w-full flex flex-row justify-between cursor-pointer'
               onClick={async () => {
-                activate(connector)
-                props.onClose()
+                if (!metamaskMissing) {
+                  activate(connector)
+                  props.onClose()
+                }
               }}
             >
               <div tw='flex flex-row justify-start items-center p-0 my-2'>
-                {/* TODO PROVIDER LOGO */}
-                {/* <img tw='w-8 h-8 mr-4' src={token.logoURI} alt='token image' /> */}
+                <Icon tw='h-8 w-8 m-2' />
                 <div tw='flex flex-col justify-start'>
-                  <Txt.Body2Regular>{name}</Txt.Body2Regular>
-                  {/* <Txt.CaptionMedium>{token.name}</Txt.CaptionMedium> */}
+                  <Txt.Body2Regular
+                    css={[
+                      // @ts-ignore
+                      metamaskMissing && tw`text-font-200`,
+                    ]}
+                  >
+                    {name}
+                    {metamaskMissing && ' (Not installed)'}
+                  </Txt.Body2Regular>
                 </div>
               </div>
             </div>

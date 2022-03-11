@@ -5,7 +5,7 @@
     "tokens": [
         {
         "name": "DAI Stablecoin",
-        "address": "0x1C51De870718801E745482b25d3bB2Bd3b86e08C",
+        "address": "0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b",
         "symbol": "DAI",
         "decimals": 18,
         "chainId": 4,
@@ -13,7 +13,7 @@
         },
         {
         "name": "Wrapped Ether",
-        "address": "0x0B84D4B9fE423CED62E1eF836B4aE8130E35604E",
+        "address": "0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE",
         "symbol": "WETH",
         "decimals": 18,
         "chainId": 4,

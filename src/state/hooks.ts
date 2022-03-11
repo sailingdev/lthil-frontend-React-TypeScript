@@ -1,9 +1,10 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import {
+  initializeAccountAddress,
   initializeAccountBalance,
   updateBlockNumber,
 } from './network/network.actions'
-
+import { initializeUserStakes } from './stake/stake.actions'
 import { RootState } from './store'
 import { toggleTheme } from './theme/theme.actions'
 
@@ -29,11 +30,39 @@ export const useUpdateBlock = () => {
 }
 
 export const useAccountBalance = () =>
-  useAppSelector((state) => state.network.balance)
+  useAppSelector((state) => state.network.accountBalance)
 
 export const useInitAccountBalance = () => {
   const dispatch = useDispatch()
   return () => dispatch(initializeAccountBalance())
+}
+
+export const useAccountAddress = () => {
+  const address = useAppSelector((state) => state.network.accountAddress)
+  if (address) {
+    const shortAddress = `${address!.substring(0, 6)}...${address!.substring(
+      address!.length - 5,
+      address!.length,
+    )}`
+    return [address, shortAddress]
+  }
+  return [undefined, undefined]
+}
+
+export const useInitAccountAddress = () => {
+  const dispatch = useDispatch()
+  return () => dispatch(initializeAccountAddress())
+}
+
+// STAKE HOOKS
+
+export const useStakeTokens = () => {
+  return useAppSelector((state) => state.stake.tokenStakeData)
+}
+
+export const useInitStakeTokens = () => {
+  const dispatch = useDispatch()
+  return () => dispatch(initializeUserStakes())
 }
 
 // TODO MISLAV
