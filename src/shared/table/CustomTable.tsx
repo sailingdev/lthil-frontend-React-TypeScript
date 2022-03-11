@@ -63,7 +63,6 @@ const tableContainerStyle = css`
     th {
       ${tw``}/* This is where the top row border is */
     }
-    /* TODO THIS IS CAUSING WEIRD BORDER BEHAVIOUR BUT WE NEED IT */
     td {
       ${tw`self-center`}
     }

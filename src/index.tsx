@@ -23,7 +23,6 @@ const queryClient = new QueryClient({
     },
   },
 })
-debugger
 
 ReactDOM.render(
   <Web3ReactProvider

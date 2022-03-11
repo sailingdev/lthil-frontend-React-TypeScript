@@ -167,6 +167,9 @@ export const StakePage = () => {
   }, [])
   const stakeTokens = useStakeTokens()
   console.log(stakeTokens)
+  useAsync(async () => {
+    console.log(await etherGlobal.getAccountAddress())
+  })
 
   return (
     <ContentContainer>

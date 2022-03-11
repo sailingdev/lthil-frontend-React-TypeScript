@@ -14,7 +14,6 @@ export interface StakeState {
 }
 
 const initialState = {
-  // TODO: Random state just for testing
   tokenStakeData: undefined,
 } as StakeState
 
