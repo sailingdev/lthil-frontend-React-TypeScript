@@ -9,23 +9,23 @@ export const initializeUserStakes = createAsyncThunk(
     // TODO - CHAIN ID FILTER IS HARDCODED TO 4
     const stakeList: any = []
 
-    const filteredList = tokenList.tokens
-      .filter((token) => token.chainId == 4)
-      .map((token) => ({
-        name: token.symbol,
-        address: token.address,
-        logoURI: token.logoURI,
-      }))
+    const filteredList = tokenList.tokens.filter((token) => token.chainId == 4)
 
     for (const token of filteredList) {
-      // @ts-ignore
-      const owned = await etherGlobal.getMaxWithdrawAmount(token.address)
-      // const tvl = await etherGlobal.getTokenTvl(token.address)
       stakeList.push({
-        name: token.name,
-        owned: owned,
-        // tvl: '0',
-        logo: token.logoURI,
+        vaultName: token.name,
+        annualPositionYield: {
+          value: 1, // TODO: Calculate this
+          format: 'en-US',
+        },
+        totalValueLocked: {
+          currencyValue: await etherGlobal.getTokenTvl(token.address),
+          format: 'en-US',
+        },
+        owned: {
+          currencyValue: await etherGlobal.getMaxWithdrawAmount(token.address),
+          format: 'en-US',
+        },
       })
     }
     // console.log('stakelist:', stakeList)

@@ -180,6 +180,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
               </tr>
             ))}
           </thead>
+          {/* TODO: Do we need this skeleton code here? */}
           {loading ? (
             <tbody {...getTableBodyProps()}>
               {page.map((row) => {
@@ -260,7 +261,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                           )
                         })}
                       </div>
-                      {props.activeRow === row.original && props.renderExpanded}
+                      {props.activeRow == row.original && props.renderExpanded}
                     </tr>
                   </React.Fragment>
                 )

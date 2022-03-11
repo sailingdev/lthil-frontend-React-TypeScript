@@ -86,10 +86,11 @@ export class Ether {
   }
 
   async getTokenTvl(tokenAddres: string): Promise<string> {
-    const tokenContract = new Contract(tokenAddres, ERC20Abi.abi, this.signer)
-    const tvl = (await tokenContract.balance(tokenAddres)).toHexString()
+    const vault = this.getVaultContract()
+    //@ts-ignore
+    const tvl = (await vault.balance(tokenAddres)).toHexString()
 
-    return tvl
+    return this.parseHexValueToEtherBase10(tvl)
   }
 
   getVaultContract(): Promise<VaultInterface> {
