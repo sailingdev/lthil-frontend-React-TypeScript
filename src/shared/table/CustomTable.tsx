@@ -260,6 +260,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                           )
                         })}
                       </div>
+                      {props.activeRow === row.original && props.renderExpanded}
                     </tr>
                   </React.Fragment>
                 )

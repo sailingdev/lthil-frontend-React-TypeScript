@@ -1,4 +1,4 @@
-import { Contract, ethers } from 'ethers'
+import { BigNumber, Contract, ethers } from 'ethers'
 
 import ERC20Abi from './assets/abi/ERC20.json'
 import MarginTradingStrategyAbi from './assets/abi/MarginTradingStrategy.json'
@@ -8,6 +8,7 @@ import { TokenDetails } from './types'
 import VaultAbi from './assets/abi/Vault.json'
 import { VaultInterface } from './config/typings'
 import addresses from './assets/addresses.json'
+import { useWeb3React } from '@web3-react/core'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
@@ -29,6 +30,13 @@ export class Ether {
   constructor(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
     this.initializeSigner()
+  }
+
+  parseHexValueToEtherBase10(hexAmount: string) {
+    return ethers.utils.formatUnits(
+      BigNumber.from(parseInt(hexAmount, 16).toString()),
+      18,
+    )
   }
 
   async initializeSigner() {
@@ -57,6 +65,31 @@ export class Ether {
   async getAccountAddress(): Promise<string | null> {
     const accounts = await this.provider.listAccounts()
     return accounts.length > 0 ? accounts[0] : null
+  }
+
+  async getMaxWithdrawAmount(tokenAddress: string): Promise<string> {
+    const vault = this.getVaultContract()
+    // @ts-ignore
+    const amount = (await vault.claimable(tokenAddress)).toHexString()
+
+    return this.parseHexValueToEtherBase10(amount)
+  }
+
+  async getMaxDepositAmount(tokenAddres: string): Promise<string> {
+    const tokenContract = new Contract(tokenAddres, ERC20Abi.abi, this.signer)
+    const balance = (
+      await tokenContract.balanceOf(this.getAccountAddress())
+    ).toHexString()
+
+    // TODO: this.parseHexValueToEtherBase10 fails here. Fix it and use that function
+    return (parseInt(balance, 16) / 1000000000000000000).toString()
+  }
+
+  async getTokenTvl(tokenAddres: string): Promise<string> {
+    const tokenContract = new Contract(tokenAddres, ERC20Abi.abi, this.signer)
+    const tvl = (await tokenContract.balance(tokenAddres)).toHexString()
+
+    return tvl
   }
 
   getVaultContract(): Promise<VaultInterface> {

@@ -4,8 +4,8 @@ import { initializeUserStakes } from './stake.actions'
 
 export interface IStakeToken {
   name: string
-  apy: any
-  tvl: any
+  logo: string
+  // tvl: string
   owned: any
 }
 

@@ -15,6 +15,25 @@ import { useState } from 'react'
 import { etherGlobal } from '../ether'
 import { useInitStakeTokens, useStakeTokens } from '../state/hooks'
 import { useAsync } from 'react-use'
+import { PositionDetailsCard } from '../shared/PositionDetailsCard'
+import { DepositWithdraw } from '../shared/DepositWithdraw'
+
+/*
+Example data:
+
+{
+    vaultName: 'ETH',
+    annualPositionYield: { value: 17.1, format: 'en-US' },
+    totalValueLocked: {
+      currencyValue: 83676.12,
+      format: 'en-US',
+    },
+    owned: {
+      currencyValue: 83676.12,
+      format: 'en-US',
+    },
+  },
+*/
 
 const data = [
   {
@@ -160,16 +179,23 @@ const initialSearchParams: Partial<ISearchParams> = {
 export const StakePage = () => {
   const [search, setSearch] = useState('')
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
-  const initStakeTokens = useInitStakeTokens()
+  // const initStakeTokens = useInitStakeTokens()
+  // const tt = useInitStakeTable()
+  // useInitStakeTokens()
 
-  useEffect(() => {
-    initStakeTokens()
-  }, [])
   const stakeTokens = useStakeTokens()
-  console.log(stakeTokens)
-  useAsync(async () => {
-    console.log(await etherGlobal.getAccountAddress())
-  })
+  console.log('Stake tokens: ', stakeTokens)
+
+  const [activeRow, setActiveRow] = useState<any | undefined>()
+
+  const onRowClick = (row: any) => {
+    // console.log('rowclick', row)
+    if (activeRow == row) {
+      // setActiveRow(undefined)
+    } else {
+      setActiveRow(row)
+    }
+  }
 
   return (
     <ContentContainer>
@@ -184,6 +210,9 @@ export const StakePage = () => {
             renderRight={<MagnifyingGlass tw='text-secondary' />}
           />
           <CustomTable
+            activeRow={activeRow}
+            onActiveRowChange={onRowClick}
+            renderExpanded={<DepositWithdraw />}
             loading={false}
             maxPage={data.length / searchParams.size}
             currentPage={searchParams.page}
