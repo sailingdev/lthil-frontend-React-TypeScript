@@ -3,6 +3,7 @@
 import {
   useInitAccountAddress,
   useInitAccountBalance,
+  useInitStakeTokens,
   useUpdateBlock,
 } from '../../state/hooks'
 

@@ -89,7 +89,7 @@ const thStyle = [
 export type ICustomColumnProps<T extends object> = Omit<Column<T>, 'Cell'> & {
   cell(data: T): ReactNode
   accessor: keyof T
-  align?: 'left' | 'right' | 'middle'
+  align?: 'left' | 'right' | 'center'
 }
 
 interface ICustomTableProps<T extends object> {
@@ -106,6 +106,7 @@ interface ICustomTableProps<T extends object> {
   activeRow?: T | undefined
 }
 // TODO TABLE EMPTY STATE
+// TODO: Make the row toggle button be the cells, now the entire row
 
 export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
   const {
@@ -180,6 +181,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
               </tr>
             ))}
           </thead>
+          {/* TODO: Do we need this skeleton code here? */}
           {loading ? (
             <tbody {...getTableBodyProps()}>
               {page.map((row) => {
@@ -235,8 +237,8 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                         tw`cursor-pointer flex flex-col justify-between items-center`,
                       ]}
                       onClick={() => {
-                        props.onActiveRowChange &&
-                          props.onActiveRowChange(row.original as T)
+                        // props.onActiveRowChange &&
+                        //   props.onActiveRowChange(row.original as T)
                       }}
                       // @ts-ignore
                     >
@@ -253,6 +255,10 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                                 textAlign: cell.column.align ?? 'left',
                               }}
                               css={tw`py-4`}
+                              onClick={() => {
+                                props.onActiveRowChange &&
+                                  props.onActiveRowChange(row.original as T)
+                              }}
                             >
                               {/* @ts-ignore */}
                               {cell.column.cell(cell.row.original)}
@@ -260,6 +266,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                           )
                         })}
                       </div>
+                      {props.activeRow == row.original && props.renderExpanded}
                     </tr>
                   </React.Fragment>
                 )

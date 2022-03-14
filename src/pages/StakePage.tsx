@@ -15,141 +15,11 @@ import { useState } from 'react'
 import { etherGlobal } from '../ether'
 import { useInitStakeTokens, useStakeTokens } from '../state/hooks'
 import { useAsync } from 'react-use'
+import { PositionDetailsCard } from '../shared/PositionDetailsCard'
+import { DepositWithdraw } from '../shared/DepositWithdraw'
+import { useIsConnected } from '../shared/hooks/useIsConnected'
 
-const data = [
-  {
-    vaultName: 'ETH',
-    annualPositionYield: { value: 17.1, format: 'en-US' },
-    totalValueLocked: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-    owned: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-  },
-  {
-    vaultName: 'ETH',
-    annualPositionYield: { value: 17.1, format: 'en-US' },
-    totalValueLocked: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-    owned: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-  },
-  {
-    vaultName: 'ETH',
-    annualPositionYield: { value: 17.1, format: 'en-US' },
-    totalValueLocked: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-    owned: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-  },
-  {
-    vaultName: 'ETH',
-    annualPositionYield: { value: 17.1, format: 'en-US' },
-    totalValueLocked: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-    owned: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-  },
-  {
-    vaultName: 'ETH',
-    annualPositionYield: { value: 17.1, format: 'en-US' },
-    totalValueLocked: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-    owned: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-  },
-  {
-    vaultName: 'ETH',
-    annualPositionYield: { value: 17.1, format: 'en-US' },
-    totalValueLocked: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-    owned: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-  },
-  {
-    vaultName: 'ETH',
-    annualPositionYield: { value: 17.1, format: 'en-US' },
-    totalValueLocked: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-    owned: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-  },
-  {
-    vaultName: 'ETH',
-    annualPositionYield: { value: 17.1, format: 'en-US' },
-    totalValueLocked: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-    owned: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-  },
-  {
-    vaultName: 'ETH',
-    annualPositionYield: { value: 17.1, format: 'en-US' },
-    totalValueLocked: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-    owned: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-  },
-  {
-    vaultName: 'ETH',
-    annualPositionYield: { value: 17.1, format: 'en-US' },
-    totalValueLocked: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-    owned: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-  },
-  {
-    vaultName: 'ETH',
-    annualPositionYield: { value: 17.1, format: 'en-US' },
-    totalValueLocked: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-    owned: {
-      currencyValue: 83676.12,
-      format: 'en-US',
-    },
-  },
-]
+const tableData: any[] = []
 
 const initialSearchParams: Partial<ISearchParams> = {
   orderField: 'name',
@@ -160,16 +30,35 @@ const initialSearchParams: Partial<ISearchParams> = {
 export const StakePage = () => {
   const [search, setSearch] = useState('')
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
-  const initStakeTokens = useInitStakeTokens()
+  // const initStakeTokens = useInitStakeTokens()
+  // const tt = useInitStakeTable()
+  // useInitStakeTokens()
+  const initUserStakes = useInitStakeTokens()
+  const stakeTokens = useStakeTokens()
 
   useEffect(() => {
-    initStakeTokens()
-  }, [])
-  const stakeTokens = useStakeTokens()
-  console.log(stakeTokens)
-  useAsync(async () => {
-    console.log(await etherGlobal.getAccountAddress())
-  })
+    initUserStakes()
+    console.log('Stake tokens: ', stakeTokens)
+    // tableData = stakeTokens
+
+    console.log('tableData', tableData)
+  }, [useIsConnected()])
+
+  const [activeRow, setActiveRow] = useState<any | undefined>()
+
+  const onRowClick = async (row: any) => {
+    console.log(
+      await etherGlobal
+        .getVaultContract()
+        // @ts-ignore
+        .balance('0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE'),
+    )
+    if (activeRow == row) {
+      setActiveRow(undefined)
+    } else {
+      setActiveRow(row)
+    }
+  }
 
   return (
     <ContentContainer>
@@ -183,82 +72,99 @@ export const StakePage = () => {
             onChange={(value) => setSearch(value)}
             renderRight={<MagnifyingGlass tw='text-secondary' />}
           />
-          <CustomTable
-            loading={false}
-            maxPage={data.length / searchParams.size}
-            currentPage={searchParams.page}
-            setPage={setPage}
-            pageSize={searchParams.size}
-            data={data}
-            mobileColumns={[
-              {
-                Header: 'Vault',
-                accessor: 'vaultName',
-                cell: (l) => <TableCell.Text value={l.vaultName} />,
-              },
-              {
-                Header: 'APY',
-                accessor: 'annualPositionYield',
-                cell: (l) => (
-                  <TableCell.Percentage
-                    value={l.annualPositionYield.value}
-                    format={l.annualPositionYield.format}
-                  />
-                ),
-              },
-              {
-                Header: 'TVL',
-                accessor: 'totalValueLocked',
-                cell: (l) => (
-                  <TableCell.Currency
-                    value={l.totalValueLocked.currencyValue}
-                    format={l.totalValueLocked.format}
-                  />
-                ),
-              },
-            ]}
-            columns={[
-              {
-                Header: 'Vault Name',
-                accessor: 'vaultName',
-                align: 'left',
-                cell: (l) => <TableCell.Text value={l.vaultName} />,
-              },
-              {
-                Header: 'Annual Percentage Yield',
-                accessor: 'annualPositionYield',
-                align: 'left',
-                cell: (l) => (
-                  <TableCell.Percentage
-                    value={l.annualPositionYield.value}
-                    format={l.annualPositionYield.format}
-                  />
-                ),
-              },
-              {
-                Header: 'Total value locked',
-                accessor: 'totalValueLocked',
-                align: 'left',
-                cell: (l) => (
-                  <TableCell.Currency
-                    value={l.totalValueLocked.currencyValue}
-                    format={l.totalValueLocked.format}
-                  />
-                ),
-              },
-              {
-                Header: 'Owned',
-                accessor: 'owned',
-                align: 'left',
-                cell: (l) => (
-                  <TableCell.Currency
-                    value={l.owned.currencyValue}
-                    format={l.owned.format}
-                  />
-                ),
-              },
-            ]}
-          />
+          {stakeTokens && stakeTokens.length > 0 ? (
+            <CustomTable
+              activeRow={activeRow}
+              onActiveRowChange={onRowClick}
+              renderExpanded={<DepositWithdraw />}
+              loading={false}
+              maxPage={
+                stakeTokens.length > 0
+                  ? stakeTokens.length / searchParams.size
+                  : 1
+              }
+              currentPage={searchParams.page}
+              setPage={setPage}
+              pageSize={searchParams.size}
+              data={stakeTokens.length > 0 ? stakeTokens : []}
+              mobileColumns={[
+                {
+                  Header: 'Vault',
+                  accessor: 'vaultName',
+                  cell: (l) => <TableCell.Text value={l.vaultName} />,
+                },
+                {
+                  Header: 'APY',
+                  accessor: 'annualPositionYield',
+                  cell: (l) => (
+                    <TableCell.Percentage
+                      value={l.annualPositionYield.value}
+                      format={l.annualPositionYield.format}
+                    />
+                  ),
+                },
+                {
+                  Header: 'TVL',
+                  accessor: 'totalValueLocked',
+                  cell: (l) => (
+                    <TableCell.Currency
+                      value={l.totalValueLocked.currencyValue}
+                      format={l.totalValueLocked.format}
+                    />
+                  ),
+                },
+              ]}
+              columns={[
+                {
+                  Header: 'Vault Name',
+                  accessor: 'vaultName',
+                  align: 'left',
+                  cell: (l) => <TableCell.Text value={l.vaultName} />,
+                },
+                {
+                  Header: 'Annual Percentage Yield',
+                  accessor: 'annualPositionYield',
+                  align: 'center',
+                  cell: (l) => (
+                    <TableCell.Percentage
+                      value={l.annualPositionYield.value}
+                      format={l.annualPositionYield.format}
+                    />
+                  ),
+                },
+                {
+                  Header: 'Total value locked',
+                  accessor: 'totalValueLocked',
+                  align: 'right',
+                  cell: (l) => (
+                    <TableCell.Currency
+                      value={l.totalValueLocked.currencyValue}
+                      format={l.totalValueLocked.format}
+                    />
+                  ),
+                },
+                {
+                  Header: 'Owned',
+                  accessor: 'owned',
+                  align: 'right',
+                  cell: (l) => (
+                    <TableCell.Currency
+                      value={l.owned.currencyValue}
+                      format={l.owned.format}
+                    />
+                  ),
+                },
+                {
+                  Header: '',
+                  accessor: 'icons',
+                  align: 'right',
+                  cell: (l) => <TableCell.TokenIcons />,
+                },
+              ]}
+            />
+          ) : (
+            'loading or wallet not connected'
+          )}
         </div>
       </div>
     </ContentContainer>

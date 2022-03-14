@@ -4,6 +4,7 @@ import {
   initializeAccountBalance,
   updateBlockNumber,
 } from './network/network.actions'
+// @ts-ignore
 import { initializeUserStakes } from './stake/stake.actions'
 import { RootState } from './store'
 import { toggleTheme } from './theme/theme.actions'

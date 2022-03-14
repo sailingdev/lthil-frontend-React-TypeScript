@@ -3,12 +3,20 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { initializeUserStakes } from './stake.actions'
 
 export interface IStakeToken {
-  name: string
-  apy: any
-  tvl: any
-  owned: any
+  vaultName: string
+  annualPositionYield: {
+    value: string
+    format: string
+  }
+  totalValueLocked: {
+    currencyValue: number
+    format: string
+  }
+  owned: {
+    currencyValue: number
+    format: string
+  }
 }
-
 export interface StakeState {
   tokenStakeData: IStakeToken[] | undefined
 }
