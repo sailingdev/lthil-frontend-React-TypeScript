@@ -89,10 +89,21 @@ const TokenIcons = () => {
   )
 }
 
+const ClosePosition = () => {
+  return (
+    <div tw='flex flex-row justify-end'>
+      <button tw='rounded-md py-1 px-2 border border-primary-400 text-font-100'>
+        Close
+      </button>
+    </div>
+  )
+}
+
 export const TableCell = {
   Text,
   Currency,
   Percentage,
   Profit,
   TokenIcons,
+  ClosePosition,
 }

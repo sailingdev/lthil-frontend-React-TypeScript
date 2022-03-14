@@ -47,12 +47,6 @@ export const StakePage = () => {
   const [activeRow, setActiveRow] = useState<any | undefined>()
 
   const onRowClick = async (row: any) => {
-    console.log(
-      await etherGlobal
-        .getVaultContract()
-        // @ts-ignore
-        .balance('0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE'),
-    )
     if (activeRow == row) {
       setActiveRow(undefined)
     } else {

@@ -6,6 +6,7 @@ import {
 } from './network/network.actions'
 // @ts-ignore
 import { initializeUserStakes } from './stake/stake.actions'
+import { initializePositionsData } from './marginTrading/marginTrading.actions'
 import { RootState } from './store'
 import { toggleTheme } from './theme/theme.actions'
 
@@ -64,6 +65,17 @@ export const useStakeTokens = () => {
 export const useInitStakeTokens = () => {
   const dispatch = useDispatch()
   return () => dispatch(initializeUserStakes())
+}
+
+// MARGIN TRADING HOOKS
+
+export const usePositions = () => {
+  return useAppSelector((state) => state.marginTrading.positions)
+}
+
+export const useInitPositions = () => {
+  const dispatch = useDispatch()
+  return () => dispatch(initializePositionsData())
 }
 
 // TODO MISLAV
