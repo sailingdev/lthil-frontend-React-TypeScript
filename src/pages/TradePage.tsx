@@ -96,6 +96,82 @@ export const TradePage = () => {
     }
   }
 
+  const openposition = async () => {
+    try {
+      const MockWETHToken = etherGlobal.getMockWETHTokenContract()
+      const MarginTrading = etherGlobal.getMarginTradingStrategyContract()
+      const MockKyberNetworkProxy =
+        etherGlobal.getMockKyberNetworkProxyContract()
+
+      const provider = etherGlobal.getProvider()
+      //@ts-ignore
+      const signer = etherGlobal.getSigner()
+      console.log('PROVIDER: ', provider)
+      console.log('SIGNER: ', signer)
+
+      const positionData2 = {
+        spentToken: '0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE', // WETH
+        obtainedToken: '0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b', // MockTaxedToken
+        collateral: '0xde0b6b3a7640000',
+        collateralIsSrcToken: true,
+        minObtained: '0',
+        maxSpent: '0xde0b6b3a7640000',
+        deadline: Math.floor(Date.now() / 1000) + 60 * 20, // 20 minutes from the current Unix time
+      }
+
+      // Approve spending a certian amount of tokens to the marginTrading contract
+      // console.log(
+      //   'Approve: ',
+      //   await MockWETHToken.approve(
+      //     '0xf672812E0D29aAbEEfA818E727b710D78D8062B4',
+      //     '0x21E19E0C9BAB2400000',
+      //   ),
+      // )
+
+      // Still need to figure out what this rate is
+      // console.log(
+      //   'Kyber setRate: ',
+      //   await MockKyberNetworkProxy.setRate(
+      //     '0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE',
+      //     '0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b',
+      //     {
+      //       numerator: 3000,
+      //       denominator: 1,
+      //     },
+      //   ),
+      // )
+
+      // Check how much money the dapp can spend with the strategy contract
+      // console.log(
+      //   'allowance: ',
+      //   await MockWETHToken.allowance(
+      //     '0x4678820caa137EE5FDcE601E1963a3b487d8F1f4', // Wallet
+      //     '0xf672812E0D29aAbEEfA818E727b710D78D8062B4', // Strategy address
+      //   ),
+      // )
+
+      // TODO: Add allow button to frontned (just a reminder to write this to ithil)
+
+      const openPosition = await MarginTrading.openPosition(positionData2, {
+        gasLimit: 1000000,
+      })
+      console.log(openPosition)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const getAllPositionEvents = async () => {
+    const MarginTradingStrategy = etherGlobal.getMarginTradingStrategyContract()
+
+    const openedPositions = await MarginTradingStrategy.queryFilter(
+      MarginTradingStrategy.filters.PositionWasOpened(),
+      '0x1',
+      'latest',
+    )
+    console.log('OPE: ', openedPositions)
+  }
+
   return (
     <ContentContainer>
       <div>Block: {block}</div>
@@ -105,6 +181,10 @@ export const TradePage = () => {
       <div>Chain Id: {network?.chainId}</div>
 
       <button onClick={() => runCode()}>Stake 26 WETH</button>
+      <button onClick={() => openposition()}>OpenPosition</button>
+      <button onClick={() => getAllPositionEvents()}>
+        Get all position events
+      </button>
     </ContentContainer>
   )
 }

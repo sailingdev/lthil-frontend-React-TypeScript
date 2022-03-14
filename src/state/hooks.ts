@@ -4,6 +4,7 @@ import {
   initializeAccountBalance,
   updateBlockNumber,
 } from './network/network.actions'
+import { initializePositionsData } from './marginTrading/marginTrading.actions'
 
 import { RootState } from './store'
 // @ts-ignore
@@ -67,6 +68,17 @@ export const useInitStakeTokens = () => {
   const dispatch = useDispatch()
   const { chainId } = useWeb3React()
   return () => dispatch(initializeUserStakes(chainId!))
+}
+
+// MARGIN TRADING HOOKS
+
+export const usePositions = () => {
+  return useAppSelector((state) => state.marginTrading.positions)
+}
+
+export const useInitPositions = () => {
+  const dispatch = useDispatch()
+  return () => dispatch(initializePositionsData())
 }
 
 // TODO MISLAV
