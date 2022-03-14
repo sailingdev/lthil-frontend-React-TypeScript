@@ -106,7 +106,6 @@ interface ICustomTableProps<T extends object> {
   activeRow?: T | undefined
 }
 // TODO TABLE EMPTY STATE
-// TODO: Make the row toggle button be the cells, now the entire row
 
 export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
   const {
@@ -237,8 +236,8 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                         tw`cursor-pointer flex flex-col justify-between items-center`,
                       ]}
                       onClick={() => {
-                        // props.onActiveRowChange &&
-                        //   props.onActiveRowChange(row.original as T)
+                        props.onActiveRowChange &&
+                          props.onActiveRowChange(row.original as T)
                       }}
                       // @ts-ignore
                     >
@@ -255,10 +254,6 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                                 textAlign: cell.column.align ?? 'left',
                               }}
                               css={tw`py-4`}
-                              onClick={() => {
-                                props.onActiveRowChange &&
-                                  props.onActiveRowChange(row.original as T)
-                              }}
                             >
                               {/* @ts-ignore */}
                               {cell.column.cell(cell.row.original)}

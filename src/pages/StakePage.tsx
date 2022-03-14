@@ -1,5 +1,7 @@
 import 'twin.macro'
 
+/** @jsxImportSource @emotion/react */
+import { ChartLine, Info, MagnifyingGlass } from 'phosphor-react'
 import { ISearchParams, StakeToken } from '../types'
 import { useEffect, useState } from 'react'
 import { useInitStakeTokens, useStakeTokens } from '../state/hooks'
@@ -8,8 +10,6 @@ import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
 import { DepositWithdraw } from '../shared/DepositWithdraw'
 import { InputField } from '../shared/InputField'
-/** @jsxImportSource @emotion/react */
-import { MagnifyingGlass } from 'phosphor-react'
 import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
@@ -128,7 +128,26 @@ export const StakePage = () => {
                   Header: '',
                   accessor: 'icons',
                   align: 'right',
-                  cell: (l) => <TableCell.TokenIcons />,
+                  cell: (l) => (
+                    <div tw='flex flex-row justify-end gap-3'>
+                      <ChartLine
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          // TODO VALENTIN
+                          window.open('https://facebook.com', '_blank')
+                        }}
+                        tw='text-font-100 dark:text-font-200 height[16px] width[16px]'
+                      />
+                      <Info
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          // TODO VALENTIN
+                          window.open('facebook.com', '_blank')
+                        }}
+                        tw='text-font-100 dark:text-font-200 height[16px] width[16px]'
+                      />
+                    </div>
+                  ),
                 },
               ]}
             />

@@ -12,7 +12,7 @@ export const initializeUserStakes = createAsyncThunk<any, number>(
     const stakes: StakeToken[] = []
 
     for (const token of chainTokens) {
-      // TODO TRANSFORM totalValueLocked and owned from string to number and remove these two @ts-ignore
+      // TODO VALENTIN TRANSFORM totalValueLocked and owned from string to number and remove these two @ts-ignore
       const totalValueLocked = await etherGlobal.getTokenTvl(token.address)
       const owned = await etherGlobal.getMaxWithdrawAmount(token.address)
       stakes.push({

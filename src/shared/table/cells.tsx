@@ -1,7 +1,5 @@
 import 'twin.macro'
 
-import { ChartLine, Info } from 'phosphor-react'
-
 import { Txt } from '../Txt'
 import { isDesktop } from '../../utils'
 import tw from 'twin.macro'
@@ -77,15 +75,6 @@ const Profit = (props: { currencyValue: number; percentageValue: number }) => {
   )
 }
 
-const TokenIcons = () => {
-  return (
-    <div tw='flex flex-row justify-end gap-3'>
-      <ChartLine tw='text-font-100 dark:text-font-200 height[16px] width[16px]' />
-      <Info tw='text-font-100 dark:text-font-200 height[16px] width[16px]' />
-    </div>
-  )
-}
-
 const ClosePosition = () => {
   return (
     <div tw='flex flex-row justify-end'>
@@ -101,6 +90,5 @@ export const TableCell = {
   Currency,
   Percentage,
   Profit,
-  TokenIcons,
   ClosePosition,
 }
