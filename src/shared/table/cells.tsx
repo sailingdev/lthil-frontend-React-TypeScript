@@ -1,9 +1,10 @@
 import 'twin.macro'
-import tw from 'twin.macro'
-import { Info, ChartLine } from 'phosphor-react'
 
-import { isDesktop } from '../../utils'
+import { ChartLine, Info } from 'phosphor-react'
+
 import { Txt } from '../Txt'
+import { isDesktop } from '../../utils'
+import tw from 'twin.macro'
 
 /** @jsxImportSource @emotion/react */
 
@@ -17,10 +18,10 @@ const Text = (props: { value: string | number }) => {
   )
 }
 
-const Currency = (props: { value: number; format: string }) => {
-  const { value, format } = props
+const Currency = (props: { value: number }) => {
+  const { value } = props
   const currency = value
-    ? new Intl.NumberFormat(format, {
+    ? new Intl.NumberFormat('en-us', {
         style: 'currency',
         currency: 'USD',
         currencyDisplay: 'narrowSymbol',
@@ -33,10 +34,10 @@ const Currency = (props: { value: number; format: string }) => {
   )
 }
 
-const Percentage = (props: { value: number; format: string }) => {
-  const { value, format } = props
+const Percentage = (props: { value: number }) => {
+  const { value } = props
   const percentage = value
-    ? new Intl.NumberFormat(format, {
+    ? new Intl.NumberFormat('en-us', {
         style: 'percent',
       }).format(value * 10)
     : ''
@@ -47,15 +48,11 @@ const Percentage = (props: { value: number; format: string }) => {
   )
 }
 
-const Profit = (props: {
-  currencyValue: number
-  percentageValue: number
-  format: string
-}) => {
-  const { currencyValue, percentageValue, format } = props
+const Profit = (props: { currencyValue: number; percentageValue: number }) => {
+  const { currencyValue, percentageValue } = props
 
   const currency = currencyValue
-    ? new Intl.NumberFormat(format, {
+    ? new Intl.NumberFormat('en-us', {
         style: 'currency',
         currency: 'USD',
         currencyDisplay: 'narrowSymbol',
@@ -63,7 +60,7 @@ const Profit = (props: {
       }).format(currencyValue)
     : ''
   const percentage = percentageValue
-    ? new Intl.NumberFormat(format, {
+    ? new Intl.NumberFormat('en-us', {
         style: 'percent',
         signDisplay: 'always',
       }).format(percentageValue * 10)

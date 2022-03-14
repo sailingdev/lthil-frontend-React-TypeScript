@@ -1,25 +1,20 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
-import { useEffect } from 'react'
+
+import { ISearchParams, StakeToken } from '../types'
+import { useEffect, useState } from 'react'
+import { useInitStakeTokens, useStakeTokens } from '../state/hooks'
 
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
-import { ISearchParams } from '../types'
+import { DepositWithdraw } from '../shared/DepositWithdraw'
 import { InputField } from '../shared/InputField'
+/** @jsxImportSource @emotion/react */
 import { MagnifyingGlass } from 'phosphor-react'
 import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
-import { useSearch } from '../shared/hooks/useSearch'
-import { useState } from 'react'
 import { etherGlobal } from '../ether'
-import { useInitStakeTokens, useStakeTokens } from '../state/hooks'
-import { useAsync } from 'react-use'
-import { PositionDetailsCard } from '../shared/PositionDetailsCard'
-import { DepositWithdraw } from '../shared/DepositWithdraw'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
-
-const tableData: any[] = []
+import { useSearch } from '../shared/hooks/useSearch'
 
 const initialSearchParams: Partial<ISearchParams> = {
   orderField: 'name',
@@ -30,21 +25,17 @@ const initialSearchParams: Partial<ISearchParams> = {
 export const StakePage = () => {
   const [search, setSearch] = useState('')
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
-  // const initStakeTokens = useInitStakeTokens()
-  // const tt = useInitStakeTable()
-  // useInitStakeTokens()
   const initUserStakes = useInitStakeTokens()
   const stakeTokens = useStakeTokens()
+  const [activeRow, setActiveRow] = useState<any | undefined>()
+
+  const isConnected = useIsConnected()
 
   useEffect(() => {
-    initUserStakes()
-    console.log('Stake tokens: ', stakeTokens)
-    // tableData = stakeTokens
-
-    console.log('tableData', tableData)
-  }, [useIsConnected()])
-
-  const [activeRow, setActiveRow] = useState<any | undefined>()
+    if (isConnected) {
+      initUserStakes()
+    }
+  }, [isConnected])
 
   const onRowClick = async (row: any) => {
     console.log(
@@ -86,31 +77,27 @@ export const StakePage = () => {
               currentPage={searchParams.page}
               setPage={setPage}
               pageSize={searchParams.size}
-              data={stakeTokens.length > 0 ? stakeTokens : []}
+              data={(stakeTokens ?? []) as StakeToken[]}
               mobileColumns={[
                 {
                   Header: 'Vault',
                   accessor: 'vaultName',
-                  cell: (l) => <TableCell.Text value={l.vaultName} />,
+                  cell: (l: StakeToken) => (
+                    <TableCell.Text value={l.vaultName} />
+                  ),
                 },
                 {
                   Header: 'APY',
                   accessor: 'annualPositionYield',
-                  cell: (l) => (
-                    <TableCell.Percentage
-                      value={l.annualPositionYield.value}
-                      format={l.annualPositionYield.format}
-                    />
+                  cell: (l: StakeToken) => (
+                    <TableCell.Percentage value={l.annualPositionYield} />
                   ),
                 },
                 {
                   Header: 'TVL',
                   accessor: 'totalValueLocked',
-                  cell: (l) => (
-                    <TableCell.Currency
-                      value={l.totalValueLocked.currencyValue}
-                      format={l.totalValueLocked.format}
-                    />
+                  cell: (l: StakeToken) => (
+                    <TableCell.Currency value={l.totalValueLocked} />
                   ),
                 },
               ]}
@@ -125,33 +112,24 @@ export const StakePage = () => {
                   Header: 'Annual Percentage Yield',
                   accessor: 'annualPositionYield',
                   align: 'center',
-                  cell: (l) => (
-                    <TableCell.Percentage
-                      value={l.annualPositionYield.value}
-                      format={l.annualPositionYield.format}
-                    />
+                  cell: (l: StakeToken) => (
+                    <TableCell.Percentage value={l.annualPositionYield} />
                   ),
                 },
                 {
                   Header: 'Total value locked',
                   accessor: 'totalValueLocked',
                   align: 'right',
-                  cell: (l) => (
-                    <TableCell.Currency
-                      value={l.totalValueLocked.currencyValue}
-                      format={l.totalValueLocked.format}
-                    />
+                  cell: (l: StakeToken) => (
+                    <TableCell.Currency value={l.totalValueLocked} />
                   ),
                 },
                 {
                   Header: 'Owned',
                   accessor: 'owned',
                   align: 'right',
-                  cell: (l) => (
-                    <TableCell.Currency
-                      value={l.owned.currencyValue}
-                      format={l.owned.format}
-                    />
+                  cell: (l: StakeToken) => (
+                    <TableCell.Currency value={l.owned} />
                   ),
                 },
                 {

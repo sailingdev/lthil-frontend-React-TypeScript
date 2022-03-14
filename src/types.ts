@@ -1,4 +1,5 @@
 import { Interpolation, Theme } from '@emotion/react'
+
 import { CSSProperties } from 'react'
 
 export interface ISearchParams {
@@ -42,4 +43,11 @@ export interface TokenDetails {
   symbol: string
   decimals: number
   balance: string
+}
+
+export interface StakeToken {
+  vaultName: string
+  annualPositionYield: number
+  totalValueLocked: number
+  owned: number
 }

@@ -210,7 +210,6 @@ export const DashboardPage = () => {
                   <TableCell.Profit
                     currencyValue={l.profit.currencyValue}
                     percentageValue={l.profit.percentageValue}
-                    format={l.profit.format}
                   />
                 ),
               },
@@ -236,7 +235,6 @@ export const DashboardPage = () => {
                   <TableCell.Profit
                     currencyValue={l.profit.currencyValue}
                     percentageValue={l.profit.percentageValue}
-                    format={l.profit.format}
                   />
                 ),
               },
