@@ -1,35 +1,29 @@
+import { StakeToken } from '../../types'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import tokenList from '../../assets/tokenlist.json'
 import { etherGlobal } from '../../ether'
-import { useAsync } from 'react-use'
+import tokenList from '../../assets/tokenlist.json'
 
-export const initializeUserStakes = createAsyncThunk(
+export const initializeUserStakes = createAsyncThunk<any, number>(
   'stake/initializeUserStakes',
-  async () => {
-    // TODO - CHAIN ID FILTER IS HARDCODED TO 4
-    const stakeList: any = []
+  async (chainId) => {
+    const chainTokens = tokenList.tokens.filter(
+      (token) => token.chainId == chainId,
+    )
+    const stakes: StakeToken[] = []
 
-    const filteredList = tokenList.tokens.filter((token) => token.chainId == 4)
-
-    for (const token of filteredList) {
-      stakeList.push({
+    for (const token of chainTokens) {
+      // TODO TRANSFORM totalValueLocked and owned from string to number and remove these two @ts-ignore
+      const totalValueLocked = await etherGlobal.getTokenTvl(token.address)
+      const owned = await etherGlobal.getMaxWithdrawAmount(token.address)
+      stakes.push({
         vaultName: token.name,
-        annualPositionYield: {
-          value: 1, // TODO: Calculate this
-          format: 'en-US',
-        },
-        totalValueLocked: {
-          currencyValue: await etherGlobal.getTokenTvl(token.address),
-          format: 'en-US',
-        },
-        owned: {
-          currencyValue: await etherGlobal.getMaxWithdrawAmount(token.address),
-          format: 'en-US',
-        },
-        // TODO: figure out what data to put here
-        icons: {},
+        annualPositionYield: 1,
+        // @ts-ignore
+        totalValueLocked,
+        // @ts-ignore
+        owned,
       })
     }
-    return stakeList
+    return stakes
   },
 )

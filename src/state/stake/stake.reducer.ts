@@ -1,24 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import { StakeToken } from '../../types'
 import { initializeUserStakes } from './stake.actions'
 
-export interface IStakeToken {
-  vaultName: string
-  annualPositionYield: {
-    value: string
-    format: string
-  }
-  totalValueLocked: {
-    currencyValue: number
-    format: string
-  }
-  owned: {
-    currencyValue: number
-    format: string
-  }
-}
 export interface StakeState {
-  tokenStakeData: IStakeToken[] | undefined
+  tokenStakeData: StakeToken[] | undefined
 }
 
 const initialState = {
@@ -33,7 +19,7 @@ export default createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       initializeUserStakes.fulfilled,
-      (state, { payload: tokenStakeData }: PayloadAction<IStakeToken[]>) => {
+      (state, { payload: tokenStakeData }: PayloadAction<StakeToken[]>) => {
         state.tokenStakeData = tokenStakeData
       },
     )

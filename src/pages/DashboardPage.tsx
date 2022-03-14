@@ -68,7 +68,6 @@ export const DashboardPage = () => {
                     <TableCell.Profit
                       currencyValue={l.profit.currencyValue}
                       percentageValue={l.profit.percentageValue}
-                      format={l.profit.format}
                     />
                   ),
                 },
@@ -94,7 +93,6 @@ export const DashboardPage = () => {
                     <TableCell.Profit
                       currencyValue={l.profit.currencyValue}
                       percentageValue={l.profit.percentageValue}
-                      format={l.profit.format}
                     />
                   ),
                 },
@@ -115,6 +113,13 @@ export const DashboardPage = () => {
           ) : (
             'loading'
           )}
+          {/* <InputField
+            tw='desktop:width[500px] desktop:self-start mb-4'
+            placeholder='Search tokens...'
+            value={search}
+            onChange={(value) => setSearch(value)}
+            renderRight={<MagnifyingGlass tw='text-secondary' />}
+          /> */}
         </div>
       </div>
       {/* <TokenModal modalIsOpen onChange={() => {}} /> */}

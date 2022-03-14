@@ -4,11 +4,13 @@ import {
   initializeAccountBalance,
   updateBlockNumber,
 } from './network/network.actions'
+import { initializePositionsData } from './marginTrading/marginTrading.actions'
+
+import { RootState } from './store'
 // @ts-ignore
 import { initializeUserStakes } from './stake/stake.actions'
-import { initializePositionsData } from './marginTrading/marginTrading.actions'
-import { RootState } from './store'
 import { toggleTheme } from './theme/theme.actions'
+import { useWeb3React } from '@web3-react/core'
 
 const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
@@ -64,7 +66,8 @@ export const useStakeTokens = () => {
 
 export const useInitStakeTokens = () => {
   const dispatch = useDispatch()
-  return () => dispatch(initializeUserStakes())
+  const { chainId } = useWeb3React()
+  return () => dispatch(initializeUserStakes(chainId!))
 }
 
 // MARGIN TRADING HOOKS
