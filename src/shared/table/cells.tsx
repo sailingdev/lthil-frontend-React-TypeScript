@@ -1,10 +1,13 @@
 import 'twin.macro'
-
-import { Txt } from '../Txt'
-import { isDesktop } from '../../utils'
 import tw from 'twin.macro'
+import { Info, ChartLine } from 'phosphor-react'
+
+import { isDesktop } from '../../utils'
+import { Txt } from '../Txt'
 
 /** @jsxImportSource @emotion/react */
+
+// TODO: Use the Text component where applicable
 
 const Text = (props: { value: string | number }) => {
   return isDesktop ? (
@@ -77,9 +80,19 @@ const Profit = (props: {
   )
 }
 
+const TokenIcons = () => {
+  return (
+    <div tw='flex flex-row justify-end gap-3'>
+      <ChartLine tw='text-font-100 dark:text-font-200 height[16px] width[16px]' />
+      <Info tw='text-font-100 dark:text-font-200 height[16px] width[16px]' />
+    </div>
+  )
+}
+
 export const TableCell = {
   Text,
   Currency,
   Percentage,
   Profit,
+  TokenIcons,
 }

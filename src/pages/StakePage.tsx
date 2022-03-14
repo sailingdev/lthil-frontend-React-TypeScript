@@ -46,9 +46,15 @@ export const StakePage = () => {
 
   const [activeRow, setActiveRow] = useState<any | undefined>()
 
-  const onRowClick = (row: any) => {
+  const onRowClick = async (row: any) => {
+    console.log(
+      await etherGlobal
+        .getVaultContract()
+        // @ts-ignore
+        .balance('0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE'),
+    )
     if (activeRow == row) {
-      // setActiveRow(undefined) // TODO: if this is enabled, click anywhere on the row collapses it.
+      setActiveRow(undefined)
     } else {
       setActiveRow(row)
     }
@@ -118,7 +124,7 @@ export const StakePage = () => {
                 {
                   Header: 'Annual Percentage Yield',
                   accessor: 'annualPositionYield',
-                  align: 'left',
+                  align: 'center',
                   cell: (l) => (
                     <TableCell.Percentage
                       value={l.annualPositionYield.value}
@@ -129,7 +135,7 @@ export const StakePage = () => {
                 {
                   Header: 'Total value locked',
                   accessor: 'totalValueLocked',
-                  align: 'left',
+                  align: 'right',
                   cell: (l) => (
                     <TableCell.Currency
                       value={l.totalValueLocked.currencyValue}
@@ -140,13 +146,19 @@ export const StakePage = () => {
                 {
                   Header: 'Owned',
                   accessor: 'owned',
-                  align: 'left',
+                  align: 'right',
                   cell: (l) => (
                     <TableCell.Currency
                       value={l.owned.currencyValue}
                       format={l.owned.format}
                     />
                   ),
+                },
+                {
+                  Header: '',
+                  accessor: 'icons',
+                  align: 'right',
+                  cell: (l) => <TableCell.TokenIcons />,
                 },
               ]}
             />

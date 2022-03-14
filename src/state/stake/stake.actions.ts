@@ -26,9 +26,10 @@ export const initializeUserStakes = createAsyncThunk(
           currencyValue: await etherGlobal.getMaxWithdrawAmount(token.address),
           format: 'en-US',
         },
+        // TODO: figure out what data to put here
+        icons: {},
       })
     }
-    // console.log('stakelist:', stakeList)
     return stakeList
   },
 )

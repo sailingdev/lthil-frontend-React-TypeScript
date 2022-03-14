@@ -59,7 +59,7 @@ export const DepositWithdraw = (props: {}) => {
         />
         <Button text='Deposit' bold action full />
       </div>
-      <div tw='w-96 flex flex-col rounded-md border border-primary-300 p-5 gap-3'>
+      {/* <div tw='w-96 flex flex-col rounded-md border border-primary-300 p-5 gap-3'>
         <div tw='flex flex-row w-full justify-between'>
           <Txt.Heading2>Deposited</Txt.Heading2>
           <Txt.Heading2>0.000 ($0.00)</Txt.Heading2>
@@ -84,7 +84,7 @@ export const DepositWithdraw = (props: {}) => {
           bold
           full
         />
-      </div>
+      </div> */}
     </div>
   )
 }

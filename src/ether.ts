@@ -67,6 +67,8 @@ export class Ether {
     return accounts.length > 0 ? accounts[0] : null
   }
 
+  // ========= STAKE PAGE =========
+
   async getMaxWithdrawAmount(tokenAddress: string): Promise<string> {
     const vault = this.getVaultContract()
     // @ts-ignore
@@ -93,6 +95,22 @@ export class Ether {
     return this.parseHexValueToEtherBase10(tvl)
   }
 
+  async getAnnualPercentageYield(tokenAddress: string): Promise<number> {
+    const vault = this.getVaultContract()
+    const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
+
+    // TODO: calculate the correct daysFromStart using this: (createdAt comes from the vault)
+    // const daysFromStart = Math.floor((Date.now() - createdAt) / 86400)
+    const daysFromStart = Date.now()
+    // @ts-ignore
+    const balance = vault.balance(tokenAddress)
+    const tokenTotalSupply = token.totalSupply()
+
+    return Math.pow(balance / tokenTotalSupply, (365 / daysFromStart - 1) * 100)
+  }
+
+  // ========= CONTRACTS =========
+
   getVaultContract(): Promise<VaultInterface> {
     // @ts-ignore
     return new Contract(this.vaultAddress, VaultAbi.abi, this.signer)
@@ -114,6 +132,9 @@ export class Ether {
       this.signer,
     )
   }
+
+  // ========= HELPER FUNCTIONS =========
+
   async getTokenInfo(
     tokenAddres: string,
     signer: any,
