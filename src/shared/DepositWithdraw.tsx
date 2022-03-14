@@ -1,11 +1,12 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
-import { useEffect, useState } from 'react'
-import { Txt } from './Txt'
-import { InputField } from './InputField'
+
 import { Button } from './Button'
+import { InputField } from './InputField'
+import { Txt } from './Txt'
 import { etherGlobal } from '../ether'
+import tw from 'twin.macro'
+import { useState } from 'react'
+/** @jsxImportSource @emotion/react */
 import { useWeb3React } from '@web3-react/core'
 
 // interface IInputFieldProps {}

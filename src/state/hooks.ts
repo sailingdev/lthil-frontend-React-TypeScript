@@ -4,9 +4,9 @@ import {
   initializeAccountBalance,
   updateBlockNumber,
 } from './network/network.actions'
-import { initializePositionsData } from './marginTrading/marginTrading.actions'
 
 import { RootState } from './store'
+import { initializePositionsData } from './marginTrading/marginTrading.actions'
 // @ts-ignore
 import { initializeUserStakes } from './stake/stake.actions'
 import { toggleTheme } from './theme/theme.actions'
@@ -60,8 +60,11 @@ export const useInitAccountAddress = () => {
 
 // STAKE HOOKS
 
-export const useStakeTokens = () => {
-  return useAppSelector((state) => state.stake.tokenStakeData)
+export const useStakeTokens = (term: String) => {
+  const stakes = useAppSelector((state) => state.stake.tokenStakeData)
+  return (stakes ?? []).filter((s) =>
+    s.vaultName.toLowerCase().trim().includes(term.toLowerCase().trim()),
+  )
 }
 
 export const useInitStakeTokens = () => {

@@ -12,7 +12,6 @@ import { InputField } from '../shared/InputField'
 import { MagnifyingGlass } from 'phosphor-react'
 import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
-import { etherGlobal } from '../ether'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useSearch } from '../shared/hooks/useSearch'
 
@@ -23,11 +22,10 @@ const initialSearchParams: Partial<ISearchParams> = {
 }
 
 export const StakePage = () => {
-  const [search, setSearch] = useState('')
-  const [searchParams, { setPage }] = useSearch(initialSearchParams)
+  const [searchParams, { setPage, setTerm }] = useSearch(initialSearchParams)
   const initUserStakes = useInitStakeTokens()
-  const stakeTokens = useStakeTokens()
   const [activeRow, setActiveRow] = useState<any | undefined>()
+  const stakeTokens = useStakeTokens(searchParams.term)
 
   const isConnected = useIsConnected()
 
@@ -53,11 +51,11 @@ export const StakePage = () => {
           <InputField
             tw='desktop:width[500px] desktop:self-start mb-4'
             placeholder='Search tokens...'
-            value={search}
-            onChange={(value) => setSearch(value)}
+            value={searchParams.term}
+            onChange={(value) => setTerm(value)}
             renderRight={<MagnifyingGlass tw='text-secondary' />}
           />
-          {stakeTokens && stakeTokens.length > 0 ? (
+          {stakeTokens.length > 0 ? (
             <CustomTable
               activeRow={activeRow}
               onActiveRowChange={onRowClick}
@@ -71,7 +69,7 @@ export const StakePage = () => {
               currentPage={searchParams.page}
               setPage={setPage}
               pageSize={searchParams.size}
-              data={(stakeTokens ?? []) as StakeToken[]}
+              data={stakeTokens}
               mobileColumns={[
                 {
                   Header: 'Vault',

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
 import {
@@ -9,16 +8,17 @@ import {
 } from '../state/hooks'
 
 import { ContentContainer } from '../shared/ContentContainer'
-import { useNetwork } from '../shared/hooks/useNetwork'
 import { etherGlobal } from '../ether'
+/** @jsxImportSource @emotion/react */
 import { ethers } from 'ethers'
+import { useNetwork } from '../shared/hooks/useNetwork'
 
 export const TradePage = () => {
   const block = useLatestBlock()
   const balance = useAccountBalance()
   const network = useNetwork()
   const address = useAccountAddress()
-  const stake = useStakeTokens()
+  const stake = useStakeTokens('')
   console.log('Block', block)
   console.log('Balance', balance)
   console.log('Network', network)
