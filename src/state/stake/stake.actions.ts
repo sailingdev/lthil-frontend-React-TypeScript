@@ -12,16 +12,18 @@ export const initializeUserStakes = createAsyncThunk<any, number>(
     const stakes: StakeToken[] = []
 
     for (const token of chainTokens) {
-      // TODO VALENTIN TRANSFORM totalValueLocked and owned from string to number and remove these two @ts-ignore
       const totalValueLocked = await etherGlobal.getTokenTvl(token.address)
       const owned = await etherGlobal.getMaxWithdrawAmount(token.address)
+      const annualPercentageYield = await etherGlobal.getAnnualPercentageYield(
+        token.address,
+      )
       stakes.push({
-        vaultName: token.name,
-        annualPositionYield: 1,
-        // @ts-ignore
+        vaultName: token.symbol,
+        annualPercentageYield,
         totalValueLocked,
-        // @ts-ignore
         owned,
+        etherscanUrl: `https://etherscan.io/token/${token.address}`,
+        tokenAddress: token.address,
       })
     }
     return stakes

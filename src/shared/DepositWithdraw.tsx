@@ -11,31 +11,29 @@ import { useWeb3React } from '@web3-react/core'
 
 // interface IInputFieldProps {}
 
-export const DepositWithdraw = (props: {}) => {
-  const { account } = useWeb3React()
+export const DepositWithdraw = (props: {
+  tokenAddress: string | undefined
+  onClick: any
+}) => {
   const [depositValue, setDepositValue] = useState<string>('0')
-  const [withdrawValue, setWithdrawValue] = useState<string>('0')
+  // const [withdrawValue, setWithdrawValue] = useState<string>('0')
 
-  // TODO: Function will take a "tokenAddress" argument
-  const getMaxWithdraw = async () => {
-    setWithdrawValue(
-      await etherGlobal.getMaxWithdrawAmount(
-        '0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE',
-      ),
-    )
-  }
+  // const getMaxWithdraw = async () => {
+  //   setWithdrawValue(
+  //     await etherGlobal.getMaxWithdrawAmount(props.tokenAddress!).toString(),
+  //   )
+  // }
 
-  // TODO: Function will take a "tokenAddress" argument
-  const getMaxDeposit = async () => {
-    setDepositValue(
-      await etherGlobal.getMaxDepositAmount(
-        '0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE',
-      ),
-    )
+  const getMaxDeposit = async (e: any) => {
+    const value = (
+      await etherGlobal.getMaxDepositAmount(props.tokenAddress!)
+    ).toString()
+    setDepositValue(value)
   }
 
   return (
     <div
+      onClick={props.onClick}
       // className={props.className}
       tw='flex flex-row justify-center gap-4 my-2 w-full'
     >

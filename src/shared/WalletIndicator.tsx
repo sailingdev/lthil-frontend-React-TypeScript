@@ -22,7 +22,6 @@ export const WalletIndicator = () => {
   if (connUrl == 'metamask') {
     ProviderIcon = <MetaMaskIcon tw='h-4 w-4' />
   } else if (connUrl == 'eip-1193:') {
-    console.log('EEEEIIIPPP')
     ProviderIcon = <WalletConnectIcon tw='h-4 w-4' />
   }
 

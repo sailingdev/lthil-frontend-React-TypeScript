@@ -24,7 +24,7 @@ const Currency = (props: { value: number }) => {
         currency: 'USD',
         currencyDisplay: 'narrowSymbol',
       }).format(value)
-    : ''
+    : '$0.00' // TODO: Is this a good way of hanlding this?
   return isDesktop ? (
     <Txt.Body2Regular tw='text-secondary'>{currency}</Txt.Body2Regular>
   ) : (
@@ -38,7 +38,7 @@ const Percentage = (props: { value: number }) => {
     ? new Intl.NumberFormat('en-us', {
         style: 'percent',
       }).format(value * 10)
-    : ''
+    : '0.000%'
   return isDesktop ? (
     <Txt.Body2Regular tw='text-secondary'>{percentage}</Txt.Body2Regular>
   ) : (

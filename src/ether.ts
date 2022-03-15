@@ -35,10 +35,9 @@ export class Ether {
     this.initializeSigner()
   }
 
-  parseHexValueToEtherBase10(hexAmount: string) {
-    return ethers.utils.formatUnits(
-      BigNumber.from(parseInt(hexAmount, 16).toString()),
-      18,
+  parseHexValueToEtherBase10(hexAmount: string): number {
+    return parseFloat(
+      ethers.utils.formatUnits(BigNumber.from(hexAmount).toString()),
     )
   }
 
@@ -72,7 +71,7 @@ export class Ether {
 
   // ========= STAKE PAGE =========
 
-  async getMaxWithdrawAmount(tokenAddress: string): Promise<string> {
+  async getMaxWithdrawAmount(tokenAddress: string): Promise<number> {
     const vault = this.getVaultContract()
     // @ts-ignore
     const amount = (await vault.claimable(tokenAddress)).toHexString()
@@ -80,17 +79,16 @@ export class Ether {
     return this.parseHexValueToEtherBase10(amount)
   }
 
-  async getMaxDepositAmount(tokenAddres: string): Promise<string> {
+  async getMaxDepositAmount(tokenAddres: string): Promise<number> {
     const tokenContract = new Contract(tokenAddres, ERC20Abi.abi, this.signer)
     const balance = (
       await tokenContract.balanceOf(this.getAccountAddress())
     ).toHexString()
 
-    // TODO: this.parseHexValueToEtherBase10 fails here. Fix it and use that function
-    return (parseInt(balance, 16) / 1000000000000000000).toString()
+    return this.parseHexValueToEtherBase10(balance)
   }
 
-  async getTokenTvl(tokenAddres: string): Promise<string> {
+  async getTokenTvl(tokenAddres: string): Promise<number> {
     const vault = this.getVaultContract()
     //@ts-ignore
     const tvl = (await vault.balance(tokenAddres)).toHexString()
@@ -102,14 +100,20 @@ export class Ether {
     const vault = this.getVaultContract()
     const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
 
-    // TODO: calculate the correct daysFromStart using this: (createdAt comes from the vault)
-    // const daysFromStart = Math.floor((Date.now() - createdAt) / 86400)
-    const daysFromStart = Date.now()
     // @ts-ignore
-    const balance = vault.balance(tokenAddress)
-    const tokenTotalSupply = token.totalSupply()
+    const tokenSubvault = await vault.vaults(tokenAddress)
+    const createdAt = parseInt(tokenSubvault.creationTime.toHexString(), 16)
+    const daysFromStart = Math.floor(
+      (new Date().getTime() / 1000 - createdAt) / 86400,
+    )
+    // @ts-ignore
+    const balance = (await vault.balance(tokenAddress)).toHexString()
+    const tokenTotalSupply = (await token.totalSupply()).toHexString()
 
-    return Math.pow(balance / tokenTotalSupply, (365 / daysFromStart - 1) * 100)
+    return Math.pow(
+      parseInt(balance) / parseInt(tokenTotalSupply),
+      (365 / daysFromStart - 1) * 100,
+    )
   }
 
   // ========= CONTRACTS =========
