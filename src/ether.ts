@@ -18,8 +18,6 @@ export const initializeGlobalInstance = (instance: Ether) => {
   etherGlobal = instance
 }
 
-// TODO: What's the best way to do error handling here with these contract functions?
-
 export class Ether {
   private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner
