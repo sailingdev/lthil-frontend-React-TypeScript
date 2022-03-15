@@ -5,9 +5,10 @@ import { InputField } from './InputField'
 import { Txt } from './Txt'
 import { etherGlobal } from '../ether'
 import tw from 'twin.macro'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 /** @jsxImportSource @emotion/react */
 import { useWeb3React } from '@web3-react/core'
+import { useAsync } from 'react-use'
 
 // interface IInputFieldProps {}
 
@@ -16,6 +17,10 @@ export const DepositWithdraw = (props: {
   onClick: any
 }) => {
   const [depositValue, setDepositValue] = useState<string>('0')
+  const [userTokenBalance, setUserTokenBalance] = useState<number>(0)
+
+  // Client said they don't need the withdraw feature, so I comment it out.
+
   // const [withdrawValue, setWithdrawValue] = useState<string>('0')
 
   // const getMaxWithdraw = async () => {
@@ -24,11 +29,21 @@ export const DepositWithdraw = (props: {
   //   )
   // }
 
-  const getMaxDeposit = async (e: any) => {
+  useAsync(async () => {
+    setUserTokenBalance(
+      await etherGlobal.getUserTokenBalance(props.tokenAddress!),
+    )
+  })
+
+  const getMaxDeposit = async () => {
     const value = (
       await etherGlobal.getMaxDepositAmount(props.tokenAddress!)
     ).toString()
     setDepositValue(value)
+  }
+
+  const depositToken = () => {
+    etherGlobal.depositToken(props.tokenAddress!, depositValue)
   }
 
   return (
@@ -40,7 +55,7 @@ export const DepositWithdraw = (props: {
       <div tw='w-96 flex flex-col rounded-md border border-primary-300 p-5 gap-3'>
         <div tw='flex flex-row w-full justify-between'>
           <Txt.Heading2>Deposit</Txt.Heading2>
-          <Txt.Heading2>4000 ($4,001.20)</Txt.Heading2>
+          <Txt.Heading2>{userTokenBalance} ($placeholder)</Txt.Heading2>
         </div>
         <InputField
           value={depositValue}
@@ -56,7 +71,7 @@ export const DepositWithdraw = (props: {
             </button>
           }
         />
-        <Button text='Deposit' bold action full />
+        <Button text='Deposit' bold action full onClick={depositToken} />
       </div>
       {/* <div tw='w-96 flex flex-col rounded-md border border-primary-300 p-5 gap-3'>
         <div tw='flex flex-row w-full justify-between'>

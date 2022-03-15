@@ -17,6 +17,9 @@ export let etherGlobal: Ether
 export const initializeGlobalInstance = (instance: Ether) => {
   etherGlobal = instance
 }
+
+// TODO: What's the best way to do error handling here with these contract functions?
+
 export class Ether {
   private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner
@@ -35,10 +38,16 @@ export class Ether {
     this.initializeSigner()
   }
 
+  // TODO: rename this function
   parseHexValueToEtherBase10(hexAmount: string): number {
     return parseFloat(
       ethers.utils.formatUnits(BigNumber.from(hexAmount).toString()),
     )
+  }
+
+  // TODO: rename this function maybe?
+  parseUnits(amount: string, decimal: number): ethers.BigNumber {
+    return ethers.utils.parseUnits(amount, decimal)
   }
 
   async initializeSigner() {
@@ -96,6 +105,7 @@ export class Ether {
     return this.parseHexValueToEtherBase10(tvl)
   }
 
+  // TODO: double check if this does the right math
   async getAnnualPercentageYield(tokenAddress: string): Promise<number> {
     const vault = this.getVaultContract()
     const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
@@ -114,6 +124,47 @@ export class Ether {
       parseInt(balance) / parseInt(tokenTotalSupply),
       (365 / daysFromStart - 1) * 100,
     )
+  }
+
+  // TODO: function returns Promise <any>
+  async approveSpending(
+    tokenAddress: string,
+    destinationAddress: string,
+    amount: string,
+  ): Promise<any> {
+    const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
+    const approvedSpending = await token.approve(
+      destinationAddress,
+      this.parseUnits(amount, await token.decimals()),
+    )
+    return approvedSpending
+  }
+
+  async getUserTokenBalance(tokenAddress: string): Promise<number> {
+    const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
+    const balance = await token.balanceOf(this.getAccountAddress())
+    return this.parseHexValueToEtherBase10(balance.toHexString())
+  }
+
+  async depositToken(tokenAddress: string, amount: string): Promise<any> {
+    const vault = this.getVaultContract()
+    const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
+
+    // Check balance -> TODO: where to do the balance checking? On the input?
+
+    // Allow token spending
+    await this.approveSpending(tokenAddress, this.vaultAddress, amount)
+
+    // Do the staking
+    //@ts-ignore
+    const stake = await vault.stake(
+      tokenAddress,
+      this.parseUnits(amount, await token.decimals()),
+      {
+        gasLimit: 1000000,
+      },
+    )
+    return stake
   }
 
   // ========= CONTRACTS =========
