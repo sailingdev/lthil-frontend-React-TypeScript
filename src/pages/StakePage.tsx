@@ -26,7 +26,6 @@ export const StakePage = () => {
   const initUserStakes = useInitStakeTokens()
   const [activeRow, setActiveRow] = useState<any | undefined>()
   const stakeTokens = useStakeTokens(searchParams.term)
-
   const isConnected = useIsConnected()
 
   useEffect(() => {
@@ -59,7 +58,12 @@ export const StakePage = () => {
             <CustomTable
               activeRow={activeRow}
               onActiveRowChange={onRowClick}
-              renderExpanded={<DepositWithdraw />}
+              renderExpanded={
+                <DepositWithdraw
+                  tokenAddress={activeRow?.tokenAddress ?? undefined}
+                  onClick={(e: any) => e.stopPropagation()}
+                />
+              }
               loading={false}
               maxPage={
                 stakeTokens.length > 0
@@ -82,7 +86,7 @@ export const StakePage = () => {
                   Header: 'APY',
                   accessor: 'annualPositionYield',
                   cell: (l: StakeToken) => (
-                    <TableCell.Percentage value={l.annualPositionYield} />
+                    <TableCell.Percentage value={l.annualPercentageYield} />
                   ),
                 },
                 {
@@ -105,7 +109,7 @@ export const StakePage = () => {
                   accessor: 'annualPositionYield',
                   align: 'center',
                   cell: (l: StakeToken) => (
-                    <TableCell.Percentage value={l.annualPositionYield} />
+                    <TableCell.Percentage value={l.annualPercentageYield} />
                   ),
                 },
                 {
@@ -141,8 +145,7 @@ export const StakePage = () => {
                       <Info
                         onClick={(e) => {
                           e.stopPropagation()
-                          // TODO VALENTIN
-                          window.open('facebook.com', '_blank')
+                          window.open(l.etherscanUrl, '_blank')
                         }}
                         tw='text-font-100 dark:text-font-200 height[16px] width[16px]'
                       />
@@ -152,7 +155,9 @@ export const StakePage = () => {
               ]}
             />
           ) : (
-            'loading or wallet not connected'
+            <div tw='w-full rounded-lg flex flex-col items-center h-64 bg-primary-100 flex justify-center items-center'>
+              <Txt.Body1Regular>No tokens found.</Txt.Body1Regular>
+            </div>
           )}
         </div>
       </div>
