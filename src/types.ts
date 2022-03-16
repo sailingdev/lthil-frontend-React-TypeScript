@@ -51,3 +51,26 @@ export interface StakeToken {
   totalValueLocked: number
   owned: number
 }
+
+export interface PositionWasOpenedEvent {
+  id: string
+  owner: string
+  owedToken: string
+  heldToken: string
+  collateralToken: string
+  collateral: string
+  principal: string
+  allowance: string
+  fees: string
+  createdAt: string
+}
+
+export interface PositionRow {
+  tokenPair: string
+  position: string
+  profit: {
+    currencyValue: number
+    percentageValue: number
+  }
+  trend: string
+}

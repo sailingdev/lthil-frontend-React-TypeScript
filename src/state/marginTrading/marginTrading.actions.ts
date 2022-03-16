@@ -1,11 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { etherGlobal } from '../../ether'
-import { BigNumber, utils } from 'ethers'
+import { BigNumber, Contract, utils } from 'ethers'
+import { PositionRow, PositionWasOpenedEvent } from '../../types'
+
+import tokenList from '../../assets/tokenlist.json'
 
 export const initializePositionsData = createAsyncThunk(
   'marginTrading/initializePositionsData',
   async () => {
     const MarginTradingStrategy = etherGlobal.getMarginTradingStrategyContract()
+    const positions: PositionRow[] = []
 
     const openedPositions = await MarginTradingStrategy.queryFilter(
       MarginTradingStrategy.filters.PositionWasOpened(),
@@ -13,39 +17,39 @@ export const initializePositionsData = createAsyncThunk(
       'latest',
     )
 
-    // Event data:
-    // uint256 indexed id,
-    // address indexed owner,
-    // address owedToken,
-    // address heldToken,
-    // address collateralToken,
-    // uint256 collateral,
-    // uint256 principal,
-    // uint256 allowance,
-    // uint256 fees,
-    // uint256 createdAt
-
-    return [
+    const events: PositionWasOpenedEvent[] = [
       {
-        tokenPair: 'ETH/ETH',
-        position: 'ETH 2x Long',
-        profit: {
-          currencyValue: 1240,
-          percentageValue: 15.6,
-          format: 'en-US',
-        },
-        trend: 'placeholder',
-      },
-      {
-        tokenPair: 'ETH/ETH',
-        position: 'ETH 2x Long',
-        profit: {
-          currencyValue: 1240,
-          percentageValue: 15.6,
-          format: 'en-US',
-        },
-        trend: 'placeholder',
+        id: '1',
+        owner: '0x4678820caa137EE5FDcE601E1963a3b487d8F1f4',
+        owedToken: '0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE',
+        heldToken: '0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b',
+        collateralToken: '0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE',
+        collateral: '0xde0b6b3a7640000',
+        principal: 'hex',
+        allowance: 'hex',
+        fees: 'hex',
+        createdAt: 'hex',
       },
     ]
+
+    events.forEach((e) => {
+      const ownedToken = tokenList.tokens.filter(
+        (token) => e.owedToken === token.address,
+      )[0].symbol
+      const heldToken = tokenList.tokens.filter(
+        (token) => e.heldToken === token.address,
+      )[0].symbol
+      positions.push({
+        tokenPair: `${ownedToken}/${heldToken}`,
+        position: 'placeholder',
+        profit: {
+          currencyValue: 2,
+          percentageValue: 15,
+        },
+        trend: 'placeholder',
+      })
+    })
+
+    return positions
   },
 )
