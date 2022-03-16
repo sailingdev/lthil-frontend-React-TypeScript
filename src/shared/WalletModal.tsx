@@ -16,14 +16,18 @@ export const WalletModal = (props: IWalletModal) => {
 
   return (
     <CenteredModal
-      tw='bg-secondary width[600px]'
+      tw='bg-secondary'
       isOpen={props.modalIsOpen}
       onChange={props.onClose}
     >
-      <div tw='flex flex-row justify-center items-center w-full'>
-        <Txt.Heading2 tw='self-end'>Select wallet provider</Txt.Heading2>
+      <div tw='flex flex-col justify-center items-center'>
+        <Txt.Heading2 tw='self-end'>Connect to a wallet</Txt.Heading2>
       </div>
-
+      <Txt.Body2Regular tw='w-96 self-start my-3'>
+        By connecting a wallet, I agree to Ithil’s <u>Terms of Use</u>,{' '}
+        <u>Cookies Policy</u>
+        and <u>Privacy Policy</u>.
+      </Txt.Body2Regular>
       <div tw='w-full height[1px] bg-primary-300 my-4'></div>
       <div tw='w-full height[384px]'>
         {connectors.map(({ name, icon, connector }) => {
@@ -42,18 +46,18 @@ export const WalletModal = (props: IWalletModal) => {
                 }
               }}
             >
-              <div tw='flex flex-row justify-start items-center p-0 my-2'>
-                <Icon tw='h-8 w-8 m-2' />
+              <div tw='flex flex-row justify-start items-center p-0 my-2 gap-2'>
+                <Icon tw='h-9 w-9 m-2' />
                 <div tw='flex flex-col justify-start'>
-                  <Txt.Body2Regular
+                  <Txt.Body2Bold
                     css={[
                       // @ts-ignore
-                      metamaskMissing && tw`text-font-200`,
+                      metamaskMissing && tw`text-font-200 text-secondary`,
                     ]}
                   >
                     {name}
                     {metamaskMissing && ' (Not installed)'}
-                  </Txt.Body2Regular>
+                  </Txt.Body2Bold>
                 </div>
               </div>
             </div>
