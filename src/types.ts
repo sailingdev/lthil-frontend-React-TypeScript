@@ -65,12 +65,14 @@ export interface PositionWasOpenedEvent {
   createdAt: string
 }
 
+export interface ProfitsAndLosses {
+  currencyValue: number
+  percentageValue: number
+}
+
 export interface PositionRow {
   tokenPair: string
   position: string
-  profit: {
-    currencyValue: number
-    percentageValue: number
-  }
+  profit: ProfitsAndLosses
   trend: string
 }

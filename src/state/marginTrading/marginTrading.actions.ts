@@ -41,12 +41,12 @@ export const initializePositionsData = createAsyncThunk(
       )[0].symbol
       positions.push({
         tokenPair: `${ownedToken}/${heldToken}`,
-        position: 'placeholder',
+        position: `${ownedToken}/${heldToken}`, // TODO: long/short
         profit: {
           currencyValue: 2,
           percentageValue: 15,
         },
-        trend: 'placeholder',
+        trend: 'placeholder', // TODO: trend chart
       })
     })
 

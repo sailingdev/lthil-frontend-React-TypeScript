@@ -4,7 +4,7 @@ import ERC20Abi from './assets/abi/ERC20.json'
 import MarginTradingStrategyAbi from './assets/abi/MarginTradingStrategy.json'
 import MockTaxedTokenAbi from './assets/abi/MockTaxedToken.json'
 import MockWETHAbi from './assets/abi/MockWETH.json'
-import { TokenDetails } from './types'
+import { ProfitsAndLosses, TokenDetails } from './types'
 import VaultAbi from './assets/abi/Vault.json'
 import MockKyberNetworkProxyAbi from './assets/abi/MockKyberNetworkProxy.json'
 import { VaultInterface } from './config/typings'
@@ -98,7 +98,7 @@ export class Ether {
     return this.parseHexValueToEtherBase10(tvl)
   }
 
-  async getAnnualPercentageYield(tokenAddress: string): Promise<number> {
+  async computeAnnualPercentageYield(tokenAddress: string): Promise<number> {
     const vault = this.getVaultContract()
     const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
 
@@ -111,6 +111,19 @@ export class Ether {
 
     return Math.pow(balance / tokenTotalSupply, (365 / daysFromStart - 1) * 100)
   }
+
+  // ========= DASHBOARD PAGE =========
+
+  // async computeProfitsAndLosses(
+  //   tokenAddress: string,
+  // ): Promise<ProfitsAndLosses> {
+  //   const vault = this.getVaultContract()
+  //   //@ts-ignore
+  //   const tokenSubvault = await vault.vaults(tokenAddress)
+  //   const createdAt = parseInt(tokenSubvault.creationTime.toHexString(), 16)
+
+  //   const time = new Date().getTime() / 1000 - createdAt
+  // }
 
   // ========= CONTRACTS =========
 
