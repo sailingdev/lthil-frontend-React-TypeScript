@@ -15,6 +15,7 @@ import { useBlockNumberListener } from './shared/hooks/useBlockNumberListener'
 import { useEffect } from 'react'
 import { useInitSetup } from './shared/hooks/useInitSetup'
 import { useNetworkListener } from './shared/hooks/useNetworkListener'
+import { MarginTradingPage } from './pages/MarginTradingPage'
 
 /** @jsxImportSource @emotion/react */
 
@@ -37,6 +38,7 @@ export const AppRouter = () => {
           <Routes>
             <Route path='/' element={<TradePage />} />
             <Route path='/dashboard' element={<DashboardPage />} />
+            <Route path='/margintrading' element={<MarginTradingPage />} />
             <Route path='/dashboard/:position' element={<PositionPage />} />
             <Route path='/stake' element={<StakePage />} />
             <Route path='/charts' element={<ChartsPage />} />

@@ -6,8 +6,8 @@ import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 
 import { Txt } from './Txt'
-import { ReactComponent as RadioButtonSelected } from '../assets/radioButton/selected.svg'
-import { ReactComponent as RadioButtonNotSelected } from '../assets/radioButton/notSelected.svg'
+import { ReactComponent as RadioButtonSelected } from '../assets/images/radioButton/selected.svg'
+import { ReactComponent as RadioButtonNotSelected } from '../assets/images/radioButton/notSelected.svg'
 
 interface IRadioItem {
   label: string
