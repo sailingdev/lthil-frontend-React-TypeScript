@@ -6,7 +6,7 @@ import { ThemeSwitch } from './ThemeSwitch'
 
 export const Footer = () => {
   return (
-    <div tw='w-full flex justify-center items-center'>
+    <div tw='w-full flex justify-center items-center pb-5'>
       <div tw='flex flex-row items-start justify-center'>
         <span tw='mt-1 flex flex-row'>
           <NavigationMenu />

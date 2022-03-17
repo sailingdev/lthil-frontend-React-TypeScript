@@ -32,7 +32,7 @@ export const AppRouter = () => {
   return (
     <div css={[tw`flex flex-col bg-primary min-h-screen desktop:flex-row`]}>
       <div tw='flex-grow flex flex-col'>
-        {isDesktop && <Header />}
+        <Header />
         <div tw='flex-grow'>
           <Routes>
             <Route path='/' element={<TradePage />} />
