@@ -52,7 +52,6 @@ ReactDOM.render(
         </BrowserRouter>
       </ErrorBoundary>
     </Provider>
-    ,
   </Web3ReactProvider>,
 
   document.getElementById('root'),
