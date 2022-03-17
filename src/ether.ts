@@ -4,7 +4,7 @@ import ERC20Abi from './assets/abi/ERC20.json'
 import MarginTradingStrategyAbi from './assets/abi/MarginTradingStrategy.json'
 import MockTaxedTokenAbi from './assets/abi/MockTaxedToken.json'
 import MockWETHAbi from './assets/abi/MockWETH.json'
-import { ProfitsAndLosses, TokenDetails } from './types'
+import { PositionWasOpenedEvent, ProfitsAndLosses, TokenDetails } from './types'
 import VaultAbi from './assets/abi/Vault.json'
 import MockKyberNetworkProxyAbi from './assets/abi/MockKyberNetworkProxy.json'
 import { VaultInterface } from './config/typings'
@@ -115,14 +115,16 @@ export class Ether {
   // ========= DASHBOARD PAGE =========
 
   // async computeProfitsAndLosses(
-  //   tokenAddress: string,
+  //   positionEvent: PositionWasOpenedEvent,
   // ): Promise<ProfitsAndLosses> {
-  //   const vault = this.getVaultContract()
-  //   //@ts-ignore
-  //   const tokenSubvault = await vault.vaults(tokenAddress)
-  //   const createdAt = parseInt(tokenSubvault.creationTime.toHexString(), 16)
-
+  //   const createdAt = parseInt(positionEvent.createdAt.toHexString(), 16)
+  //   const principal = positionEvent.principal.toHexString()
+  //   const interestRate = 0.002 // (positionEvent.interestRate) where do I get the interestRate?
   //   const time = new Date().getTime() / 1000 - createdAt
+  //   const timeFees = (principal * interestRate * time) / 864000000
+  //   const positionFees = positionEvent.fees
+  //   const fees = timeFees + positionFees
+
   // }
 
   // ========= CONTRACTS =========
