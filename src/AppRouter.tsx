@@ -6,16 +6,15 @@ import { ChartsPage } from './pages/ChartsPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { Footer } from './shared/Footer'
 import { Header } from './shared/Header'
+import { MarginTradingPage } from './pages/MarginTradingPage'
 import { PositionPage } from './pages/PositionPage'
 import { StakePage } from './pages/StakePage'
-import { TradePage } from './pages/TradePage'
 import { isDesktop } from './utils'
 import tw from 'twin.macro'
 import { useBlockNumberListener } from './shared/hooks/useBlockNumberListener'
 import { useEffect } from 'react'
 import { useInitSetup } from './shared/hooks/useInitSetup'
 import { useNetworkListener } from './shared/hooks/useNetworkListener'
-import { MarginTradingPage } from './pages/MarginTradingPage'
 
 /** @jsxImportSource @emotion/react */
 
@@ -36,7 +35,7 @@ export const AppRouter = () => {
         <Header />
         <div tw='flex-grow'>
           <Routes>
-            <Route path='/' element={<TradePage />} />
+            <Route path='/' element={<MarginTradingPage />} />
             <Route path='/dashboard' element={<DashboardPage />} />
             <Route path='/margintrading' element={<MarginTradingPage />} />
             <Route path='/dashboard/:position' element={<PositionPage />} />

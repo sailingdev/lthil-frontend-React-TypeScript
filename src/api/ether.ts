@@ -1,12 +1,9 @@
-import { BigNumber, ethers } from 'ethers'
-import {
-  PositionWasOpenedEvent,
-  ProfitsAndLosses,
-  TokenDetails,
-} from '../types'
+import { PositionWasOpenedEvent, ProfitsAndLosses } from '../types'
 
 import { ContractFactory } from './contract-factory'
 import { addresses } from '../assets/addresses.json'
+import { ethers } from 'ethers'
+import { hexToDecimal } from '../utils'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
@@ -23,13 +20,6 @@ export class Ether {
   constructor(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
     this.initializeSigner()
-  }
-
-  // TODO: rename this function
-  parseHexValueToEtherBase10(hexAmount: string): number {
-    return parseFloat(
-      ethers.utils.formatUnits(BigNumber.from(hexAmount).toString()),
-    )
   }
 
   // TODO: rename this function maybe?
@@ -72,7 +62,7 @@ export class Ether {
     // @ts-ignore
     const amount = (await vault.claimable(tokenAddress)).toHexString()
 
-    return this.parseHexValueToEtherBase10(amount)
+    return hexToDecimal(amount)
   }
 
   async getMaxDepositAmount(tokenAddress: string): Promise<number> {
@@ -84,7 +74,7 @@ export class Ether {
       await tokenContract.balanceOf(this.getAccountAddress())
     ).toHexString()
 
-    return this.parseHexValueToEtherBase10(balance)
+    return hexToDecimal(balance)
   }
 
   async getTokenTvl(tokenAddres: string): Promise<number> {
@@ -92,7 +82,7 @@ export class Ether {
     //@ts-ignore
     const tvl = (await vault.balance(tokenAddres)).toHexString()
 
-    return this.parseHexValueToEtherBase10(tvl)
+    return hexToDecimal(tvl)
   }
 
   async computeAnnualPercentageYield(tokenAddress: string): Promise<number> {
@@ -132,7 +122,7 @@ export class Ether {
   async getUserTokenBalance(tokenAddress: string): Promise<number> {
     const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
     const balance = await token.balanceOf(this.getAccountAddress())
-    return this.parseHexValueToEtherBase10(balance.toHexString())
+    return hexToDecimal(balance.toHexString())
   }
 
   async depositToken(tokenAddress: string, amount: string): Promise<any> {
@@ -155,8 +145,6 @@ export class Ether {
     )
     return stake
   }
-
-  // ========= DASHBOARD PAGE =========
 
   // TODO: This function is layed out but the data is wrong since we don't yet know precisely what data PositionWasOpened event returns.
   async computeProfitsAndLosses(
@@ -203,24 +191,5 @@ export class Ether {
       currencyValue: profitsAndLosses,
       percentageValue: (profitsAndLosses / collateral) * 100,
     }
-  }
-
-  // ========= HELPER FUNCTIONS =========
-
-  async getTokenInfo(
-    tokenAddress: string,
-    signer: any,
-    userAddress: string,
-  ): Promise<TokenDetails> {
-    const tokenContract = ContractFactory.getTokenContract(
-      tokenAddress,
-      this.signer,
-    )
-    const name = await tokenContract.name()
-    const symbol = await tokenContract.symbol()
-    const decimals = await tokenContract.decimals()
-    const balance = await tokenContract.balanceOf(userAddress)
-    // const userAllowance = await tokenContract.allowance(userAddress, destAddress TODO: figure out why we need this?
-    return { name, symbol, decimals, balance }
   }
 }

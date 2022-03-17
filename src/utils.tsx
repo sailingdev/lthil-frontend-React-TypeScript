@@ -1,3 +1,5 @@
+import { BigNumber, ethers } from 'ethers'
+
 import { format } from 'date-fns'
 
 export const mapErrorToCode = (e: any): number => {
@@ -14,6 +16,10 @@ export const formatDate = (date: Date, options?: IFormatDateOptions): any => {
   const startDate = format(date, dateFormat)
 
   return uppercase ? startDate.toUpperCase() : startDate
+}
+
+export const hexToDecimal = (hex: string) => {
+  return parseFloat(ethers.utils.formatUnits(BigNumber.from(hex).toString()))
 }
 
 export const TABLET_BREAKPOINT = 480
