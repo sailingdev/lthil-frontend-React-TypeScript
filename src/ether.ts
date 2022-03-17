@@ -4,7 +4,7 @@ import ERC20Abi from './assets/abi/ERC20.json'
 import MarginTradingStrategyAbi from './assets/abi/MarginTradingStrategy.json'
 import MockTaxedTokenAbi from './assets/abi/MockTaxedToken.json'
 import MockWETHAbi from './assets/abi/MockWETH.json'
-import { TokenDetails } from './types'
+import { PositionWasOpenedEvent, ProfitsAndLosses, TokenDetails } from './types'
 import VaultAbi from './assets/abi/Vault.json'
 import MockKyberNetworkProxyAbi from './assets/abi/MockKyberNetworkProxy.json'
 import { VaultInterface } from './config/typings'
@@ -103,8 +103,7 @@ export class Ether {
     return this.parseHexValueToEtherBase10(tvl)
   }
 
-  // TODO: double check if this does the right math
-  async getAnnualPercentageYield(tokenAddress: string): Promise<number> {
+  async computeAnnualPercentageYield(tokenAddress: string): Promise<number> {
     const vault = this.getVaultContract()
     const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
 
@@ -163,6 +162,53 @@ export class Ether {
       },
     )
     return stake
+  }
+
+  // ========= DASHBOARD PAGE =========
+
+  // TODO: This function is layed out but the data is wrong since we don't yet know precisely what data PositionWasOpened event returns.
+  async computeProfitsAndLosses(
+    positionEvent: PositionWasOpenedEvent,
+  ): Promise<ProfitsAndLosses> {
+    const marginTrading = this.getMarginTradingStrategyContract()
+
+    let profitsAndLosses = 0
+
+    const createdAt = parseInt(positionEvent.createdAt, 16)
+    const principal = parseInt(positionEvent.principal, 16)
+    const interestRate = 0.002 // (positionEvent.interestRate) TODO: where do I get the interestRate?
+    const time = new Date().getTime() / 1000 - createdAt
+    const timeFees = (principal * interestRate * time) / 864000000
+    const positionFees = parseInt(positionEvent.fees, 16)
+    const fees = timeFees + positionFees
+    const allowance = parseInt(positionEvent.allowance, 16)
+    const collateral = parseInt(positionEvent.collateral, 16)
+
+    if (positionEvent.heldToken === positionEvent.collateralToken) {
+      profitsAndLosses =
+        allowance -
+        marginTrading.quote(
+          positionEvent.owedToken,
+          positionEvent.heldToken,
+          positionEvent.principal + fees,
+        ) -
+        collateral
+    } else {
+      profitsAndLosses =
+        marginTrading.quote(
+          positionEvent.heldToken,
+          positionEvent.owedToken,
+          positionEvent.allowance,
+        ) -
+        principal -
+        collateral -
+        fees
+    }
+
+    return {
+      currencyValue: profitsAndLosses,
+      percentageValue: (profitsAndLosses / collateral) * 100,
+    }
   }
 
   // ========= CONTRACTS =========

@@ -14,9 +14,8 @@ export const initializeUserStakes = createAsyncThunk<any, number>(
     for (const token of chainTokens) {
       const totalValueLocked = await etherGlobal.getTokenTvl(token.address)
       const owned = await etherGlobal.getMaxWithdrawAmount(token.address)
-      const annualPercentageYield = await etherGlobal.getAnnualPercentageYield(
-        token.address,
-      )
+      const annualPercentageYield =
+        await etherGlobal.computeAnnualPercentageYield(token.address)
       stakes.push({
         vaultName: token.symbol,
         annualPercentageYield,
