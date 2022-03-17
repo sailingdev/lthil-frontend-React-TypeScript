@@ -47,9 +47,11 @@ export interface TokenDetails {
 
 export interface StakeToken {
   vaultName: string
-  annualPositionYield: number
+  annualPercentageYield: number
   totalValueLocked: number
   owned: number
+  etherscanUrl: string
+  tokenAddress: string
 }
 
 export interface PositionWasOpenedEvent {

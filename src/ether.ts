@@ -17,6 +17,7 @@ export let etherGlobal: Ether
 export const initializeGlobalInstance = (instance: Ether) => {
   etherGlobal = instance
 }
+
 export class Ether {
   private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner
@@ -35,11 +36,16 @@ export class Ether {
     this.initializeSigner()
   }
 
-  parseHexValueToEtherBase10(hexAmount: string) {
-    return ethers.utils.formatUnits(
-      BigNumber.from(parseInt(hexAmount, 16).toString()),
-      18,
+  // TODO: rename this function
+  parseHexValueToEtherBase10(hexAmount: string): number {
+    return parseFloat(
+      ethers.utils.formatUnits(BigNumber.from(hexAmount).toString()),
     )
+  }
+
+  // TODO: rename this function maybe?
+  parseUnits(amount: string, decimal: number): ethers.BigNumber {
+    return ethers.utils.parseUnits(amount, decimal)
   }
 
   async initializeSigner() {
@@ -72,7 +78,7 @@ export class Ether {
 
   // ========= STAKE PAGE =========
 
-  async getMaxWithdrawAmount(tokenAddress: string): Promise<string> {
+  async getMaxWithdrawAmount(tokenAddress: string): Promise<number> {
     const vault = this.getVaultContract()
     // @ts-ignore
     const amount = (await vault.claimable(tokenAddress)).toHexString()
@@ -80,17 +86,16 @@ export class Ether {
     return this.parseHexValueToEtherBase10(amount)
   }
 
-  async getMaxDepositAmount(tokenAddres: string): Promise<string> {
+  async getMaxDepositAmount(tokenAddres: string): Promise<number> {
     const tokenContract = new Contract(tokenAddres, ERC20Abi.abi, this.signer)
     const balance = (
       await tokenContract.balanceOf(this.getAccountAddress())
     ).toHexString()
 
-    // TODO: this.parseHexValueToEtherBase10 fails here. Fix it and use that function
-    return (parseInt(balance, 16) / 1000000000000000000).toString()
+    return this.parseHexValueToEtherBase10(balance)
   }
 
-  async getTokenTvl(tokenAddres: string): Promise<string> {
+  async getTokenTvl(tokenAddres: string): Promise<number> {
     const vault = this.getVaultContract()
     //@ts-ignore
     const tvl = (await vault.balance(tokenAddres)).toHexString()
@@ -102,30 +107,109 @@ export class Ether {
     const vault = this.getVaultContract()
     const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
 
-    // TODO: calculate the correct daysFromStart using this: (createdAt comes from the vault)
-    // const daysFromStart = Math.floor((Date.now() - createdAt) / 86400)
-    const daysFromStart = Date.now()
     // @ts-ignore
-    const balance = vault.balance(tokenAddress)
-    const tokenTotalSupply = token.totalSupply()
+    const tokenSubvault = await vault.vaults(tokenAddress)
+    const createdAt = parseInt(tokenSubvault.creationTime.toHexString(), 16)
+    const daysFromStart = Math.floor(
+      (new Date().getTime() / 1000 - createdAt) / 86400,
+    )
+    // @ts-ignore
+    const balance = (await vault.balance(tokenAddress)).toHexString()
+    const tokenTotalSupply = (await token.totalSupply()).toHexString()
 
-    return Math.pow(balance / tokenTotalSupply, (365 / daysFromStart - 1) * 100)
+    return Math.pow(
+      parseInt(balance) / parseInt(tokenTotalSupply),
+      (365 / daysFromStart - 1) * 100,
+    )
+  }
+
+  // TODO: function returns Promise <any>
+  async approveSpending(
+    tokenAddress: string,
+    destinationAddress: string,
+    amount: string,
+  ): Promise<any> {
+    const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
+    const approvedSpending = await token.approve(
+      destinationAddress,
+      this.parseUnits(amount, await token.decimals()),
+    )
+    return approvedSpending
+  }
+
+  async getUserTokenBalance(tokenAddress: string): Promise<number> {
+    const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
+    const balance = await token.balanceOf(this.getAccountAddress())
+    return this.parseHexValueToEtherBase10(balance.toHexString())
+  }
+
+  async depositToken(tokenAddress: string, amount: string): Promise<any> {
+    const vault = this.getVaultContract()
+    const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
+
+    // Check balance -> TODO: where to do the balance checking? On the input?
+
+    // Allow token spending
+    await this.approveSpending(tokenAddress, this.vaultAddress, amount)
+
+    // Do the staking
+    //@ts-ignore
+    const stake = await vault.stake(
+      tokenAddress,
+      this.parseUnits(amount, await token.decimals()),
+      {
+        gasLimit: 1000000,
+      },
+    )
+    return stake
   }
 
   // ========= DASHBOARD PAGE =========
 
-  // async computeProfitsAndLosses(
-  //   positionEvent: PositionWasOpenedEvent,
-  // ): Promise<ProfitsAndLosses> {
-  //   const createdAt = parseInt(positionEvent.createdAt.toHexString(), 16)
-  //   const principal = positionEvent.principal.toHexString()
-  //   const interestRate = 0.002 // (positionEvent.interestRate) where do I get the interestRate?
-  //   const time = new Date().getTime() / 1000 - createdAt
-  //   const timeFees = (principal * interestRate * time) / 864000000
-  //   const positionFees = positionEvent.fees
-  //   const fees = timeFees + positionFees
+  // TODO: This function is layed out but the data is wrong since we don't yet know precisely what data PositionWasOpened event returns.
+  async computeProfitsAndLosses(
+    positionEvent: PositionWasOpenedEvent,
+  ): Promise<ProfitsAndLosses> {
+    const marginTrading = this.getMarginTradingStrategyContract()
 
-  // }
+    let profitsAndLosses = 0
+
+    const createdAt = parseInt(positionEvent.createdAt, 16)
+    const principal = parseInt(positionEvent.principal, 16)
+    const interestRate = 0.002 // (positionEvent.interestRate) TODO: where do I get the interestRate?
+    const time = new Date().getTime() / 1000 - createdAt
+    const timeFees = (principal * interestRate * time) / 864000000
+    const positionFees = parseInt(positionEvent.fees, 16)
+    const fees = timeFees + positionFees
+    const allowance = parseInt(positionEvent.allowance, 16)
+    const collateral = parseInt(positionEvent.collateral, 16)
+
+    if (positionEvent.heldToken === positionEvent.collateralToken) {
+      profitsAndLosses =
+        allowance -
+        marginTrading.quote(
+          positionEvent.owedToken,
+          positionEvent.heldToken,
+          positionEvent.principal + fees,
+        ) -
+        collateral
+    } else {
+      profitsAndLosses =
+        marginTrading.quote(
+          positionEvent.heldToken,
+          positionEvent.owedToken,
+          positionEvent.allowance,
+        ) -
+        principal -
+        collateral -
+        fees
+    }
+
+    return {
+      currencyValue: profitsAndLosses,
+      percentageValue: (profitsAndLosses / collateral) * 100,
+    }
+  }
 
   // ========= CONTRACTS =========
 

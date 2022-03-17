@@ -5,44 +5,57 @@ import { InputField } from './InputField'
 import { Txt } from './Txt'
 import { etherGlobal } from '../ether'
 import tw from 'twin.macro'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 /** @jsxImportSource @emotion/react */
 import { useWeb3React } from '@web3-react/core'
+import { useAsync } from 'react-use'
 
 // interface IInputFieldProps {}
 
-export const DepositWithdraw = (props: {}) => {
-  const { account } = useWeb3React()
+export const DepositWithdraw = (props: {
+  tokenAddress: string | undefined
+  onClick: any
+}) => {
   const [depositValue, setDepositValue] = useState<string>('0')
-  const [withdrawValue, setWithdrawValue] = useState<string>('0')
+  const [userTokenBalance, setUserTokenBalance] = useState<number>(0)
 
-  // TODO: Function will take a "tokenAddress" argument
-  const getMaxWithdraw = async () => {
-    setWithdrawValue(
-      await etherGlobal.getMaxWithdrawAmount(
-        '0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE',
-      ),
+  // Client said they don't need the withdraw feature, so I comment it out.
+
+  // const [withdrawValue, setWithdrawValue] = useState<string>('0')
+
+  // const getMaxWithdraw = async () => {
+  //   setWithdrawValue(
+  //     await etherGlobal.getMaxWithdrawAmount(props.tokenAddress!).toString(),
+  //   )
+  // }
+
+  useAsync(async () => {
+    setUserTokenBalance(
+      await etherGlobal.getUserTokenBalance(props.tokenAddress!),
     )
+  })
+
+  const getMaxDeposit = async () => {
+    const value = (
+      await etherGlobal.getMaxDepositAmount(props.tokenAddress!)
+    ).toString()
+    setDepositValue(value)
   }
 
-  // TODO: Function will take a "tokenAddress" argument
-  const getMaxDeposit = async () => {
-    setDepositValue(
-      await etherGlobal.getMaxDepositAmount(
-        '0xA7C0df5B42E009115EEcc6e0E35514DD9f703AfE',
-      ),
-    )
+  const depositToken = () => {
+    etherGlobal.depositToken(props.tokenAddress!, depositValue)
   }
 
   return (
     <div
+      onClick={props.onClick}
       // className={props.className}
       tw='flex flex-row justify-center gap-4 my-2 w-full'
     >
       <div tw='w-96 flex flex-col rounded-md border border-primary-300 p-5 gap-3'>
         <div tw='flex flex-row w-full justify-between'>
           <Txt.Heading2>Deposit</Txt.Heading2>
-          <Txt.Heading2>4000 ($4,001.20)</Txt.Heading2>
+          <Txt.Heading2>{userTokenBalance} ($placeholder)</Txt.Heading2>
         </div>
         <InputField
           value={depositValue}
@@ -58,7 +71,7 @@ export const DepositWithdraw = (props: {}) => {
             </button>
           }
         />
-        <Button text='Deposit' bold action full />
+        <Button text='Deposit' bold action full onClick={depositToken} />
       </div>
       {/* <div tw='w-96 flex flex-col rounded-md border border-primary-300 p-5 gap-3'>
         <div tw='flex flex-row w-full justify-between'>
