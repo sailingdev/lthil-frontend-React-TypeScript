@@ -21,7 +21,6 @@ export const initializeUserStakes = createAsyncThunk<any, number>(
         annualPercentageYield,
         totalValueLocked,
         owned,
-        etherscanUrl: `https://etherscan.io/token/${token.address}`,
         tokenAddress: token.address,
       })
     }

@@ -50,7 +50,6 @@ export interface StakeToken {
   annualPercentageYield: number
   totalValueLocked: number
   owned: number
-  etherscanUrl: string
   tokenAddress: string
 }
 

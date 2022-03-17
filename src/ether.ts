@@ -1,15 +1,14 @@
 import { BigNumber, Contract, ethers } from 'ethers'
+import { PositionWasOpenedEvent, ProfitsAndLosses, TokenDetails } from './types'
 
 import ERC20Abi from './assets/abi/ERC20.json'
 import MarginTradingStrategyAbi from './assets/abi/MarginTradingStrategy.json'
+import MockKyberNetworkProxyAbi from './assets/abi/MockKyberNetworkProxy.json'
 import MockTaxedTokenAbi from './assets/abi/MockTaxedToken.json'
 import MockWETHAbi from './assets/abi/MockWETH.json'
-import { PositionWasOpenedEvent, ProfitsAndLosses, TokenDetails } from './types'
 import VaultAbi from './assets/abi/Vault.json'
-import MockKyberNetworkProxyAbi from './assets/abi/MockKyberNetworkProxy.json'
 import { VaultInterface } from './config/typings'
 import addresses from './assets/addresses.json'
-import { useWeb3React } from '@web3-react/core'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
