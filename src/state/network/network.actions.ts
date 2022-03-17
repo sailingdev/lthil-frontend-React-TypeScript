@@ -1,6 +1,7 @@
-import { createAsyncThunk } from '@reduxjs/toolkit'
-import { etherGlobal } from '../../ether'
 import { BigNumber, utils } from 'ethers'
+
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import { etherGlobal } from '../../api/ether'
 
 export const initializeAccountBalance = createAsyncThunk(
   'network/initializeAccountBalance',

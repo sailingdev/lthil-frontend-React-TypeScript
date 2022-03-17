@@ -1,14 +1,15 @@
-import { createAsyncThunk } from '@reduxjs/toolkit'
-import { etherGlobal } from '../../ether'
-import { BigNumber, Contract, utils } from 'ethers'
 import { PositionRow, PositionWasOpenedEvent } from '../../types'
 
+import { ContractFactory } from '../../api/contract-factory'
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import { etherGlobal } from '../../api/ether'
 import tokenList from '../../assets/tokenlist.json'
 
 export const initializePositionsData = createAsyncThunk(
   'marginTrading/initializePositionsData',
   async () => {
-    const MarginTradingStrategy = etherGlobal.getMarginTradingStrategyContract()
+    const MarginTradingStrategy =
+      ContractFactory.getMarginTradingStrategyContract(etherGlobal.getSigner())
     const positions: PositionRow[] = []
 
     const openedPositions = await MarginTradingStrategy.queryFilter(

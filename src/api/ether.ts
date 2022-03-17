@@ -1,14 +1,12 @@
-import { BigNumber, Contract, ethers } from 'ethers'
-import { PositionWasOpenedEvent, ProfitsAndLosses, TokenDetails } from './types'
+import { BigNumber, ethers } from 'ethers'
+import {
+  PositionWasOpenedEvent,
+  ProfitsAndLosses,
+  TokenDetails,
+} from '../types'
 
-import ERC20Abi from './assets/abi/ERC20.json'
-import MarginTradingStrategyAbi from './assets/abi/MarginTradingStrategy.json'
-import MockKyberNetworkProxyAbi from './assets/abi/MockKyberNetworkProxy.json'
-import MockTaxedTokenAbi from './assets/abi/MockTaxedToken.json'
-import MockWETHAbi from './assets/abi/MockWETH.json'
-import VaultAbi from './assets/abi/Vault.json'
-import { VaultInterface } from './config/typings'
-import addresses from './assets/addresses.json'
+import { ContractFactory } from './contract-factory'
+import { addresses } from '../assets/addresses.json'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
@@ -20,15 +18,7 @@ export const initializeGlobalInstance = (instance: Ether) => {
 export class Ether {
   private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner
-
-  // Addresses
-  private vaultAddress = addresses.addresses.Vault
-  private mockTaxedTokenAddress = addresses.addresses.MockTaxedToken
-  private mockWETHTokenAddress = addresses.addresses.MockWETH
-  private marginTradingStrategyAddress =
-    addresses.addresses.MarginTradingStrategy
-  private mockKyberNetworkProxyAddress =
-    addresses.addresses.MockKyberNetworkProxy
+  private vaultAddress = addresses.Vault
 
   constructor(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
@@ -78,15 +68,18 @@ export class Ether {
   // ========= STAKE PAGE =========
 
   async getMaxWithdrawAmount(tokenAddress: string): Promise<number> {
-    const vault = this.getVaultContract()
+    const vault = ContractFactory.getVaultContract(this.signer)
     // @ts-ignore
     const amount = (await vault.claimable(tokenAddress)).toHexString()
 
     return this.parseHexValueToEtherBase10(amount)
   }
 
-  async getMaxDepositAmount(tokenAddres: string): Promise<number> {
-    const tokenContract = new Contract(tokenAddres, ERC20Abi.abi, this.signer)
+  async getMaxDepositAmount(tokenAddress: string): Promise<number> {
+    const tokenContract = ContractFactory.getTokenContract(
+      tokenAddress,
+      this.signer,
+    )
     const balance = (
       await tokenContract.balanceOf(this.getAccountAddress())
     ).toHexString()
@@ -95,7 +88,7 @@ export class Ether {
   }
 
   async getTokenTvl(tokenAddres: string): Promise<number> {
-    const vault = this.getVaultContract()
+    const vault = ContractFactory.getVaultContract(this.signer)
     //@ts-ignore
     const tvl = (await vault.balance(tokenAddres)).toHexString()
 
@@ -103,8 +96,8 @@ export class Ether {
   }
 
   async computeAnnualPercentageYield(tokenAddress: string): Promise<number> {
-    const vault = this.getVaultContract()
-    const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
+    const vault = ContractFactory.getVaultContract(this.signer)
+    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
 
     // @ts-ignore
     const tokenSubvault = await vault.vaults(tokenAddress)
@@ -128,7 +121,7 @@ export class Ether {
     destinationAddress: string,
     amount: string,
   ): Promise<any> {
-    const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
+    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
     const approvedSpending = await token.approve(
       destinationAddress,
       this.parseUnits(amount, await token.decimals()),
@@ -137,14 +130,14 @@ export class Ether {
   }
 
   async getUserTokenBalance(tokenAddress: string): Promise<number> {
-    const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
+    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
     const balance = await token.balanceOf(this.getAccountAddress())
     return this.parseHexValueToEtherBase10(balance.toHexString())
   }
 
   async depositToken(tokenAddress: string, amount: string): Promise<any> {
-    const vault = this.getVaultContract()
-    const token = new Contract(tokenAddress, ERC20Abi.abi, this.signer)
+    const vault = ContractFactory.getVaultContract(this.signer)
+    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
 
     // Check balance -> TODO: where to do the balance checking? On the input?
 
@@ -169,7 +162,9 @@ export class Ether {
   async computeProfitsAndLosses(
     positionEvent: PositionWasOpenedEvent,
   ): Promise<ProfitsAndLosses> {
-    const marginTrading = this.getMarginTradingStrategyContract()
+    const marginTrading = ContractFactory.getMarginTradingStrategyContract(
+      this.signer,
+    )
 
     let profitsAndLosses = 0
 
@@ -210,45 +205,17 @@ export class Ether {
     }
   }
 
-  // ========= CONTRACTS =========
-
-  getVaultContract(): Promise<VaultInterface> {
-    // @ts-ignore
-    return new Contract(this.vaultAddress, VaultAbi.abi, this.signer)
-  }
-  getMockTaxedTokenContract() {
-    return new Contract(
-      this.mockTaxedTokenAddress,
-      MockTaxedTokenAbi.abi,
-      this.signer,
-    )
-  }
-  getMockWETHTokenContract() {
-    return new Contract(this.mockWETHTokenAddress, MockWETHAbi.abi, this.signer)
-  }
-  getMarginTradingStrategyContract() {
-    return new Contract(
-      this.marginTradingStrategyAddress,
-      MarginTradingStrategyAbi.abi,
-      this.signer,
-    )
-  }
-  getMockKyberNetworkProxyContract() {
-    return new Contract(
-      this.mockKyberNetworkProxyAddress,
-      MockKyberNetworkProxyAbi.abi,
-      this.signer,
-    )
-  }
-
   // ========= HELPER FUNCTIONS =========
 
   async getTokenInfo(
-    tokenAddres: string,
+    tokenAddress: string,
     signer: any,
     userAddress: string,
   ): Promise<TokenDetails> {
-    const tokenContract = new Contract(tokenAddres, ERC20Abi.abi, signer)
+    const tokenContract = ContractFactory.getTokenContract(
+      tokenAddress,
+      this.signer,
+    )
     const name = await tokenContract.name()
     const symbol = await tokenContract.symbol()
     const decimals = await tokenContract.decimals()

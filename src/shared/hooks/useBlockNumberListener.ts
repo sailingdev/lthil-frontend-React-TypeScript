@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { Ether } from '../../ether'
+import { Ether } from '../../api/ether'
 import { useAsync } from 'react-use'
 import { useIsConnected } from './useIsConnected'
 import { useUpdateBlock } from '../../state/hooks'
