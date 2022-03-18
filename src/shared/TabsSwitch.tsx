@@ -12,6 +12,8 @@ interface ITab {
 interface ITabsProps {
   className?: string | undefined
   items: ITab[]
+  activeIndex: number
+  onChange: (value: number) => void
 }
 
 const TabButton = (props: {
@@ -41,7 +43,7 @@ const TabButton = (props: {
 }
 
 export const TabsSwitch = (props: ITabsProps) => {
-  const [activeIndex, setActiveIndex] = useState(0)
+  const { activeIndex, onChange } = props
 
   return (
     <div tw='w-full'>
@@ -55,7 +57,7 @@ export const TabsSwitch = (props: ITabsProps) => {
             key={`${i}`}
             text={t.title}
             active={i === activeIndex}
-            onClick={() => setActiveIndex(i)}
+            onClick={() => onChange(i)}
           />
         ))}
       </div>
