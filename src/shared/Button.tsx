@@ -28,7 +28,7 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
       type={props.type ?? 'button'}
       className={props.className}
       css={[
-        tw`border-0 rounded-md cursor-pointer flex flex-row items-center justify-center h-9 max-h-9 tablet:h-10 tablet:max-h-10  desktop:h-11 desktop:max-h-11 px-2`,
+        tw`border-0 rounded-md cursor-pointer flex flex-row items-center justify-center h-9 tablet:h-10 desktop:h-11 px-2`,
         primary && tw`bg-primary-200`,
         props.action && tw`bg-action`,
         props.full && tw`w-full`,
