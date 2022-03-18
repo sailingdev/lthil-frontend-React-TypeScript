@@ -1,8 +1,9 @@
 import 'twin.macro'
-import tw from 'twin.macro'
+
 import { CenteredModal } from './CenteredModal'
 import { Txt } from './Txt'
 import { connectors } from './test/connectors'
+import tw from 'twin.macro'
 import { useWeb3React } from '@web3-react/core'
 
 interface IWalletModal {
@@ -24,9 +25,11 @@ export const WalletModal = (props: IWalletModal) => {
         <Txt.Heading2 tw='self-end'>Connect to a wallet</Txt.Heading2>
       </div>
       <Txt.Body2Regular tw='w-96 self-start my-3'>
-        By connecting a wallet, I agree to Ithil’s <u>Terms of Use</u>,{' '}
-        <u>Cookies Policy</u>
-        and <u>Privacy Policy</u>.
+        {/* TODO ADD LINKS */}
+        By connecting a wallet, I agree to Ithil’s{' '}
+        <a tw='cursor-pointer'>Terms of Use</a>,{' '}
+        <a tw='cursor-pointer'>Cookies Policy</a>
+        and <a tw='cursor-pointer'>Privacy Policy</a>.
       </Txt.Body2Regular>
       <div tw='w-full height[1px] bg-primary-300 my-4'></div>
       <div tw='w-full height[384px]'>
@@ -56,7 +59,7 @@ export const WalletModal = (props: IWalletModal) => {
                     ]}
                   >
                     {name}
-                    {metamaskMissing && ' (Not installed)'}
+                    {metamaskMissing && '(Not installed)'}
                   </Txt.Body2Bold>
                 </div>
               </div>

@@ -6,7 +6,7 @@ import { ArrowDown, FadersHorizontal } from 'phosphor-react'
 import { BasicChart } from '../shared/charts/BasicChart'
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
-import { ReactComponent as CurrEth } from '../assets/currencyEthereum.svg'
+import { ReactComponent as CurrEth } from '../assets/images/currencyEthereum.svg'
 import { InputField } from '../shared/InputField'
 import { RadioGroup } from '../shared/RadioGroup'
 import { SliderBar } from '../shared/SliderBar'
@@ -26,6 +26,7 @@ export const MarginTradingPage = () => {
   const [slippage, setSlippage] = useState<any>('')
   const [deadline, setDeadline] = useState<any>('')
   const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
+  const [activeTab, setActiveTab] = useState(0)
 
   return (
     <ContentContainer>
@@ -36,6 +37,8 @@ export const MarginTradingPage = () => {
             <div tw='flex flex-col gap-3 flex-grow'>
               <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100 gap-7'>
                 <TabsSwitch
+                  activeIndex={activeTab}
+                  onChange={(value) => setActiveTab(value)}
                   items={[
                     {
                       title: 'Long',
@@ -62,7 +65,9 @@ export const MarginTradingPage = () => {
                         <Txt.Body2Regular>Max</Txt.Body2Regular>
                       </button>
                       <Button
-                        css={[tw`h-8 bg-primary-400 dark:bg-primary-300`]}
+                        css={[
+                          tw`h-8 bg-primary-400 dark:bg-primary-300 h-6 tablet:h-7 desktop:h-8`,
+                        ]}
                         text='USDC'
                         leftIcon={CurrEth}
                         rightIcon={ArrowDown}
@@ -86,7 +91,9 @@ export const MarginTradingPage = () => {
                         <Txt.Body2Regular>Max</Txt.Body2Regular>
                       </button>
                       <Button
-                        css={[tw`h-8 bg-primary-400 dark:bg-primary-300`]}
+                        css={[
+                          tw`h-8 bg-primary-400 dark:bg-primary-300 h-6 tablet:h-7 desktop:h-8`,
+                        ]}
                         text='USDC'
                         leftIcon={CurrEth}
                         rightIcon={ArrowDown}

@@ -50,6 +50,30 @@ export interface StakeToken {
   annualPercentageYield: number
   totalValueLocked: number
   owned: number
-  etherscanUrl: string
   tokenAddress: string
+}
+
+export interface PositionWasOpenedEvent {
+  id: string
+  owner: string
+  owedToken: string
+  heldToken: string
+  collateralToken: string
+  collateral: string
+  principal: string
+  allowance: string
+  fees: string
+  createdAt: string
+}
+
+export interface ProfitsAndLosses {
+  currencyValue: number
+  percentageValue: number
+}
+
+export interface PositionRow {
+  tokenPair: string
+  position: string
+  profit: ProfitsAndLosses
+  trend: string
 }

@@ -61,7 +61,10 @@ export const StakePage = () => {
               renderExpanded={
                 <DepositWithdraw
                   tokenAddress={activeRow?.tokenAddress ?? undefined}
-                  onClick={(e: any) => e.stopPropagation()}
+                  onClick={(e: any) => {
+                    e.stopPropagation()
+                    // TODO VALENTIN
+                  }}
                 />
               }
               loading={false}
@@ -145,7 +148,10 @@ export const StakePage = () => {
                       <Info
                         onClick={(e) => {
                           e.stopPropagation()
-                          window.open(l.etherscanUrl, '_blank')
+                          window.open(
+                            `https://etherscan.io/token/${l.tokenAddress}`,
+                            '_blank',
+                          )
                         }}
                         tw='text-font-100 dark:text-font-200 height[16px] width[16px]'
                       />

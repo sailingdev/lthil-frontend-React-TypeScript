@@ -1,9 +1,10 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
+
 import { ICSSProps } from '../types'
+/** @jsxImportSource @emotion/react */
 import { MouseEventHandler } from 'react'
 import { Txt } from './Txt'
+import tw from 'twin.macro'
 
 interface IButtonProps extends ICSSProps {
   type?: any
@@ -27,7 +28,7 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
       type={props.type ?? 'button'}
       className={props.className}
       css={[
-        tw`border-0 rounded-md cursor-pointer flex flex-row items-center px-3 py-2.5`,
+        tw`border-0 rounded-md cursor-pointer flex flex-row items-center justify-center h-9 tablet:h-10 desktop:h-11 px-2`,
         primary && tw`bg-primary-200`,
         props.action && tw`bg-action`,
         props.full && tw`w-full`,
@@ -44,6 +45,7 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
           size={16}
         />
       )}
+
       <Txt.ButtonMedium
         css={[
           tw`flex-grow`,
@@ -54,6 +56,7 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
       >
         {props.text}
       </Txt.ButtonMedium>
+
       {RightIcon && (
         <RightIcon
           css={[

@@ -1,6 +1,6 @@
 import { StakeToken } from '../../types'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { etherGlobal } from '../../ether'
+import { etherGlobal } from '../../api/ether'
 import tokenList from '../../assets/tokenlist.json'
 
 export const initializeUserStakes = createAsyncThunk<any, number>(
@@ -14,15 +14,13 @@ export const initializeUserStakes = createAsyncThunk<any, number>(
     for (const token of chainTokens) {
       const totalValueLocked = await etherGlobal.getTokenTvl(token.address)
       const owned = await etherGlobal.getMaxWithdrawAmount(token.address)
-      const annualPercentageYield = await etherGlobal.getAnnualPercentageYield(
-        token.address,
-      )
+      const annualPercentageYield =
+        await etherGlobal.computeAnnualPercentageYield(token.address)
       stakes.push({
         vaultName: token.symbol,
         annualPercentageYield,
         totalValueLocked,
         owned,
-        etherscanUrl: `https://etherscan.io/token/${token.address}`,
         tokenAddress: token.address,
       })
     }

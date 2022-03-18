@@ -16,15 +16,13 @@ const Text = (props: { value: string | number }) => {
   )
 }
 
-const Currency = (props: { value: number }) => {
-  const { value } = props
-  const currency = value
-    ? new Intl.NumberFormat('en-us', {
-        style: 'currency',
-        currency: 'USD',
-        currencyDisplay: 'narrowSymbol',
-      }).format(value)
-    : '$0.00' // TODO: Is this a good way of hanlding this?
+const Currency = (props: { value?: number }) => {
+  const value = props.value ?? 0
+  const currency = new Intl.NumberFormat('en-us', {
+    style: 'currency',
+    currency: 'USD',
+    currencyDisplay: 'narrowSymbol',
+  }).format(value)
   return isDesktop ? (
     <Txt.Body2Regular tw='text-secondary'>{currency}</Txt.Body2Regular>
   ) : (
@@ -32,13 +30,12 @@ const Currency = (props: { value: number }) => {
   )
 }
 
-const Percentage = (props: { value: number }) => {
-  const { value } = props
-  const percentage = value
-    ? new Intl.NumberFormat('en-us', {
-        style: 'percent',
-      }).format(value * 10)
-    : '0.000%'
+const Percentage = (props: { value?: number }) => {
+  const value = props.value ?? 0
+  const percentage = new Intl.NumberFormat('en-us', {
+    style: 'percent',
+  }).format(value * 10)
+
   return isDesktop ? (
     <Txt.Body2Regular tw='text-secondary'>{percentage}</Txt.Body2Regular>
   ) : (

@@ -2,7 +2,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import 'tailwindcss/dist/base.min.css'
 import './index.css'
 
-import { Ether, initializeGlobalInstance } from './ether'
+import { Ether, initializeGlobalInstance } from './api/ether'
 /** @jsxImportSource @emotion/react */
 import { QueryClient, QueryClientProvider } from 'react-query'
 
@@ -52,7 +52,6 @@ ReactDOM.render(
         </BrowserRouter>
       </ErrorBoundary>
     </Provider>
-    ,
   </Web3ReactProvider>,
 
   document.getElementById('root'),

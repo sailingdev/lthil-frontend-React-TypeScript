@@ -1,4 +1,6 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import tw from 'twin.macro'
 
 import { BasicChart } from '../shared/charts/BasicChart'
 import { CollateralCard } from '../shared/CollateralCard'
@@ -7,11 +9,25 @@ import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabButton } from '../shared/TabButton'
 import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
-/** @jsxImportSource @emotion/react */
 import { useState } from 'react'
+import { Liquidation } from '../shared/Liquidation'
+
+import { ClosePosition } from '../shared/ClosePosition'
 
 export const PositionPage = () => {
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
+  const [liquidationInput, setLiquidationInput] = useState<string>('')
+  const [liquidationToken1, setLiquidationToken1] = useState('ETH')
+  const [liquidationToken2, setLiquidationToken2] = useState('USDC')
+  const [liquidationPrice, setLiquidationPrice] = useState(5000)
+
+  const liquidationAction = () => {
+    console.log('liquidation action clicked.')
+  }
+
+  const closePosition = () => {
+    console.log('Close position clicked.')
+  }
 
   return (
     <ContentContainer>
@@ -22,14 +38,19 @@ export const PositionPage = () => {
             <div tw='flex flex-col gap-3 flex-grow'>
               <PositionDetailsCard />
               <CollateralCard />
-              <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100'>
-                <Txt.Body2Regular>
-                  Placeholder-Liquidation price
-                </Txt.Body2Regular>
-              </div>
-              <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100'>
-                <Txt.Body2Regular>Placeholder-Position value</Txt.Body2Regular>
-              </div>
+              <Liquidation
+                liquidationToken1={liquidationToken1}
+                liquidationToken2={liquidationToken2}
+                liquidationPrice={liquidationPrice}
+                inputValue={liquidationInput}
+                inputOnChange={(value) => setLiquidationInput(value)}
+                onClick={liquidationAction}
+              />
+              <ClosePosition
+                token='USDC'
+                value={3000}
+                onClick={closePosition}
+              />
             </div>
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
               <div tw='w-full flex flex-row justify-between pb-5 '>

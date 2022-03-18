@@ -1,39 +1,27 @@
 import 'twin.macro'
 
 import { Button } from './Button'
+import { IBaseProps } from '../types'
 import { InputField } from './InputField'
 import { Txt } from './Txt'
-import { etherGlobal } from '../ether'
+import { etherGlobal } from '../api/ether'
 import tw from 'twin.macro'
-import { useEffect, useState } from 'react'
-/** @jsxImportSource @emotion/react */
-import { useWeb3React } from '@web3-react/core'
 import { useAsync } from 'react-use'
+import { useState } from 'react'
 
-// interface IInputFieldProps {}
-
-export const DepositWithdraw = (props: {
-  tokenAddress: string | undefined
+interface IDepositWithdrawProps extends IBaseProps {
+  tokenAddress: string
   onClick: any
-}) => {
+}
+
+export const DepositWithdraw = (props: IDepositWithdrawProps) => {
   const [depositValue, setDepositValue] = useState<string>('0')
   const [userTokenBalance, setUserTokenBalance] = useState<number>(0)
 
-  // Client said they don't need the withdraw feature, so I comment it out.
-
-  // const [withdrawValue, setWithdrawValue] = useState<string>('0')
-
-  // const getMaxWithdraw = async () => {
-  //   setWithdrawValue(
-  //     await etherGlobal.getMaxWithdrawAmount(props.tokenAddress!).toString(),
-  //   )
-  // }
-
   useAsync(async () => {
-    setUserTokenBalance(
-      await etherGlobal.getUserTokenBalance(props.tokenAddress!),
-    )
-  })
+    const balance = await etherGlobal.getUserTokenBalance(props.tokenAddress)
+    setUserTokenBalance(balance)
+  }, [props.tokenAddress])
 
   const getMaxDeposit = async () => {
     const value = (
@@ -42,14 +30,15 @@ export const DepositWithdraw = (props: {
     setDepositValue(value)
   }
 
-  const depositToken = () => {
-    etherGlobal.depositToken(props.tokenAddress!, depositValue)
+  const depositToken = async () => {
+    // TODO VALENTIN WE NEED TO IMPLEMENT HANDSHAKE - FIRST APPROVE, THEN DEPOSIT. IT SHOULD BE DONE HERE DIRECTLY
+    await etherGlobal.depositToken(props.tokenAddress!, depositValue)
   }
 
   return (
     <div
       onClick={props.onClick}
-      // className={props.className}
+      className={props.className}
       tw='flex flex-row justify-center gap-4 my-2 w-full'
     >
       <div tw='w-96 flex flex-col rounded-md border border-primary-300 p-5 gap-3'>
@@ -73,32 +62,6 @@ export const DepositWithdraw = (props: {
         />
         <Button text='Deposit' bold action full onClick={depositToken} />
       </div>
-      {/* <div tw='w-96 flex flex-col rounded-md border border-primary-300 p-5 gap-3'>
-        <div tw='flex flex-row w-full justify-between'>
-          <Txt.Heading2>Deposited</Txt.Heading2>
-          <Txt.Heading2>0.000 ($0.00)</Txt.Heading2>
-        </div>
-        <InputField
-          value={withdrawValue}
-          onChange={(value) => setWithdrawValue(value)}
-          renderRight={
-            <button
-              onClick={getMaxWithdraw}
-              css={[
-                tw`border-primary-400 dark:border-primary-300 rounded-md border-2 h-8 px-2`,
-              ]}
-            >
-              <Txt.Body2Regular>Max</Txt.Body2Regular>
-            </button>
-          }
-        />
-        <Button
-          tw='bg-primary-100 border-font-200 border'
-          text='Withdraw'
-          bold
-          full
-        />
-      </div> */}
     </div>
   )
 }
