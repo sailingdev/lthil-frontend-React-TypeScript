@@ -12,6 +12,8 @@ import { Txt } from '../shared/Txt'
 import { useState } from 'react'
 import { Liquidation } from '../shared/Liquidation'
 
+import { ClosePosition } from '../shared/ClosePosition'
+
 export const PositionPage = () => {
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
   const [liquidationInput, setLiquidationInput] = useState<string>('')
@@ -21,6 +23,10 @@ export const PositionPage = () => {
 
   const liquidationAction = () => {
     console.log('liquidation action clicked.')
+  }
+
+  const closePosition = () => {
+    console.log('Close position clicked.')
   }
 
   return (
@@ -39,6 +45,11 @@ export const PositionPage = () => {
                 inputValue={liquidationInput}
                 inputOnChange={(value) => setLiquidationInput(value)}
                 onClick={liquidationAction}
+                />
+              <ClosePosition
+                token='USDC'
+                value={3000}
+                onClick={closePosition}
               />
             </div>
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
