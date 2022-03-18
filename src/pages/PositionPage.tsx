@@ -18,7 +18,6 @@ export const PositionPage = () => {
   const [liquidationToken1, setLiquidationToken1] = useState('ETH')
   const [liquidationToken2, setLiquidationToken2] = useState('USDC')
   const [liquidationPrice, setLiquidationPrice] = useState(5000)
-  const [activeTab, setActiveTab] = useState(0)
 
   const liquidationAction = () => {
     console.log('liquidation action clicked.')
@@ -34,8 +33,6 @@ export const PositionPage = () => {
               <PositionDetailsCard />
               <CollateralCard />
               <Liquidation
-                activeTab={activeTab}
-                activeTabOnChange={(value) => setActiveTab(value)}
                 liquidationToken1={liquidationToken1}
                 liquidationToken2={liquidationToken2}
                 liquidationPrice={liquidationPrice}

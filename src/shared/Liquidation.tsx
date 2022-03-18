@@ -17,8 +17,6 @@ interface ILiquidation {
   inputOnChange: (value: string) => void
   inputValue: string
   liquidationPrice: number
-  activeTab: number
-  activeTabOnChange: (value: number) => void
 }
 
 export const Liquidation = (props: ILiquidation) => {
@@ -29,8 +27,6 @@ export const Liquidation = (props: ILiquidation) => {
     onClick,
     inputOnChange,
     inputValue,
-    activeTab,
-    activeTabOnChange,
   } = props
 
   return (
@@ -43,20 +39,6 @@ export const Liquidation = (props: ILiquidation) => {
           {liquidationPrice} {liquidationToken1}/{liquidationToken2}
         </Txt.Body2Bold>
       </div>
-      <TabsSwitch
-        activeIndex={activeTab}
-        onChange={(value) => activeTabOnChange(value)}
-        items={[
-          {
-            title: 'Top up',
-            content: '',
-          },
-          {
-            title: 'Withdraw',
-            content: '',
-          },
-        ]}
-      />
       <InputField
         label='Top up'
         placeholder='0'
