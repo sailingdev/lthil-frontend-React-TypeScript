@@ -1,5 +1,6 @@
 import { Interpolation, Theme } from '@emotion/react'
 
+import { BigNumber } from 'ethers'
 import { CSSProperties } from 'react'
 
 export interface ISearchParams {
@@ -100,9 +101,19 @@ export interface TransactionReceipt {
   from: string
   contractAddress: string
   transactionIndex: number
+  root?: string
+  gasUsed: BigNumber
+  logsBloom: string
   blockHash: string
   transactionHash: string
+  logs: Array<any>
   blockNumber: number
+  confirmations: number
+  cumulativeGasUsed: BigNumber
+  effectiveGasPrice: BigNumber
+  byzantium: boolean
+  type: number
+  status?: number
 }
 export type CreatableTransaction = Omit<Transaction, 'status'>
 export type FinalizableTransaction = Pick<Transaction, 'tx' | 'chainId'> & {

@@ -17,6 +17,7 @@ import { useEagerConnect } from './shared/hooks/useEagerConnect'
 import { useEffect } from 'react'
 import { useInitSetup } from './shared/hooks/useInitSetup'
 import { useNetworkListener } from './shared/hooks/useNetworkListener'
+import { useVerifyTransaction } from './shared/hooks/useVerifyTransactions'
 
 /** @jsxImportSource @emotion/react */
 
@@ -24,6 +25,7 @@ export const AppRouter = () => {
   useEagerConnect()
   useNetworkListener()
   useBlockNumberListener()
+  useVerifyTransaction()
   useInitSetup()
 
   useEffect(() => {

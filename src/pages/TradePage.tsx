@@ -22,11 +22,11 @@ export const TradePage = () => {
   const address = useAccountAddress()
   const stake = useStakeTokens('')
   const transactions = useTransactions()
-  console.log('Block', block)
-  console.log('Balance', balance)
-  console.log('Network', network)
-  console.log('Address', address)
-  console.log('Stake', stake)
+  // console.log('Block', block)
+  // console.log('Balance', balance)
+  // console.log('Network', network)
+  // console.log('Address', address)
+  // console.log('Stake', stake)
 
   // const runCode = async () => {
   //   try {
@@ -197,6 +197,7 @@ export const TradePage = () => {
         primary
         onClick={() => {
           // @ts-ignore
+
           finalizeTransaction('abc', {})
         }}
       />
