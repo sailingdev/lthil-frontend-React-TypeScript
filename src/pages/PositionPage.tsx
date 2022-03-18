@@ -10,8 +10,14 @@ import { Txt } from '../shared/Txt'
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react'
 
+import { ClosePosition } from '../shared/ClosePosition'
+
 export const PositionPage = () => {
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
+
+  const closePosition = () => {
+    console.log('Close position clicked.')
+  }
 
   return (
     <ContentContainer>
@@ -22,14 +28,11 @@ export const PositionPage = () => {
             <div tw='flex flex-col gap-3 flex-grow'>
               <PositionDetailsCard />
               <CollateralCard />
-              <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100'>
-                <Txt.Body2Regular>
-                  Placeholder-Liquidation price
-                </Txt.Body2Regular>
-              </div>
-              <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100'>
-                <Txt.Body2Regular>Placeholder-Position value</Txt.Body2Regular>
-              </div>
+              <ClosePosition
+                token='USDC'
+                value={3000}
+                onClick={closePosition}
+              />
             </div>
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
               <div tw='w-full flex flex-row justify-between pb-5 '>
