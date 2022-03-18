@@ -3,11 +3,16 @@ import 'twin.macro'
 import {
   useAccountAddress,
   useAccountBalance,
+  useAddTransaction,
+  useFinalizeTransaction,
   useLatestBlock,
   useStakeTokens,
+  useTransactions,
 } from '../state/hooks'
 
+import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
+import { TransactionType } from '../types'
 import { useNetwork } from '../shared/hooks/useNetwork'
 
 export const TradePage = () => {
@@ -16,6 +21,7 @@ export const TradePage = () => {
   const network = useNetwork()
   const address = useAccountAddress()
   const stake = useStakeTokens('')
+  const transactions = useTransactions()
   console.log('Block', block)
   console.log('Balance', balance)
   console.log('Network', network)
@@ -169,6 +175,9 @@ export const TradePage = () => {
   //   console.log('OPE: ', openedPositions)
   // }
 
+  const addTransaction = useAddTransaction()
+  const finalizeTransaction = useFinalizeTransaction()
+
   return (
     <ContentContainer>
       <div>Block: {block}</div>
@@ -176,6 +185,22 @@ export const TradePage = () => {
       <div>Balance: {balance}</div>
       <div>Network: {network?.name}</div>
       <div>Chain Id: {network?.chainId}</div>
+      <Button
+        text='Add dummy transaction'
+        primary
+        onClick={() => {
+          addTransaction(TransactionType.APPROVE, 'abc', {})
+        }}
+      />
+      <Button
+        text='Finalize transaction'
+        primary
+        onClick={() => {
+          // @ts-ignore
+          finalizeTransaction('abc', {})
+        }}
+      />
+      <div>{JSON.stringify(transactions)}</div>
 
       {/* <button onClick={() => runCode()}>Stake 26 WETH</button>
       <button onClick={() => openposition()}>OpenPosition</button>

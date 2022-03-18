@@ -77,3 +77,34 @@ export interface PositionRow {
   profit: ProfitsAndLosses
   trend: string
 }
+
+export enum TransactionType {
+  APPROVE = 'APPROVE',
+  DEPOSIT = 'DEPOSIT',
+  WITHDRAW = 'WITHDRAW',
+  MTS_OPEN_POSITION = 'MTS_OPEN_POSITION',
+  MTS_CLOSE_POSITION = 'MTS_CLOSE_POSITION',
+}
+
+export interface Transaction {
+  type: TransactionType
+  chainId: number
+  meta: any
+  tx: string
+  status: 'pending' | 'verified'
+  receipt?: TransactionReceipt
+}
+
+export interface TransactionReceipt {
+  to: string
+  from: string
+  contractAddress: string
+  transactionIndex: number
+  blockHash: string
+  transactionHash: string
+  blockNumber: number
+}
+export type CreatableTransaction = Omit<Transaction, 'status'>
+export type FinalizableTransaction = Pick<Transaction, 'tx' | 'chainId'> & {
+  receipt: TransactionReceipt
+}

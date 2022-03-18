@@ -9,9 +9,11 @@ import { Header } from './shared/Header'
 import { MarginTradingPage } from './pages/MarginTradingPage'
 import { PositionPage } from './pages/PositionPage'
 import { StakePage } from './pages/StakePage'
+import { TradePage } from './pages/TradePage'
 import { isDesktop } from './utils'
 import tw from 'twin.macro'
 import { useBlockNumberListener } from './shared/hooks/useBlockNumberListener'
+import { useEagerConnect } from './shared/hooks/useEagerConnect'
 import { useEffect } from 'react'
 import { useInitSetup } from './shared/hooks/useInitSetup'
 import { useNetworkListener } from './shared/hooks/useNetworkListener'
@@ -19,6 +21,7 @@ import { useNetworkListener } from './shared/hooks/useNetworkListener'
 /** @jsxImportSource @emotion/react */
 
 export const AppRouter = () => {
+  useEagerConnect()
   useNetworkListener()
   useBlockNumberListener()
   useInitSetup()
@@ -41,6 +44,8 @@ export const AppRouter = () => {
             <Route path='/dashboard/:position' element={<PositionPage />} />
             <Route path='/stake' element={<StakePage />} />
             <Route path='/charts' element={<ChartsPage />} />
+            <Route path='/abc' element={<TradePage />} />
+
             {/* <Route path='*' element={<Navigate to='/trade' />} /> */}
           </Routes>
         </div>

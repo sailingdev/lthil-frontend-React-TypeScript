@@ -1,18 +1,16 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
 
 import { BasicChart } from '../shared/charts/BasicChart'
+import { ClosePosition } from '../shared/ClosePosition'
 import { CollateralCard } from '../shared/CollateralCard'
 import { ContentContainer } from '../shared/ContentContainer'
+import { Liquidation } from '../shared/Liquidation'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabButton } from '../shared/TabButton'
 import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
+/** @jsxImportSource @emotion/react */
 import { useState } from 'react'
-import { Liquidation } from '../shared/Liquidation'
-
-import { ClosePosition } from '../shared/ClosePosition'
 
 export const PositionPage = () => {
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
@@ -45,7 +43,7 @@ export const PositionPage = () => {
                 inputValue={liquidationInput}
                 inputOnChange={(value) => setLiquidationInput(value)}
                 onClick={liquidationAction}
-                />
+              />
               <ClosePosition
                 token='USDC'
                 value={3000}

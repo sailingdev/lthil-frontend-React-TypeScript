@@ -1,4 +1,9 @@
+import { Transaction, TransactionReceipt, TransactionType } from '../types'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import {
+  addTransaction,
+  finalizeTransaction,
+} from './transaction/transaction.actions'
 import {
   initializeAccountAddress,
   initializeAccountBalance,
@@ -84,31 +89,50 @@ export const useInitPositions = () => {
   return () => dispatch(initializePositionsData())
 }
 
-// TODO MISLAV
-// export function useEagerConnect() {
-//   const { activate, active } = useWeb3React();
+// TRANSACTION HOOKS
 
-//   const [tried, setTried] = useState(false);
+export const useTransactions = () => {
+  const { chainId } = useWeb3React()
+  return useAppSelector<Transaction[]>((state) => {
+    if (!chainId) {
+      return []
+    }
+    return Object.values(state.transactions.transactions[chainId!] ?? {})
+  })
+}
+export const usePendingTransactions = () => {
+  const transactions = useTransactions()
+  return transactions.filter((t) => t.status === 'pending')
+}
+export const useVerifiedTransactions = () => {
+  const transactions = useTransactions()
+  return transactions.filter((t) => t.status === 'verified')
+}
 
-//   useEffect(() => {
-//     injected.isAuthorized().then(isAuthorized => {
-//       if (isAuthorized) {
-
-//         activate(injected, undefined, true).catch(() => {
-//           setTried(true);
-//         });
-//       } else {
-//         setTried(true);
-//       }
-//     });
-//   }, [activate]); // intentionally only running on mount (make sure it's only mounted once :))
-
-//   // if the connection worked, wait until we get confirmation of that to flip the flag
-//   useEffect(() => {
-//     if (!tried && active) {
-//       setTried(true);
-//     }
-//   }, [tried, active]);
-
-//   return tried;
-// }
+export const useAddTransaction = () => {
+  const { chainId } = useWeb3React()
+  const dispatch = useDispatch()
+  return (type: TransactionType, tx: string, meta: any) => {
+    if (!chainId) {
+      return
+    }
+    return dispatch(
+      addTransaction({
+        chainId,
+        type,
+        tx,
+        meta,
+      }),
+    )
+  }
+}
+export const useFinalizeTransaction = () => {
+  const { chainId } = useWeb3React()
+  const dispatch = useDispatch()
+  return (tx: string, receipt: TransactionReceipt) => {
+    if (!chainId) {
+      return
+    }
+    return dispatch(finalizeTransaction({ chainId, receipt, tx }))
+  }
+}
