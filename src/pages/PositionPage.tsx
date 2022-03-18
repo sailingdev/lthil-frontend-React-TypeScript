@@ -45,7 +45,7 @@ export const PositionPage = () => {
                 inputValue={liquidationInput}
                 inputOnChange={(value) => setLiquidationInput(value)}
                 onClick={liquidationAction}
-                />
+              />
               <ClosePosition
                 token='USDC'
                 value={3000}
