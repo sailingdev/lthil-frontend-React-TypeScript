@@ -3,24 +3,41 @@ import 'twin.macro'
 import {
   useAccountAddress,
   useAccountBalance,
+  useFinalizeTransaction,
   useLatestBlock,
   useStakeTokens,
+  useTransactions,
 } from '../state/hooks'
+import { useApproval, useLazyApproval } from '../shared/hooks/useApproval'
 
+import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
+import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useNetwork } from '../shared/hooks/useNetwork'
+import { useState } from 'react'
 
 export const TradePage = () => {
+  const [a, setA] = useState<any>({})
   const block = useLatestBlock()
   const balance = useAccountBalance()
   const network = useNetwork()
   const address = useAccountAddress()
   const stake = useStakeTokens('')
-  console.log('Block', block)
-  console.log('Balance', balance)
-  console.log('Network', network)
-  console.log('Address', address)
-  console.log('Stake', stake)
+  const transactions = useTransactions()
+  const [approval, action] = useApprovalAction({
+    approvalMeta: {
+      token: '0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b',
+      destination: '0x27001942d886573b4C68d77547143C4b98f3775C',
+      amount: 0.00017,
+    },
+    onApproval: (s: string) => console.log(s),
+  })
+
+  // console.log('Block', block)
+  // console.log('Balance', balance)
+  // console.log('Network', network)
+  // console.log('Address', address)
+  // console.log('Stake', stake)
 
   // const runCode = async () => {
   //   try {
@@ -169,6 +186,8 @@ export const TradePage = () => {
   //   console.log('OPE: ', openedPositions)
   // }
 
+  const finalizeTransaction = useFinalizeTransaction()
+
   return (
     <ContentContainer>
       <div>Block: {block}</div>
@@ -176,6 +195,24 @@ export const TradePage = () => {
       <div>Balance: {balance}</div>
       <div>Network: {network?.name}</div>
       <div>Chain Id: {network?.chainId}</div>
+      <Button
+        text='Add dummy transaction'
+        primary
+        onClick={async () => {
+          action('akakaka')
+        }}
+      />
+      <Button
+        text='Finalize transaction'
+        primary
+        onClick={() => {
+          // @ts-ignore
+
+          finalizeTransaction('abc', {})
+        }}
+      />
+      <div>{JSON.stringify(transactions)}</div>
+      <div>{approval}</div>
 
       {/* <button onClick={() => runCode()}>Stake 26 WETH</button>
       <button onClick={() => openposition()}>OpenPosition</button>

@@ -7,7 +7,7 @@ import { useUpdateBlock } from '../../state/hooks'
 import { useWeb3React } from '@web3-react/core'
 
 export const useBlockNumberListener = () => {
-  const { library, account } = useWeb3React<Ether>()
+  const { library } = useWeb3React<Ether>()
   const isConnected = useIsConnected()
   const updateBlock = useUpdateBlock()
 

@@ -1,8 +1,11 @@
-import { PositionWasOpenedEvent, ProfitsAndLosses } from '../types'
+import {
+  PositionWasOpenedEvent,
+  ProfitsAndLosses,
+  TransactionReceipt,
+} from '../types'
+import { Transaction, ethers } from 'ethers'
 
 import { ContractFactory } from './contract-factory'
-import { addresses } from '../assets/addresses.json'
-import { ethers } from 'ethers'
 import { hexToDecimal } from '../utils'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
@@ -15,7 +18,6 @@ export const initializeGlobalInstance = (instance: Ether) => {
 export class Ether {
   private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner
-  private vaultAddress = addresses.Vault
 
   constructor(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
@@ -104,19 +106,44 @@ export class Ether {
       (365 / daysFromStart - 1) * 100,
     )
   }
-
-  // TODO: function returns Promise <any>
-  async approveSpending(
+  async allowanceForToken(
     tokenAddress: string,
     destinationAddress: string,
-    amount: string,
-  ): Promise<any> {
-    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
-    const approvedSpending = await token.approve(
-      destinationAddress,
-      this.parseUnits(amount, await token.decimals()),
+  ): Promise<number> {
+    const account = await this.getAccountAddress()
+    const tokenContract = ContractFactory.getTokenContract(
+      tokenAddress,
+      this.signer,
     )
-    return approvedSpending
+    const allowance = await tokenContract.allowance(account, destinationAddress)
+    return hexToDecimal(allowance.toHexString())
+  }
+
+  async approve(
+    tokenAddress: string,
+    destinationAddress: string,
+    amount: number,
+  ): Promise<Transaction | null> {
+    try {
+      const tokenContract = ContractFactory.getTokenContract(
+        tokenAddress,
+        this.signer,
+      )
+      const decimals = await tokenContract.decimals()
+      // console.log(
+      //   await tokenContract.estimateGas.approve(
+      //     destinationAddress,
+      //     this.parseUnits(amount, decimals),
+      //   ),
+      // )
+      return tokenContract.approve(
+        destinationAddress,
+        this.parseUnits(amount.toString(), decimals),
+      )
+    } catch (e: any) {
+      console.error(e)
+      return null
+    }
   }
 
   async getUserTokenBalance(tokenAddress: string): Promise<number> {
@@ -124,27 +151,55 @@ export class Ether {
     const balance = await token.balanceOf(this.getAccountAddress())
     return hexToDecimal(balance.toHexString())
   }
-
-  async depositToken(tokenAddress: string, amount: string): Promise<any> {
-    const vault = ContractFactory.getVaultContract(this.signer)
-    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
-
-    // Check balance -> TODO: where to do the balance checking? On the input?
-
-    // Allow token spending
-    await this.approveSpending(tokenAddress, this.vaultAddress, amount)
-
-    // Do the staking
-    //@ts-ignore
-    const stake = await vault.stake(
-      tokenAddress,
-      this.parseUnits(amount, await token.decimals()),
-      {
-        gasLimit: 1000000,
-      },
-    )
-    return stake
+  async getSerializableTransactionReceipt(
+    tx: string,
+  ): Promise<TransactionReceipt | null> {
+    const response = await this.provider.getTransactionReceipt(tx)
+    if (!response) {
+      return null
+    }
+    const {
+      blockHash,
+      blockNumber,
+      contractAddress,
+      from,
+      status,
+      to,
+      transactionHash,
+      transactionIndex,
+    } = response
+    return {
+      blockHash,
+      blockNumber,
+      contractAddress,
+      from,
+      status,
+      to,
+      transactionHash,
+      transactionIndex,
+    }
   }
+
+  // async depositToken(tokenAddress: string, amount: string): Promise<any> {
+  //   const vault = ContractFactory.getVaultContract(this.signer)
+  //   const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
+
+  //   // Check balance -> TODO: where to do the balance checking? On the input?
+
+  //   // Allow token spending
+  //   await this.approve(tokenAddress, this.vaultAddress, amount)
+
+  //   // Do the staking
+  //   //@ts-ignore
+  //   const stake = await vault.stake(
+  //     tokenAddress,
+  //     this.parseUnits(amount, await token.decimals()),
+  //     {
+  //       gasLimit: 1000000,
+  //     },
+  //   )
+  //   return stake
+  // }
 
   // TODO: This function is layed out but the data is wrong since we don't yet know precisely what data PositionWasOpened event returns.
   async computeProfitsAndLosses(

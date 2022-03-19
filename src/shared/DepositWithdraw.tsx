@@ -31,8 +31,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
   }
 
   const depositToken = async () => {
-    // TODO VALENTIN WE NEED TO IMPLEMENT HANDSHAKE - FIRST APPROVE, THEN DEPOSIT. IT SHOULD BE DONE HERE DIRECTLY
-    await etherGlobal.depositToken(props.tokenAddress!, depositValue)
+    // await etherGlobal.depositToken(props.tokenAddress!, depositValue)
   }
 
   return (
