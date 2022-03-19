@@ -1,6 +1,5 @@
 import { Interpolation, Theme } from '@emotion/react'
 
-import { BigNumber } from 'ethers'
 import { CSSProperties } from 'react'
 
 export interface ISearchParams {
@@ -80,7 +79,7 @@ export interface PositionRow {
 }
 
 export enum TransactionType {
-  APPROVE = 'APPROVE',
+  APPROVAL = 'APPROVAL',
   DEPOSIT = 'DEPOSIT',
   WITHDRAW = 'WITHDRAW',
   MTS_OPEN_POSITION = 'MTS_OPEN_POSITION',
@@ -90,7 +89,7 @@ export enum TransactionType {
 export interface Transaction {
   type: TransactionType
   chainId: number
-  meta: any
+  meta: ApprovalTransactionMeta
   tx: string
   status: 'pending' | 'verified'
   receipt?: TransactionReceipt
@@ -101,21 +100,25 @@ export interface TransactionReceipt {
   from: string
   contractAddress: string
   transactionIndex: number
-  root?: string
-  gasUsed: BigNumber
-  logsBloom: string
   blockHash: string
   transactionHash: string
-  logs: Array<any>
   blockNumber: number
-  confirmations: number
-  cumulativeGasUsed: BigNumber
-  effectiveGasPrice: BigNumber
-  byzantium: boolean
-  type: number
   status?: number
 }
+
 export type CreatableTransaction = Omit<Transaction, 'status'>
 export type FinalizableTransaction = Pick<Transaction, 'tx' | 'chainId'> & {
   receipt: TransactionReceipt
+}
+
+export enum Approval {
+  PENDING = 'PENDING',
+  VERIFIED = 'VERIFIED',
+  UNKNOWN = 'UNKNOWN',
+  DENIED = 'DENIED',
+}
+
+export interface ApprovalTransactionMeta {
+  destination: string
+  token: string
 }

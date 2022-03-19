@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 
+import { Ether, etherGlobal } from '../../api/ether'
 import {
   useFinalizeTransaction,
   useLatestBlock,
   usePendingTransactions,
 } from '../../state/hooks'
 
-import { Ether } from '../../api/ether'
 import { useAsync } from 'react-use'
 import { useIsConnected } from './useIsConnected'
 import { useWeb3React } from '@web3-react/core'
@@ -21,11 +21,14 @@ export const useVerifyTransaction = () => {
     if (!isConnected || !chainId || !library || !block) {
       return
     }
-    const provider = library!.getProvider()
     for (const t of pendingTransactions) {
       try {
-        const receipt = await provider.getTransactionReceipt(t.tx)
-        finalizeTransaction(t.tx, receipt)
+        const receipt = await etherGlobal.getSerializableTransactionReceipt(
+          t.tx,
+        )
+        if (receipt) {
+          finalizeTransaction(t.tx, receipt)
+        }
       } catch (e) {
         console.error(e)
       }

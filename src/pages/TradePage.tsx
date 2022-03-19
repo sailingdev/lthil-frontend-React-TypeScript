@@ -3,25 +3,32 @@ import 'twin.macro'
 import {
   useAccountAddress,
   useAccountBalance,
-  useAddTransaction,
   useFinalizeTransaction,
   useLatestBlock,
   useStakeTokens,
   useTransactions,
 } from '../state/hooks'
+import { useApproval, useLazyApproval } from '../shared/hooks/useApproval'
 
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
-import { TransactionType } from '../types'
 import { useNetwork } from '../shared/hooks/useNetwork'
+import { useState } from 'react'
 
 export const TradePage = () => {
+  const [a, setA] = useState<any>({})
   const block = useLatestBlock()
   const balance = useAccountBalance()
   const network = useNetwork()
   const address = useAccountAddress()
   const stake = useStakeTokens('')
   const transactions = useTransactions()
+  const getApproval = useLazyApproval()
+  const approval = useApproval(
+    '0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b',
+    '0x27001942d886573b4C68d77547143C4b98f3775C',
+    0.00016,
+  )
   // console.log('Block', block)
   // console.log('Balance', balance)
   // console.log('Network', network)
@@ -175,7 +182,6 @@ export const TradePage = () => {
   //   console.log('OPE: ', openedPositions)
   // }
 
-  const addTransaction = useAddTransaction()
   const finalizeTransaction = useFinalizeTransaction()
 
   return (
@@ -188,8 +194,14 @@ export const TradePage = () => {
       <Button
         text='Add dummy transaction'
         primary
-        onClick={() => {
-          addTransaction(TransactionType.APPROVE, 'abc', {})
+        onClick={async () => {
+          const a = await getApproval(
+            '0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b',
+            '0x27001942d886573b4C68d77547143C4b98f3775C',
+            0.0001,
+          )
+          console.log(a)
+          // addTransaction(TransactionType.APPROVE, 'abc', {})
         }}
       />
       <Button
@@ -202,6 +214,7 @@ export const TradePage = () => {
         }}
       />
       <div>{JSON.stringify(transactions)}</div>
+      <div>{approval}</div>
 
       {/* <button onClick={() => runCode()}>Stake 26 WETH</button>
       <button onClick={() => openposition()}>OpenPosition</button>

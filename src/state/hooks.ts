@@ -108,6 +108,10 @@ export const useVerifiedTransactions = () => {
   const transactions = useTransactions()
   return transactions.filter((t) => t.status === 'verified')
 }
+export const useApprovalTransactions = () => {
+  const transactions = useTransactions()
+  return transactions.filter((t) => t.type === TransactionType.APPROVAL)
+}
 
 export const useAddTransaction = () => {
   const { chainId } = useWeb3React()
