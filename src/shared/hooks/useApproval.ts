@@ -44,19 +44,15 @@ export const useLazyApproval = () => {
       if (!isConnected) {
         return Approval.UNKNOWN
       }
-      console.log('here')
       const tokenAllowance = await etherGlobal.allowanceForToken(
         token,
         destination,
       )
-      console.log('Amount: ', amount)
-      console.log('Allowance: ', tokenAllowance)
       if (tokenAllowance >= amount) {
         return Approval.VERIFIED
       }
 
       const transactionApproval = getTransactionApproval(token, destination)
-      console.log('Transaction approval:', transactionApproval)
       if (transactionApproval === Approval.PENDING) {
         return Approval.PENDING
       }
@@ -93,7 +89,6 @@ export const useApproval = (
   const [approval, setApproval] = useState<Approval | null>(null)
   const getApproval = useLazyApproval()
   const isConnected = useIsConnected()
-  const getTransactionApproval = useLazyApprovalTransactionState()
   const transactions = useApprovalTransactions()
   const isMissingInfo = !token || !destination || !amount
 
@@ -119,8 +114,6 @@ export const useApproval = (
       return
     }
     etherGlobal.allowanceForToken(token, destination).then((tokenAllowance) => {
-      console.log('Amount: ', amount)
-      console.log('Allowance: ', tokenAllowance)
       if (tokenAllowance >= amount) {
         setApproval(Approval.VERIFIED)
       }
