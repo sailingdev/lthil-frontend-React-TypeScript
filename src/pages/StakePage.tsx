@@ -6,6 +6,7 @@ import { ISearchParams, StakeToken } from '../types'
 import { useEffect, useState } from 'react'
 import { useInitStakeTokens, useStakeTokens } from '../state/hooks'
 
+import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
 import { DepositWithdraw } from '../shared/DepositWithdraw'
@@ -59,25 +60,28 @@ export const StakePage = () => {
             />
             <div tw='flex space-x-2 items-center'>
               <Txt.Body2Regular>Sort by :</Txt.Body2Regular>
-              <TabButton
+              <Button
                 text='APY - highest'
-                active={searchParams.orderField === 'annualPercentageYield'}
+                action={searchParams.orderField === 'annualPercentageYield'}
+                bold={searchParams.orderField === 'annualPercentageYield'}
                 onClick={() => {
                   setOrder('DESC')
                   setOrderField('annualPercentageYield')
                 }}
               />
-              <TabButton
+              <Button
                 text='TVL - highest'
-                active={searchParams.orderField === 'totalValueLocked'}
+                action={searchParams.orderField === 'totalValueLocked'}
+                bold={searchParams.orderField === 'totalValueLocked'}
                 onClick={() => {
                   setOrder('DESC')
                   setOrderField('totalValueLocked')
                 }}
               />
-              <TabButton
+              <Button
                 text='Owned'
-                active={searchParams.orderField === 'owned'}
+                action={searchParams.orderField === 'owned'}
+                bold={searchParams.orderField === 'owned'}
                 onClick={() => {
                   setOrder('DESC')
                   setOrderField('owned')
