@@ -1,9 +1,9 @@
+import { BigNumber, Transaction, ethers } from 'ethers'
 import {
   PositionWasOpenedEvent,
   ProfitsAndLosses,
   TransactionReceipt,
 } from '../types'
-import { Transaction, ethers } from 'ethers'
 
 import { ContractFactory } from './contract-factory'
 import { hexToDecimal } from '../utils'
@@ -14,6 +14,10 @@ export let etherGlobal: Ether
 export const initializeGlobalInstance = (instance: Ether) => {
   etherGlobal = instance
 }
+
+const MaxUint256: BigNumber = BigNumber.from(
+  '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+)
 
 export class Ether {
   private provider!: ethers.providers.Web3Provider
@@ -130,20 +134,49 @@ export class Ether {
         this.signer,
       )
       const decimals = await tokenContract.decimals()
-      // console.log(
-      //   await tokenContract.estimateGas.approve(
-      //     destinationAddress,
-      //     this.parseUnits(amount, decimals),
-      //   ),
-      // )
+      const gasLimit = await this.getApprovalGasEstimation(
+        tokenAddress,
+        destinationAddress,
+        amount,
+      )
+
+      console.log('Gas limit, ', gasLimit)
+
       return tokenContract.approve(
         destinationAddress,
         this.parseUnits(amount.toString(), decimals),
+        {
+          gasLimit,
+        },
       )
     } catch (e: any) {
       console.error(e)
       return null
     }
+  }
+  async getApprovalGasEstimation(
+    tokenAddress: string,
+    destinationAddress: string,
+    amount: number,
+  ) {
+    const tokenContract = ContractFactory.getTokenContract(
+      tokenAddress,
+      this.signer,
+    )
+    const decimals = await tokenContract.decimals()
+    const gas = await tokenContract.estimateGas.approve(
+      destinationAddress,
+      this.parseUnits(amount.toString(), decimals),
+    )
+    return gas.mul(120).div(100)
+  }
+  async getTransactionGasEstimate(account: string, to: string, value: number) {
+    // THIS IS CURRENTLY NOT WORKING.
+    // https://docs.ethers.io/v5/api/providers/provider/#Provider-estimateGas
+    //
+    const gas = await this.signer.estimateGas({ from: account, to, value })
+    console.log(gas)
+    return gas
   }
 
   async getUserTokenBalance(tokenAddress: string): Promise<number> {
