@@ -1,13 +1,12 @@
 /** @jsxImportSource @emotion/react */
 
-import { Approval, ApprovalTransactionMeta, TransactionType } from '../../types'
-import { useAddTransaction, useApprovalTransactions } from '../../state/hooks'
-import { useApproval, useLazyApproval } from './useApproval'
 import { useEffect, useState } from 'react'
 
+import { Approval } from '../../types'
 import { etherGlobal } from '../../api/ether'
-import { useAsync } from 'react-use'
+import { useApprovalTransactions } from '../../state/hooks'
 import { useIsConnected } from './useIsConnected'
+import { useLazyApproval } from './useApproval'
 
 export interface IUseApprovalActionParams {
   approvalMeta: {

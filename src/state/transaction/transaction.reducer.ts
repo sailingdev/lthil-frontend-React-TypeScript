@@ -2,7 +2,6 @@ import { addTransaction, finalizeTransaction } from './transaction.actions'
 
 import { Transaction } from '../../types'
 import { createReducer } from '@reduxjs/toolkit'
-import { supportedChainIds } from '../../shared/test/connectors'
 
 export interface TransactionState {
   transactions: {
@@ -11,7 +10,6 @@ export interface TransactionState {
     }
   }
 }
-supportedChainIds
 
 const initialState = {
   transactions: {},

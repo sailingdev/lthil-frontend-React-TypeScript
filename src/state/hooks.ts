@@ -67,9 +67,11 @@ export const useInitAccountAddress = () => {
 
 export const useStakeTokens = (term: String) => {
   const stakes = useAppSelector((state) => state.stake.tokenStakeData)
-  return (stakes ?? []).filter((s) =>
+
+  const a = (stakes ?? []).filter((s) =>
     s.vaultName.toLowerCase().trim().includes(term.toLowerCase().trim()),
   )
+  return [...a, ...a, ...a, ...a, ...a, ...a, ...a]
 }
 
 export const useInitStakeTokens = () => {
