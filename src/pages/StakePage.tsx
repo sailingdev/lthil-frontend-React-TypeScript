@@ -10,22 +10,24 @@ import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
 import { DepositWithdraw } from '../shared/DepositWithdraw'
 import { InputField } from '../shared/InputField'
+import { TabButton } from '../shared/TabButton'
 import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useSearch } from '../shared/hooks/useSearch'
 
 const initialSearchParams: Partial<ISearchParams> = {
-  orderField: 'name',
-  order: 'ASC',
+  orderField: 'annualPercentageYield',
+  order: 'DESC',
   term: '',
 }
 
 export const StakePage = () => {
-  const [searchParams, { setPage, setTerm }] = useSearch(initialSearchParams)
+  const [searchParams, { setPage, setTerm, setOrder, setOrderField }] =
+    useSearch(initialSearchParams)
   const initUserStakes = useInitStakeTokens()
   const [activeRow, setActiveRow] = useState<any | undefined>()
-  const stakeTokens = useStakeTokens(searchParams.term)
+  const stakeTokens = useStakeTokens(searchParams)
   const isConnected = useIsConnected()
 
   useEffect(() => {
@@ -47,13 +49,42 @@ export const StakePage = () => {
       <div tw='flex flex-col w-full items-center'>
         <div tw='w-full desktop:w-10/12 flex flex-col items-center'>
           <Txt.Heading1 tw='mb-12'>Stake</Txt.Heading1>
-          <InputField
-            tw='desktop:width[500px] desktop:self-start mb-4'
-            placeholder='Search tokens...'
-            value={searchParams.term}
-            onChange={(value) => setTerm(value)}
-            renderRight={<MagnifyingGlass tw='text-secondary' />}
-          />
+          <div tw='flex items-center justify-start flex-row w-full'>
+            <InputField
+              tw='desktop:width[500px] desktop:self-start mr-9'
+              placeholder='Search tokens...'
+              value={searchParams.term}
+              onChange={(value) => setTerm(value)}
+              renderRight={<MagnifyingGlass tw='text-secondary' />}
+            />
+            <div tw='flex space-x-2 items-center'>
+              <Txt.Body2Regular>Sort by :</Txt.Body2Regular>
+              <TabButton
+                text='APY - highest'
+                active={searchParams.orderField === 'annualPercentageYield'}
+                onClick={() => {
+                  setOrder('DESC')
+                  setOrderField('annualPercentageYield')
+                }}
+              />
+              <TabButton
+                text='TVL - highest'
+                active={searchParams.orderField === 'totalValueLocked'}
+                onClick={() => {
+                  setOrder('DESC')
+                  setOrderField('totalValueLocked')
+                }}
+              />
+              <TabButton
+                text='Owned'
+                active={searchParams.orderField === 'owned'}
+                onClick={() => {
+                  setOrder('DESC')
+                  setOrderField('owned')
+                }}
+              />
+            </div>
+          </div>
           {stakeTokens.length > 0 ? (
             <CustomTable
               activeRow={activeRow}

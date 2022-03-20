@@ -8,7 +8,6 @@ import {
   useStakeTokens,
   useTransactions,
 } from '../state/hooks'
-import { useApproval, useLazyApproval } from '../shared/hooks/useApproval'
 
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
@@ -17,12 +16,10 @@ import { useNetwork } from '../shared/hooks/useNetwork'
 import { useState } from 'react'
 
 export const TradePage = () => {
-  const [a, setA] = useState<any>({})
   const block = useLatestBlock()
   const balance = useAccountBalance()
   const network = useNetwork()
   const address = useAccountAddress()
-  const stake = useStakeTokens('')
   const transactions = useTransactions()
   const [approval, action] = useApprovalAction({
     approvalMeta: {
