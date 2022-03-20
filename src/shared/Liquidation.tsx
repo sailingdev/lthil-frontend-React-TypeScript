@@ -1,14 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
-import { useState } from 'react'
 
-import { Txt } from '../shared/Txt'
-import { TabsSwitch } from '../shared/TabsSwitch'
-import { InputField } from '../shared/InputField'
+import { ArrowDown } from 'phosphor-react'
 import { Button } from '../shared/Button'
 import { ReactComponent as CurrEth } from '../assets/images/currencyEthereum.svg'
-import { ArrowDown } from 'phosphor-react'
+import { InputField } from '../shared/InputField'
+import { Txt } from '../shared/Txt'
+import tw from 'twin.macro'
 
 interface ILiquidation {
   liquidationToken1: string

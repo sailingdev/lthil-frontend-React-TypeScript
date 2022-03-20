@@ -10,6 +10,7 @@ import { MarginTradingPage } from './pages/MarginTradingPage'
 import { PositionPage } from './pages/PositionPage'
 import { StakePage } from './pages/StakePage'
 import { TradePage } from './pages/TradePage'
+import { UnsupportedNetworkWarning } from './shared/UnsupportedNetworkWarning'
 import { isDesktop } from './utils'
 import tw from 'twin.macro'
 import { useBlockNumberListener } from './shared/hooks/useBlockNumberListener'
@@ -35,24 +36,27 @@ export const AppRouter = () => {
   }, [])
 
   return (
-    <div css={[tw`flex flex-col bg-primary min-h-screen desktop:flex-row`]}>
-      <div tw='flex-grow flex flex-col'>
-        <Header />
-        <div tw='flex-grow'>
-          <Routes>
-            <Route path='/' element={<MarginTradingPage />} />
-            <Route path='/dashboard' element={<DashboardPage />} />
-            <Route path='/margintrading' element={<MarginTradingPage />} />
-            <Route path='/dashboard/:position' element={<PositionPage />} />
-            <Route path='/stake' element={<StakePage />} />
-            <Route path='/charts' element={<ChartsPage />} />
-            <Route path='/abc' element={<TradePage />} />
+    <>
+      <UnsupportedNetworkWarning />
+      <div css={[tw`flex flex-col bg-primary min-h-screen desktop:flex-row`]}>
+        <div tw='flex-grow flex flex-col'>
+          <Header />
+          <div tw='flex-grow'>
+            <Routes>
+              <Route path='/' element={<MarginTradingPage />} />
+              <Route path='/dashboard' element={<DashboardPage />} />
+              <Route path='/margintrading' element={<MarginTradingPage />} />
+              <Route path='/dashboard/:position' element={<PositionPage />} />
+              <Route path='/stake' element={<StakePage />} />
+              <Route path='/charts' element={<ChartsPage />} />
+              <Route path='/abc' element={<TradePage />} />
 
-            {/* <Route path='*' element={<Navigate to='/trade' />} /> */}
-          </Routes>
+              {/* <Route path='*' element={<Navigate to='/trade' />} /> */}
+            </Routes>
+          </div>
+          {!isDesktop && <Footer />}
         </div>
-        {!isDesktop && <Footer />}
       </div>
-    </div>
+    </>
   )
 }

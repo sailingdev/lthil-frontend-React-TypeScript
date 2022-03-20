@@ -1,4 +1,9 @@
-import { Transaction, TransactionReceipt, TransactionType } from '../types'
+import {
+  ISearchParams,
+  Transaction,
+  TransactionReceipt,
+  TransactionType,
+} from '../types'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import {
   addTransaction,
@@ -65,11 +70,20 @@ export const useInitAccountAddress = () => {
 
 // STAKE HOOKS
 
-export const useStakeTokens = (term: String) => {
+export const useStakeTokens = (params: ISearchParams) => {
   const stakes = useAppSelector((state) => state.stake.tokenStakeData)
-  return (stakes ?? []).filter((s) =>
-    s.vaultName.toLowerCase().trim().includes(term.toLowerCase().trim()),
+
+  const filteredStakes = (stakes ?? []).filter((s) =>
+    s.vaultName.toLowerCase().trim().includes(params.term.toLowerCase().trim()),
   )
+  filteredStakes.sort((s1, s2) => {
+    // @ts-ignore
+    const p1 = s1[params.orderField]
+    // @ts-ignore
+    const p2 = s2[params.orderField]
+    return params.order === 'DESC' ? p2 - p1 : p1 - p2
+  })
+  return filteredStakes
 }
 
 export const useInitStakeTokens = () => {

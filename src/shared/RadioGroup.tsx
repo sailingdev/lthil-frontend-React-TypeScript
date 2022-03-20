@@ -1,13 +1,12 @@
-/** @jsxImportSource @emotion/react */
-import { useState } from 'react'
 import 'twin.macro'
-import tw from 'twin.macro'
-import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 
-import { Txt } from './Txt'
-import { ReactComponent as RadioButtonSelected } from '../assets/images/radioButton/selected.svg'
 import { ReactComponent as RadioButtonNotSelected } from '../assets/images/radioButton/notSelected.svg'
+import { ReactComponent as RadioButtonSelected } from '../assets/images/radioButton/selected.svg'
+import { Txt } from './Txt'
+import tw from 'twin.macro'
+/** @jsxImportSource @emotion/react */
+import { useState } from 'react'
 
 interface IRadioItem {
   label: string
