@@ -14,6 +14,7 @@ import { ContentContainer } from '../shared/ContentContainer'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useNetwork } from '../shared/hooks/useNetwork'
 import { useState } from 'react'
+import { etherGlobal } from '../api/ether'
 
 export const TradePage = () => {
   const block = useLatestBlock()
@@ -25,7 +26,7 @@ export const TradePage = () => {
     approvalMeta: {
       token: '0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b',
       destination: '0x27001942d886573b4C68d77547143C4b98f3775C',
-      amount: 0.0025,
+      amount: 7,
     },
     onApproval: (s: string) => console.log(s),
   })

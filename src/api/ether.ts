@@ -7,6 +7,7 @@ import {
 
 import { ContractFactory } from './contract-factory'
 import { hexToDecimal } from '../utils'
+import addresses from '../assets/addresses.json'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
@@ -59,6 +60,10 @@ export class Ether {
   async getAccountAddress(): Promise<string | null> {
     const accounts = await this.provider.listAccounts()
     return accounts.length > 0 ? accounts[0] : null
+  }
+
+  getAddresses() {
+    return addresses.addresses
   }
 
   // ========= STAKE PAGE =========
@@ -213,26 +218,45 @@ export class Ether {
     }
   }
 
-  // async depositToken(tokenAddress: string, amount: string): Promise<any> {
-  //   const vault = ContractFactory.getVaultContract(this.signer)
-  //   const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
+  async depositToken(tokenAddress: string, amount: string): Promise<any> {
+    try {
+      const vault = ContractFactory.getVaultContract(this.signer)
+      const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
 
-  //   // Check balance -> TODO: where to do the balance checking? On the input?
+      // Check balance -> TODO: where to do the balance checking? On the input? Do we need to do this even?
 
-  //   // Allow token spending
-  //   await this.approve(tokenAddress, this.vaultAddress, amount)
+      //@ts-ignore
+      const stake = await vault.stake(
+        tokenAddress,
+        this.parseUnits(amount, await token.decimals()),
+        {
+          gasLimit: 1000000, // GAS LIMIT
+        },
+      )
+      return stake
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-  //   // Do the staking
-  //   //@ts-ignore
-  //   const stake = await vault.stake(
-  //     tokenAddress,
-  //     this.parseUnits(amount, await token.decimals()),
-  //     {
-  //       gasLimit: 1000000,
-  //     },
-  //   )
-  //   return stake
-  // }
+  async withdrawToken(tokenAddress: string, amount: string): Promise<any> {
+    try {
+      const vault = ContractFactory.getVaultContract(this.signer)
+      const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
+
+      //@ts-ignore
+      const withdraw = await vault.unstake(
+        tokenAddress,
+        this.parseUnits(amount, await token.decimals()),
+        {
+          gasLimit: 1000000, // GAS LIMIT
+        },
+      )
+      return withdraw
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // TODO: This function is layed out but the data is wrong since we don't yet know precisely what data PositionWasOpened event returns.
   async computeProfitsAndLosses(

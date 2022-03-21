@@ -122,3 +122,15 @@ export interface ApprovalTransactionMeta {
   destination: string
   token: string
 }
+
+export interface StakeTransactionMeta {
+  destination: string
+  token: string
+  amount: number
+}
+
+export interface WithdrawTransactionMeta {
+  destination: string
+  token: string
+  amount: number
+}
