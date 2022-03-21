@@ -14,6 +14,18 @@ export const allNetworks = [
     name: 'Ethereum Main Network',
     chainId: 1,
   },
+  {
+    name: 'Kovan',
+    chainId: 42,
+  },
+  {
+    name: 'Goerli',
+    chainId: 5,
+  },
+  {
+    name: 'Ropsten',
+    chainId: 3,
+  },
 ]
 export const allChainIds = allNetworks.map((n) => n.chainId)
 export const allowedChainIds = [4]
