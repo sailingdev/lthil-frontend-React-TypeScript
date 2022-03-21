@@ -1,6 +1,7 @@
-import 'twin.macro'
-
 /** @jsxImportSource @emotion/react */
+import 'twin.macro'
+import tw from 'twin.macro'
+
 import { ArrowDown, FadersHorizontal } from 'phosphor-react'
 
 import { BasicChart } from '../shared/charts/BasicChart'
@@ -14,19 +15,61 @@ import { TabButton } from '../shared/TabButton'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
-import tw from 'twin.macro'
 import { useState } from 'react'
 
+import { useTransaction, useAddTransaction } from '../state/hooks'
+import { useApprovalAction } from '../shared/hooks/useApprovalAction'
+import { IBaseProps, TransactionType } from '../types'
+import { etherGlobal } from '../api/ether'
+
+import { addresses } from '../assets/addresses.json'
+
 export const MarginTradingPage = () => {
+  const addTx = useAddTransaction()
+
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
-  const [tokenFrom, setTokenFrom] = useState<any>('')
-  const [tokenTo, setTokenTo] = useState<any>('')
+  const [positionType, setPositionType] = useState<'short' | 'long'>('long')
+  const [spentToken, setSpentToken] = useState<any>(
+    '0x52C9CC325f372eF9891eBf8F317ec3b861feC817',
+  )
+  const [obtainedToken, setObtainedToken] = useState<any>(
+    '0x2eEb75C48f56dA757f626C09A95487639a46e517',
+  )
   const [sliderValue, setSliderValue] = useState<number>(1)
-  const [principal, setPrincipal] = useState<any>('')
+  const [margin, setMargin] = useState<any>(2)
   const [slippage, setSlippage] = useState<any>('')
-  const [deadline, setDeadline] = useState<any>('')
+  const [deadline, setDeadline] = useState<any>(20)
   const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
   const [activeTab, setActiveTab] = useState(0)
+
+  const [openPositionHash, setOpenPositionHash] = useState<string | undefined>(
+    undefined,
+  )
+  const openPositionTx = useTransaction(openPositionHash)
+
+  const [positionApproval, openPosition] = useApprovalAction({
+    approvalMeta: {
+      token: spentToken,
+      destination: addresses.MarginTradingStrategy,
+      amount: 5, // TODO: What about this?
+    },
+    onApproval: async () => {
+      const timestampSeconds = Math.floor(Date.now() / 1000)
+      const positionData = {
+        spentToken: spentToken, // 0x52C9CC325f372eF9891eBf8F317ec3b861feC817
+        obtainedToken: obtainedToken, // 0x2eEb75C48f56dA757f626C09A95487639a46e517
+        collateral: margin, // 2
+        collateralIsSpentToken: positionType === 'long' ? true : false, // long
+        minObtained: '0x00',
+        maxSpent: '0xff',
+        deadline: (timestampSeconds + 60 * deadline).toString(), // 20min from now
+      }
+      //@ts-ignore
+      const position = await etherGlobal.marginTradingOpenPosition({})
+      addTx(TransactionType.DEPOSIT, position.hash, positionData)
+      setOpenPositionHash(position.hash)
+    },
+  })
 
   return (
     <ContentContainer>
@@ -52,8 +95,8 @@ export const MarginTradingPage = () => {
                 />
                 <InputField
                   label='Token 1'
-                  value={tokenFrom}
-                  onChange={(value) => setTokenFrom(value)}
+                  value={spentToken}
+                  onChange={(value) => setSpentToken(value)}
                   placeholder='0'
                   renderRight={
                     <>
@@ -79,8 +122,8 @@ export const MarginTradingPage = () => {
                 <InputField
                   label='Token 2'
                   placeholder='0'
-                  value={tokenTo}
-                  onChange={(value) => setTokenTo(value)}
+                  value={obtainedToken}
+                  onChange={(value) => setObtainedToken(value)}
                   renderRight={
                     <>
                       <button
@@ -117,10 +160,10 @@ export const MarginTradingPage = () => {
                   }}
                 />
                 <InputField
-                  label='Principal'
+                  label='Margin'
                   placeholder='0'
-                  value={principal}
-                  onChange={(value) => setPrincipal(value)}
+                  value={margin}
+                  onChange={(value) => setMargin(value)}
                 />
                 <div tw='w-full'>
                   {showAdvancedOptions ? (
@@ -180,7 +223,7 @@ export const MarginTradingPage = () => {
                     </button>
                   )}
                 </div>
-                <Button text='Buy / Long TKN' full action bold />
+                <Button text='Open position' full action bold />
               </div>
             </div>
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>

@@ -122,3 +122,13 @@ export interface ApprovalTransactionMeta {
   destination: string
   token: string
 }
+
+export interface OpenPosition {
+  spentToken: string // address
+  obtainedToken: string // address
+  collateral: string // uint256
+  collateralIsSpentToken: boolean // bool
+  minObtained: string // uint256
+  maxSpent: string // uint256
+  deadline: string // uint256
+}

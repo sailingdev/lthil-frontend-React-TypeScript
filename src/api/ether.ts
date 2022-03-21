@@ -1,5 +1,6 @@
 import { BigNumber, Transaction, ethers } from 'ethers'
 import {
+  OpenPosition,
   PositionWasOpenedEvent,
   ProfitsAndLosses,
   TransactionReceipt,
@@ -234,6 +235,8 @@ export class Ether {
   //   return stake
   // }
 
+  // ========= MARGIN TRADING =========
+
   // TODO: This function is layed out but the data is wrong since we don't yet know precisely what data PositionWasOpened event returns.
   async computeProfitsAndLosses(
     positionEvent: PositionWasOpenedEvent,
@@ -278,6 +281,37 @@ export class Ether {
     return {
       currencyValue: profitsAndLosses,
       percentageValue: (profitsAndLosses / collateral) * 100,
+    }
+  }
+
+  async computeMinObtained(
+    spentToken: string,
+    obtainedToken: string,
+    margin: number,
+    leverage: number,
+  ): Promise<number> {
+    const MarginTrading = ContractFactory.getMarginTradingStrategyContract(
+      this.signer,
+    )
+    return await MarginTrading.quote(
+      spentToken,
+      obtainedToken,
+      margin * leverage,
+    )
+  }
+
+  async marginTradingOpenPosition(positionData: OpenPosition): Promise<any> {
+    try {
+      const marginTrading = ContractFactory.getMarginTradingStrategyContract(
+        this.signer,
+      )
+      const position = await marginTrading.openPosition(positionData, {
+        gasLimit: 1000000, // GAS LIMIT
+      })
+      console.log(position)
+      return position
+    } catch (error) {
+      console.log(error)
     }
   }
 }
