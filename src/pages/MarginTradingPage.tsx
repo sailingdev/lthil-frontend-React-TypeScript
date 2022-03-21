@@ -66,7 +66,7 @@ export const MarginTradingPage = () => {
       }
       //@ts-ignore
       const position = await etherGlobal.marginTradingOpenPosition({})
-      addTx(TransactionType.DEPOSIT, position.hash, positionData)
+      // addTx(TransactionType.DEPOSIT, position.hash, positionData) // TODO: add meta
       setOpenPositionHash(position.hash)
     },
   })

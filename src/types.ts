@@ -132,3 +132,14 @@ export interface OpenPosition {
   maxSpent: string // uint256
   deadline: string // uint256
 }
+export interface StakeTransactionMeta {
+  destination: string
+  token: string
+  amount: number
+}
+
+export interface WithdrawTransactionMeta {
+  destination: string
+  token: string
+  amount: number
+}

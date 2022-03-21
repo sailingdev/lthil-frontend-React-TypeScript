@@ -1,8 +1,11 @@
 import {
+  ApprovalTransactionMeta,
   ISearchParams,
+  StakeTransactionMeta,
   Transaction,
   TransactionReceipt,
   TransactionType,
+  WithdrawTransactionMeta,
 } from '../types'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import {
@@ -135,7 +138,14 @@ export const useApprovalTransactions = () => {
 export const useAddTransaction = () => {
   const { chainId } = useWeb3React()
   const dispatch = useDispatch()
-  return (type: TransactionType, tx: string, meta: any) => {
+  return (
+    type: TransactionType,
+    tx: string,
+    meta:
+      | WithdrawTransactionMeta
+      | StakeTransactionMeta
+      | ApprovalTransactionMeta,
+  ) => {
     if (!chainId) {
       return
     }

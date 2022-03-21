@@ -26,7 +26,7 @@ export const TradePage = () => {
     approvalMeta: {
       token: '0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b',
       destination: '0x27001942d886573b4C68d77547143C4b98f3775C',
-      amount: 50,
+      amount: 7,
     },
     onApproval: (s: string) => console.log(s),
   })
