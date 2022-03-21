@@ -114,6 +114,11 @@ export const useTransactions = () => {
     return Object.values(state.transactions.transactions[chainId!] ?? {})
   })
 }
+
+export const useTransaction = (tx?: string) => {
+  const transactions = useTransactions()
+  return transactions.find((t) => t.tx === tx)
+}
 export const usePendingTransactions = () => {
   const transactions = useTransactions()
   return transactions.filter((t) => t.status === 'pending')
