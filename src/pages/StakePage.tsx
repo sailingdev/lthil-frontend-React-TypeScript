@@ -100,6 +100,7 @@ export const StakePage = () => {
                     e.stopPropagation()
                     // TODO VALENTIN
                   }}
+                  tokenSymbol={activeRow?.vaultName ?? undefined}
                 />
               }
               loading={false}
