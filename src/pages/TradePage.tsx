@@ -11,22 +11,21 @@ import {
 
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
+import { etherGlobal } from '../api/ether'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useNetwork } from '../shared/hooks/useNetwork'
 import { useState } from 'react'
-import { etherGlobal } from '../api/ether'
 
 export const TradePage = () => {
   const block = useLatestBlock()
   const balance = useAccountBalance()
   const network = useNetwork()
   const address = useAccountAddress()
-  const transactions = useTransactions()
   const [approval, action] = useApprovalAction({
     approvalMeta: {
       token: '0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b',
       destination: '0x27001942d886573b4C68d77547143C4b98f3775C',
-      amount: 7,
+      amount: 8,
     },
     onApproval: (s: string) => console.log(s),
   })
@@ -209,8 +208,6 @@ export const TradePage = () => {
           finalizeTransaction('abc', {})
         }}
       />
-      <div>{JSON.stringify(transactions)}</div>
-      <div>{approval}</div>
 
       {/* <button onClick={() => runCode()}>Stake 26 WETH</button>
       <button onClick={() => openposition()}>OpenPosition</button>

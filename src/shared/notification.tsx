@@ -14,3 +14,12 @@ export const showErrorNotification = (text: string) =>
       className: 'toastify-error-container',
     },
   )
+export const showInfoNotification = (text: string) =>
+  toast(
+    <div css={[tw`flex flex-row items-center p-0 m-0`]}>
+      <div css={[tw`text-white`]}>{text}</div>
+    </div>,
+    {
+      className: 'toastify-info-container',
+    },
+  )

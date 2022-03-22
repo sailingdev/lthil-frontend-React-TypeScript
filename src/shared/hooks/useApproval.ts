@@ -67,6 +67,7 @@ export const useLazyApproval = () => {
         }
         addTransaction(TransactionType.APPROVAL, transaction.hash!, {
           destination,
+          amount,
           token,
         } as ApprovalTransactionMeta)
         return Approval.PENDING

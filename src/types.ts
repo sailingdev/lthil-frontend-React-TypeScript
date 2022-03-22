@@ -121,6 +121,7 @@ export enum Approval {
 export interface ApprovalTransactionMeta {
   destination: string
   token: string
+  amount: number
 }
 
 export interface StakeTransactionMeta {
