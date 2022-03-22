@@ -6,6 +6,7 @@ import {
   TransactionReceipt,
   TransactionType,
   WithdrawTransactionMeta,
+  MtsOpenPositionMeta,
 } from '../types'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import {
@@ -144,7 +145,8 @@ export const useAddTransaction = () => {
     meta:
       | WithdrawTransactionMeta
       | StakeTransactionMeta
-      | ApprovalTransactionMeta,
+      | ApprovalTransactionMeta
+      | MtsOpenPositionMeta,
   ) => {
     if (!chainId) {
       return

@@ -19,7 +19,7 @@ import { useState } from 'react'
 
 import { useTransaction, useAddTransaction } from '../state/hooks'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
-import { IBaseProps, TransactionType } from '../types'
+import { IBaseProps, Priority, TransactionType } from '../types'
 import { etherGlobal } from '../api/ether'
 
 import { addresses } from '../assets/addresses.json'
@@ -35,12 +35,12 @@ export const MarginTradingPage = () => {
   const [obtainedToken, setObtainedToken] = useState<any>(
     '0x2eEb75C48f56dA757f626C09A95487639a46e517',
   )
-  const [sliderValue, setSliderValue] = useState<number>(1)
+  const [leverage, setLeverage] = useState<number>(1)
   const [margin, setMargin] = useState<any>(2)
-  const [slippage, setSlippage] = useState<any>('')
-  const [deadline, setDeadline] = useState<any>(20)
+  const [slippage, setSlippage] = useState<any>(1)
+  const [deadline, setDeadline] = useState<any>(20) // minutes
   const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
-  const [activeTab, setActiveTab] = useState(0)
+  const [priority, setPriority] = useState<Priority>('buy')
 
   const [openPositionHash, setOpenPositionHash] = useState<string | undefined>(
     undefined,
@@ -51,25 +51,30 @@ export const MarginTradingPage = () => {
     approvalMeta: {
       token: spentToken,
       destination: addresses.MarginTradingStrategy,
-      amount: 5, // TODO: What about this?
+      amount: 10, // TODO: What about this?
     },
     onApproval: async () => {
-      const timestampSeconds = Math.floor(Date.now() / 1000)
       const positionData = {
-        spentToken: spentToken, // 0x52C9CC325f372eF9891eBf8F317ec3b861feC817
-        obtainedToken: obtainedToken, // 0x2eEb75C48f56dA757f626C09A95487639a46e517
-        collateral: margin, // 2
-        collateralIsSpentToken: positionType === 'long' ? true : false, // long
-        minObtained: '0x00',
-        maxSpent: '0xff',
-        deadline: (timestampSeconds + 60 * deadline).toString(), // 20min from now
+        positionType,
+        spentToken,
+        obtainedToken,
+        margin,
+        slippage,
+        leverage,
+        priority,
+        deadline,
       }
-      //@ts-ignore
-      const position = await etherGlobal.marginTradingOpenPosition({})
-      // addTx(TransactionType.DEPOSIT, position.hash, positionData) // TODO: add meta
+      // //@ts-ignore
+      const position = await etherGlobal.marginTradingOpenPosition(positionData)
+      addTx(TransactionType.MTS_OPEN_POSITION, position.hash, positionData)
       setOpenPositionHash(position.hash)
     },
   })
+
+  // TODO: rename this function
+  const runOpenPosition = async () => {
+    openPosition()
+  }
 
   return (
     <ContentContainer>
@@ -80,16 +85,16 @@ export const MarginTradingPage = () => {
             <div tw='flex flex-col gap-3 flex-grow'>
               <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100 gap-7'>
                 <TabsSwitch
-                  activeIndex={activeTab}
-                  onChange={(value) => setActiveTab(value)}
+                  activeIndex={positionType}
+                  onChange={(value) => setPositionType(value)}
                   items={[
                     {
                       title: 'Long',
-                      content: '',
+                      value: 'long',
                     },
                     {
                       title: 'Short',
-                      content: '',
+                      value: 'short',
                     },
                   ]}
                 />
@@ -149,8 +154,8 @@ export const MarginTradingPage = () => {
                   tooltip
                   min={1}
                   max={5}
-                  value={sliderValue}
-                  onChange={(value) => setSliderValue(value)}
+                  value={leverage}
+                  onChange={(value) => setLeverage(value)}
                   marks={{
                     1: '1x',
                     2: '2x',
@@ -193,13 +198,15 @@ export const MarginTradingPage = () => {
                           items={[
                             {
                               label: 'Buy',
-                              value: 'BUY',
+                              value: 'buy',
                             },
                             {
                               label: 'Sell',
-                              value: 'Sell',
+                              value: 'sell',
                             },
                           ]}
+                          activeRadio={priority}
+                          onChange={(value) => setPriority(value as Priority)}
                         />
                         <InputField
                           label='Deadline'
@@ -223,7 +230,28 @@ export const MarginTradingPage = () => {
                     </button>
                   )}
                 </div>
-                <Button text='Open position' full action bold />
+                <Button
+                  text={
+                    positionApproval == 'UNKNOWN'
+                      ? 'Approve token spending'
+                      : positionApproval == 'PENDING'
+                      ? 'Pending...'
+                      : positionApproval == 'VERIFIED'
+                      ? `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`
+                      : 'Approve token spending'
+                  }
+                  full
+                  action
+                  bold
+                  onClick={runOpenPosition}
+                />
+                <Txt.CaptionMedium>
+                  {!openPositionTx
+                    ? ''
+                    : openPositionTx.status == 'verified'
+                    ? 'Transaction verified.'
+                    : 'Transaction pending...'}
+                </Txt.CaptionMedium>
               </div>
             </div>
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>

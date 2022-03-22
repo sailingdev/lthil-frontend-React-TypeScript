@@ -16,6 +16,8 @@ interface IRadioItem {
 interface IRadioGroupProps {
   label?: string
   items: IRadioItem[]
+  activeRadio: string
+  onChange: (value: string) => void
 }
 
 const RadioButton = (props: {
@@ -34,19 +36,17 @@ const RadioButton = (props: {
 }
 
 export const RadioGroup = (props: IRadioGroupProps) => {
-  const [activeButton, setActiveButton] = useState<any>(0)
-
-  const { label, items } = props
+  const { label, items, activeRadio, onChange } = props
   return (
     <div tw='w-full flex flex-col gap-3'>
       <Txt.Body2Regular>{label}:</Txt.Body2Regular>
       <div tw='flex flex-row gap-10'>
-        {props.items.map((t, i) => (
+        {props.items.map((radio) => (
           <RadioButton
-            key={`${i}`}
-            selected={activeButton === i}
-            value={t.label}
-            onClick={() => setActiveButton(i)}
+            key={`${radio}`}
+            selected={activeRadio === radio.value}
+            value={radio.label}
+            onClick={() => onChange(radio.value)}
           />
         ))}
       </div>
