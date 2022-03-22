@@ -89,7 +89,11 @@ export enum TransactionType {
 export interface Transaction {
   type: TransactionType
   chainId: number
-  meta: ApprovalTransactionMeta
+  meta:
+    | WithdrawTransactionMeta
+    | StakeTransactionMeta
+    | ApprovalTransactionMeta
+    | MtsOpenPositionMeta
   tx: string
   status: 'pending' | 'verified'
   receipt?: TransactionReceipt
@@ -133,4 +137,30 @@ export interface WithdrawTransactionMeta {
   destination: string
   token: string
   amount: number
+}
+
+export interface MtsOpenPositionMeta {
+  positionType: PositionType
+  spentToken: string
+  obtainedToken: string
+  margin: number
+  slippage: number
+  priority: Priority
+  leverage: number
+  deadline: number
+}
+
+export type Priority = 'buy' | 'sell'
+
+export type PositionType = 'long' | 'short'
+
+export interface OpenPosition {
+  positionType: PositionType
+  spentToken: string
+  obtainedToken: string
+  margin: number
+  slippage: number
+  priority: Priority
+  leverage: number
+  deadline: number
 }

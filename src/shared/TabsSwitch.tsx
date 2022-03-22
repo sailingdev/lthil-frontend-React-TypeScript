@@ -3,17 +3,18 @@ import tw from 'twin.macro'
 import { useState, MouseEventHandler } from 'react'
 
 import { Txt } from './Txt'
+import { PositionType } from '../types'
 
 interface ITab {
   title: string
-  content: any
+  value: string
 }
 
 interface ITabsProps {
   className?: string | undefined
   items: ITab[]
-  activeIndex: number
-  onChange: (value: number) => void
+  activeIndex: PositionType
+  onChange: (value: PositionType) => void
 }
 
 const TabButton = (props: {
@@ -52,17 +53,17 @@ export const TabsSwitch = (props: ITabsProps) => {
           tw`flex flex-row items-center gap-2 border-2 border-font-200 rounded-xl p-1 dark:border-primary-400`,
         ]}
       >
-        {props.items.map((t, i) => (
+        {props.items.map((tab) => (
           <TabButton
-            key={`${i}`}
-            text={t.title}
-            active={i === activeIndex}
-            onClick={() => onChange(i)}
+            key={`${tab}`}
+            text={tab.title}
+            active={tab.value == activeIndex}
+            onClick={() => onChange(tab.value as PositionType)}
           />
         ))}
       </div>
 
-      {props.items[activeIndex].content}
+      {/* {props.items[activeIndex].content} */}
     </div>
   )
 }

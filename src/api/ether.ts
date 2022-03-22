@@ -1,6 +1,9 @@
 import { BigNumber, Transaction, ethers } from 'ethers'
 import {
+  OpenPosition,
+  PositionType,
   PositionWasOpenedEvent,
+  Priority,
   ProfitsAndLosses,
   TransactionReceipt,
 } from '../types'
@@ -64,6 +67,12 @@ export class Ether {
 
   getAddresses() {
     return addresses.addresses
+  }
+
+  async getBlockGasLimit() {
+    return await (
+      await this.provider.getBlock('latest')
+    ).gasLimit
   }
 
   // ========= STAKE PAGE =========
@@ -230,7 +239,7 @@ export class Ether {
         tokenAddress,
         this.parseUnits(amount, await token.decimals()),
         {
-          gasLimit: 1000000, // GAS LIMIT
+          gasLimit: 300000000, // GAS LIMIT
         },
       )
       return stake
@@ -249,7 +258,7 @@ export class Ether {
         tokenAddress,
         this.parseUnits(amount, await token.decimals()),
         {
-          gasLimit: 1000000, // GAS LIMIT
+          gasLimit: 300000000, // GAS LIMIT
         },
       )
       return withdraw
@@ -257,6 +266,8 @@ export class Ether {
       console.log(error)
     }
   }
+
+  // ========= MARGIN TRADING =========
 
   // TODO: This function is layed out but the data is wrong since we don't yet know precisely what data PositionWasOpened event returns.
   async computeProfitsAndLosses(
@@ -302,6 +313,154 @@ export class Ether {
     return {
       currencyValue: profitsAndLosses,
       percentageValue: (profitsAndLosses / collateral) * 100,
+    }
+  }
+
+  async computeMinObtained(
+    spentToken: string,
+    obtainedToken: string,
+    margin: number,
+    leverage: number,
+    priority: Priority,
+    positionType: PositionType,
+    slippage: number,
+  ): Promise<BigNumber> {
+    const MarginTrading = ContractFactory.getMarginTradingStrategyContract(
+      this.signer,
+    )
+
+    const Margin = BigNumber.from(margin)
+    const Leverage = BigNumber.from(leverage)
+    const Slippage = BigNumber.from(slippage)
+
+    if (positionType === 'long') {
+      const quoted = await MarginTrading.quote(
+        spentToken,
+        obtainedToken,
+        Margin.mul(Leverage).toHexString(),
+      )
+
+      if (priority === 'buy') {
+        return quoted[0]
+      } else {
+        // priority is 'sell'
+        return quoted[0].mul(BigNumber.from(1).sub(Slippage.div(100)))
+      }
+    } else {
+      // positionType is 'short'
+
+      if (priority === 'buy') {
+        return Margin.mul(Leverage)
+      } else {
+        // priority is 'sell'
+        return Margin.mul(Leverage).mul(
+          BigNumber.from(1).sub(Slippage.div(100)),
+        )
+      }
+    }
+  }
+
+  async computeMaxSpent(
+    spentToken: string,
+    obtainedToken: string,
+    margin: number,
+    leverage: number,
+    priority: Priority,
+    positionType: PositionType,
+    slippage: number,
+  ): Promise<BigNumber> {
+    const MarginTrading = ContractFactory.getMarginTradingStrategyContract(
+      this.signer,
+    )
+
+    const Margin = BigNumber.from(margin)
+    const Leverage = BigNumber.from(leverage)
+    const Slippage = BigNumber.from(slippage)
+
+    if (positionType === 'long') {
+      if (priority === 'buy') {
+        return Margin.mul(Leverage).div(
+          BigNumber.from(1).sub(Slippage.div(100)),
+        )
+      } else {
+        // priority is 'sell'
+        return Margin.mul(Leverage)
+      }
+    } else {
+      // positionType is 'short'
+
+      const quoted = await MarginTrading.quote(
+        obtainedToken,
+        spentToken,
+        margin * leverage,
+      )
+
+      if (priority === 'buy') {
+        return quoted[0].div(BigNumber.from(1).sub(Slippage.div(100)))
+      } else {
+        // priority is 'sell'
+        return quoted[0]
+      }
+    }
+  }
+
+  // TODO: Update dashboard table after transaction gets verified
+  async marginTradingOpenPosition(positionData: OpenPosition): Promise<any> {
+    const {
+      spentToken,
+      obtainedToken,
+      leverage,
+      slippage,
+      deadline,
+      margin,
+      positionType,
+      priority,
+    } = positionData
+
+    const marginTrading = ContractFactory.getMarginTradingStrategyContract(
+      this.signer,
+    )
+
+    const positionInfo = {
+      spentToken,
+      obtainedToken,
+      deadline: BigNumber.from(
+        Math.floor(Date.now() / 1000) + 60 * deadline,
+      ).toHexString(), // deadline should be integer representing minutes
+      collateral: BigNumber.from(margin).toHexString(),
+      collateralIsSpentToken: positionType === 'long' ? true : false,
+      minObtained: (
+        await this.computeMinObtained(
+          spentToken,
+          obtainedToken,
+          margin,
+          leverage,
+          priority,
+          positionType,
+          slippage,
+        )
+      ).toHexString(),
+      maxSpent: (
+        await this.computeMaxSpent(
+          spentToken,
+          obtainedToken,
+          margin,
+          leverage,
+          priority,
+          positionType,
+          slippage,
+        )
+      ).toHexString(),
+    }
+    try {
+      const position = await marginTrading.openPosition(positionInfo, {
+        gasLimit: (await etherGlobal.getBlockGasLimit()).toNumber() - 1, // GAS LIMIT // TODO: testing max gas limit
+      })
+      console.log(positionInfo)
+      console.log(position)
+      return position
+    } catch (error) {
+      console.log(error)
     }
   }
 }
