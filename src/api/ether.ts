@@ -69,6 +69,12 @@ export class Ether {
     return addresses.addresses
   }
 
+  async getBlockGasLimit() {
+    return await (
+      await this.provider.getBlock('latest')
+    ).gasLimit
+  }
+
   // ========= STAKE PAGE =========
 
   async getMaxWithdrawAmount(tokenAddress: string): Promise<number> {
@@ -398,8 +404,7 @@ export class Ether {
     }
   }
 
-  // TODO: What else needs to happen here?
-  // - the dashboard table needs to get updated
+  // TODO: Update dashboard table after transaction gets verified
   async marginTradingOpenPosition(positionData: OpenPosition): Promise<any> {
     const {
       spentToken,
@@ -419,8 +424,10 @@ export class Ether {
     const positionInfo = {
       spentToken,
       obtainedToken,
-      deadline: Math.floor(Date.now() / 1000) + 60 * deadline, // deadline should be integer representing minutes
-      collateral: BigNumber.from(margin),
+      deadline: BigNumber.from(
+        Math.floor(Date.now() / 1000) + 60 * deadline,
+      ).toHexString(), // deadline should be integer representing minutes
+      collateral: BigNumber.from(margin).toHexString(),
       collateralIsSpentToken: positionType === 'long' ? true : false,
       minObtained: (
         await this.computeMinObtained(
@@ -447,8 +454,9 @@ export class Ether {
     }
     try {
       const position = await marginTrading.openPosition(positionInfo, {
-        gasLimit: 10000000, // GAS LIMIT
+        gasLimit: (await etherGlobal.getBlockGasLimit()).toNumber() - 1, // GAS LIMIT // TODO: testing max gas limit
       })
+      console.log(positionInfo)
       console.log(position)
       return position
     } catch (error) {

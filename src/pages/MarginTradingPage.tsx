@@ -16,6 +16,7 @@ import { TabsSwitch } from '../shared/TabsSwitch'
 import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
 import { useState } from 'react'
+import { TokenModal } from '../shared/TokenModal'
 
 import { useTransaction, useAddTransaction } from '../state/hooks'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
@@ -25,6 +26,7 @@ import { etherGlobal } from '../api/ether'
 import { addresses } from '../assets/addresses.json'
 
 export const MarginTradingPage = () => {
+  const [modalIsOpen, setModalIsOpen] = useState(false)
   const addTx = useAddTransaction()
 
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
@@ -119,6 +121,7 @@ export const MarginTradingPage = () => {
                         text='USDC'
                         leftIcon={CurrEth}
                         rightIcon={ArrowDown}
+                        onClick={() => setModalIsOpen(true)}
                       />
                     </>
                   }
@@ -145,6 +148,7 @@ export const MarginTradingPage = () => {
                         text='USDC'
                         leftIcon={CurrEth}
                         rightIcon={ArrowDown}
+                        onClick={() => setModalIsOpen(true)}
                       />
                     </>
                   }
@@ -278,6 +282,10 @@ export const MarginTradingPage = () => {
           </div>
         </div>
       </div>
+      <TokenModal
+        modalIsOpen={modalIsOpen}
+        onChange={(value) => setModalIsOpen(value)}
+      />
     </ContentContainer>
   )
 }

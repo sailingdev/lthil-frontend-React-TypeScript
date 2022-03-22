@@ -18,6 +18,8 @@ export const initializePositionsData = createAsyncThunk(
       'latest',
     )
 
+    console.log(openedPositions)
+
     const events: PositionWasOpenedEvent[] = [
       {
         id: '1',
