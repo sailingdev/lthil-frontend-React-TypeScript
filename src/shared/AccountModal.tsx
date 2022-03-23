@@ -1,5 +1,6 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import 'twin.macro'
+import tw from 'twin.macro'
 
 import { ArrowSquareOut, Check, Copy } from 'phosphor-react'
 import { useAccountAddress, useTransactions } from '../state/hooks'
@@ -9,7 +10,6 @@ import ClipLoader from 'react-spinners/ClipLoader'
 import { Txt } from './Txt'
 import { getTransactionLabel } from '../utils'
 import { showInfoNotification } from './notification'
-import tw from 'twin.macro'
 import { useProviderInfo } from './hooks/useProviderInfo'
 import { useWeb3React } from '@web3-react/core'
 
@@ -35,25 +35,25 @@ export const AccountModal = (props: IAccountModal) => {
       <div tw='w-full h-full flex flex-col'>
         <Txt.Heading2 tw='text-center mb-6'>Account</Txt.Heading2>
         <div tw='flex flex-row items-center justify-between mb-4'>
-          <Txt.Body2Regular tw='flex-grow text-font-200'>
+          <Txt.Body2Regular tw='flex-grow text-font-100'>
             Connected with {provider?.name ?? ''}
           </Txt.Body2Regular>
-          <button
-            tw='rounded-md py-1 px-2 border border-primary-400'
-            onClick={() => {
-              deactivate()
-              props.onClose()
-            }}
-          >
-            <Txt.CaptionMedium tw='text-white-100'>
-              Disconnect
-            </Txt.CaptionMedium>
-          </button>
+          <div tw='flex flex-row justify-end'>
+            <button
+              tw='rounded-md py-1 px-2 border border-primary-400 text-font-100'
+              onClick={() => {
+                deactivate()
+                props.onClose()
+              }}
+            >
+              <Txt.CaptionMedium tw='text-secondary'>Change</Txt.CaptionMedium>
+            </button>
+          </div>
         </div>
 
         <div tw='flex flex-row items-center mb-3'>
-          {Icon && <Icon tw='h-4 w-4 mr-2' />}
-          <Txt.Body1Bold tw='text-white-100'>{shortAccount}</Txt.Body1Bold>
+          {Icon && <Icon tw='h-6 w-6 mr-2' />}
+          <Txt.Body1Bold tw='text-secondary'>{shortAccount}</Txt.Body1Bold>
         </div>
 
         <div tw='flex flex-row items-center justify-center mb-6'>
@@ -64,8 +64,8 @@ export const AccountModal = (props: IAccountModal) => {
               showInfoNotification('Copied to clipboard')
             }}
           >
-            <Copy tw='text-font-200 mr-2' />
-            <Txt.Body2Regular tw='flex-grow text-font-200'>
+            <Copy size={22} tw='text-font-200 mr-2' />
+            <Txt.Body2Regular tw='flex-grow text-font-100'>
               Copy address
             </Txt.Body2Regular>
           </div>
@@ -78,8 +78,8 @@ export const AccountModal = (props: IAccountModal) => {
               )
             }}
           >
-            <ArrowSquareOut tw='text-font-200 mr-2' />
-            <Txt.Body2Regular tw='flex-grow text-font-200'>
+            <ArrowSquareOut size={22} tw='text-font-200 mr-2' />
+            <Txt.Body2Regular tw='flex-grow text-font-100'>
               View on explorer
             </Txt.Body2Regular>
           </div>
@@ -105,9 +105,9 @@ export const AccountModal = (props: IAccountModal) => {
                   href={`https://rinkeby.etherscan.io/tx/${t.tx}`}
                   target='_blank'
                 >
-                  <Txt.MobileMedium tw='text-secondary underline'>
+                  <Txt.Body2Bold tw='text-secondary underline'>
                     Link
-                  </Txt.MobileMedium>
+                  </Txt.Body2Bold>
                 </a>
                 <Txt.Body2Regular tw='text-font-200'>
                   {/* @ts-ignore */}
@@ -115,20 +115,20 @@ export const AccountModal = (props: IAccountModal) => {
                 </Txt.Body2Regular>
               </div>
               {t.status === 'pending' ? (
-                <div tw='flex flex-col justify-between items-center'>
+                <div tw='flex flex-col justify-between items-center self-center'>
                   <ClipLoader loading color={'blue'} size={18} tw='mb-1.5' />
-                  <Txt.Body2Regular tw='text-font-200'>
+                  <Txt.CaptionMedium tw='text-font-200'>
                     Pending
-                  </Txt.Body2Regular>
+                  </Txt.CaptionMedium>
                 </div>
               ) : (
-                <div tw='flex flex-col items-center'>
-                  <div tw='flex items-center justify-center h-8 w-8 rounded-3xl bg-success'>
-                    <Check tw='text-primary w-5 h-5' />
+                <div tw='flex flex-col items-center self-center'>
+                  <div tw='flex items-center justify-center h-5 w-5 rounded-3xl bg-success'>
+                    <Check tw='text-primary w-3 h-3' />
                   </div>
-                  <Txt.Body2Regular tw='text-success'>
+                  <Txt.CaptionMedium tw='text-success'>
                     Finished
-                  </Txt.Body2Regular>
+                  </Txt.CaptionMedium>
                 </div>
               )}
             </div>
