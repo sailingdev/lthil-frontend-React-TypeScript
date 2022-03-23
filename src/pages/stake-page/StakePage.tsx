@@ -2,20 +2,20 @@ import 'twin.macro'
 
 /** @jsxImportSource @emotion/react */
 import { ChartLine, Info, MagnifyingGlass } from 'phosphor-react'
-import { ISearchParams, StakeToken } from '../types'
+import { ISearchParams, StakeToken } from '../../types'
 import { useEffect, useState } from 'react'
-import { useInitStakeTokens, useStakeTokens } from '../state/hooks'
+import { useInitStakeTokens, useStakeTokens } from '../../state/hooks'
 
-import { Button } from '../shared/Button'
-import { ContentContainer } from '../shared/ContentContainer'
-import { CustomTable } from '../shared/table/CustomTable'
-import { DepositWithdraw } from '../shared/DepositWithdraw'
-import { InputField } from '../shared/InputField'
-import { TabButton } from '../shared/TabButton'
-import { TableCell } from '../shared/table/cells'
-import { Txt } from '../shared/Txt'
-import { useIsConnected } from '../shared/hooks/useIsConnected'
-import { useSearch } from '../shared/hooks/useSearch'
+import { Button } from '../../shared/Button'
+import { ContentContainer } from '../../shared/ContentContainer'
+import { CustomTable } from '../../shared/table/CustomTable'
+import { DepositWithdraw } from './DepositWithdraw'
+import { InputField } from '../../shared/InputField'
+import { TabButton } from '../../shared/TabButton'
+import { TableCell } from '../../shared/table/cells'
+import { Txt } from '../../shared/Txt'
+import { useIsConnected } from '../../shared/hooks/useIsConnected'
+import { useSearch } from '../../shared/hooks/useSearch'
 
 const initialSearchParams: Partial<ISearchParams> = {
   orderField: 'annualPercentageYield',
@@ -96,10 +96,6 @@ export const StakePage = () => {
               renderExpanded={
                 <DepositWithdraw
                   tokenAddress={activeRow?.tokenAddress ?? undefined}
-                  onClick={(e: any) => {
-                    e.stopPropagation()
-                    // TODO VALENTIN
-                  }}
                   tokenSymbol={activeRow?.vaultName ?? undefined}
                 />
               }
@@ -177,7 +173,10 @@ export const StakePage = () => {
                         onClick={(e) => {
                           e.stopPropagation()
                           // TODO VALENTIN
-                          window.open('https://facebook.com', '_blank')
+                          window.open(
+                            `https://etherscan.io/token/${l.tokenAddress}`,
+                            '_blank',
+                          )
                         }}
                         tw='text-font-100 dark:text-font-200 height[16px] width[16px]'
                       />

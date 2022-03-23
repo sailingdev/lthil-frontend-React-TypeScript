@@ -9,8 +9,8 @@ import {
 } from '../types'
 
 import { ContractFactory } from './contract-factory'
-import { hexToDecimal } from '../utils'
 import addresses from '../assets/addresses.json'
+import { hexToDecimal } from '../utils'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
@@ -79,10 +79,11 @@ export class Ether {
 
   async getMaxWithdrawAmount(tokenAddress: string): Promise<number> {
     const vault = ContractFactory.getVaultContract(this.signer)
-    // @ts-ignore
-    const amount = (await vault.claimable(tokenAddress)).toHexString()
 
-    return hexToDecimal(amount)
+    // @ts-ignore
+    // const amount = (await vault.claimable(tokenAddress)).toHexString()
+
+    return hexToDecimal(2)
   }
 
   async getMaxDepositAmount(tokenAddress: string): Promise<number> {

@@ -1,4 +1,9 @@
-import { ApprovalTransactionMeta, Transaction, TransactionType } from './types'
+import {
+  Approval,
+  ApprovalTransactionMeta,
+  Transaction,
+  TransactionType,
+} from './types'
 import { BigNumber, ethers } from 'ethers'
 
 import { format } from 'date-fns'
@@ -39,4 +44,14 @@ export const getTransactionLabel = (t: Transaction) => {
     return `Approval for ${meta.amount} ${tokenName}`
   }
   return 'Transaction'
+}
+
+export const getCTALabelForApproval = (action: string, approval: Approval) => {
+  return approval == 'UNKNOWN'
+    ? 'Approve token spending'
+    : approval == 'PENDING'
+    ? 'Pending...'
+    : approval == 'VERIFIED'
+    ? action
+    : 'Approve token spending'
 }

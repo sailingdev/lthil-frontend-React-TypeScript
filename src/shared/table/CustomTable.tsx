@@ -88,7 +88,7 @@ const thStyle = [
 
 export type ICustomColumnProps<T extends object> = Omit<Column<T>, 'Cell'> & {
   cell(data: T): ReactNode
-  accessor: keyof T
+  accessor: keyof T | 'action'
   align?: 'left' | 'right' | 'center'
 }
 

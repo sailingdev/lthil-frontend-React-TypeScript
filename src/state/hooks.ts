@@ -1,12 +1,12 @@
 import {
   ApprovalTransactionMeta,
   ISearchParams,
+  MtsOpenPositionMeta,
   StakeTransactionMeta,
   Transaction,
   TransactionReceipt,
   TransactionType,
   WithdrawTransactionMeta,
-  MtsOpenPositionMeta,
 } from '../types'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import {
@@ -20,7 +20,6 @@ import {
 } from './network/network.actions'
 
 import { RootState } from './store'
-import { initializePositionsData } from './marginTrading/marginTrading.actions'
 // @ts-ignore
 import { initializeUserStakes } from './stake/stake.actions'
 import { toggleTheme } from './theme/theme.actions'
@@ -94,17 +93,6 @@ export const useInitStakeTokens = () => {
   const dispatch = useDispatch()
   const { chainId } = useWeb3React()
   return () => dispatch(initializeUserStakes(chainId!))
-}
-
-// MARGIN TRADING HOOKS
-
-export const usePositions = () => {
-  return useAppSelector((state) => state.marginTrading.positions)
-}
-
-export const useInitPositions = () => {
-  const dispatch = useDispatch()
-  return () => dispatch(initializePositionsData())
 }
 
 // TRANSACTION HOOKS

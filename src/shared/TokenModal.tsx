@@ -19,7 +19,8 @@ interface IToken {
 
 interface ITokenModal {
   modalIsOpen: boolean
-  onChange: (st: boolean) => void
+  onModalChange: (value: boolean) => void
+  onSelect(token: any): void
 }
 
 export const TokenModal = (props: ITokenModal) => {
@@ -41,7 +42,7 @@ export const TokenModal = (props: ITokenModal) => {
     <CenteredModal
       tw='bg-secondary width[600px]'
       isOpen={props.modalIsOpen}
-      onChange={props.onChange}
+      onChange={props.onModalChange}
     >
       <div tw='flex flex-row justify-center items-center w-full'>
         <Txt.Heading2 tw='self-end'>Select a token</Txt.Heading2>
@@ -55,7 +56,11 @@ export const TokenModal = (props: ITokenModal) => {
       <div tw='w-full height[384px]'>
         {filteredTokenList.map((token) => {
           return (
-            <div key={token.name} tw='w-full flex flex-row justify-between'>
+            <div
+              key={token.name}
+              tw='w-full flex flex-row justify-between cursor-pointer'
+              onClick={() => props.onSelect(token)}
+            >
               <div tw='flex flex-row justify-start items-center p-0 my-2'>
                 <img tw='w-8 h-8 mr-4' src={token.logoURI} alt='token image' />
                 <div tw='flex flex-col justify-start'>
