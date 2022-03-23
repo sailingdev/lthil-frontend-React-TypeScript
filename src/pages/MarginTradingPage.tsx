@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import tw from 'twin.macro'
 
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
 import { Priority, TransactionType } from '../types'
@@ -87,7 +88,7 @@ export const MarginTradingPage = () => {
                     },
                   ]}
                 />
-                <div tw='flex flex-row items-center'>
+                <div tw='flex w-full justify-between items-center'>
                   <TokenInputField
                     label='Token 1'
                     value={'0.0'}
