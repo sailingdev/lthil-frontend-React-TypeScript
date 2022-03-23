@@ -56,25 +56,15 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
     },
   })
 
-  const [withdrawApproval, withdraw] = useApprovalAction({
-    approvalMeta: {
+  const withdraw = async (tokenAddress: string, depositValue: string) => {
+    const withdraw = await etherGlobal.withdrawToken(tokenAddress, depositValue)
+    addTx(TransactionType.WITHDRAW, withdraw.hash!, {
       token: props.tokenAddress,
       destination: etherGlobal.getAddresses().Vault,
       amount: Number(withdrawValue),
-    },
-    onApproval: async (tokenAddress: string, depositValue: string) => {
-      const withdraw = await etherGlobal.withdrawToken(
-        tokenAddress,
-        depositValue,
-      )
-      addTx(TransactionType.WITHDRAW, withdraw.hash!, {
-        token: props.tokenAddress,
-        destination: etherGlobal.getAddresses().Vault,
-        amount: Number(withdrawValue),
-      }) // TODO: withdraw meta
-      setWithdrawHash(withdraw.hash)
-    },
-  })
+    })
+    setWithdrawHash(withdraw.hash)
+  }
 
   useAsync(async () => {
     const tokenBalance = await etherGlobal.getUserTokenBalance(
@@ -166,7 +156,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
           }
         />
         <Button
-          text={getCTALabelForApproval('Withdraw', withdrawApproval)}
+          text='Withdraw'
           bold
           action
           full
