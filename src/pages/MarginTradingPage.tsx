@@ -213,7 +213,7 @@ export const MarginTradingPage = () => {
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
               <div tw='w-full flex flex-row justify-between pb-5 '>
                 <Txt.Heading2>
-                  {spentToken.symbol}/{obtainedToken.symbol}
+                  {obtainedToken.symbol}/{spentToken.symbol}
                 </Txt.Heading2>
                 <div tw='hidden desktop:flex flex-row items-center gap-1'>
                   <Txt.Body2Regular tw='mr-4'>View:</Txt.Body2Regular>
@@ -232,11 +232,11 @@ export const MarginTradingPage = () => {
               <div tw='w-full h-full  flex flex-col'>
                 {activeChart === 'basic' ? (
                   <BasicChart
-                    tokenSymbol={`${spentToken.symbol}${obtainedToken.symbol}`}
+                    tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
                   />
                 ) : (
                   <TradingChart
-                    tokenSymbol={`${spentToken.symbol}${obtainedToken.symbol}`}
+                    tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
                   />
                 )}
               </div>
