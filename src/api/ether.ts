@@ -77,12 +77,14 @@ export class Ether {
 
   // ========= STAKE PAGE =========
 
+  // TODO: COMMENTED THIS OUT SO WE CAN TEST STAKING ON THE NEWEST DEPLOYMENT
   async getMaxWithdrawAmount(tokenAddress: string): Promise<number> {
-    const vault = ContractFactory.getVaultContract(this.signer)
-    // @ts-ignore
-    const amount = (await vault.claimable(tokenAddress)).toHexString()
+    // const vault = ContractFactory.getVaultContract(this.signer)
+    // // @ts-ignore
+    // const amount = (await vault.claimable(tokenAddress)).toHexString()
 
-    return hexToDecimal(amount)
+    // return hexToDecimal(amount)
+    return 2
   }
 
   async getMaxDepositAmount(tokenAddress: string): Promise<number> {
@@ -239,7 +241,7 @@ export class Ether {
         tokenAddress,
         this.parseUnits(amount, await token.decimals()),
         {
-          gasLimit: 300000000, // GAS LIMIT
+          gasLimit: 1000000, // GAS LIMIT
         },
       )
       return stake
@@ -258,7 +260,7 @@ export class Ether {
         tokenAddress,
         this.parseUnits(amount, await token.decimals()),
         {
-          gasLimit: 300000000, // GAS LIMIT
+          gasLimit: 1000000, // GAS LIMIT
         },
       )
       return withdraw
@@ -454,7 +456,8 @@ export class Ether {
     }
     try {
       const position = await marginTrading.openPosition(positionInfo, {
-        gasLimit: (await etherGlobal.getBlockGasLimit()).toNumber() - 1, // GAS LIMIT // TODO: testing max gas limit
+        // gasLimit: (await etherGlobal.getBlockGasLimit()).toNumber() - 1, // GAS LIMIT // TODO: testing max gas limit
+        gasLimit: 10000000,
       })
       console.log(positionInfo)
       console.log(position)

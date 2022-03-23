@@ -1,4 +1,10 @@
-import { ApprovalTransactionMeta, Transaction, TransactionType } from './types'
+import {
+  ApprovalTransactionMeta,
+  MtsOpenPositionMeta,
+  StakeTransactionMeta,
+  Transaction,
+  TransactionType,
+} from './types'
 import { BigNumber, ethers } from 'ethers'
 
 import { format } from 'date-fns'
@@ -35,8 +41,29 @@ export const getTransactionLabel = (t: Transaction) => {
     const meta = t.meta as ApprovalTransactionMeta
     const tokenName = tokenList.tokens.find(
       (t) => t.address === meta.token,
-    )?.name
+    )?.symbol
     return `Approval for ${meta.amount} ${tokenName}`
+  } else if (t.type === TransactionType.DEPOSIT) {
+    const meta = t.meta as StakeTransactionMeta
+    const tokenName = tokenList.tokens.find(
+      (t) => t.address === meta.token,
+    )?.symbol
+    return `Deposited ${meta.amount} of ${tokenName} into Vault`
+  } else if (t.type === TransactionType.WITHDRAW) {
+    const meta = t.meta as StakeTransactionMeta
+    const tokenName = tokenList.tokens.find(
+      (t) => t.address === meta.token,
+    )?.symbol
+    return `Withdraw ${meta.amount} of ${tokenName} out of Vault`
+  } else if (t.type === TransactionType.MTS_OPEN_POSITION) {
+    const meta = t.meta as MtsOpenPositionMeta
+    const obtainedTokenName = tokenList.tokens.find(
+      (t) => t.address === meta.obtainedToken,
+    )?.symbol
+    const spentTokenName = tokenList.tokens.find(
+      (t) => t.address === meta.spentToken,
+    )?.symbol
+    return `Opened ${meta.positionType} position ${obtainedTokenName}/${spentTokenName}`
   }
   return 'Transaction'
 }
