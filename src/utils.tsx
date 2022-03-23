@@ -71,10 +71,10 @@ export const getTransactionLabel = (t: Transaction) => {
 
 export const getCTALabelForApproval = (action: string, approval: Approval) => {
   return approval == 'UNKNOWN'
-    ? 'Approve token spending'
+    ? 'Approve'
     : approval == 'PENDING'
     ? 'Pending...'
     : approval == 'VERIFIED'
     ? action
-    : 'Approve token spending'
+    : 'Approve'
 }

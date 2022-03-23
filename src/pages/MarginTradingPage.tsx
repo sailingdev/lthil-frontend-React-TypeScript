@@ -67,9 +67,7 @@ export const MarginTradingPage = () => {
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>
         <div tw='w-full tablet:w-9/12 desktop:w-10/12 flex flex-col items-center'>
-          <Txt.Heading1 tw='mb-12'>
-            {spentToken.symbol}/{obtainedToken.symbol}
-          </Txt.Heading1>
+          <Txt.Heading1 tw='mb-12'>Margin Trading Strategy </Txt.Heading1>
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
             <div tw='flex flex-col gap-3 flex-grow'>
               <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100 gap-7'>
@@ -187,12 +185,12 @@ export const MarginTradingPage = () => {
                 <Button
                   text={
                     positionApproval == 'UNKNOWN'
-                      ? 'Approve token spending'
+                      ? 'Approve'
                       : positionApproval == 'PENDING'
                       ? 'Pending...'
                       : positionApproval == 'VERIFIED'
                       ? `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`
-                      : 'Approve token spending'
+                      : 'Approve'
                   }
                   full
                   action
