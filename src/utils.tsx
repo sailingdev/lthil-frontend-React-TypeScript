@@ -1,4 +1,5 @@
 import {
+  Approval,
   ApprovalTransactionMeta,
   MtsOpenPositionMeta,
   StakeTransactionMeta,
@@ -66,4 +67,14 @@ export const getTransactionLabel = (t: Transaction) => {
     return `Opened ${meta.positionType} position ${obtainedTokenName}/${spentTokenName}`
   }
   return 'Transaction'
+}
+
+export const getCTALabelForApproval = (action: string, approval: Approval) => {
+  return approval == 'UNKNOWN'
+    ? 'Approve token spending'
+    : approval == 'PENDING'
+    ? 'Pending...'
+    : approval == 'VERIFIED'
+    ? action
+    : 'Approve token spending'
 }

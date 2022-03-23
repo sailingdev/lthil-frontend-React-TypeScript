@@ -1,31 +1,31 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
 
-import { Button } from './Button'
-import { IBaseProps, TransactionType } from '../types'
-import { InputField } from './InputField'
-import { Txt } from './Txt'
-import { etherGlobal } from '../api/ether'
+import { IBaseProps, TransactionType } from '../../types'
+import {
+  useAddTransaction,
+  useTransaction,
+  useTransactions,
+} from '../../state/hooks'
+
+import { Button } from '../../shared/Button'
+import { ContractFactory } from '../../api/contract-factory'
+import { InputField } from '../../shared/InputField'
+import { Txt } from '../../shared/Txt'
+import { addTransaction } from '../../state/transaction/transaction.actions'
+import { etherGlobal } from '../../api/ether'
+import { getCTALabelForApproval } from '../../utils'
+import tw from 'twin.macro'
+import { useApprovalAction } from '../../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useState } from 'react'
-import { useApprovalAction } from '../shared/hooks/useApprovalAction'
-import {
-  useTransactions,
-  useTransaction,
-  useAddTransaction,
-} from '../state/hooks'
-import { ContractFactory } from '../api/contract-factory'
-import { addTransaction } from '../state/transaction/transaction.actions'
+
 interface IDepositWithdrawProps extends IBaseProps {
   tokenAddress: string
-  onClick: any
   tokenSymbol: string
 }
 
 export const DepositWithdraw = (props: IDepositWithdrawProps) => {
-  const addTx = useAddTransaction()
-  // const transactions = useTransactions()
   const [depositValue, setDepositValue] = useState<string>('0')
   const [withdrawValue, setWithdrawValue] = useState<string>('0')
   const [userTokenBalance, setUserTokenBalance] = useState<number>(0)
@@ -34,6 +34,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
   const [withdrawHash, setWithdrawHash] = useState<string | undefined>(
     undefined,
   )
+  const addTx = useAddTransaction()
 
   const stakeTx = useTransaction(stakeHash)
   const withdrawTx = useTransaction(withdrawHash)
@@ -101,17 +102,9 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
     setWithdrawValue(value)
   }
 
-  const depositToken = async () => {
-    deposit(props.tokenAddress, depositValue)
-  }
-
-  const withdrawToken = async () => {
-    withdraw(props.tokenAddress, withdrawValue)
-  }
-
   return (
     <div
-      onClick={props.onClick}
+      onClick={(e) => e.stopPropagation()}
       className={props.className}
       tw='flex flex-col tablet:flex-row justify-center gap-4 my-2 w-full'
     >
@@ -137,19 +130,11 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
           }
         />
         <Button
-          text={
-            stakeApproval == 'UNKNOWN'
-              ? 'Approve token spending'
-              : stakeApproval == 'PENDING'
-              ? 'Pending...'
-              : stakeApproval == 'VERIFIED'
-              ? 'Deposit'
-              : 'Approve token spending'
-          }
+          text={getCTALabelForApproval('Deposit', stakeApproval)}
           bold
           action
           full
-          onClick={depositToken}
+          onClick={() => deposit(props.tokenAddress, depositValue)}
         />
         <Txt.CaptionMedium>
           {!stakeTx
@@ -181,19 +166,11 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
           }
         />
         <Button
-          text={
-            withdrawApproval == 'UNKNOWN'
-              ? 'Approve token spending'
-              : withdrawApproval == 'PENDING'
-              ? 'Pending...'
-              : withdrawApproval == 'VERIFIED'
-              ? 'Withdraw'
-              : 'Approve token spending'
-          }
+          text={getCTALabelForApproval('Withdraw', withdrawApproval)}
           bold
           action
           full
-          onClick={withdrawToken}
+          onClick={() => withdraw(props.tokenAddress, withdrawValue)}
         />
         <Txt.CaptionMedium>
           {!withdrawTx
