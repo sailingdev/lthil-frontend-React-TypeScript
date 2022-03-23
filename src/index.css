@@ -128,3 +128,12 @@ body > div {
   color: white !important;
   opacity: 1;
 }
+
+.toastify-info-container {
+  background-color: rgb(7, 124, 224) !important;
+}
+
+.toastify-info-container > button {
+  color: white !important;
+  opacity: 1;
+}

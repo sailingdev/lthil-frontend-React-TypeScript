@@ -88,7 +88,7 @@ const thStyle = [
 
 export type ICustomColumnProps<T extends object> = Omit<Column<T>, 'Cell'> & {
   cell(data: T): ReactNode
-  accessor: keyof T
+  accessor: keyof T | 'action'
   align?: 'left' | 'right' | 'center'
 }
 
@@ -105,7 +105,6 @@ interface ICustomTableProps<T extends object> {
   onActiveRowChange?: (row: T) => void
   activeRow?: T | undefined
 }
-// TODO TABLE EMPTY STATE
 
 export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
   const {
@@ -180,7 +179,12 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
               </tr>
             ))}
           </thead>
-          {/* TODO: Do we need this skeleton code here? */}
+
+          {data.length === 0 && !loading && (
+            <div tw='w-full rounded-lg  flex-col h-64 bg-primary-100 flex justify-center items-center'>
+              <Txt.Body1Regular>No tokens found.</Txt.Body1Regular>
+            </div>
+          )}
           {loading ? (
             <tbody {...getTableBodyProps()}>
               {page.map((row) => {

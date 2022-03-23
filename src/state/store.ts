@@ -1,6 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
-import marginTradingReducer from './marginTrading/marginTrading.reducer'
 import networkReducer from './network/network.reducer'
 import stakeReducer from './stake/stake.reducer'
 import themeReducer from './theme/theme.reducer'
@@ -10,7 +9,6 @@ const reducer = combineReducers({
   theme: themeReducer.reducer,
   network: networkReducer.reducer,
   stake: stakeReducer.reducer,
-  marginTrading: marginTradingReducer.reducer,
   transactions: transactionReducer,
 })
 

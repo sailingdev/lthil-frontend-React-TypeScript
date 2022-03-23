@@ -1,113 +1,115 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-/** @jsxImportSource @emotion/react */
 import { ArrowDown, FadersHorizontal } from 'phosphor-react'
+import { Priority, TransactionType } from '../types'
+import { useAddTransaction, useTransaction } from '../state/hooks'
 
 import { BasicChart } from '../shared/charts/BasicChart'
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
-import { ReactComponent as CurrEth } from '../assets/images/currencyEthereum.svg'
 import { InputField } from '../shared/InputField'
 import { RadioGroup } from '../shared/RadioGroup'
 import { SliderBar } from '../shared/SliderBar'
 import { TabButton } from '../shared/TabButton'
 import { TabsSwitch } from '../shared/TabsSwitch'
+import { TokenInputField } from './TokenInputField'
 import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
-import tw from 'twin.macro'
+import { addresses } from '../assets/addresses.json'
+import { etherGlobal } from '../api/ether'
+import { tokens } from '../assets/tokenlist.json'
+import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useState } from 'react'
 
 export const MarginTradingPage = () => {
+  const addTx = useAddTransaction()
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
-  const [tokenFrom, setTokenFrom] = useState<any>('')
-  const [tokenTo, setTokenTo] = useState<any>('')
-  const [sliderValue, setSliderValue] = useState<number>(1)
-  const [principal, setPrincipal] = useState<any>('')
-  const [slippage, setSlippage] = useState<any>('')
-  const [deadline, setDeadline] = useState<any>('')
+  const [positionType, setPositionType] = useState<'short' | 'long'>('long')
+  const [spentToken, setSpentToken] = useState<any>(tokens[0])
+  const [obtainedToken, setObtainedToken] = useState<any>(tokens[1])
+  const [leverage, setLeverage] = useState<number>(1)
+  const [margin, setMargin] = useState<any>(2)
+  const [slippage, setSlippage] = useState<any>(1)
+  const [deadline, setDeadline] = useState<any>(20)
   const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
-  const [activeTab, setActiveTab] = useState(0)
+  const [priority, setPriority] = useState<Priority>('buy')
+
+  const [openPositionHash, setOpenPositionHash] = useState<string | undefined>(
+    undefined,
+  )
+  const openPositionTx = useTransaction(openPositionHash)
+
+  const [positionApproval, openPosition] = useApprovalAction({
+    approvalMeta: {
+      token: spentToken.address,
+      destination: addresses.MarginTradingStrategy,
+      amount: 10, // TODO: What about this?
+    },
+    onApproval: async () => {
+      const positionData = {
+        positionType,
+        spentToken: spentToken.address,
+        obtainedToken: obtainedToken.address,
+        margin,
+        slippage,
+        leverage,
+        priority,
+        deadline,
+      }
+      const position = await etherGlobal.marginTradingOpenPosition(positionData)
+      addTx(TransactionType.MTS_OPEN_POSITION, position.hash, positionData)
+      setOpenPositionHash(position.hash)
+    },
+  })
 
   return (
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>
         <div tw='w-full tablet:w-9/12 desktop:w-10/12 flex flex-col items-center'>
-          <Txt.Heading1 tw='mb-12'>ETH/ETH</Txt.Heading1>
+          <Txt.Heading1 tw='mb-12'>
+            {spentToken.symbol}/{obtainedToken.symbol}
+          </Txt.Heading1>
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
             <div tw='flex flex-col gap-3 flex-grow'>
               <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100 gap-7'>
                 <TabsSwitch
-                  activeIndex={activeTab}
-                  onChange={(value) => setActiveTab(value)}
+                  activeIndex={positionType}
+                  onChange={(value) => setPositionType(value)}
                   items={[
                     {
                       title: 'Long',
-                      content: '',
+                      value: 'long',
                     },
                     {
                       title: 'Short',
-                      content: '',
+                      value: 'short',
                     },
                   ]}
                 />
-                <InputField
+                <TokenInputField
                   label='Token 1'
-                  value={tokenFrom}
-                  onChange={(value) => setTokenFrom(value)}
-                  placeholder='0'
-                  renderRight={
-                    <>
-                      <button
-                        css={[
-                          tw`border-primary-400 dark:border-primary-300 rounded-md border-2 h-8 px-2`,
-                        ]}
-                      >
-                        <Txt.Body2Regular>Max</Txt.Body2Regular>
-                      </button>
-                      <Button
-                        css={[
-                          tw`h-8 bg-primary-400 dark:bg-primary-300 h-6 tablet:h-7 desktop:h-8`,
-                        ]}
-                        text='USDC'
-                        leftIcon={CurrEth}
-                        rightIcon={ArrowDown}
-                      />
-                    </>
-                  }
+                  value={'0.0'}
+                  token={spentToken}
+                  setValue={(value) => setSpentToken(value)}
+                  onTokenChange={(value) => setSpentToken(value)}
                 />
                 <ArrowDown size={28} tw='self-center text-font-200' />
-                <InputField
+                <TokenInputField
                   label='Token 2'
-                  placeholder='0'
-                  value={tokenTo}
-                  onChange={(value) => setTokenTo(value)}
-                  renderRight={
-                    <>
-                      <button
-                        css={[
-                          tw`border-primary-400 dark:border-primary-300 rounded-md border-2 h-8 px-2`,
-                        ]}
-                      >
-                        <Txt.Body2Regular>Max</Txt.Body2Regular>
-                      </button>
-                      <Button
-                        css={[
-                          tw`h-8 bg-primary-400 dark:bg-primary-300 h-6 tablet:h-7 desktop:h-8`,
-                        ]}
-                        text='USDC'
-                        leftIcon={CurrEth}
-                        rightIcon={ArrowDown}
-                      />
-                    </>
-                  }
+                  value={'0.0'}
+                  token={obtainedToken}
+                  setValue={(value) => setObtainedToken(value)}
+                  onTokenChange={(value) => setObtainedToken(value)}
                 />
+
                 <SliderBar
                   label='Leverage'
                   tooltip
                   min={1}
                   max={5}
-                  value={sliderValue}
-                  onChange={(value) => setSliderValue(value)}
+                  value={leverage}
+                  onChange={(value) => setLeverage(value)}
                   marks={{
                     1: '1x',
                     2: '2x',
@@ -117,10 +119,10 @@ export const MarginTradingPage = () => {
                   }}
                 />
                 <InputField
-                  label='Principal'
+                  label='Margin'
                   placeholder='0'
-                  value={principal}
-                  onChange={(value) => setPrincipal(value)}
+                  value={margin}
+                  onChange={(value) => setMargin(value)}
                 />
                 <div tw='w-full'>
                   {showAdvancedOptions ? (
@@ -150,13 +152,15 @@ export const MarginTradingPage = () => {
                           items={[
                             {
                               label: 'Buy',
-                              value: 'BUY',
+                              value: 'buy',
                             },
                             {
                               label: 'Sell',
-                              value: 'Sell',
+                              value: 'sell',
                             },
                           ]}
+                          activeRadio={priority}
+                          onChange={(value) => setPriority(value as Priority)}
                         />
                         <InputField
                           label='Deadline'
@@ -180,12 +184,35 @@ export const MarginTradingPage = () => {
                     </button>
                   )}
                 </div>
-                <Button text='Buy / Long TKN' full action bold />
+                <Button
+                  text={
+                    positionApproval == 'UNKNOWN'
+                      ? 'Approve token spending'
+                      : positionApproval == 'PENDING'
+                      ? 'Pending...'
+                      : positionApproval == 'VERIFIED'
+                      ? `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`
+                      : 'Approve token spending'
+                  }
+                  full
+                  action
+                  bold
+                  onClick={() => openPosition()}
+                />
+                <Txt.CaptionMedium>
+                  {!openPositionTx
+                    ? ''
+                    : openPositionTx.status == 'verified'
+                    ? 'Transaction verified.'
+                    : 'Transaction pending...'}
+                </Txt.CaptionMedium>
               </div>
             </div>
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
               <div tw='w-full flex flex-row justify-between pb-5 '>
-                <Txt.Heading2>ETH/USDC</Txt.Heading2>
+                <Txt.Heading2>
+                  {spentToken.symbol}/{obtainedToken.symbol}
+                </Txt.Heading2>
                 <div tw='hidden desktop:flex flex-row items-center gap-1'>
                   <Txt.Body2Regular tw='mr-4'>View:</Txt.Body2Regular>
                   <TabButton
@@ -201,7 +228,15 @@ export const MarginTradingPage = () => {
                 </div>
               </div>
               <div tw='w-full h-full  flex flex-col'>
-                {activeChart === 'basic' ? <BasicChart /> : <TradingChart />}
+                {activeChart === 'basic' ? (
+                  <BasicChart
+                    tokenSymbol={`${spentToken.symbol}${obtainedToken.symbol}`}
+                  />
+                ) : (
+                  <TradingChart
+                    tokenSymbol={`${spentToken.symbol}${obtainedToken.symbol}`}
+                  />
+                )}
               </div>
             </div>
           </div>

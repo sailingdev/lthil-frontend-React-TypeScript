@@ -1,11 +1,15 @@
 import { BigNumber, Transaction, ethers } from 'ethers'
 import {
+  OpenPosition,
+  PositionType,
   PositionWasOpenedEvent,
+  Priority,
   ProfitsAndLosses,
   TransactionReceipt,
 } from '../types'
 
 import { ContractFactory } from './contract-factory'
+import addresses from '../assets/addresses.json'
 import { hexToDecimal } from '../utils'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
@@ -25,7 +29,7 @@ export class Ether {
 
   constructor(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
-    this.initializeSigner()
+    this.ensureSigner()
   }
 
   // TODO: rename this function maybe?
@@ -33,8 +37,11 @@ export class Ether {
     return ethers.utils.parseUnits(amount, decimal)
   }
 
-  async initializeSigner() {
-    this.signer = await this.provider.getSigner()
+  async ensureSigner() {
+    if (!this.signer) {
+      this.signer = await this.provider.getSigner()
+    }
+    return this.signer
   }
 
   getProvider() {
@@ -42,9 +49,6 @@ export class Ether {
   }
   getBlockNumber() {
     return this.provider.getBlockNumber()
-  }
-  getSigner() {
-    return this.signer
   }
 
   getNetwork() {
@@ -61,20 +65,31 @@ export class Ether {
     return accounts.length > 0 ? accounts[0] : null
   }
 
+  getAddresses() {
+    return addresses.addresses
+  }
+
+  async getBlockGasLimit() {
+    return await (
+      await this.provider.getBlock('latest')
+    ).gasLimit
+  }
+
   // ========= STAKE PAGE =========
 
   async getMaxWithdrawAmount(tokenAddress: string): Promise<number> {
-    const vault = ContractFactory.getVaultContract(this.signer)
-    // @ts-ignore
-    const amount = (await vault.claimable(tokenAddress)).toHexString()
+    const vault = ContractFactory.getVaultContract(await this.ensureSigner())
 
-    return hexToDecimal(amount)
+    // @ts-ignore
+    // const amount = (await vault.claimable(tokenAddress)).toHexString()
+
+    return hexToDecimal(2)
   }
 
   async getMaxDepositAmount(tokenAddress: string): Promise<number> {
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
-      this.signer,
+      await this.ensureSigner(),
     )
     const balance = (
       await tokenContract.balanceOf(this.getAccountAddress())
@@ -83,17 +98,21 @@ export class Ether {
     return hexToDecimal(balance)
   }
 
-  async getTokenTvl(tokenAddres: string): Promise<number> {
-    const vault = ContractFactory.getVaultContract(this.signer)
+  async getTokenTvl(tokenAddress: string): Promise<number> {
+    console.log(tokenAddress)
+    const vault = ContractFactory.getVaultContract(await this.ensureSigner())
     //@ts-ignore
-    const tvl = (await vault.balance(tokenAddres)).toHexString()
+    const tvl = (await vault.balance(tokenAddress)).toHexString()
 
     return hexToDecimal(tvl)
   }
 
   async computeAnnualPercentageYield(tokenAddress: string): Promise<number> {
-    const vault = ContractFactory.getVaultContract(this.signer)
-    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
+    const vault = ContractFactory.getVaultContract(await this.ensureSigner())
+    const token = ContractFactory.getTokenContract(
+      tokenAddress,
+      await this.ensureSigner(),
+    )
 
     // @ts-ignore
     const tokenSubvault = await vault.vaults(tokenAddress)
@@ -117,7 +136,7 @@ export class Ether {
     const account = await this.getAccountAddress()
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
-      this.signer,
+      await this.ensureSigner(),
     )
     const allowance = await tokenContract.allowance(account, destinationAddress)
     return hexToDecimal(allowance.toHexString())
@@ -131,7 +150,7 @@ export class Ether {
     try {
       const tokenContract = ContractFactory.getTokenContract(
         tokenAddress,
-        this.signer,
+        await this.ensureSigner(),
       )
       const decimals = await tokenContract.decimals()
       const gasLimit = await this.getApprovalGasEstimation(
@@ -161,7 +180,7 @@ export class Ether {
   ) {
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
-      this.signer,
+      await this.ensureSigner(),
     )
     const decimals = await tokenContract.decimals()
     const gas = await tokenContract.estimateGas.approve(
@@ -174,13 +193,22 @@ export class Ether {
     // THIS IS CURRENTLY NOT WORKING.
     // https://docs.ethers.io/v5/api/providers/provider/#Provider-estimateGas
     //
-    const gas = await this.signer.estimateGas({ from: account, to, value })
+    const gas = await (
+      await this.ensureSigner()
+    ).estimateGas({
+      from: account,
+      to,
+      value,
+    })
     console.log(gas)
     return gas
   }
 
   async getUserTokenBalance(tokenAddress: string): Promise<number> {
-    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
+    const token = ContractFactory.getTokenContract(
+      tokenAddress,
+      await this.ensureSigner(),
+    )
     const balance = await token.balanceOf(this.getAccountAddress())
     return hexToDecimal(balance.toHexString())
   }
@@ -213,33 +241,60 @@ export class Ether {
     }
   }
 
-  // async depositToken(tokenAddress: string, amount: string): Promise<any> {
-  //   const vault = ContractFactory.getVaultContract(this.signer)
-  //   const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
+  async depositToken(tokenAddress: string, amount: string): Promise<any> {
+    try {
+      const vault = ContractFactory.getVaultContract(await this.ensureSigner())
+      const token = ContractFactory.getTokenContract(
+        tokenAddress,
+        await this.ensureSigner(),
+      )
 
-  //   // Check balance -> TODO: where to do the balance checking? On the input?
+      // Check balance -> TODO: where to do the balance checking? On the input? Do we need to do this even?
 
-  //   // Allow token spending
-  //   await this.approve(tokenAddress, this.vaultAddress, amount)
+      //@ts-ignore
+      const stake = await vault.stake(
+        tokenAddress,
+        this.parseUnits(amount, await token.decimals()),
+        {
+          gasLimit: 300000000, // GAS LIMIT
+        },
+      )
+      return stake
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-  //   // Do the staking
-  //   //@ts-ignore
-  //   const stake = await vault.stake(
-  //     tokenAddress,
-  //     this.parseUnits(amount, await token.decimals()),
-  //     {
-  //       gasLimit: 1000000,
-  //     },
-  //   )
-  //   return stake
-  // }
+  async withdrawToken(tokenAddress: string, amount: string): Promise<any> {
+    try {
+      const vault = ContractFactory.getVaultContract(await this.ensureSigner())
+      const token = ContractFactory.getTokenContract(
+        tokenAddress,
+        await this.ensureSigner(),
+      )
+
+      //@ts-ignore
+      const withdraw = await vault.unstake(
+        tokenAddress,
+        this.parseUnits(amount, await token.decimals()),
+        {
+          gasLimit: 300000000, // GAS LIMIT
+        },
+      )
+      return withdraw
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // ========= MARGIN TRADING =========
 
   // TODO: This function is layed out but the data is wrong since we don't yet know precisely what data PositionWasOpened event returns.
   async computeProfitsAndLosses(
     positionEvent: PositionWasOpenedEvent,
   ): Promise<ProfitsAndLosses> {
     const marginTrading = ContractFactory.getMarginTradingStrategyContract(
-      this.signer,
+      await this.ensureSigner(),
     )
 
     let profitsAndLosses = 0
@@ -278,6 +333,154 @@ export class Ether {
     return {
       currencyValue: profitsAndLosses,
       percentageValue: (profitsAndLosses / collateral) * 100,
+    }
+  }
+
+  async computeMinObtained(
+    spentToken: string,
+    obtainedToken: string,
+    margin: number,
+    leverage: number,
+    priority: Priority,
+    positionType: PositionType,
+    slippage: number,
+  ): Promise<BigNumber> {
+    const marginTrading = ContractFactory.getMarginTradingStrategyContract(
+      await this.ensureSigner(),
+    )
+
+    const Margin = BigNumber.from(margin)
+    const Leverage = BigNumber.from(leverage)
+    const Slippage = BigNumber.from(slippage)
+
+    if (positionType === 'long') {
+      const quoted = await marginTrading.quote(
+        spentToken,
+        obtainedToken,
+        Margin.mul(Leverage).toHexString(),
+      )
+
+      if (priority === 'buy') {
+        return quoted[0]
+      } else {
+        // priority is 'sell'
+        return quoted[0].mul(BigNumber.from(1).sub(Slippage.div(100)))
+      }
+    } else {
+      // positionType is 'short'
+
+      if (priority === 'buy') {
+        return Margin.mul(Leverage)
+      } else {
+        // priority is 'sell'
+        return Margin.mul(Leverage).mul(
+          BigNumber.from(1).sub(Slippage.div(100)),
+        )
+      }
+    }
+  }
+
+  async computeMaxSpent(
+    spentToken: string,
+    obtainedToken: string,
+    margin: number,
+    leverage: number,
+    priority: Priority,
+    positionType: PositionType,
+    slippage: number,
+  ): Promise<BigNumber> {
+    const MarginTrading = ContractFactory.getMarginTradingStrategyContract(
+      await this.ensureSigner(),
+    )
+
+    const Margin = BigNumber.from(margin)
+    const Leverage = BigNumber.from(leverage)
+    const Slippage = BigNumber.from(slippage)
+
+    if (positionType === 'long') {
+      if (priority === 'buy') {
+        return Margin.mul(Leverage).div(
+          BigNumber.from(1).sub(Slippage.div(100)),
+        )
+      } else {
+        // priority is 'sell'
+        return Margin.mul(Leverage)
+      }
+    } else {
+      // positionType is 'short'
+
+      const quoted = await MarginTrading.quote(
+        obtainedToken,
+        spentToken,
+        margin * leverage,
+      )
+
+      if (priority === 'buy') {
+        return quoted[0].div(BigNumber.from(1).sub(Slippage.div(100)))
+      } else {
+        // priority is 'sell'
+        return quoted[0]
+      }
+    }
+  }
+
+  // TODO: Update dashboard table after transaction gets verified
+  async marginTradingOpenPosition(positionData: OpenPosition): Promise<any> {
+    const {
+      spentToken,
+      obtainedToken,
+      leverage,
+      slippage,
+      deadline,
+      margin,
+      positionType,
+      priority,
+    } = positionData
+
+    const marginTrading = ContractFactory.getMarginTradingStrategyContract(
+      await this.ensureSigner(),
+    )
+
+    const positionInfo = {
+      spentToken,
+      obtainedToken,
+      deadline: BigNumber.from(
+        Math.floor(Date.now() / 1000) + 60 * deadline,
+      ).toHexString(), // deadline should be integer representing minutes
+      collateral: BigNumber.from(margin).toHexString(),
+      collateralIsSpentToken: positionType === 'long' ? true : false,
+      minObtained: (
+        await this.computeMinObtained(
+          spentToken,
+          obtainedToken,
+          margin,
+          leverage,
+          priority,
+          positionType,
+          slippage,
+        )
+      ).toHexString(),
+      maxSpent: (
+        await this.computeMaxSpent(
+          spentToken,
+          obtainedToken,
+          margin,
+          leverage,
+          priority,
+          positionType,
+          slippage,
+        )
+      ).toHexString(),
+    }
+    try {
+      const position = await marginTrading.openPosition(positionInfo, {
+        // gasLimit: (await etherGlobal.getBlockGasLimit()).toNumber() - 1, // GAS LIMIT // TODO: testing max gas limit
+      })
+      console.log(positionInfo)
+      console.log(position)
+      return position
+    } catch (error) {
+      console.log(error)
     }
   }
 }

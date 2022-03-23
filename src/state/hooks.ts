@@ -1,8 +1,12 @@
 import {
+  ApprovalTransactionMeta,
   ISearchParams,
+  MtsOpenPositionMeta,
+  StakeTransactionMeta,
   Transaction,
   TransactionReceipt,
   TransactionType,
+  WithdrawTransactionMeta,
 } from '../types'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import {
@@ -16,7 +20,6 @@ import {
 } from './network/network.actions'
 
 import { RootState } from './store'
-import { initializePositionsData } from './marginTrading/marginTrading.actions'
 // @ts-ignore
 import { initializeUserStakes } from './stake/stake.actions'
 import { toggleTheme } from './theme/theme.actions'
@@ -92,17 +95,6 @@ export const useInitStakeTokens = () => {
   return () => dispatch(initializeUserStakes(chainId!))
 }
 
-// MARGIN TRADING HOOKS
-
-export const usePositions = () => {
-  return useAppSelector((state) => state.marginTrading.positions)
-}
-
-export const useInitPositions = () => {
-  const dispatch = useDispatch()
-  return () => dispatch(initializePositionsData())
-}
-
 // TRANSACTION HOOKS
 
 export const useTransactions = () => {
@@ -113,6 +105,11 @@ export const useTransactions = () => {
     }
     return Object.values(state.transactions.transactions[chainId!] ?? {})
   })
+}
+
+export const useTransaction = (tx?: string) => {
+  const transactions = useTransactions()
+  return transactions.find((t) => t.tx === tx)
 }
 export const usePendingTransactions = () => {
   const transactions = useTransactions()
@@ -130,7 +127,15 @@ export const useApprovalTransactions = () => {
 export const useAddTransaction = () => {
   const { chainId } = useWeb3React()
   const dispatch = useDispatch()
-  return (type: TransactionType, tx: string, meta: any) => {
+  return (
+    type: TransactionType,
+    tx: string,
+    meta:
+      | WithdrawTransactionMeta
+      | StakeTransactionMeta
+      | ApprovalTransactionMeta
+      | MtsOpenPositionMeta,
+  ) => {
     if (!chainId) {
       return
     }

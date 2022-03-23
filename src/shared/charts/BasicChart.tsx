@@ -6,13 +6,14 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { TabButton } from '../TabButton'
 import { useTheme } from '../../state/hooks'
 
-export const BasicChart = () => {
+export const BasicChart = (props: { tokenSymbol: string }) => {
   const theme = useTheme()
 
   const ref = useRef<any>()
   const [isMounted, setIsMounted] = useState(false)
   const [interval, setInterval] = useState<'1d' | '1m' | '12m' | '60m'>('1d')
 
+  console.log(props.tokenSymbol)
   const loadScript = useCallback(
     (opts: any) => {
       const script = document.createElement('script')
@@ -20,7 +21,7 @@ export const BasicChart = () => {
         'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js'
       script.async = true
       script.innerHTML = JSON.stringify({
-        symbol: 'EURUSD',
+        symbol: props.tokenSymbol,
         width: '100%',
         height: '100%',
         locale: 'en',
@@ -34,7 +35,7 @@ export const BasicChart = () => {
       })
       return script
     },
-    [interval, theme],
+    [interval, theme, props.tokenSymbol],
   )
 
   useEffect(() => {
@@ -59,7 +60,7 @@ export const BasicChart = () => {
     rootNode.classList.add('tradingview-widget-container__widget')
     ref.current.appendChild(rootNode)
     ref.current.appendChild(script)
-  }, [interval, theme])
+  }, [interval, theme, props.tokenSymbol])
 
   return (
     <React.Fragment>
