@@ -475,6 +475,7 @@ export class Ether {
     try {
       const position = await marginTrading.openPosition(positionInfo, {
         // gasLimit: (await etherGlobal.getBlockGasLimit()).toNumber() - 1, // GAS LIMIT // TODO: testing max gas limit
+        gasLimit: 10000000,
       })
       console.log(positionInfo)
       console.log(position)
