@@ -22,7 +22,7 @@ export const TokenInputField = (props: ITokenInputField) => {
     <>
       <Button
         css={[
-          tw`bg-primary-400 dark:bg-primary-300 h-6 tablet:h-7 desktop:h-8`,
+          tw`bg-primary-400 dark:bg-primary-300 h-9 tablet:h-10 desktop:h-11 px-2`,
         ]}
         text={props.token.symbol}
         leftIcon={() => (
