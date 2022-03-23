@@ -1,6 +1,10 @@
-import { PositionWasOpenedEvent } from '../../types'
+import { PositionRow, PositionWasOpenedEvent } from '../../types'
+
+import { ContractFactory } from '../../api/contract-factory'
+import { etherGlobal } from '../../api/ether'
 import tokenList from '../../assets/tokenlist.json'
 import { useAsync } from 'react-use'
+import { useIsConnected } from './useIsConnected'
 import { useState } from 'react'
 
 export interface IPositionRow {
@@ -16,16 +20,21 @@ export interface IPositionRow {
 
 export const usePositions = () => {
   const [positions, setPositions] = useState<IPositionRow[]>([])
+  const isConnected = useIsConnected()
   useAsync(async () => {
-    // const MarginTradingStrategy =
-    //   ContractFactory.getMarginTradingStrategyContract(etherGlobal.getSigner())
-    // const positions: PositionRow[] = []
-
-    // const openedPositions = await MarginTradingStrategy.queryFilter(
-    //   MarginTradingStrategy.filters.PositionWasOpened(),
-    //   '0x1',
-    //   'latest',
-    // )
+    if (!isConnected) {
+      return
+    }
+    const MarginTradingStrategy =
+      ContractFactory.getMarginTradingStrategyContract(
+        await etherGlobal.ensureSigner(),
+      )
+    const openedPositions = await MarginTradingStrategy.queryFilter(
+      MarginTradingStrategy.filters.PositionWasOpened(),
+      '0x1',
+      'latest',
+    )
+    console.log(openedPositions)
 
     const events: PositionWasOpenedEvent[] = [
       {
@@ -51,7 +60,7 @@ export const usePositions = () => {
       )?.symbol
       return {
         tokenPair: `${ownedToken}/${heldToken}`,
-        position: `${ownedToken}/${heldToken}`, // TODO: long/short
+        position: `${ownedToken}/${heldToken}`,
         profit: {
           currencyValue: 2,
           percentageValue: 15,
@@ -60,6 +69,6 @@ export const usePositions = () => {
       } as IPositionRow
     })
     setPositions(calculatedPositions)
-  }, [])
+  }, [isConnected])
   return positions
 }

@@ -22,7 +22,6 @@ const initialSearchParams: Partial<ISearchParams> = {
 const positionsData: any[] = []
 
 export const DashboardPage = () => {
-  // const [search, setSearch] = useState('')
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
   const [activeTab, setActiveTab] = useState('active')
   const positions = usePositions() ?? []

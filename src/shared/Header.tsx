@@ -62,9 +62,9 @@ export const Header = () => {
         ) : (
           <Button text='Connect' action onClick={() => setIsOpenWallet(true)} />
         )}
-        <button tw='border-0 rounded-md cursor-pointer flex flex-row items-center justify-center h-9 tablet:h-10 desktop:h-11 w-9 tablet:w-10 desktop:w-11 px-2 bg-primary-200 dark:text-secondary'>
+        {/* <button tw='border-0 rounded-md cursor-pointer flex flex-row items-center justify-center h-9 tablet:h-10 desktop:h-11 w-9 tablet:w-10 desktop:w-11 px-2 bg-primary-200 dark:text-secondary'>
           <DotsThree size={24} />
-        </button>
+        </button> */}
       </span>
       <WalletModal
         modalIsOpen={isOpenWallet}

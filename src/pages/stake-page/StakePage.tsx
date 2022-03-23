@@ -89,117 +89,107 @@ export const StakePage = () => {
               />
             </div>
           </div>
-          {stakeTokens.length > 0 ? (
-            <CustomTable
-              activeRow={activeRow}
-              onActiveRowChange={onRowClick}
-              renderExpanded={
-                <DepositWithdraw
-                  tokenAddress={activeRow?.tokenAddress ?? undefined}
-                  tokenSymbol={activeRow?.vaultName ?? undefined}
-                />
-              }
-              loading={false}
-              maxPage={
-                stakeTokens.length > 0
-                  ? stakeTokens.length / searchParams.size
-                  : 1
-              }
-              currentPage={searchParams.page}
-              setPage={setPage}
-              pageSize={searchParams.size}
-              data={stakeTokens}
-              mobileColumns={[
-                {
-                  Header: 'Vault',
-                  accessor: 'vaultName',
-                  cell: (l: StakeToken) => (
-                    <TableCell.Text value={l.vaultName} />
-                  ),
-                },
-                {
-                  Header: 'APY',
-                  accessor: 'annualPositionYield',
-                  cell: (l: StakeToken) => (
-                    <TableCell.Percentage value={l.annualPercentageYield} />
-                  ),
-                },
-                {
-                  Header: 'TVL',
-                  accessor: 'totalValueLocked',
-                  cell: (l: StakeToken) => (
-                    <TableCell.Currency value={l.totalValueLocked} />
-                  ),
-                },
-              ]}
-              columns={[
-                {
-                  Header: 'Vault Name',
-                  accessor: 'vaultName',
-                  align: 'left',
-                  cell: (l) => <TableCell.Text value={l.vaultName} />,
-                },
-                {
-                  Header: 'Annual Percentage Yield',
-                  accessor: 'annualPositionYield',
-                  align: 'center',
-                  cell: (l: StakeToken) => (
-                    <TableCell.Percentage value={l.annualPercentageYield} />
-                  ),
-                },
-                {
-                  Header: 'Total value locked',
-                  accessor: 'totalValueLocked',
-                  align: 'right',
-                  cell: (l: StakeToken) => (
-                    <TableCell.Currency value={l.totalValueLocked} />
-                  ),
-                },
-                {
-                  Header: 'Owned',
-                  accessor: 'owned',
-                  align: 'right',
-                  cell: (l: StakeToken) => (
-                    <TableCell.Currency value={l.owned} />
-                  ),
-                },
-                {
-                  Header: '',
-                  accessor: 'icons',
-                  align: 'right',
-                  cell: (l) => (
-                    <div tw='flex flex-row justify-end gap-3'>
-                      <ChartLine
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          // TODO VALENTIN
-                          window.open(
-                            `https://etherscan.io/token/${l.tokenAddress}`,
-                            '_blank',
-                          )
-                        }}
-                        tw='text-font-100 dark:text-font-200 height[16px] width[16px]'
-                      />
-                      <Info
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          window.open(
-                            `https://etherscan.io/token/${l.tokenAddress}`,
-                            '_blank',
-                          )
-                        }}
-                        tw='text-font-100 dark:text-font-200 height[16px] width[16px]'
-                      />
-                    </div>
-                  ),
-                },
-              ]}
-            />
-          ) : (
-            <div tw='w-full rounded-lg flex flex-col items-center h-64 bg-primary-100 flex justify-center items-center'>
-              <Txt.Body1Regular>No tokens found.</Txt.Body1Regular>
-            </div>
-          )}
+          <CustomTable
+            activeRow={activeRow}
+            onActiveRowChange={onRowClick}
+            renderExpanded={
+              <DepositWithdraw
+                tokenAddress={activeRow?.tokenAddress ?? undefined}
+                tokenSymbol={activeRow?.vaultName ?? undefined}
+              />
+            }
+            loading={false}
+            maxPage={
+              stakeTokens.length > 0
+                ? stakeTokens.length / searchParams.size
+                : 1
+            }
+            currentPage={searchParams.page}
+            setPage={setPage}
+            pageSize={searchParams.size}
+            data={stakeTokens}
+            mobileColumns={[
+              {
+                Header: 'Vault',
+                accessor: 'vaultName',
+                cell: (l: StakeToken) => <TableCell.Text value={l.vaultName} />,
+              },
+              {
+                Header: 'APY',
+                accessor: 'annualPositionYield',
+                cell: (l: StakeToken) => (
+                  <TableCell.Percentage value={l.annualPercentageYield} />
+                ),
+              },
+              {
+                Header: 'TVL',
+                accessor: 'totalValueLocked',
+                cell: (l: StakeToken) => (
+                  <TableCell.Currency value={l.totalValueLocked} />
+                ),
+              },
+            ]}
+            columns={[
+              {
+                Header: 'Vault Name',
+                accessor: 'vaultName',
+                align: 'left',
+                cell: (l) => <TableCell.Text value={l.vaultName} />,
+              },
+              {
+                Header: 'Annual Percentage Yield',
+                accessor: 'annualPositionYield',
+                align: 'center',
+                cell: (l: StakeToken) => (
+                  <TableCell.Percentage value={l.annualPercentageYield} />
+                ),
+              },
+              {
+                Header: 'Total value locked',
+                accessor: 'totalValueLocked',
+                align: 'right',
+                cell: (l: StakeToken) => (
+                  <TableCell.Currency value={l.totalValueLocked} />
+                ),
+              },
+              {
+                Header: 'Owned',
+                accessor: 'owned',
+                align: 'right',
+                cell: (l: StakeToken) => <TableCell.Currency value={l.owned} />,
+              },
+              {
+                Header: '',
+                accessor: 'icons',
+                align: 'right',
+                cell: (l) => (
+                  <div tw='flex flex-row justify-end gap-3'>
+                    <ChartLine
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        // TODO VALENTIN
+                        window.open(
+                          `https://etherscan.io/token/${l.tokenAddress}`,
+                          '_blank',
+                        )
+                      }}
+                      tw='text-font-100 dark:text-font-200 height[16px] width[16px]'
+                    />
+                    <Info
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        window.open(
+                          `https://etherscan.io/token/${l.tokenAddress}`,
+                          '_blank',
+                        )
+                      }}
+                      tw='text-font-100 dark:text-font-200 height[16px] width[16px]'
+                    />
+                  </div>
+                ),
+              },
+            ]}
+          />
         </div>
       </div>
     </ContentContainer>

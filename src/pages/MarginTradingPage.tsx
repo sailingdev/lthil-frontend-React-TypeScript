@@ -17,6 +17,7 @@ import { TokenInputField } from './TokenInputField'
 import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
 import { addresses } from '../assets/addresses.json'
+import { etherGlobal } from '../api/ether'
 import { tokens } from '../assets/tokenlist.json'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useState } from 'react'
@@ -46,20 +47,19 @@ export const MarginTradingPage = () => {
       amount: 10, // TODO: What about this?
     },
     onApproval: async () => {
-      // const positionData = {
-      //   positionType,
-      //   spentToken,
-      //   obtainedToken,
-      //   margin,
-      //   slippage,
-      //   leverage,
-      //   priority,
-      //   deadline,
-      // }
-      // // //@ts-ignore
-      // const position = await etherGlobal.marginTradingOpenPosition(positionData)
-      // addTx(TransactionType.MTS_OPEN_POSITION, position.hash, positionData)
-      // setOpenPositionHash(position.hash)
+      const positionData = {
+        positionType,
+        spentToken: spentToken.address,
+        obtainedToken: obtainedToken.address,
+        margin,
+        slippage,
+        leverage,
+        priority,
+        deadline,
+      }
+      const position = await etherGlobal.marginTradingOpenPosition(positionData)
+      addTx(TransactionType.MTS_OPEN_POSITION, position.hash, positionData)
+      setOpenPositionHash(position.hash)
     },
   })
 

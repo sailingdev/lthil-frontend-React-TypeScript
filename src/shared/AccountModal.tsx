@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
 
 import { ArrowSquareOut, Check, Copy } from 'phosphor-react'
 import { useAccountAddress, useTransactions } from '../state/hooks'
@@ -10,6 +9,7 @@ import ClipLoader from 'react-spinners/ClipLoader'
 import { Txt } from './Txt'
 import { getTransactionLabel } from '../utils'
 import { showInfoNotification } from './notification'
+import tw from 'twin.macro'
 import { useProviderInfo } from './hooks/useProviderInfo'
 import { useWeb3React } from '@web3-react/core'
 
@@ -46,7 +46,9 @@ export const AccountModal = (props: IAccountModal) => {
                 props.onClose()
               }}
             >
-              <Txt.CaptionMedium tw='text-secondary'>Change</Txt.CaptionMedium>
+              <Txt.CaptionMedium tw='text-secondary'>
+                Disconnect
+              </Txt.CaptionMedium>
             </button>
           </div>
         </div>

@@ -29,7 +29,7 @@ export class Ether {
 
   constructor(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
-    this.initializeSigner()
+    this.ensureSigner()
   }
 
   // TODO: rename this function maybe?
@@ -37,8 +37,11 @@ export class Ether {
     return ethers.utils.parseUnits(amount, decimal)
   }
 
-  async initializeSigner() {
-    this.signer = await this.provider.getSigner()
+  async ensureSigner() {
+    if (!this.signer) {
+      this.signer = await this.provider.getSigner()
+    }
+    return this.signer
   }
 
   getProvider() {
@@ -46,9 +49,6 @@ export class Ether {
   }
   getBlockNumber() {
     return this.provider.getBlockNumber()
-  }
-  getSigner() {
-    return this.signer
   }
 
   getNetwork() {
@@ -78,7 +78,7 @@ export class Ether {
   // ========= STAKE PAGE =========
 
   async getMaxWithdrawAmount(tokenAddress: string): Promise<number> {
-    const vault = ContractFactory.getVaultContract(this.signer)
+    const vault = ContractFactory.getVaultContract(await this.ensureSigner())
 
     // @ts-ignore
     // const amount = (await vault.claimable(tokenAddress)).toHexString()
@@ -89,7 +89,7 @@ export class Ether {
   async getMaxDepositAmount(tokenAddress: string): Promise<number> {
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
-      this.signer,
+      await this.ensureSigner(),
     )
     const balance = (
       await tokenContract.balanceOf(this.getAccountAddress())
@@ -98,17 +98,21 @@ export class Ether {
     return hexToDecimal(balance)
   }
 
-  async getTokenTvl(tokenAddres: string): Promise<number> {
-    const vault = ContractFactory.getVaultContract(this.signer)
+  async getTokenTvl(tokenAddress: string): Promise<number> {
+    console.log(tokenAddress)
+    const vault = ContractFactory.getVaultContract(await this.ensureSigner())
     //@ts-ignore
-    const tvl = (await vault.balance(tokenAddres)).toHexString()
+    const tvl = (await vault.balance(tokenAddress)).toHexString()
 
     return hexToDecimal(tvl)
   }
 
   async computeAnnualPercentageYield(tokenAddress: string): Promise<number> {
-    const vault = ContractFactory.getVaultContract(this.signer)
-    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
+    const vault = ContractFactory.getVaultContract(await this.ensureSigner())
+    const token = ContractFactory.getTokenContract(
+      tokenAddress,
+      await this.ensureSigner(),
+    )
 
     // @ts-ignore
     const tokenSubvault = await vault.vaults(tokenAddress)
@@ -132,7 +136,7 @@ export class Ether {
     const account = await this.getAccountAddress()
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
-      this.signer,
+      await this.ensureSigner(),
     )
     const allowance = await tokenContract.allowance(account, destinationAddress)
     return hexToDecimal(allowance.toHexString())
@@ -146,7 +150,7 @@ export class Ether {
     try {
       const tokenContract = ContractFactory.getTokenContract(
         tokenAddress,
-        this.signer,
+        await this.ensureSigner(),
       )
       const decimals = await tokenContract.decimals()
       const gasLimit = await this.getApprovalGasEstimation(
@@ -176,7 +180,7 @@ export class Ether {
   ) {
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
-      this.signer,
+      await this.ensureSigner(),
     )
     const decimals = await tokenContract.decimals()
     const gas = await tokenContract.estimateGas.approve(
@@ -189,13 +193,22 @@ export class Ether {
     // THIS IS CURRENTLY NOT WORKING.
     // https://docs.ethers.io/v5/api/providers/provider/#Provider-estimateGas
     //
-    const gas = await this.signer.estimateGas({ from: account, to, value })
+    const gas = await (
+      await this.ensureSigner()
+    ).estimateGas({
+      from: account,
+      to,
+      value,
+    })
     console.log(gas)
     return gas
   }
 
   async getUserTokenBalance(tokenAddress: string): Promise<number> {
-    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
+    const token = ContractFactory.getTokenContract(
+      tokenAddress,
+      await this.ensureSigner(),
+    )
     const balance = await token.balanceOf(this.getAccountAddress())
     return hexToDecimal(balance.toHexString())
   }
@@ -230,8 +243,11 @@ export class Ether {
 
   async depositToken(tokenAddress: string, amount: string): Promise<any> {
     try {
-      const vault = ContractFactory.getVaultContract(this.signer)
-      const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
+      const vault = ContractFactory.getVaultContract(await this.ensureSigner())
+      const token = ContractFactory.getTokenContract(
+        tokenAddress,
+        await this.ensureSigner(),
+      )
 
       // Check balance -> TODO: where to do the balance checking? On the input? Do we need to do this even?
 
@@ -251,8 +267,11 @@ export class Ether {
 
   async withdrawToken(tokenAddress: string, amount: string): Promise<any> {
     try {
-      const vault = ContractFactory.getVaultContract(this.signer)
-      const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
+      const vault = ContractFactory.getVaultContract(await this.ensureSigner())
+      const token = ContractFactory.getTokenContract(
+        tokenAddress,
+        await this.ensureSigner(),
+      )
 
       //@ts-ignore
       const withdraw = await vault.unstake(
@@ -275,7 +294,7 @@ export class Ether {
     positionEvent: PositionWasOpenedEvent,
   ): Promise<ProfitsAndLosses> {
     const marginTrading = ContractFactory.getMarginTradingStrategyContract(
-      this.signer,
+      await this.ensureSigner(),
     )
 
     let profitsAndLosses = 0
@@ -326,8 +345,8 @@ export class Ether {
     positionType: PositionType,
     slippage: number,
   ): Promise<BigNumber> {
-    const MarginTrading = ContractFactory.getMarginTradingStrategyContract(
-      this.signer,
+    const marginTrading = ContractFactory.getMarginTradingStrategyContract(
+      await this.ensureSigner(),
     )
 
     const Margin = BigNumber.from(margin)
@@ -335,7 +354,7 @@ export class Ether {
     const Slippage = BigNumber.from(slippage)
 
     if (positionType === 'long') {
-      const quoted = await MarginTrading.quote(
+      const quoted = await marginTrading.quote(
         spentToken,
         obtainedToken,
         Margin.mul(Leverage).toHexString(),
@@ -371,7 +390,7 @@ export class Ether {
     slippage: number,
   ): Promise<BigNumber> {
     const MarginTrading = ContractFactory.getMarginTradingStrategyContract(
-      this.signer,
+      await this.ensureSigner(),
     )
 
     const Margin = BigNumber.from(margin)
@@ -419,7 +438,7 @@ export class Ether {
     } = positionData
 
     const marginTrading = ContractFactory.getMarginTradingStrategyContract(
-      this.signer,
+      await this.ensureSigner(),
     )
 
     const positionInfo = {
@@ -455,7 +474,7 @@ export class Ether {
     }
     try {
       const position = await marginTrading.openPosition(positionInfo, {
-        gasLimit: (await etherGlobal.getBlockGasLimit()).toNumber() - 1, // GAS LIMIT // TODO: testing max gas limit
+        // gasLimit: (await etherGlobal.getBlockGasLimit()).toNumber() - 1, // GAS LIMIT // TODO: testing max gas limit
       })
       console.log(positionInfo)
       console.log(position)
