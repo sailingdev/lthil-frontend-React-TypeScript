@@ -44,7 +44,7 @@ export const MarginTradingPage = () => {
     approvalMeta: {
       token: spentToken.address,
       destination: addresses.MarginTradingStrategy,
-      amount: 10, // TODO: What about this?
+      amount: 50, // TODO: What about this?
     },
     onApproval: async () => {
       const positionData = {
