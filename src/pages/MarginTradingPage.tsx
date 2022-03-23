@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { ArrowDown, FadersHorizontal } from 'phosphor-react'
+import { ArrowRight, FadersHorizontal } from 'phosphor-react'
 import { Priority, TransactionType } from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
@@ -87,22 +87,29 @@ export const MarginTradingPage = () => {
                     },
                   ]}
                 />
-                <TokenInputField
-                  label='Token 1'
-                  value={'0.0'}
-                  token={spentToken}
-                  setValue={(value) => setSpentToken(value)}
-                  onTokenChange={(value) => setSpentToken(value)}
+                <div tw='flex flex-row items-center'>
+                  <TokenInputField
+                    label='Token 1'
+                    value={'0.0'}
+                    token={spentToken}
+                    setValue={(value) => setSpentToken(value)}
+                    onTokenChange={(value) => setSpentToken(value)}
+                  />
+                  <ArrowRight size={28} tw='text-font-200 mx-6' />
+                  <TokenInputField
+                    label='Token 2'
+                    value={'0.0'}
+                    token={obtainedToken}
+                    setValue={(value) => setObtainedToken(value)}
+                    onTokenChange={(value) => setObtainedToken(value)}
+                  />
+                </div>
+                <InputField
+                  label='Margin'
+                  placeholder='0'
+                  value={margin}
+                  onChange={(value) => setMargin(value)}
                 />
-                <ArrowDown size={28} tw='self-center text-font-200' />
-                <TokenInputField
-                  label='Token 2'
-                  value={'0.0'}
-                  token={obtainedToken}
-                  setValue={(value) => setObtainedToken(value)}
-                  onTokenChange={(value) => setObtainedToken(value)}
-                />
-
                 <SliderBar
                   label='Leverage'
                   tooltip
@@ -117,12 +124,6 @@ export const MarginTradingPage = () => {
                     4: '4x',
                     5: '5x',
                   }}
-                />
-                <InputField
-                  label='Margin'
-                  placeholder='0'
-                  value={margin}
-                  onChange={(value) => setMargin(value)}
                 />
                 <div tw='w-full'>
                   {showAdvancedOptions ? (
