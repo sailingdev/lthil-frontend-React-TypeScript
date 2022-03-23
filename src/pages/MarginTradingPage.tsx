@@ -22,6 +22,7 @@ import { etherGlobal } from '../api/ether'
 import { tokens } from '../assets/tokenlist.json'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useState } from 'react'
+import { getCTALabelForApproval } from '../utils'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
@@ -187,15 +188,10 @@ export const MarginTradingPage = () => {
                   )}
                 </div>
                 <Button
-                  text={
-                    positionApproval == 'UNKNOWN'
-                      ? 'Approve token spending'
-                      : positionApproval == 'PENDING'
-                      ? 'Pending...'
-                      : positionApproval == 'VERIFIED'
-                      ? `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`
-                      : 'Approve token spending'
-                  }
+                  text={getCTALabelForApproval(
+                    `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`,
+                    positionApproval,
+                  )}
                   full
                   action
                   bold
