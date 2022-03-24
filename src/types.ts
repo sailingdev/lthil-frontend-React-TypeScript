@@ -1,6 +1,6 @@
 import { Interpolation, Theme } from '@emotion/react'
-
 import { CSSProperties } from 'react'
+import { BigNumber } from 'ethers'
 
 export interface ISearchParams {
   term: string
@@ -164,4 +164,47 @@ export interface OpenPosition {
   priority: Priority
   leverage: number
   deadline: number
+}
+
+export interface IPositionWasOpenedEventArgs {
+  positionId: string
+  ownerId: string
+  owedToken: string
+  heldToken: string
+  collateralToken: string
+  collateral: BigNumber
+  principal: BigNumber // margin
+  allowance: BigNumber
+  fees: BigNumber
+  createdAt: BigNumber
+}
+
+export interface IPositionWasOpenedEvent {
+  blockNumber: number
+  blockHash: string
+  transactionIndex: number
+  removed: boolean
+  address: string
+  data: string
+  topics: string[]
+  transactionHash: string
+  logIndex: number
+  event: 'PositionWasOpened'
+  eventSignature: 'PositionWasOpened(uint256,address,address,address,address,uint256,uint256,uint256,uint256,uint256)'
+  args: (BigNumber | string)[]
+}
+
+export interface IParsedPositionWasOpenedEvent
+  extends IPositionWasOpenedEventArgs {
+  blockNumber: number
+  blockHash: string
+  transactionIndex: number
+  removed: boolean
+  address: string
+  data: string
+  topics: string[]
+  transactionHash: string
+  logIndex: number
+  event: 'PositionWasOpened'
+  eventSignature: 'PositionWasOpened(uint256,address,address,address,address,uint256,uint256,uint256,uint256,uint256)'
 }

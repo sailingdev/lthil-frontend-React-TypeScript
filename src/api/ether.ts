@@ -1,5 +1,7 @@
 import { BigNumber, Transaction, ethers } from 'ethers'
 import {
+  IParsedPositionWasOpenedEvent,
+  IPositionWasOpenedEvent,
   OpenPosition,
   PositionType,
   PositionWasOpenedEvent,
@@ -327,6 +329,25 @@ export class Ether {
     return {
       currencyValue: profitsAndLosses,
       percentageValue: (profitsAndLosses / collateral) * 100,
+    }
+  }
+
+  parsePositionWasOpenedEvent(
+    event: IPositionWasOpenedEvent,
+  ): IParsedPositionWasOpenedEvent {
+    const { args, ...eventExceptArgs } = event
+    return {
+      ...eventExceptArgs,
+      positionId: args[0] as string,
+      ownerId: args[1] as string,
+      owedToken: args[2] as string,
+      heldToken: args[3] as string,
+      collateralToken: args[4] as string,
+      collateral: args[5] as BigNumber,
+      principal: args[6] as BigNumber,
+      allowance: args[7] as BigNumber,
+      fees: args[8] as BigNumber,
+      createdAt: args[9] as BigNumber,
     }
   }
 

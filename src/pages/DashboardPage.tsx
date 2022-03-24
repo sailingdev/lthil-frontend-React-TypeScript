@@ -1,17 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-
-import { useEffect, useState } from 'react'
+import tw from 'twin.macro'
+import { useState } from 'react'
 
 import { Button } from '../shared/Button'
+import { useSearch } from '../shared/hooks/useSearch'
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
 import { ISearchParams } from '../types'
 import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
-import tw from 'twin.macro'
 import { usePositions } from '../shared/hooks/usePositions'
-import { useSearch } from '../shared/hooks/useSearch'
 
 const initialSearchParams: Partial<ISearchParams> = {
   orderField: 'name',
