@@ -13,6 +13,7 @@ import {
   addTransaction,
   finalizeTransaction,
 } from './transaction/transaction.actions'
+import { initializeActivePositions } from './position/position.actions'
 import {
   initializeAccountAddress,
   initializeAccountBalance,
@@ -93,6 +94,16 @@ export const useInitStakeTokens = () => {
   const dispatch = useDispatch()
   const { chainId } = useWeb3React()
   return () => dispatch(initializeUserStakes(chainId!))
+}
+
+// POSITION HOOKS
+
+export const usePosition = () =>
+  useAppSelector((state) => state.positions.activePositions)
+
+export const useInitPositions = () => {
+  const dispatch = useDispatch()
+  return () => dispatch(initializeActivePositions())
 }
 
 // TRANSACTION HOOKS
