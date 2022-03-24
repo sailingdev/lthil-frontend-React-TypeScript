@@ -21,7 +21,10 @@ import { addresses } from '../assets/addresses.json'
 import { etherGlobal } from '../api/ether'
 import { tokens } from '../assets/tokenlist.json'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { InfoItem } from '../shared/InfoItem'
+import { useAsync } from 'react-use'
+import { useIsConnected } from '../shared/hooks/useIsConnected'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
@@ -35,6 +38,52 @@ export const MarginTradingPage = () => {
   const [deadline, setDeadline] = useState<any>(20)
   const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
   const [priority, setPriority] = useState<Priority>('buy')
+  const [minObtained, setMinObtained] = useState<string>('0')
+  const [maxSpent, setMaxSpent] = useState<string>('0')
+
+  const isConn = useIsConnected()
+
+  useAsync(async () => {
+    try {
+      if (etherGlobal && slippage && margin) {
+        const minObtained = (
+          await etherGlobal.computeMinObtained(
+            spentToken.address,
+            obtainedToken.address,
+            margin,
+            leverage,
+            priority,
+            positionType,
+            slippage,
+          )
+        ).toString()
+        const maxSpent = (
+          await etherGlobal.computeMaxSpent(
+            spentToken.address,
+            obtainedToken.address,
+            margin,
+            leverage,
+            priority,
+            positionType,
+            slippage,
+          )
+        ).toString()
+        setMinObtained(minObtained)
+        setMaxSpent(maxSpent)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }, [
+    isConn,
+    spentToken.address,
+    obtainedToken.address,
+    margin,
+    leverage,
+    priority,
+    positionType,
+    slippage,
+  ])
 
   const [openPositionHash, setOpenPositionHash] = useState<string | undefined>(
     undefined,
@@ -104,6 +153,13 @@ export const MarginTradingPage = () => {
                     setValue={(value) => setObtainedToken(value)}
                     onTokenChange={(value) => setObtainedToken(value)}
                   />
+                </div>
+                <div tw='w-full'>
+                  <InfoItem
+                    label='Min. obtained'
+                    value={minObtained.toUpperCase()}
+                  />
+                  <InfoItem label='Max. spent' value={maxSpent.toUpperCase()} />
                 </div>
                 <InputField
                   label='Margin'
