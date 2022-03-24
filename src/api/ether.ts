@@ -81,9 +81,9 @@ export class Ether {
     const vault = ContractFactory.getVaultContract(await this.ensureSigner())
 
     // @ts-ignore
-    // const amount = (await vault.claimable(tokenAddress)).toHexString()
+    const amount = (await vault.claimable(tokenAddress)).toHexString()
 
-    return hexToDecimal(2)
+    return hexToDecimal(amount)
   }
 
   async getMaxDepositAmount(tokenAddress: string): Promise<number> {
@@ -252,7 +252,7 @@ export class Ether {
         tokenAddress,
         this.parseUnits(amount, await token.decimals()),
         {
-          gasLimit: 300000000, // GAS LIMIT
+          gasLimit: 10000000, // GAS LIMIT
         },
       )
       return stake
@@ -274,7 +274,7 @@ export class Ether {
         tokenAddress,
         this.parseUnits(amount, await token.decimals()),
         {
-          gasLimit: 300000000, // GAS LIMIT
+          gasLimit: 10000000, // GAS LIMIT
         },
       )
       return withdraw
