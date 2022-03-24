@@ -21,10 +21,11 @@ import { addresses } from '../assets/addresses.json'
 import { etherGlobal } from '../api/ether'
 import { tokens } from '../assets/tokenlist.json'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { InfoItem } from '../shared/InfoItem'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
+import { getCTALabelForApproval } from '../utils'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
@@ -117,9 +118,7 @@ export const MarginTradingPage = () => {
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>
         <div tw='w-full tablet:w-9/12 desktop:w-10/12 flex flex-col items-center'>
-          <Txt.Heading1 tw='mb-12'>
-            {spentToken.symbol}/{obtainedToken.symbol}
-          </Txt.Heading1>
+          <Txt.Heading1 tw='mb-12'>Margin Trading</Txt.Heading1>
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
             <div tw='flex flex-col gap-3 flex-grow'>
               <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100 gap-7'>
@@ -243,15 +242,10 @@ export const MarginTradingPage = () => {
                   )}
                 </div>
                 <Button
-                  text={
-                    positionApproval == 'UNKNOWN'
-                      ? 'Approve token spending'
-                      : positionApproval == 'PENDING'
-                      ? 'Pending...'
-                      : positionApproval == 'VERIFIED'
-                      ? `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`
-                      : 'Approve token spending'
-                  }
+                  text={getCTALabelForApproval(
+                    `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`,
+                    positionApproval,
+                  )}
                   full
                   action
                   bold
@@ -269,7 +263,7 @@ export const MarginTradingPage = () => {
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
               <div tw='w-full flex flex-row justify-between pb-5 '>
                 <Txt.Heading2>
-                  {spentToken.symbol}/{obtainedToken.symbol}
+                  {obtainedToken.symbol}/{spentToken.symbol}
                 </Txt.Heading2>
                 <div tw='hidden desktop:flex flex-row items-center gap-1'>
                   <Txt.Body2Regular tw='mr-4'>View:</Txt.Body2Regular>
@@ -288,11 +282,11 @@ export const MarginTradingPage = () => {
               <div tw='w-full h-full  flex flex-col'>
                 {activeChart === 'basic' ? (
                   <BasicChart
-                    tokenSymbol={`${spentToken.symbol}${obtainedToken.symbol}`}
+                    tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
                   />
                 ) : (
                   <TradingChart
-                    tokenSymbol={`${spentToken.symbol}${obtainedToken.symbol}`}
+                    tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
                   />
                 )}
               </div>
