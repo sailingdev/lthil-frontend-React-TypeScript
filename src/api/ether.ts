@@ -99,7 +99,6 @@ export class Ether {
   }
 
   async getTokenTvl(tokenAddress: string): Promise<number> {
-    console.log(tokenAddress)
     const vault = ContractFactory.getVaultContract(await this.ensureSigner())
     //@ts-ignore
     const tvl = (await vault.balance(tokenAddress)).toHexString()
@@ -159,8 +158,6 @@ export class Ether {
         amount,
       )
 
-      console.log('Gas limit, ', gasLimit)
-
       return tokenContract.approve(
         destinationAddress,
         this.parseUnits(amount.toString(), decimals),
@@ -200,7 +197,6 @@ export class Ether {
       to,
       value,
     })
-    console.log(gas)
     return gas
   }
 
