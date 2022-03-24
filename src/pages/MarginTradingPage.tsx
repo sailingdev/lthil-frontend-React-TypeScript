@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
 
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
 import { Priority, TransactionType } from '../types'
@@ -9,6 +8,7 @@ import { useAddTransaction, useTransaction } from '../state/hooks'
 import { BasicChart } from '../shared/charts/BasicChart'
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
+import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
 import { RadioGroup } from '../shared/RadioGroup'
 import { SliderBar } from '../shared/SliderBar'
@@ -19,13 +19,13 @@ import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
 import { addresses } from '../assets/addresses.json'
 import { etherGlobal } from '../api/ether'
+import { getCTALabelForApproval } from '../utils'
 import { tokens } from '../assets/tokenlist.json'
+import tw from 'twin.macro'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
-import { useState } from 'react'
-import { InfoItem } from '../shared/InfoItem'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
-import { getCTALabelForApproval } from '../utils'
+import { useState } from 'react'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
@@ -118,7 +118,7 @@ export const MarginTradingPage = () => {
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>
         <div tw='w-full tablet:w-9/12 desktop:w-10/12 flex flex-col items-center'>
-          <Txt.Heading1 tw='mb-12'>Margin Trading</Txt.Heading1>
+          <Txt.Heading1 tw='mb-12'>Margin Trading Strategy </Txt.Heading1>
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
             <div tw='flex flex-col gap-3 flex-grow'>
               <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100 gap-7'>

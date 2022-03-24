@@ -19,9 +19,7 @@ export const initializeGlobalInstance = (instance: Ether) => {
   etherGlobal = instance
 }
 
-const MaxUint256: BigNumber = BigNumber.from(
-  '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-)
+export const maxApproval: BigNumber = ethers.constants.MaxUint256
 
 export class Ether {
   private provider!: ethers.providers.Web3Provider
@@ -252,7 +250,7 @@ export class Ether {
         tokenAddress,
         this.parseUnits(amount, await token.decimals()),
         {
-          gasLimit: 10000000, // GAS LIMIT
+          gasLimit: 3000000,
         },
       )
       return stake

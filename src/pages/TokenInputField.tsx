@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
 
-import { ArrowDown } from 'phosphor-react'
 import { Button } from '../shared/Button'
-import { InputField } from '../shared/InputField'
+import { CaretDown } from 'phosphor-react'
 import { TokenModal } from '../shared/TokenModal'
-import { Txt } from '../shared/Txt'
 import tw from 'twin.macro'
 import { useState } from 'react'
 
@@ -28,7 +26,7 @@ export const TokenInputField = (props: ITokenInputField) => {
         leftIcon={() => (
           <img tw='w-4 h-4 mr-1' src={props.token.logoURI} alt='token image' />
         )}
-        rightIcon={ArrowDown}
+        rightIcon={CaretDown}
         onClick={() => setIsModalOpen(true)}
       />
       <TokenModal
