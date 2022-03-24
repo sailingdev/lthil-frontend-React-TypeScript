@@ -19,9 +19,7 @@ export const initializeGlobalInstance = (instance: Ether) => {
   etherGlobal = instance
 }
 
-const MaxUint256: BigNumber = BigNumber.from(
-  '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-)
+export const maxApproval: BigNumber = ethers.constants.MaxUint256
 
 export class Ether {
   private provider!: ethers.providers.Web3Provider
@@ -81,9 +79,10 @@ export class Ether {
     const vault = ContractFactory.getVaultContract(await this.ensureSigner())
 
     // @ts-ignore
-    // const amount = (await vault.claimable(tokenAddress)).toHexString()
+    //const amount = await vault.claimable(tokenAddress)
+    //console.log('amount', amount)
 
-    return hexToDecimal(2)
+    return hexToDecimal('2')
   }
 
   async getMaxDepositAmount(tokenAddress: string): Promise<number> {
@@ -256,7 +255,7 @@ export class Ether {
         tokenAddress,
         this.parseUnits(amount, await token.decimals()),
         {
-          gasLimit: 300000000, // GAS LIMIT
+          gasLimit: 3000000, // GAS LIMIT
         },
       )
       return stake

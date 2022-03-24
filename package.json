@@ -1,5 +1,5 @@
 {
-  "name": "ithil",
+  "name": "@ithil-protocol/frontend",
   "version": "0.0.1",
   "private": true,
   "dependencies": {

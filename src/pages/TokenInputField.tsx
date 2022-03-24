@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { ArrowDown } from 'phosphor-react'
+import { CaretDown } from 'phosphor-react'
 import { Button } from '../shared/Button'
 import { InputField } from '../shared/InputField'
 import { TokenModal } from '../shared/TokenModal'
@@ -47,7 +47,7 @@ export const TokenInputField = (props: ITokenInputField) => {
                   alt='token image'
                 />
               )}
-              rightIcon={ArrowDown}
+              rightIcon={CaretDown}
               onClick={() => setIsModalOpen(true)}
             />
           </>

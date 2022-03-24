@@ -1,6 +1,6 @@
 import 'twin.macro'
 
-import { ArrowDown, DotsThree } from 'phosphor-react'
+import { CaretDown, DotsThree } from 'phosphor-react'
 import { isDesktop, isTablet } from '../utils'
 
 import { AccountModal } from './AccountModal'
@@ -52,7 +52,7 @@ export const Header = () => {
         <Button
           text={isTablet ? 'Ethereum' : ''}
           leftIcon={CurrEth}
-          rightIcon={ArrowDown}
+          rightIcon={CaretDown}
         />
 
         {isConnected ? (
