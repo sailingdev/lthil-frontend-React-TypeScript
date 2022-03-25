@@ -165,20 +165,6 @@ export interface OpenPosition {
   leverage: number
   deadline: number
 }
-
-export interface IPositionWasOpenedEventArgs {
-  positionId: string
-  ownerId: string
-  owedToken: string
-  heldToken: string
-  collateralToken: string
-  collateral: BigNumber
-  principal: BigNumber // margin
-  allowance: BigNumber
-  fees: BigNumber
-  createdAt: BigNumber
-}
-
 export interface IPositionWasOpenedEvent {
   blockNumber: number
   blockHash: string
@@ -194,8 +180,7 @@ export interface IPositionWasOpenedEvent {
   args: (BigNumber | string)[]
 }
 
-export interface IParsedPositionWasOpenedEvent
-  extends IPositionWasOpenedEventArgs {
+export interface IParsedPositionWasOpenedEvent {
   blockNumber: number
   blockHash: string
   transactionIndex: number
@@ -207,4 +192,14 @@ export interface IParsedPositionWasOpenedEvent
   logIndex: number
   event: 'PositionWasOpened'
   eventSignature: 'PositionWasOpened(uint256,address,address,address,address,uint256,uint256,uint256,uint256,uint256)'
+  positionId: string
+  ownerId: string
+  owedToken: string
+  heldToken: string
+  collateralToken: string
+  collateral: BigNumber
+  principal: BigNumber
+  allowance: BigNumber
+  fees: BigNumber
+  createdAt: BigNumber
 }

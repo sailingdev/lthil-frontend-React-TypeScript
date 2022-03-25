@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
 import tw from 'twin.macro'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Button } from '../shared/Button'
 import { useSearch } from '../shared/hooks/useSearch'
@@ -11,6 +11,10 @@ import { ISearchParams } from '../types'
 import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
 import { usePositions } from '../shared/hooks/usePositions'
+import { useAsync } from 'react-use'
+import { useIsConnected } from '../shared/hooks/useIsConnected'
+import { initializeActivePositions } from '../state/position/position.actions'
+import { useInitPositions, usePosition } from '../state/hooks'
 
 const initialSearchParams: Partial<ISearchParams> = {
   orderField: 'name',
@@ -18,12 +22,20 @@ const initialSearchParams: Partial<ISearchParams> = {
   term: '',
 }
 
-const positionsData: any[] = []
-
 export const DashboardPage = () => {
+  const isConnected = useIsConnected()
+  const initActivePositions = useInitPositions()
+
+  useEffect(() => {
+    if (isConnected) {
+      initActivePositions()
+    }
+  }, [isConnected])
+
+  const positions = usePositions()
+
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
   const [activeTab, setActiveTab] = useState('active')
-  const positions = usePositions() ?? []
 
   return (
     <ContentContainer>
@@ -53,7 +65,7 @@ export const DashboardPage = () => {
             currentPage={searchParams.page}
             setPage={setPage}
             pageSize={searchParams.size}
-            data={positions.length > 0 ? positions : []}
+            data={positions}
             mobileColumns={[
               {
                 Header: 'TokenPair',
