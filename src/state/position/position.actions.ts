@@ -18,12 +18,17 @@ export const initializeActivePositions = createAsyncThunk(
       '0x1',
       'latest',
     )
+    const userAddress = await etherGlobal.getAccountAddress()
 
-    const parsedEvents: IParsedPositionWasOpenedEvent[] = events.map((e) => {
-      return etherGlobal.parsePositionWasOpenedEvent(
-        e as unknown as IPositionWasOpenedEvent,
+    return events.reduce((result, event) => {
+      const parsed = etherGlobal.parsePositionWasOpenedEvent(
+        event as unknown as IPositionWasOpenedEvent,
       )
-    })
-    return parsedEvents
+      if (parsed.ownerId == userAddress) {
+        // @ts-ignore
+        result.push(parsed)
+      }
+      return result
+    }, []) as IParsedPositionWasOpenedEvent[]
   },
 )

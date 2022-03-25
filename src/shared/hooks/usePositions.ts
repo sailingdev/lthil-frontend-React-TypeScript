@@ -25,30 +25,30 @@ export interface IPositionRow {
 
 export const usePositions = () => {
   const [positions, setPositions] = useState<IPositionRow[]>([])
-  const isConnected = useIsConnected()
+  const events = usePosition() ?? []
   useAsync(async () => {
-    // TODO: Get positions
-    const usePos = usePosition() ?? []
-    console.log(usePos)
-
-    const calculatedPositions = usePos.map((e: any) => {
-      const owedToken = tokenList.tokens.find(
-        (token) => e.owedToken === token.address,
-      )?.symbol
-      const heldToken = tokenList.tokens.find(
-        (token) => e.heldToken === token.address,
-      )?.symbol
-      return {
-        tokenPair: `${owedToken}/${heldToken}`,
-        position: `${owedToken}/${heldToken}`,
-        profit: {
-          currencyValue: 2,
-          percentageValue: 15,
-        },
-        trend: 'placeholder',
-      } as IPositionRow
-    })
-    setPositions(calculatedPositions)
-  }, [isConnected])
+    try {
+      const calculatedPositions = events.map((e: any) => {
+        const owedToken = tokenList.tokens.find(
+          (token) => e.owedToken === token.address,
+        )?.symbol
+        const heldToken = tokenList.tokens.find(
+          (token) => e.heldToken === token.address,
+        )?.symbol
+        return {
+          tokenPair: `${owedToken}/${heldToken}`,
+          position: `${owedToken}/${heldToken}`,
+          profit: {
+            currencyValue: 2,
+            percentageValue: 15,
+          },
+          trend: 'placeholder',
+        } as IPositionRow
+      })
+      setPositions(calculatedPositions)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [events])
   return positions
 }
