@@ -154,6 +154,8 @@ export interface MtsOpenPositionMeta {
 
 export interface MtsClosePositionMeta {
   positionId: string
+  spentToken: string
+  obtainedToken: string
 }
 
 export type Priority = 'buy' | 'sell'

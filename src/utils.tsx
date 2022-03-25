@@ -68,8 +68,13 @@ export const getTransactionLabel = (t: Transaction) => {
     return `Opened ${meta.positionType} position ${obtainedTokenName}/${spentTokenName}`
   } else if (t.type === TransactionType.MTS_CLOSE_POSITION) {
     const meta = t.meta as MtsClosePositionMeta
-    // TODO: If needed, actual information about position can be displayed (example: Closed long DAI/WETH position)
-    return `Closed margin trading position with id ${meta.positionId}...`
+    const obtainedTokenName = tokenList.tokens.find(
+      (t) => t.address === meta.obtainedToken,
+    )?.symbol
+    const spentTokenName = tokenList.tokens.find(
+      (t) => t.address === meta.spentToken,
+    )?.symbol
+    return `Closed ${obtainedTokenName}/${spentTokenName} position`
   }
   return 'Transaction'
 }

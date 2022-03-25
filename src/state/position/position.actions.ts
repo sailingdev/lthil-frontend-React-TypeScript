@@ -9,17 +9,17 @@ import { ContractFactory } from '../../api/contract-factory'
 export const initializeActivePositions = createAsyncThunk(
   'stake/initializeActivePositions',
   async () => {
-    const MarginTradingStrategy =
+    const marginTradingStrategy =
       ContractFactory.getMarginTradingStrategyContract(
         await etherGlobal.ensureSigner(),
       )
-    const openEvents = await MarginTradingStrategy.queryFilter(
-      MarginTradingStrategy.filters.PositionWasOpened(),
+    const openEvents = await marginTradingStrategy.queryFilter(
+      marginTradingStrategy.filters.PositionWasOpened(),
       '0x1',
       'latest',
     )
-    const closedEvents = await MarginTradingStrategy.queryFilter(
-      MarginTradingStrategy.filters.PositionWasClosed(),
+    const closedEvents = await marginTradingStrategy.queryFilter(
+      marginTradingStrategy.filters.PositionWasClosed(),
       '0x1',
       'latest',
     )
