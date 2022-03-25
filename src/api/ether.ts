@@ -499,4 +499,18 @@ export class Ether {
       console.log(error)
     }
   }
+
+  async MarginTradingClosePosition(positionId: string): Promise<any> {
+    const marginTrading = ContractFactory.getMarginTradingStrategyContract(
+      await this.ensureSigner(),
+    )
+    try {
+      const closePosition = await marginTrading.closePosition(positionId, {
+        gasLimit: 10000000,
+      })
+      return closePosition
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }

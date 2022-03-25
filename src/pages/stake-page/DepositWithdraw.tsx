@@ -2,17 +2,11 @@
 import 'twin.macro'
 
 import { IBaseProps, TransactionType } from '../../types'
-import {
-  useAddTransaction,
-  useTransaction,
-  useTransactions,
-} from '../../state/hooks'
+import { useAddTransaction, useTransaction } from '../../state/hooks'
 
 import { Button } from '../../shared/Button'
-import { ContractFactory } from '../../api/contract-factory'
 import { InputField } from '../../shared/InputField'
 import { Txt } from '../../shared/Txt'
-import { addTransaction } from '../../state/transaction/transaction.actions'
 import { etherGlobal } from '../../api/ether'
 import { getCTALabelForApproval } from '../../utils'
 import tw from 'twin.macro'
@@ -51,7 +45,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
         token: props.tokenAddress,
         destination: etherGlobal.getAddresses().Vault,
         amount: Number(depositValue),
-      }) // TODO: stake meta
+      })
       setStakeHash(stake.hash)
     },
   })

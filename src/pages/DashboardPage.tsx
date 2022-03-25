@@ -3,6 +3,7 @@ import 'twin.macro'
 import tw from 'twin.macro'
 import { useState, useEffect } from 'react'
 
+import { IBaseProps, TransactionType } from '../types'
 import { Button } from '../shared/Button'
 import { useSearch } from '../shared/hooks/useSearch'
 import { ContentContainer } from '../shared/ContentContainer'
@@ -14,7 +15,13 @@ import { usePositions } from '../shared/hooks/usePositions'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { initializeActivePositions } from '../state/position/position.actions'
-import { useInitPositions, usePosition } from '../state/hooks'
+import { etherGlobal } from '../api/ether'
+import {
+  useAddTransaction,
+  useTransaction,
+  useInitPositions,
+  usePosition,
+} from '../state/hooks'
 
 const initialSearchParams: Partial<ISearchParams> = {
   orderField: 'name',
@@ -26,6 +33,8 @@ export const DashboardPage = () => {
   const isConnected = useIsConnected()
   const initActivePositions = useInitPositions()
 
+  const addTx = useAddTransaction()
+
   useEffect(() => {
     if (isConnected) {
       initActivePositions()
@@ -36,6 +45,16 @@ export const DashboardPage = () => {
 
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
   const [activeTab, setActiveTab] = useState('active')
+
+  const closePosition = async (positionId: string) => {
+    const closePosition = await etherGlobal.MarginTradingClosePosition(
+      positionId,
+    )
+    console.log(closePosition)
+    addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {
+      positionId: positionId,
+    })
+  }
 
   return (
     <ContentContainer>
@@ -126,7 +145,11 @@ export const DashboardPage = () => {
                 // @ts-ignore
                 accessor: 'action',
                 align: 'right',
-                cell: (l) => <TableCell.ClosePosition />,
+                cell: (l) => (
+                  <TableCell.ClosePosition
+                    onClick={() => closePosition(l.positionId)}
+                  />
+                ),
               },
             ]}
           />
