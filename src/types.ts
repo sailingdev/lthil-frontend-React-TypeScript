@@ -53,19 +53,6 @@ export interface StakeToken {
   tokenAddress: string
 }
 
-export interface PositionWasOpenedEvent {
-  id: string
-  owner: string
-  owedToken: string
-  heldToken: string
-  collateralToken: string
-  collateral: string
-  principal: string
-  allowance: string
-  fees: string
-  createdAt: string
-}
-
 export interface ProfitsAndLosses {
   currencyValue: number
   percentageValue: number
@@ -172,6 +159,7 @@ export interface OpenPosition {
   leverage: number
   deadline: number
 }
+
 export interface IPositionWasOpenedEvent {
   blockNumber: number
   blockHash: string
@@ -199,18 +187,18 @@ export interface IParsedPositionWasOpenedEvent {
   logIndex: number
   event: 'PositionWasOpened'
   eventSignature: 'PositionWasOpened(uint256,address,address,address,address,uint256,uint256,uint256,uint256,uint256)'
-  positionId: string
-  ownerId: string
-  owedToken: string
-  heldToken: string
-  collateralToken: string
-  collateral: BigNumber
-  principal: BigNumber
-  allowance: BigNumber
-  fees: BigNumber
-  createdAt: BigNumber
+  // Naming scheme from current deployment as of writing this commit:
+  positionId: string // id
+  ownerId: string // owner
+  spentToken: string // owedToken
+  obtainedToken: string // heldToken
+  collateralToken: string // collateralToken
+  collateralReceived: BigNumber // collateral
+  toBorrow: BigNumber // principal (margin)
+  amountIn: BigNumber // allowance
+  interestRate: BigNumber // fees
+  createdAt: BigNumber // createdAt
 }
-
 export interface IPositionWasClosedEvent {
   blockNumber: number
   blockHash: string
