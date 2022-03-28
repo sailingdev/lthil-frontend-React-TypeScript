@@ -4,7 +4,6 @@ import {
   IPositionWasOpenedEvent,
   OpenPosition,
   PositionType,
-  PositionWasOpenedEvent,
   Priority,
   ProfitsAndLosses,
   TransactionReceipt,
@@ -286,51 +285,51 @@ export class Ether {
   // ========= MARGIN TRADING =========
 
   // TODO: This function is layed out but the data is wrong since we don't yet know precisely what data PositionWasOpened event returns.
-  async computeProfitsAndLosses(
-    positionEvent: PositionWasOpenedEvent,
-  ): Promise<ProfitsAndLosses> {
-    const marginTrading = ContractFactory.getMarginTradingStrategyContract(
-      await this.ensureSigner(),
-    )
+  // async computeProfitsAndLosses(
+  //   positionEvent: PositionWasOpenedEvent,
+  // ): Promise<ProfitsAndLosses> {
+  //   const marginTrading = ContractFactory.getMarginTradingStrategyContract(
+  //     await this.ensureSigner(),
+  //   )
 
-    let profitsAndLosses = 0
+  //   let profitsAndLosses = 0
 
-    const createdAt = parseInt(positionEvent.createdAt, 16)
-    const principal = parseInt(positionEvent.principal, 16)
-    const interestRate = 0.002 // (positionEvent.interestRate) TODO: where do I get the interestRate?
-    const time = new Date().getTime() / 1000 - createdAt
-    const timeFees = (principal * interestRate * time) / 864000000
-    const positionFees = parseInt(positionEvent.fees, 16)
-    const fees = timeFees + positionFees
-    const allowance = parseInt(positionEvent.allowance, 16)
-    const collateral = parseInt(positionEvent.collateral, 16)
+  //   const createdAt = parseInt(positionEvent.createdAt, 16)
+  //   const principal = parseInt(positionEvent.principal, 16)
+  //   const interestRate = 0.002 // (positionEvent.interestRate) TODO: where do I get the interestRate?
+  //   const time = new Date().getTime() / 1000 - createdAt
+  //   const timeFees = (principal * interestRate * time) / 864000000
+  //   const positionFees = parseInt(positionEvent.fees, 16)
+  //   const fees = timeFees + positionFees
+  //   const allowance = parseInt(positionEvent.allowance, 16)
+  //   const collateral = parseInt(positionEvent.collateral, 16)
 
-    if (positionEvent.heldToken === positionEvent.collateralToken) {
-      profitsAndLosses =
-        allowance -
-        marginTrading.quote(
-          positionEvent.owedToken,
-          positionEvent.heldToken,
-          positionEvent.principal + fees,
-        ) -
-        collateral
-    } else {
-      profitsAndLosses =
-        marginTrading.quote(
-          positionEvent.heldToken,
-          positionEvent.owedToken,
-          positionEvent.allowance,
-        ) -
-        principal -
-        collateral -
-        fees
-    }
+  //   if (positionEvent.heldToken === positionEvent.collateralToken) {
+  //     profitsAndLosses =
+  //       allowance -
+  //       marginTrading.quote(
+  //         positionEvent.owedToken,
+  //         positionEvent.heldToken,
+  //         positionEvent.principal + fees,
+  //       ) -
+  //       collateral
+  //   } else {
+  //     profitsAndLosses =
+  //       marginTrading.quote(
+  //         positionEvent.heldToken,
+  //         positionEvent.owedToken,
+  //         positionEvent.allowance,
+  //       ) -
+  //       principal -
+  //       collateral -
+  //       fees
+  //   }
 
-    return {
-      currencyValue: profitsAndLosses,
-      percentageValue: (profitsAndLosses / collateral) * 100,
-    }
-  }
+  //   return {
+  //     currencyValue: profitsAndLosses,
+  //     percentageValue: (profitsAndLosses / collateral) * 100,
+  //   }
+  // }
 
   parsePositionWasOpenedEvent(
     event: IPositionWasOpenedEvent,
@@ -340,13 +339,13 @@ export class Ether {
       ...eventExceptArgs,
       positionId: args[0] as string,
       ownerId: args[1] as string,
-      owedToken: args[2] as string,
-      heldToken: args[3] as string,
+      spentToken: args[2] as string,
+      obtainedToken: args[3] as string,
       collateralToken: args[4] as string,
-      collateral: args[5] as BigNumber,
-      principal: args[6] as BigNumber,
-      allowance: args[7] as BigNumber,
-      fees: args[8] as BigNumber,
+      collateralReceived: args[5] as BigNumber,
+      toBorrow: args[6] as BigNumber,
+      amountIn: args[7] as BigNumber,
+      interestRate: args[8] as BigNumber,
       createdAt: args[9] as BigNumber,
     }
   }

@@ -12,15 +12,15 @@ export const usePositions = () => {
     try {
       const calculatedPositions = events.map(
         (e: IParsedPositionWasOpenedEvent) => {
-          const owedToken = tokenList.tokens.find(
-            (token) => e.owedToken === token.address,
+          const spentToken = tokenList.tokens.find(
+            (token) => e.spentToken === token.address,
           )?.symbol
-          const heldToken = tokenList.tokens.find(
-            (token) => e.heldToken === token.address,
+          const obtainedToken = tokenList.tokens.find(
+            (token) => e.obtainedToken === token.address,
           )?.symbol
           return {
-            tokenPair: `${owedToken}/${heldToken}`,
-            position: `${owedToken}/${heldToken}`,
+            tokenPair: `${spentToken}/${obtainedToken}`,
+            position: `${spentToken}/${obtainedToken}`,
             profit: {
               currencyValue: 2,
               percentageValue: 15,
