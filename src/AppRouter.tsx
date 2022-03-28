@@ -46,7 +46,7 @@ export const AppRouter = () => {
               <Route path='/' element={<MarginTradingPage />} />
               <Route path='/dashboard' element={<DashboardPage />} />
               <Route path='/margintrading' element={<MarginTradingPage />} />
-              <Route path='/dashboard/:position' element={<PositionPage />} />
+              <Route path='/position/:position' element={<PositionPage />} />
               <Route path='/stake' element={<StakePage />} />
               <Route path='/charts' element={<ChartsPage />} />
               <Route path='/abc' element={<TradePage />} />

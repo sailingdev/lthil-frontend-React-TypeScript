@@ -15,6 +15,7 @@ import { etherGlobal } from '../api/ether'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { usePositions } from '../shared/hooks/usePositions'
 import { useSearch } from '../shared/hooks/useSearch'
+import { useNavigate } from 'react-router-dom'
 
 const initialSearchParams: Partial<ISearchParams> = {
   orderField: 'name',
@@ -23,6 +24,8 @@ const initialSearchParams: Partial<ISearchParams> = {
 }
 
 export const DashboardPage = () => {
+  const navigate = useNavigate()
+
   const isConnected = useIsConnected()
   const initActivePositions = useInitPositions()
 
@@ -74,6 +77,9 @@ export const DashboardPage = () => {
             />
           </div>
           <CustomTable
+            onActiveRowChange={(row) => navigate(`/position/${row.positionId}`)}
+            activeRow={undefined}
+            hover
             loading={false}
             maxPage={
               positions.length > 0 ? positions.length / searchParams.size : 1
