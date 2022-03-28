@@ -95,7 +95,7 @@ export const MarginTradingPage = () => {
     approvalMeta: {
       token: spentToken.address,
       destination: addresses.MarginTradingStrategy,
-      amount: 50, // TODO: What about this?
+      amount: Number.MAX_SAFE_INTEGER, // margin
     },
     onApproval: async () => {
       const positionData = {
