@@ -13,6 +13,7 @@ import {
 import { ContractFactory } from './contract-factory'
 import addresses from '../assets/addresses.json'
 import { hexToDecimal } from '../utils'
+import { tokens } from '../assets/tokenlist.json'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
@@ -32,9 +33,35 @@ export class Ether {
     this.ensureSigner()
   }
 
-  // TODO: rename this function maybe?
-  parseUnits(amount: string, decimal: number): ethers.BigNumber {
-    return ethers.utils.parseUnits(amount, decimal)
+  parseUnits(
+    amount: string,
+    tokenAddress: string,
+  ): ethers.BigNumber | undefined {
+    try {
+      const token = tokens.find((tkn) => tkn.address === tokenAddress)
+      if (!token) {
+        throw new Error('token not found!')
+      }
+      const decimals = token.decimals
+
+      return ethers.utils.parseUnits(amount, decimals)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  formatUnits(amount: string, tokenAddress: string): string | undefined {
+    try {
+      const token = tokens.find((tkn) => tkn.address === tokenAddress)
+      if (!token) {
+        throw new Error('token not found!')
+      }
+      const decimals = token.decimals
+
+      return ethers.utils.formatUnits(amount, decimals)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async ensureSigner() {
@@ -151,7 +178,6 @@ export class Ether {
         tokenAddress,
         await this.ensureSigner(),
       )
-      const decimals = await tokenContract.decimals()
       const gasLimit = await this.getApprovalGasEstimation(
         tokenAddress,
         destinationAddress,
@@ -160,7 +186,7 @@ export class Ether {
 
       return tokenContract.approve(
         destinationAddress,
-        this.parseUnits(amount.toString(), decimals),
+        this.parseUnits(amount.toString(), tokenAddress),
         {
           gasLimit,
         },
@@ -179,10 +205,9 @@ export class Ether {
       tokenAddress,
       await this.ensureSigner(),
     )
-    const decimals = await tokenContract.decimals()
     const gas = await tokenContract.estimateGas.approve(
       destinationAddress,
-      this.parseUnits(amount.toString(), decimals),
+      this.parseUnits(amount.toString(), tokenAddress),
     )
     return gas.mul(120).div(100)
   }
@@ -240,20 +265,11 @@ export class Ether {
   async depositToken(tokenAddress: string, amount: string): Promise<any> {
     try {
       const vault = ContractFactory.getVaultContract(await this.ensureSigner())
-      const token = ContractFactory.getTokenContract(
-        tokenAddress,
-        await this.ensureSigner(),
-      )
-
-      // Check balance -> TODO: where to do the balance checking? On the input? Do we need to do this even?
 
       //@ts-ignore
       const stake = await vault.stake(
         tokenAddress,
-        this.parseUnits(amount, await token.decimals()),
-        {
-          gasLimit: 3000000,
-        },
+        this.parseUnits(amount, tokenAddress),
       )
       return stake
     } catch (error) {
@@ -264,15 +280,11 @@ export class Ether {
   async withdrawToken(tokenAddress: string, amount: string): Promise<any> {
     try {
       const vault = ContractFactory.getVaultContract(await this.ensureSigner())
-      const token = ContractFactory.getTokenContract(
-        tokenAddress,
-        await this.ensureSigner(),
-      )
 
       //@ts-ignore
       const withdraw = await vault.unstake(
         tokenAddress,
-        this.parseUnits(amount, await token.decimals()),
+        this.parseUnits(amount, tokenAddress),
         {
           gasLimit: 10000000, // GAS LIMIT
         },
@@ -364,7 +376,7 @@ export class Ether {
       await this.ensureSigner(),
     )
 
-    const Margin = BigNumber.from(margin)
+    const Margin = this.parseUnits(margin.toString(), spentToken)
     const Leverage = BigNumber.from(leverage)
     const Slippage = BigNumber.from(slippage)
 
@@ -372,7 +384,7 @@ export class Ether {
       const quoted = await marginTrading.quote(
         spentToken,
         obtainedToken,
-        Margin.mul(Leverage).toHexString(),
+        Margin!.mul(Leverage).toHexString(),
       )
 
       if (priority === 'buy') {
@@ -385,12 +397,12 @@ export class Ether {
       // positionType is 'short'
 
       if (priority === 'buy') {
-        return Margin.mul(Leverage)
+        return Margin!.mul(Leverage)
       } else {
         // priority is 'sell'
-        return Margin.mul(Leverage).mul(
-          BigNumber.from(1).sub(Slippage.div(100)),
-        )
+        return Margin!
+          .mul(Leverage)
+          .mul(BigNumber.from(1).sub(Slippage.div(100)))
       }
     }
   }
@@ -408,18 +420,18 @@ export class Ether {
       await this.ensureSigner(),
     )
 
-    const Margin = BigNumber.from(margin)
+    const Margin = this.parseUnits(margin.toString(), spentToken)
     const Leverage = BigNumber.from(leverage)
     const Slippage = BigNumber.from(slippage)
 
     if (positionType === 'long') {
       if (priority === 'buy') {
-        return Margin.mul(Leverage).div(
-          BigNumber.from(1).sub(Slippage.div(100)),
-        )
+        return Margin!
+          .mul(Leverage)
+          .div(BigNumber.from(1).sub(Slippage.div(100)))
       } else {
         // priority is 'sell'
-        return Margin.mul(Leverage)
+        return Margin!.mul(Leverage)
       }
     } else {
       // positionType is 'short'
@@ -427,7 +439,7 @@ export class Ether {
       const quoted = await MarginTrading.quote(
         obtainedToken,
         spentToken,
-        margin * leverage,
+        Margin!.mul(Leverage).toHexString(),
       )
 
       if (priority === 'buy') {
@@ -456,13 +468,15 @@ export class Ether {
       await this.ensureSigner(),
     )
 
+    const marginValue = this.parseUnits(margin.toString(), spentToken)
+
     const positionInfo = {
       spentToken,
       obtainedToken,
       deadline: BigNumber.from(
         Math.floor(Date.now() / 1000) + 60 * deadline,
       ).toHexString(), // deadline should be integer representing minutes
-      collateral: BigNumber.from(margin).toHexString(),
+      collateral: marginValue!.toHexString(),
       collateralIsSpentToken: positionType === 'long' ? true : false,
       minObtained: (
         await this.computeMinObtained(
