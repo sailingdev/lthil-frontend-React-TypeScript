@@ -99,8 +99,13 @@ export const useInitStakeTokens = () => {
 
 // POSITION HOOKS
 
-export const usePosition = () =>
+export const usePositions = () =>
   useAppSelector((state) => state.positions.activePositions)
+
+export const usePosition = (positionId?: any) => {
+  const positions = usePositions()
+  return positions!.find((p) => positionId === p.positionId.toString())
+}
 
 export const useInitPositions = () => {
   const dispatch = useDispatch()

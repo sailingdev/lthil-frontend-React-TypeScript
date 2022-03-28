@@ -2,12 +2,12 @@ import { IParsedPositionWasOpenedEvent } from '../../types'
 import { IPositionRow } from '../../types'
 import tokenList from '../../assets/tokenlist.json'
 import { useAsync } from 'react-use'
-import { usePosition } from '../../state/hooks'
+import { usePositions } from '../../state/hooks'
 import { useState } from 'react'
 
-export const usePositions = () => {
+export const populatePositions = () => {
   const [positions, setPositions] = useState<IPositionRow[]>([])
-  const events = usePosition() ?? []
+  const events = usePositions() ?? []
   useAsync(async () => {
     try {
       const calculatedPositions = events.map(

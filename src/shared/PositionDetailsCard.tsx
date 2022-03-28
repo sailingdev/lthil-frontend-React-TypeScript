@@ -4,7 +4,21 @@ import 'twin.macro'
 import { InfoItem } from './InfoItem'
 import { Txt } from './Txt'
 
-export const PositionDetailsCard = () => {
+// TODO: work in progress
+interface IPositionDetailsCard {
+  spentTokenSymbol?: string
+  obtainedTokenSymbol?: string
+  leverage?: number
+  positionType?: string
+  openPrice?: string
+  currentPrice?: string
+  liquidationPrice?: string
+  collateral?: string
+  createdAt?: string
+}
+
+export const PositionDetailsCard = (props: IPositionDetailsCard) => {
+  const { createdAt } = props
   return (
     <div tw='flex flex-col justify-between items-center w-full rounded-xl p-5 bg-primary-100'>
       <Txt.Heading2>Position details</Txt.Heading2>
@@ -24,7 +38,7 @@ export const PositionDetailsCard = () => {
           value={'$ +1.240,00 (+15.6%)'}
           valueColor={'green'}
         />
-        <InfoItem label='Opened' value={'10/01/2021'} />
+        <InfoItem label='Opened' value={createdAt!} />
       </div>
     </div>
   )

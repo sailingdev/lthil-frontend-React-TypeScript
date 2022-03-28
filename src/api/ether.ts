@@ -13,6 +13,7 @@ import { ContractFactory } from './contract-factory'
 import addresses from '../assets/addresses.json'
 import { hexToDecimal } from '../utils'
 import { tokens } from '../assets/tokenlist.json'
+import { TokenDetails } from '../types'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
@@ -58,6 +59,22 @@ export class Ether {
       const decimals = token.decimals
 
       return ethers.utils.formatUnits(amount, decimals)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  getTokenData(tokenAddress: string): TokenDetails | undefined {
+    try {
+      const token = tokens.find((tkn) => tkn.address === tokenAddress)
+      if (!token) {
+        throw new Error('token not found!')
+      }
+      return {
+        name: token.name,
+        symbol: token.symbol,
+        decimals: token.decimals,
+      }
     } catch (error) {
       console.log(error)
     }
