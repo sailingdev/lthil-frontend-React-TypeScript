@@ -89,6 +89,7 @@ export const StakePage = () => {
             </div>
           </div>
           <CustomTable
+            hover
             activeRow={activeRow}
             onActiveRowChange={onRowClick}
             renderExpanded={

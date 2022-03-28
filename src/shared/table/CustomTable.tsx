@@ -10,16 +10,17 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 import { CustomTablePagination } from './CustomTablePagination'
 import { Txt } from '../Txt'
+import { isMobile } from '../../utils'
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { isMobile } from '../../utils'
+import 'twin.macro'
 import tw from 'twin.macro'
 
 const tableContainerStyle = css`
   .table {
     ${tw`mb-4`}
     tr {
-      ${tw`bg-primary-100 desktop:py-3`}
+      ${tw`desktop:py-3`}
     }
 
     /* tr:hover > td {
@@ -104,6 +105,7 @@ interface ICustomTableProps<T extends object> {
   renderExpanded?: React.ReactNode
   onActiveRowChange?: (row: T) => void
   activeRow?: T | undefined
+  hover?: boolean | undefined
 }
 
 export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
@@ -113,7 +115,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
     data,
     currentPage,
     setPage,
-
+    hover,
     pageSize,
     maxPage,
     loading,
@@ -232,12 +234,16 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                 prepareRow(row)
                 return (
                   <React.Fragment key={row.id}>
-                    <tr tw='h-0.5 bg-primary-100'>
+                    <tr>
                       <td css={[tw`h-0.5 mx-10 bg-primary-300`]}></td>
                     </tr>
                     <tr
                       {...row.getRowProps()}
-                      css={[tw`cursor-pointer`]}
+                      // tw='bg-action'
+                      css={[
+                        tw`cursor-pointer bg-primary-100`,
+                        hover && tw`hover:bg-primary-200`,
+                      ]}
                       onClick={() => {
                         props.onActiveRowChange &&
                           props.onActiveRowChange(row.original as T)
@@ -264,7 +270,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                       })}
                     </tr>
                     <tr>
-                      <td colSpan={columns.length}>
+                      <td tw='bg-primary-100' colSpan={columns.length}>
                         {props.activeRow == row.original &&
                           props.renderExpanded}
                       </td>
