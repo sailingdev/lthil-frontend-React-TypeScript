@@ -180,11 +180,17 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
             ))}
           </thead>
 
-          {/* {data.length === 0 && !loading && (
-            <div tw='w-full rounded-lg  flex-col h-64 bg-primary-100 flex justify-center items-center'>
-              <Txt.Body1Regular>No tokens found.</Txt.Body1Regular>
-            </div>
-          )} */}
+          {data.length === 0 && !loading && (
+            <tbody>
+              <tr>
+                <td colSpan={columns.length}>
+                  <div tw='w-full rounded-lg  flex-col h-64 bg-primary-100 flex justify-center items-center'>
+                    <Txt.Body1Regular>No tokens found.</Txt.Body1Regular>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          )}
           {loading ? (
             <tbody {...getTableBodyProps()}>
               {page.map((row) => {
