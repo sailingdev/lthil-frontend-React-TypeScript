@@ -94,6 +94,7 @@ export interface Transaction {
     | StakeTransactionMeta
     | ApprovalTransactionMeta
     | MtsOpenPositionMeta
+    | MtsClosePositionMeta
   tx: string
   status: 'pending' | 'verified'
   receipt?: TransactionReceipt
@@ -151,6 +152,12 @@ export interface MtsOpenPositionMeta {
   deadline: number
 }
 
+export interface MtsClosePositionMeta {
+  positionId: string
+  spentToken: string
+  obtainedToken: string
+}
+
 export type Priority = 'buy' | 'sell'
 
 export type PositionType = 'long' | 'short'
@@ -202,4 +209,45 @@ export interface IParsedPositionWasOpenedEvent {
   allowance: BigNumber
   fees: BigNumber
   createdAt: BigNumber
+}
+
+export interface IPositionWasClosedEvent {
+  blockNumber: number
+  blockHash: string
+  transactionIndex: number
+  removed: boolean
+  address: string
+  data: string
+  topics: string[]
+  transactionHash: string
+  logIndex: number
+  event: 'PositionWasClosed'
+  eventSignature: 'PositionWasClosed(uint256)'
+  args: BigNumber[]
+}
+
+export interface IPrasedPositionWasClosedEvent {
+  blockNumber: number
+  blockHash: string
+  transactionIndex: number
+  removed: boolean
+  address: string
+  data: string
+  topics: string[]
+  transactionHash: string
+  logIndex: number
+  event: 'PositionWasClosed'
+  eventSignature: 'PositionWasClosed(uint256)'
+  positionId: BigNumber
+}
+
+export interface IPositionRow {
+  tokenPair: string
+  position: string
+  profit: {
+    currencyValue: number
+    percentageValue: number
+  }
+  trend: string
+  positionId: string
 }
