@@ -13,7 +13,6 @@ export const BasicChart = (props: { tokenSymbol: string }) => {
   const [isMounted, setIsMounted] = useState(false)
   const [interval, setInterval] = useState<'1d' | '1m' | '12m' | '60m'>('1d')
 
-  console.log(props.tokenSymbol)
   const loadScript = useCallback(
     (opts: any) => {
       const script = document.createElement('script')
