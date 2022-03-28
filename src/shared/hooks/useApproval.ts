@@ -5,7 +5,6 @@ import { useAddTransaction, useApprovalTransactions } from '../../state/hooks'
 import { useEffect, useState } from 'react'
 
 import { etherGlobal } from '../../api/ether'
-import { useAsync } from 'react-use'
 import { useIsConnected } from './useIsConnected'
 
 type ApprovalFunction = (

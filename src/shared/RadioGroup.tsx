@@ -5,8 +5,8 @@ import { ReactComponent as RadioButtonNotSelected } from '../assets/images/radio
 import { ReactComponent as RadioButtonSelected } from '../assets/images/radioButton/selected.svg'
 import { Txt } from './Txt'
 import tw from 'twin.macro'
+
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react'
 
 interface IRadioItem {
   label: string
@@ -36,14 +36,14 @@ const RadioButton = (props: {
 }
 
 export const RadioGroup = (props: IRadioGroupProps) => {
-  const { label, items, activeRadio, onChange } = props
+  const { label, activeRadio, onChange } = props
   return (
     <div tw='w-full flex flex-col gap-3'>
       <Txt.Body2Regular>{label}:</Txt.Body2Regular>
       <div tw='flex flex-row gap-10'>
         {props.items.map((radio) => (
           <RadioButton
-            key={`${radio}`}
+            key={`${radio.value}`}
             selected={activeRadio === radio.value}
             value={radio.label}
             onClick={() => onChange(radio.value)}

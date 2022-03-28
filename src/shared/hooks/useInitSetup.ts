@@ -4,7 +4,6 @@ import {
   useInitAccountAddress,
   useInitAccountBalance,
   useUpdateBlock,
-  useInitPositions,
 } from '../../state/hooks'
 
 import { useAsync } from 'react-use'

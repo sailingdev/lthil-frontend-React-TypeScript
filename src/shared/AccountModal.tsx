@@ -9,7 +9,6 @@ import ClipLoader from 'react-spinners/ClipLoader'
 import { Txt } from './Txt'
 import { getTransactionLabel } from '../utils'
 import { showInfoNotification } from './notification'
-import tw from 'twin.macro'
 import { useProviderInfo } from './hooks/useProviderInfo'
 import { useWeb3React } from '@web3-react/core'
 
@@ -20,7 +19,7 @@ interface IAccountModal {
 /** @jsxImportSource @emotion/react */
 
 export const AccountModal = (props: IAccountModal) => {
-  const { activate, deactivate } = useWeb3React()
+  const { deactivate } = useWeb3React()
   const [account, shortAccount] = useAccountAddress()
   const transactions = useTransactions()
   const provider = useProviderInfo()

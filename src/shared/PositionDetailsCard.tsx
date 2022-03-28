@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
 
 import { InfoItem } from './InfoItem'
 import { Txt } from './Txt'

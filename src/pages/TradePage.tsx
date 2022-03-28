@@ -5,8 +5,6 @@ import {
   useAccountBalance,
   useFinalizeTransaction,
   useLatestBlock,
-  useStakeTokens,
-  useTransactions,
 } from '../state/hooks'
 
 import { Button } from '../shared/Button'
@@ -14,21 +12,13 @@ import { ContentContainer } from '../shared/ContentContainer'
 import { etherGlobal } from '../api/ether'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useNetwork } from '../shared/hooks/useNetwork'
-import { useState } from 'react'
 
 export const TradePage = () => {
   const block = useLatestBlock()
   const balance = useAccountBalance()
   const network = useNetwork()
   const address = useAccountAddress()
-  const [approval, action] = useApprovalAction({
-    approvalMeta: {
-      token: '0x80b5AFB071d2F13Dc6F106B797a2583b1245c97b',
-      destination: '0x27001942d886573b4C68d77547143C4b98f3775C',
-      amount: 8,
-    },
-    onApproval: (s: string) => console.log(s),
-  })
+
   const [positionApproval, openPosition] = useApprovalAction({
     approvalMeta: {
       token: '0x52C9CC325f372eF9891eBf8F317ec3b861feC817',

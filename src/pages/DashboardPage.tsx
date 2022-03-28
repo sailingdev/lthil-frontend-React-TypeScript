@@ -1,21 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
-import { useState, useEffect } from 'react'
 
-import { TransactionType } from '../types'
+import { useAddTransaction, useInitPositions } from '../state/hooks'
+import { useEffect, useState } from 'react'
+
 import { Button } from '../shared/Button'
-import { useSearch } from '../shared/hooks/useSearch'
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
 import { ISearchParams } from '../types'
 import { TableCell } from '../shared/table/cells'
+import { TransactionType } from '../types'
 import { Txt } from '../shared/Txt'
-import { usePositions } from '../shared/hooks/usePositions'
-import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { etherGlobal } from '../api/ether'
-import { useAddTransaction, useInitPositions } from '../state/hooks'
-import { BigNumber } from 'ethers'
+import { useIsConnected } from '../shared/hooks/useIsConnected'
+import { usePositions } from '../shared/hooks/usePositions'
+import { useSearch } from '../shared/hooks/useSearch'
 
 const initialSearchParams: Partial<ISearchParams> = {
   orderField: 'name',

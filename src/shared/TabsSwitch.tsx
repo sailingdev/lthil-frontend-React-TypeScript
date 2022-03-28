@@ -1,9 +1,8 @@
+import { MouseEventHandler } from 'react'
+import { PositionType } from '../types'
+import { Txt } from './Txt'
 /** @jsxImportSource @emotion/react */
 import tw from 'twin.macro'
-import { useState, MouseEventHandler } from 'react'
-
-import { Txt } from './Txt'
-import { PositionType } from '../types'
 
 interface ITab {
   title: string
@@ -55,7 +54,7 @@ export const TabsSwitch = (props: ITabsProps) => {
       >
         {props.items.map((tab) => (
           <TabButton
-            key={`${tab}`}
+            key={tab.value}
             text={tab.title}
             active={tab.value == activeIndex}
             onClick={() => onChange(tab.value as PositionType)}

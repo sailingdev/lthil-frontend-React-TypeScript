@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import 'twin.macro'
 
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
 import { Priority, TransactionType } from '../types'
@@ -21,7 +22,6 @@ import { addresses } from '../assets/addresses.json'
 import { etherGlobal } from '../api/ether'
 import { getCTALabelForApproval } from '../utils'
 import { tokens } from '../assets/tokenlist.json'
-import tw from 'twin.macro'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'

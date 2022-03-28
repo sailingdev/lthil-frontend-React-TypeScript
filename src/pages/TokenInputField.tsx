@@ -31,7 +31,7 @@ export const TokenInputField = (props: ITokenInputField) => {
       />
       <TokenModal
         modalIsOpen={isModalOpen}
-        onModalChange={(value) => {
+        onModalChange={() => {
           setIsModalOpen(false)
         }}
         onSelect={(token) => {

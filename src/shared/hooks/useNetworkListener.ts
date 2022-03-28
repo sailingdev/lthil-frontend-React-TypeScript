@@ -19,7 +19,7 @@ export const useNetworkListener = () => {
     //         activate(injected)
     //       }
     //     }
-    const onChainChange = (chainId: number) => {
+    const onChainChange = () => {
       activate(injected)
     }
     ethereum.on('chainChanged', onChainChange)

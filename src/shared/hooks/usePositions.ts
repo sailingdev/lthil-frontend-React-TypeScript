@@ -1,19 +1,9 @@
-import {
-  IParsedPositionWasOpenedEvent,
-  IPositionWasOpenedEvent,
-  PositionRow,
-  PositionWasOpenedEvent,
-} from '../../types'
-
-import { ContractFactory } from '../../api/contract-factory'
-import { etherGlobal } from '../../api/ether'
+import { IParsedPositionWasOpenedEvent } from '../../types'
+import { IPositionRow } from '../../types'
 import tokenList from '../../assets/tokenlist.json'
 import { useAsync } from 'react-use'
-import { useIsConnected } from './useIsConnected'
-import { useState } from 'react'
-import { BigNumber, ethers } from 'ethers'
 import { usePosition } from '../../state/hooks'
-import { IPositionRow } from '../../types'
+import { useState } from 'react'
 
 export const usePositions = () => {
   const [positions, setPositions] = useState<IPositionRow[]>([])
