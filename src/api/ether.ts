@@ -499,4 +499,43 @@ export class Ether {
       console.log(error)
     }
   }
+
+  async MarginTradingClosePosition(positionId: string): Promise<any> {
+    const marginTrading = ContractFactory.getMarginTradingStrategyContract(
+      await this.ensureSigner(),
+    )
+    try {
+      const closePosition = await marginTrading.closePosition(positionId, {
+        gasLimit: 10000000,
+      })
+      return closePosition
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async getMarginTradingPositionById(
+    positionId: string,
+  ): Promise<IParsedPositionWasOpenedEvent> {
+    const marginTradingStrategy =
+      ContractFactory.getMarginTradingStrategyContract(
+        await this.ensureSigner(),
+      )
+
+    const events = await marginTradingStrategy.queryFilter(
+      marginTradingStrategy.filters.PositionWasOpened(),
+      '0x1',
+      'latest',
+    )
+
+    const position = events.filter(
+      (position) =>
+        // @ts-ignore
+        position!.args![0].toHexString() == positionId.toHexString(),
+    )
+
+    return this.parsePositionWasOpenedEvent(
+      position[0] as unknown as IPositionWasOpenedEvent,
+    )
+  }
 }

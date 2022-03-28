@@ -72,10 +72,15 @@ const Profit = (props: { currencyValue: number; percentageValue: number }) => {
   )
 }
 
-const ClosePosition = () => {
+const ClosePosition = (props: {
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
+}) => {
   return (
     <div tw='flex flex-row justify-end'>
-      <button tw='rounded-md py-1 px-2 border border-primary-400 text-font-100'>
+      <button
+        onClick={props.onClick}
+        tw='rounded-md py-1 px-2 border border-primary-400 text-font-100'
+      >
         Close
       </button>
     </div>

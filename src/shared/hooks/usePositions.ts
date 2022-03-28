@@ -13,38 +13,33 @@ import { useIsConnected } from './useIsConnected'
 import { useState } from 'react'
 import { BigNumber, ethers } from 'ethers'
 import { usePosition } from '../../state/hooks'
-export interface IPositionRow {
-  tokenPair: string
-  position: string
-  profit: {
-    currencyValue: number
-    percentageValue: number
-  }
-  trend: string
-}
+import { IPositionRow } from '../../types'
 
 export const usePositions = () => {
   const [positions, setPositions] = useState<IPositionRow[]>([])
   const events = usePosition() ?? []
   useAsync(async () => {
     try {
-      const calculatedPositions = events.map((e: any) => {
-        const owedToken = tokenList.tokens.find(
-          (token) => e.owedToken === token.address,
-        )?.symbol
-        const heldToken = tokenList.tokens.find(
-          (token) => e.heldToken === token.address,
-        )?.symbol
-        return {
-          tokenPair: `${owedToken}/${heldToken}`,
-          position: `${owedToken}/${heldToken}`,
-          profit: {
-            currencyValue: 2,
-            percentageValue: 15,
-          },
-          trend: 'placeholder',
-        } as IPositionRow
-      })
+      const calculatedPositions = events.map(
+        (e: IParsedPositionWasOpenedEvent) => {
+          const owedToken = tokenList.tokens.find(
+            (token) => e.owedToken === token.address,
+          )?.symbol
+          const heldToken = tokenList.tokens.find(
+            (token) => e.heldToken === token.address,
+          )?.symbol
+          return {
+            tokenPair: `${owedToken}/${heldToken}`,
+            position: `${owedToken}/${heldToken}`,
+            profit: {
+              currencyValue: 2,
+              percentageValue: 15,
+            },
+            trend: 'placeholder',
+            positionId: e.positionId,
+          } as IPositionRow
+        },
+      )
       setPositions(calculatedPositions)
     } catch (error) {
       console.log(error)
