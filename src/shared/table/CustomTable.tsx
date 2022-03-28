@@ -180,11 +180,11 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
             ))}
           </thead>
 
-          {data.length === 0 && !loading && (
+          {/* {data.length === 0 && !loading && (
             <div tw='w-full rounded-lg  flex-col h-64 bg-primary-100 flex justify-center items-center'>
               <Txt.Body1Regular>No tokens found.</Txt.Body1Regular>
             </div>
-          )}
+          )} */}
           {loading ? (
             <tbody {...getTableBodyProps()}>
               {page.map((row) => {
@@ -225,47 +225,43 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
               {page.map((row) => {
                 prepareRow(row)
                 return (
-                  <React.Fragment>
+                  <React.Fragment key={row.id}>
                     <tr tw='h-0.5 bg-primary-100'>
-                      <div
-                        css={[
-                          tw`h-0.5 mx-10 bg-primary-300`,
-                          // index === page.length - 1 && tw`bg-primary-100`,
-                        ]}
-                      ></div>
+                      <td css={[tw`h-0.5 mx-10 bg-primary-300`]}></td>
                     </tr>
                     <tr
                       {...row.getRowProps()}
-                      css={[
-                        tw`cursor-pointer flex flex-col justify-between items-center`,
-                      ]}
+                      css={[tw`cursor-pointer`]}
                       onClick={() => {
                         props.onActiveRowChange &&
                           props.onActiveRowChange(row.original as T)
                       }}
                       // @ts-ignore
                     >
-                      <div tw='w-full flex flex-row justify-between'>
-                        {row.cells.map((cell) => {
-                          const { style, ...rest } = cell.getCellProps()
-                          /* eslint-disable no-debugger */
-                          return (
-                            <td
-                              {...rest}
-                              style={{
-                                ...style,
-                                // @ts-ignore
-                                textAlign: cell.column.align ?? 'left',
-                              }}
-                              css={tw`py-4`}
-                            >
-                              {/* @ts-ignore */}
-                              {cell.column.cell(cell.row.original)}
-                            </td>
-                          )
-                        })}
-                      </div>
-                      {props.activeRow == row.original && props.renderExpanded}
+                      {row.cells.map((cell) => {
+                        const { style, ...rest } = cell.getCellProps()
+                        /* eslint-disable no-debugger */
+                        return (
+                          <td
+                            {...rest}
+                            style={{
+                              ...style,
+                              // @ts-ignore
+                              textAlign: cell.column.align ?? 'left',
+                            }}
+                            css={tw`py-4 cursor-pointer`}
+                          >
+                            {/* @ts-ignore */}
+                            {cell.column.cell(cell.row.original)}
+                          </td>
+                        )
+                      })}
+                    </tr>
+                    <tr>
+                      <td colSpan={columns.length}>
+                        {props.activeRow == row.original &&
+                          props.renderExpanded}
+                      </td>
                     </tr>
                   </React.Fragment>
                 )
