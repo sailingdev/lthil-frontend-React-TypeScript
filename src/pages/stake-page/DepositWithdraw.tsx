@@ -43,7 +43,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
     approvalMeta: {
       token: props.tokenAddress,
       destination: etherGlobal.getAddresses().Vault,
-      amount: Number(depositValue),
+      amount: Number.MAX_SAFE_INTEGER, // Number(depositValue),
     },
     onApproval: async (tokenAddress: string, depositValue: string) => {
       const stake = await etherGlobal.depositToken(tokenAddress, depositValue)
