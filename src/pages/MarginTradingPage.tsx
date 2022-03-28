@@ -47,30 +47,37 @@ export const MarginTradingPage = () => {
   useAsync(async () => {
     try {
       if (etherGlobal && slippage && margin) {
-        const minObtained = (
-          await etherGlobal.computeMinObtained(
-            spentToken.address,
-            obtainedToken.address,
-            margin,
-            leverage,
-            priority,
-            positionType,
-            slippage,
-          )
-        ).toString()
-        const maxSpent = (
-          await etherGlobal.computeMaxSpent(
-            spentToken.address,
-            obtainedToken.address,
-            margin,
-            leverage,
-            priority,
-            positionType,
-            slippage,
-          )
-        ).toString()
-        setMinObtained(minObtained)
-        setMaxSpent(maxSpent)
+        const minObtained = etherGlobal.formatUnits(
+          (
+            await etherGlobal.computeMinObtained(
+              spentToken.address,
+              obtainedToken.address,
+              margin,
+              leverage,
+              priority,
+              positionType,
+              slippage,
+            )
+          ).toString(),
+          spentToken.address,
+        )
+
+        const maxSpent = etherGlobal.formatUnits(
+          (
+            await etherGlobal.computeMaxSpent(
+              spentToken.address,
+              obtainedToken.address,
+              margin,
+              leverage,
+              priority,
+              positionType,
+              slippage,
+            )
+          ).toString(),
+          spentToken.address,
+        )
+        setMinObtained(minObtained!)
+        setMaxSpent(maxSpent!)
       }
     } catch (error) {
       console.log(error)
