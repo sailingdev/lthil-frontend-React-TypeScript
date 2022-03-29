@@ -76,7 +76,7 @@ const ClosePosition = (props: {
   onClick?: React.MouseEventHandler<HTMLButtonElement>
 }) => {
   return (
-    <div tw='flex flex-row justify-end'>
+    <div onClick={(e) => e.stopPropagation()} tw='flex flex-row justify-end'>
       <button
         onClick={props.onClick}
         tw='rounded-md py-1 px-2 border border-primary-400 text-font-100'

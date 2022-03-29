@@ -13,12 +13,12 @@ interface IPositionDetailsCard {
   openPrice?: string
   currentPrice?: string
   liquidationPrice?: string
-  collateral?: string
-  createdAt?: string
+  collateral: string
+  createdAt: string
 }
 
 export const PositionDetailsCard = (props: IPositionDetailsCard) => {
-  const { createdAt } = props
+  const { createdAt, collateral } = props
   return (
     <div tw='flex flex-col justify-between items-center w-full rounded-xl p-5 bg-primary-100'>
       <Txt.Heading2>Position details</Txt.Heading2>
@@ -27,7 +27,7 @@ export const PositionDetailsCard = (props: IPositionDetailsCard) => {
         <InfoItem label='Open price' details={'USDC'} value={'3.129'} />
         <InfoItem label='Current price' details={'USDC'} value={'3.129'} />
         <InfoItem label='Liq. price' details={'USDC'} value={'3.017'} />
-        <InfoItem label='Collateral' details={'ETH'} value={'1.00'} />
+        <InfoItem label='Collateral' details={'ETH'} value={collateral} />
         <InfoItem
           label='Distance from liquidation'
           details={'ETH'}
@@ -38,7 +38,7 @@ export const PositionDetailsCard = (props: IPositionDetailsCard) => {
           value={'$ +1.240,00 (+15.6%)'}
           valueColor={'green'}
         />
-        <InfoItem label='Opened' value={createdAt!} />
+        <InfoItem label='Opened' value={createdAt} />
       </div>
     </div>
   )

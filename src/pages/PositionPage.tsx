@@ -11,12 +11,12 @@ import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabButton } from '../shared/TabButton'
 import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { usePosition } from '../state/hooks'
 import { useParams } from 'react-router-dom'
 import { etherGlobal } from '../api/ether'
 import { useAddTransaction, useInitPositions } from '../state/hooks'
-import { TransactionType } from '../types'
+import { TokenDetails, TransactionType } from '../types'
 
 export const PositionPage = () => {
   const { positionId } = useParams()
@@ -24,10 +24,22 @@ export const PositionPage = () => {
   const addTx = useAddTransaction()
 
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
+  const [spentToken, setSpentToken] = useState<TokenDetails | undefined>(
+    undefined,
+  )
+  const [obtainedToken, setObtainedToken] = useState<TokenDetails | undefined>(
+    undefined,
+  )
+
   const [liquidationInput, setLiquidationInput] = useState<string>('')
   const [liquidationToken1, setLiquidationToken1] = useState('ETH')
   const [liquidationToken2, setLiquidationToken2] = useState('USDC')
   const [liquidationPrice, setLiquidationPrice] = useState(5000)
+
+  useEffect(() => {
+    setSpentToken(etherGlobal.getTokenData(position!.spentToken))
+    setObtainedToken(etherGlobal.getTokenData(position!.obtainedToken))
+  })
 
   const liquidationAction = () => {
     console.log('liquidation action clicked.')
@@ -47,18 +59,22 @@ export const PositionPage = () => {
     })
   }
 
+  const timestampToDate = (timestamp: string) => {
+    const dateObject = new Date(Number(timestamp) * 1000)
+    return dateObject.toLocaleDateString()
+  }
+
   return (
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>
         <div tw='w-full tablet:w-9/12 desktop:w-10/12 flex flex-col items-center'>
-          <Txt.Heading1 tw='mb-12'>
-            {etherGlobal.getTokenData(position!.spentToken)!.symbol}/
-            {etherGlobal.getTokenData(position!.obtainedToken)!.symbol}
-          </Txt.Heading1>
+          <Txt.Heading1 tw='mb-12'>Margin Trading Strategy</Txt.Heading1>
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
             <div tw='flex flex-col gap-3 flex-grow'>
-              {/* TOOD: Convert to human readable format */}
-              <PositionDetailsCard createdAt={position!.createdAt.toString()} />
+              <PositionDetailsCard
+                createdAt={timestampToDate(position!.createdAt.toString())}
+                collateral={position!.collateralReceived!.toString()}
+              />
               <CollateralCard />
               <Liquidation
                 liquidationToken1={liquidationToken1}
@@ -76,7 +92,7 @@ export const PositionPage = () => {
             </div>
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
               <div tw='w-full flex flex-row justify-between pb-5 '>
-                <Txt.Heading2>ETH/USDC</Txt.Heading2>
+                <Txt.Heading2>{`${obtainedToken?.symbol}/${spentToken?.symbol}`}</Txt.Heading2>
                 <div tw='hidden desktop:flex flex-row items-center gap-1'>
                   <Txt.Body2Regular tw='mr-4'>View:</Txt.Body2Regular>
                   <TabButton
@@ -93,9 +109,13 @@ export const PositionPage = () => {
               </div>
               <div tw='w-full h-full  flex flex-col'>
                 {activeChart === 'basic' ? (
-                  <BasicChart tokenSymbol='EURUSD' />
+                  <BasicChart
+                    tokenSymbol={`${obtainedToken?.symbol}${spentToken?.symbol}`}
+                  />
                 ) : (
-                  <TradingChart tokenSymbol='EURUSD' />
+                  <TradingChart
+                    tokenSymbol={`${obtainedToken?.symbol}${spentToken?.symbol}`}
+                  />
                 )}
               </div>
             </div>
