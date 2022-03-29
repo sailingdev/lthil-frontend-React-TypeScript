@@ -17,6 +17,8 @@ import { useParams } from 'react-router-dom'
 import { etherGlobal } from '../api/ether'
 import { useAddTransaction, useInitPositions } from '../state/hooks'
 import { TokenDetails, TransactionType } from '../types'
+import { BigNumber } from 'ethers'
+import { useAsync } from 'react-use'
 
 export const PositionPage = () => {
   const { positionId } = useParams()
@@ -34,12 +36,36 @@ export const PositionPage = () => {
   const [liquidationInput, setLiquidationInput] = useState<string>('')
   const [liquidationToken1, setLiquidationToken1] = useState('ETH')
   const [liquidationToken2, setLiquidationToken2] = useState('USDC')
-  const [liquidationPrice, setLiquidationPrice] = useState(5000)
+  const [liquidationPrice, setLiquidationPrice] = useState<
+    BigNumber | undefined
+  >(undefined)
+  const [leverage, setLeverage] = useState<BigNumber | undefined>(undefined)
+  const [currentPrice, setCurrentPrice] = useState<BigNumber | undefined>(
+    undefined,
+  )
+  const [openPrice, setOpenPrice] = useState<BigNumber | undefined>(undefined)
+
+  useAsync(async () => {
+    if (position) {
+      setSpentToken(etherGlobal.getTokenData(position!.spentToken))
+      setObtainedToken(etherGlobal.getTokenData(position!.obtainedToken))
+      setOpenPrice(etherGlobal.getPositionOpenPrice(position!))
+      setCurrentPrice(await etherGlobal.getPositionCurrentPrice(position!))
+      setLeverage(etherGlobal.getPositionLeverage(position!))
+    }
+  }, [position])
 
   useEffect(() => {
-    setSpentToken(etherGlobal.getTokenData(position!.spentToken))
-    setObtainedToken(etherGlobal.getTokenData(position!.obtainedToken))
-  })
+    if (position && openPrice && leverage) {
+      setLiquidationPrice(
+        etherGlobal.getPositionLiquidationPrice(
+          position!,
+          openPrice as BigNumber,
+          leverage as BigNumber,
+        ),
+      )
+    }
+  }, [position, openPrice, leverage])
 
   const liquidationAction = () => {
     console.log('liquidation action clicked.')
@@ -49,7 +75,6 @@ export const PositionPage = () => {
     const closePosition = await etherGlobal.MarginTradingClosePosition(
       positionId,
     )
-    console.log(closePosition)
     const { spentToken, obtainedToken } =
       await etherGlobal.getMarginTradingPositionById(positionId)
     addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {
@@ -74,12 +99,19 @@ export const PositionPage = () => {
               <PositionDetailsCard
                 createdAt={timestampToDate(position!.createdAt.toString())}
                 collateral={position!.collateralReceived!.toString()}
+                openPrice={openPrice ? openPrice!.toString() : ''}
+                currentPrice={currentPrice ? currentPrice!.toString() : ''}
+                liquidationPrice={
+                  liquidationPrice ? currentPrice!.toString() : ''
+                }
               />
               <CollateralCard />
               <Liquidation
                 liquidationToken1={liquidationToken1}
                 liquidationToken2={liquidationToken2}
-                liquidationPrice={liquidationPrice}
+                liquidationPrice={
+                  liquidationPrice ? liquidationPrice.toNumber() : 0
+                }
                 inputValue={liquidationInput}
                 inputOnChange={(value) => setLiquidationInput(value)}
                 onClick={liquidationAction}

@@ -46,7 +46,6 @@ export const DashboardPage = () => {
     const closePosition = await etherGlobal.MarginTradingClosePosition(
       positionId,
     )
-    console.log(closePosition)
     const { spentToken, obtainedToken } =
       await etherGlobal.getMarginTradingPositionById(positionId)
     addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {

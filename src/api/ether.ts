@@ -522,8 +522,6 @@ export class Ether {
         // gasLimit: (await etherGlobal.getBlockGasLimit()).toNumber() - 1, // GAS LIMIT // TODO: testing max gas limit
         gasLimit: 10000000,
       })
-      console.log(positionInfo)
-      console.log(position)
       return position
     } catch (error) {
       console.log(error)
@@ -567,5 +565,91 @@ export class Ether {
     return this.parsePositionWasOpenedEvent(
       position[0] as unknown as IPositionWasOpenedEvent,
     )
+  }
+
+  getPositionOpenPrice(
+    position: IParsedPositionWasOpenedEvent,
+  ): BigNumber | undefined {
+    try {
+      const {
+        collateralToken,
+        spentToken,
+        collateralReceived,
+        amountIn,
+        toBorrow,
+      } = position
+      if (collateralToken === spentToken) {
+        return toBorrow.add(collateralReceived).div(amountIn)
+      } else {
+        return amountIn.div(toBorrow)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async getPositionCurrentPrice(
+    position: IParsedPositionWasOpenedEvent,
+  ): Promise<BigNumber | undefined> {
+    try {
+      const { spentToken, obtainedToken, amountIn, toBorrow, collateralToken } =
+        position
+
+      const marginTradingStrategy =
+        ContractFactory.getMarginTradingStrategyContract(
+          await this.ensureSigner(),
+        )
+
+      if (collateralToken === spentToken) {
+        return (
+          await marginTradingStrategy.quote(obtainedToken, spentToken, amountIn)
+        )[0].div(amountIn)
+      } else {
+        return (
+          await marginTradingStrategy.quote(spentToken, obtainedToken, toBorrow)
+        )[0].div(toBorrow)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  getPositionLeverage(
+    position: IParsedPositionWasOpenedEvent,
+  ): BigNumber | undefined {
+    try {
+      const { collateralReceived, toBorrow } = position
+      console.log(BigNumber.from(1).add(toBorrow).div(collateralReceived))
+
+      return BigNumber.from(1).add(toBorrow).div(collateralReceived)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  getPositionLiquidationPrice(
+    position: IParsedPositionWasOpenedEvent,
+    openPrice: BigNumber,
+    leverage: BigNumber,
+  ): BigNumber | undefined {
+    try {
+      const { collateralToken, spentToken } = position
+
+      if (collateralToken === spentToken) {
+        return openPrice.mul(
+          BigNumber.from(1).sub(
+            BigNumber.from(1).div(BigNumber.from(1).div(2).mul(leverage)),
+          ),
+        )
+      } else {
+        return openPrice.mul(
+          BigNumber.from(1).add(
+            BigNumber.from(1).div(BigNumber.from(1).div(2).mul(leverage)),
+          ),
+        )
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
