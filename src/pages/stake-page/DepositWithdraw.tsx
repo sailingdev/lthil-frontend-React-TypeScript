@@ -23,7 +23,8 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
   const [depositValue, setDepositValue] = useState<string>('0')
   const [withdrawValue, setWithdrawValue] = useState<string>('0')
   const [userTokenBalance, setUserTokenBalance] = useState<number>(0)
-  const [userTokenOwnedBalance, setUserTokenOwnedBalance] = useState<number>(0)
+  const [userTokenStakedBalance, setUserTokenStakedBalance] =
+    useState<number>(0)
   const [stakeHash, setStakeHash] = useState<string | undefined>(undefined)
   const [withdrawHash, setWithdrawHash] = useState<string | undefined>(
     undefined,
@@ -66,10 +67,10 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
     )
     setUserTokenBalance(tokenBalance) // TODO: Needs to refresh on deposit and withdraw actions
 
-    const ownedBalance = await etherGlobal.getMaxWithdrawAmount(
+    const stakedBalance = await etherGlobal.getMaxWithdrawAmount(
       props.tokenAddress,
     )
-    setUserTokenOwnedBalance(ownedBalance) // TODO: Needs to refresh on deposit and withdraw actions
+    setUserTokenStakedBalance(stakedBalance) // TODO: Needs to refresh on deposit and withdraw actions
   }, [props.tokenAddress])
 
   const getMaxDeposit = async () => {
@@ -132,7 +133,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
         <div tw='flex flex-row w-full justify-between'>
           <Txt.Heading2>Withdraw</Txt.Heading2>
           <Txt.Heading2>
-            {userTokenOwnedBalance} {props.tokenSymbol}
+            {userTokenStakedBalance} {props.tokenSymbol}
           </Txt.Heading2>
         </div>
         <InputField
