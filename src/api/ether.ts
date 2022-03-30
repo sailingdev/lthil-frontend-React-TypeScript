@@ -74,6 +74,7 @@ export class Ether {
         name: token.name,
         symbol: token.symbol,
         decimals: token.decimals,
+        address: token.address,
       }
     } catch (error) {
       console.log(error)
@@ -579,8 +580,14 @@ export class Ether {
         toBorrow,
       } = position
       if (collateralToken === spentToken) {
-        return toBorrow.add(collateralReceived).div(amountIn)
+        const initalPositionValue = toBorrow.add(collateralReceived)
+        console.log(
+          'Open price: ',
+          initalPositionValue.div(amountIn).toString(),
+        )
+        return initalPositionValue.div(amountIn)
       } else {
+        console.log('Current price: ', amountIn.div(toBorrow).toString())
         return amountIn.div(toBorrow)
       }
     } catch (error) {
@@ -601,10 +608,34 @@ export class Ether {
         )
 
       if (collateralToken === spentToken) {
+        console.log(
+          'Current price: ',
+          (
+            await marginTradingStrategy.quote(
+              obtainedToken,
+              spentToken,
+              amountIn,
+            )
+          )[0]
+            .div(amountIn)
+            .toString(),
+        )
         return (
           await marginTradingStrategy.quote(obtainedToken, spentToken, amountIn)
         )[0].div(amountIn)
       } else {
+        console.log(
+          'Current price: ',
+          (
+            await marginTradingStrategy.quote(
+              spentToken,
+              obtainedToken,
+              toBorrow,
+            )
+          )[0]
+            .div(toBorrow)
+            .toString(),
+        )
         return (
           await marginTradingStrategy.quote(spentToken, obtainedToken, toBorrow)
         )[0].div(toBorrow)
@@ -619,37 +650,93 @@ export class Ether {
   ): BigNumber | undefined {
     try {
       const { collateralReceived, toBorrow } = position
-      console.log(BigNumber.from(1).add(toBorrow).div(collateralReceived))
+      console.log('Collateral: ', collateralReceived.toString())
+      console.log('To borrow: ', toBorrow.toString())
 
-      return BigNumber.from(1).add(toBorrow).div(collateralReceived)
+      console.log(
+        'Leverage: ',
+        BigNumber.from(1).add(toBorrow.div(collateralReceived)).toNumber(),
+        'x',
+      )
+      return BigNumber.from(1).add(toBorrow.div(collateralReceived))
     } catch (error) {
       console.log(error)
     }
   }
 
+  // TODO: Using numbers there instead of BigNumber
   getPositionLiquidationPrice(
     position: IParsedPositionWasOpenedEvent,
     openPrice: BigNumber,
     leverage: BigNumber,
-  ): BigNumber | undefined {
+  ): number | undefined {
     try {
+      const openPriceNum = openPrice.toNumber()
+      const leverageNum = leverage.toNumber()
+
       const { collateralToken, spentToken } = position
 
       if (collateralToken === spentToken) {
-        return openPrice.mul(
-          BigNumber.from(1).sub(
-            BigNumber.from(1).div(BigNumber.from(1).div(2).mul(leverage)),
-          ),
+        console.log(
+          'Liquidation price: ',
+          openPriceNum * (1 - 1 / (0.5 * leverageNum)),
         )
+        return openPriceNum * (1 - 1 / (0.5 * leverageNum))
       } else {
-        return openPrice.mul(
-          BigNumber.from(1).add(
-            BigNumber.from(1).div(BigNumber.from(1).div(2).mul(leverage)),
-          ),
+        console.log(
+          'Liquidation price: ',
+          openPriceNum * (1 + 1 / (0.5 * leverageNum)),
         )
+        return openPriceNum * (1 + 1 / (0.5 * leverageNum))
       }
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  computeDistanceFromLiquidation(
+    position: IParsedPositionWasOpenedEvent,
+    liquidationPrice: number,
+    currentPrice: number,
+  ): number {
+    if (this.getPositionType(position) === 'long') {
+      console.log(
+        'Distance from liquidation: ',
+        1 - liquidationPrice / currentPrice,
+      )
+      return 1 - liquidationPrice / currentPrice
+    } else {
+      console.log(
+        'Distance from liquidation: ',
+        liquidationPrice / currentPrice - 1,
+      )
+      return liquidationPrice / currentPrice - 1
+    }
+  }
+
+  getPositionType(position: IParsedPositionWasOpenedEvent): 'long' | 'short' {
+    const { collateralToken, spentToken } = position
+
+    if (collateralToken === spentToken) {
+      console.log('Position type: ', 'long')
+      return 'long'
+    } else {
+      console.log('Position type: ', 'short')
+      return 'short'
+    }
+  }
+
+  getPositionShortDescription(position: IParsedPositionWasOpenedEvent): string {
+    const { spentToken, obtainedToken } = position
+
+    const leverage = this.getPositionLeverage(position)
+    const positionType = this.getPositionType(position)
+    const spentTokenSymbol = this.getTokenData(spentToken)?.symbol
+    const obtainedTokenSymbol = this.getTokenData(obtainedToken)?.symbol
+    if (positionType === 'long') {
+      return `${obtainedTokenSymbol}/${spentTokenSymbol} ${leverage}x ${positionType}`
+    } else {
+      return `${spentTokenSymbol}/${obtainedTokenSymbol} ${leverage}x ${positionType}`
     }
   }
 }

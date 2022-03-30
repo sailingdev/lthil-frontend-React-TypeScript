@@ -32,18 +32,27 @@ export const PositionPage = () => {
   const [obtainedToken, setObtainedToken] = useState<TokenDetails | undefined>(
     undefined,
   )
-
+  const [collateral, setCollateral] = useState<string | undefined>('')
+  const [distanceFromLiquidation, setDistanceFromLiquidation] = useState<
+    number | undefined
+  >(undefined)
   const [liquidationInput, setLiquidationInput] = useState<string>('')
   const [liquidationToken1, setLiquidationToken1] = useState('ETH')
   const [liquidationToken2, setLiquidationToken2] = useState('USDC')
-  const [liquidationPrice, setLiquidationPrice] = useState<
-    BigNumber | undefined
-  >(undefined)
+  const [liquidationPrice, setLiquidationPrice] = useState<number | undefined>(
+    undefined,
+  )
   const [leverage, setLeverage] = useState<BigNumber | undefined>(undefined)
   const [currentPrice, setCurrentPrice] = useState<BigNumber | undefined>(
     undefined,
   )
   const [openPrice, setOpenPrice] = useState<BigNumber | undefined>(undefined)
+  const [positionType, setPositionType] = useState<string | undefined>(
+    undefined,
+  )
+  const [positionDesription, setPositionDescription] = useState<
+    string | undefined
+  >(undefined)
 
   useAsync(async () => {
     if (position) {
@@ -52,6 +61,8 @@ export const PositionPage = () => {
       setOpenPrice(etherGlobal.getPositionOpenPrice(position!))
       setCurrentPrice(await etherGlobal.getPositionCurrentPrice(position!))
       setLeverage(etherGlobal.getPositionLeverage(position!))
+      setPositionType(etherGlobal.getPositionType(position))
+      setPositionDescription(etherGlobal.getPositionShortDescription(position!))
     }
   }, [position])
 
@@ -65,7 +76,28 @@ export const PositionPage = () => {
         ),
       )
     }
-  }, [position, openPrice, leverage])
+
+    if (spentToken) {
+      setCollateral(
+        etherGlobal.formatUnits(
+          position!.collateralReceived!.toString(),
+          spentToken!.address,
+        ),
+      )
+    }
+  }, [position, openPrice, leverage, spentToken])
+
+  useEffect(() => {
+    if (currentPrice && liquidationPrice) {
+      setDistanceFromLiquidation(
+        etherGlobal.computeDistanceFromLiquidation(
+          position!,
+          liquidationPrice!,
+          currentPrice!.toNumber(),
+        ),
+      )
+    }
+  }, [currentPrice, liquidationPrice])
 
   const liquidationAction = () => {
     console.log('liquidation action clicked.')
@@ -98,20 +130,24 @@ export const PositionPage = () => {
             <div tw='flex flex-col gap-3 flex-grow'>
               <PositionDetailsCard
                 createdAt={timestampToDate(position!.createdAt.toString())}
-                collateral={position!.collateralReceived!.toString()}
+                collateral={collateral!}
                 openPrice={openPrice ? openPrice!.toString() : ''}
                 currentPrice={currentPrice ? currentPrice!.toString() : ''}
                 liquidationPrice={
-                  liquidationPrice ? currentPrice!.toString() : ''
+                  liquidationPrice ? liquidationPrice!.toString() : ''
                 }
+                leverage={leverage?.toString()}
+                spentTokenSymbol={spentToken?.symbol}
+                obtainedTokenSymbol={obtainedToken?.symbol}
+                positionType={positionType}
+                distanceFromLiquidation={distanceFromLiquidation?.toString()}
+                positionDescription={positionDesription}
               />
               <CollateralCard />
               <Liquidation
                 liquidationToken1={liquidationToken1}
                 liquidationToken2={liquidationToken2}
-                liquidationPrice={
-                  liquidationPrice ? liquidationPrice.toNumber() : 0
-                }
+                liquidationPrice={liquidationPrice ? liquidationPrice : 0}
                 inputValue={liquidationInput}
                 inputOnChange={(value) => setLiquidationInput(value)}
                 onClick={liquidationAction}
