@@ -61,7 +61,7 @@ export const PositionDetailsCard = (props: IPositionDetailsCard) => {
         />
         <InfoItem
           label='Distance from liquidation'
-          details={collateralToken}
+          details={'%'}
           value={distanceFromLiquidation}
         />
         <InfoItem

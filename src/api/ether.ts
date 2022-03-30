@@ -371,6 +371,7 @@ export class Ether {
           .sub(fees)
       }
 
+      // TODO: percentage is maybe wrong, double check it
       return [
         Number(this.formatUnits(profitsAndLosses!.toString(), collateralToken)),
         Number(
