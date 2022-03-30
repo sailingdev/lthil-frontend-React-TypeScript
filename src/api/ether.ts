@@ -314,7 +314,9 @@ export class Ether {
 
   // ========= MARGIN TRADING =========
 
-  async computeProfitsAndLosses(positionEvent: IParsedPositionWasOpenedEvent) {
+  async computeProfitsAndLosses(
+    positionEvent: IParsedPositionWasOpenedEvent,
+  ): Promise<[number, number] | undefined> {
     try {
       const {
         amountIn,
@@ -348,7 +350,7 @@ export class Ether {
 
       const fees = timeFees.add(positionFees)
 
-      if (obtainedToken === collateralToken) {
+      if (this.getPositionType(positionEvent) === 'long') {
         profitsAndLosses = amountIn
           .sub(
             (
@@ -370,11 +372,10 @@ export class Ether {
       }
 
       return [
-        profitsAndLosses?.toString(),
-        profitsAndLosses!
-          .div(collateralReceived)
-          .mul(BigNumber.from(100))
-          .toString(),
+        Number(this.formatUnits(profitsAndLosses!.toString(), collateralToken)),
+        Number(
+          profitsAndLosses!.div(collateralReceived).mul(BigNumber.from(100)),
+        ),
       ]
     } catch (error) {
       console.log(error)
@@ -540,7 +541,6 @@ export class Ether {
     }
     try {
       const position = await marginTrading.openPosition(positionInfo, {
-        // gasLimit: (await etherGlobal.getBlockGasLimit()).toNumber() - 1, // GAS LIMIT // TODO: testing max gas limit
         gasLimit: 10000000,
       })
       return position
@@ -592,14 +592,8 @@ export class Ether {
     position: IParsedPositionWasOpenedEvent,
   ): BigNumber | undefined {
     try {
-      const {
-        collateralToken,
-        spentToken,
-        collateralReceived,
-        amountIn,
-        toBorrow,
-      } = position
-      if (collateralToken === spentToken) {
+      const { collateralReceived, amountIn, toBorrow } = position
+      if (this.getPositionType(position) === 'long') {
         const initalPositionValue = toBorrow.add(collateralReceived)
         console.log(
           'Open price: ',

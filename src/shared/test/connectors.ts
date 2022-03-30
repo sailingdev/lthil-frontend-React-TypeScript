@@ -3,8 +3,6 @@ import { ReactComponent as MetaMaskIcon } from '../../assets/images/metamask.svg
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { ReactComponent as WalletConnectIcon } from '../../assets/images/walletconnect.svg'
 
-// TODO VALENTIN LIST ALL NETWORKS HERE: KOVAN, GOERLI, ROPSTEN, ETC.
-// WE NEED THEM LISTED HERE IN ORDER FOR THE NETWORK OVERLAY MODAL TO WORK
 export const allNetworks = [
   {
     name: 'Rinkeby',

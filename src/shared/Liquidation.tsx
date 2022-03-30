@@ -15,6 +15,7 @@ interface ILiquidation {
   inputOnChange: (value: string) => void
   inputValue: string
   liquidationPrice: number
+  tokenSymbol: string
 }
 
 export const Liquidation = (props: ILiquidation) => {
@@ -25,6 +26,7 @@ export const Liquidation = (props: ILiquidation) => {
     onClick,
     inputOnChange,
     inputValue,
+    tokenSymbol,
   } = props
 
   return (
@@ -47,7 +49,7 @@ export const Liquidation = (props: ILiquidation) => {
             css={[
               tw`bg-primary-400 dark:bg-primary-300 h-6 tablet:h-7 desktop:h-8`,
             ]}
-            text='USDC'
+            text={tokenSymbol}
             leftIcon={CurrEth}
             rightIcon={ArrowDown}
           />

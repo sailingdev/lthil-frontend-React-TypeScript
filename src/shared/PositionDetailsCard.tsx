@@ -1,15 +1,12 @@
 /** @jsxImportSource @emotion/react */
+import { BigNumber } from 'ethers'
 import 'twin.macro'
 
 import { InfoItem } from './InfoItem'
 import { Txt } from './Txt'
 
-// TODO: work in progress
 interface IPositionDetailsCard {
-  spentTokenSymbol: string | undefined
-  obtainedTokenSymbol: string | undefined
-  leverage: string | undefined
-  positionType: string | undefined
+  collateralToken: string | undefined
   openPrice: string | undefined
   currentPrice: string | undefined
   liquidationPrice: string | undefined
@@ -17,6 +14,7 @@ interface IPositionDetailsCard {
   createdAt: string | undefined
   distanceFromLiquidation: string | undefined
   positionDescription: string | undefined
+  profitsAndLosses: [number, number] | undefined
 }
 
 export const PositionDetailsCard = (props: IPositionDetailsCard) => {
@@ -27,11 +25,9 @@ export const PositionDetailsCard = (props: IPositionDetailsCard) => {
     currentPrice,
     liquidationPrice,
     distanceFromLiquidation,
-    leverage,
-    positionType,
-    spentTokenSymbol,
-    obtainedTokenSymbol,
+    collateralToken,
     positionDescription,
+    profitsAndLosses,
   } = props
   return (
     <div tw='flex flex-col justify-between items-center w-full rounded-xl p-5 bg-primary-100'>
@@ -43,23 +39,41 @@ export const PositionDetailsCard = (props: IPositionDetailsCard) => {
           details={positionDescription}
           value={'2.00'}
         />
-        <InfoItem label='Open price' details={''} value={openPrice!} />
-        <InfoItem label='Current price' details={''} value={currentPrice} />
-        <InfoItem label='Liq. price' details={''} value={liquidationPrice} />
+        <InfoItem
+          label='Open price'
+          details={collateralToken}
+          value={openPrice!}
+        />
+        <InfoItem
+          label='Current price'
+          details={collateralToken}
+          value={currentPrice}
+        />
+        <InfoItem
+          label='Liq. price'
+          details={collateralToken}
+          value={liquidationPrice}
+        />
         <InfoItem
           label='Collateral'
-          details={spentTokenSymbol}
+          details={collateralToken}
           value={collateral}
         />
         <InfoItem
           label='Distance from liquidation'
-          details={spentTokenSymbol}
+          details={collateralToken}
           value={distanceFromLiquidation}
         />
         <InfoItem
           label='Profit'
-          value={'$ +1.240,00 (+15.6%)'}
-          valueColor={'green'}
+          value={
+            profitsAndLosses
+              ? `${profitsAndLosses[0].toString()} (${profitsAndLosses[1].toString()}%)`
+              : ''
+          }
+          valueColor={
+            profitsAndLosses && profitsAndLosses![0] > 0 ? 'green' : 'red'
+          }
         />
         <InfoItem label='Opened' value={createdAt} />
       </div>

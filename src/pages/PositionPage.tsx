@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react'
 import { usePosition } from '../state/hooks'
 import { useParams } from 'react-router-dom'
 import { etherGlobal } from '../api/ether'
-import { useAddTransaction, useInitPositions } from '../state/hooks'
+import { useAddTransaction } from '../state/hooks'
 import { TokenDetails, TransactionType } from '../types'
 import { BigNumber } from 'ethers'
 import { useAsync } from 'react-use'
@@ -32,6 +32,9 @@ export const PositionPage = () => {
   const [obtainedToken, setObtainedToken] = useState<TokenDetails | undefined>(
     undefined,
   )
+  const [collateralToken, setCollateralToken] = useState<
+    TokenDetails | undefined
+  >(undefined)
   const [collateral, setCollateral] = useState<string | undefined>('')
   const [distanceFromLiquidation, setDistanceFromLiquidation] = useState<
     number | undefined
@@ -47,22 +50,23 @@ export const PositionPage = () => {
     undefined,
   )
   const [openPrice, setOpenPrice] = useState<BigNumber | undefined>(undefined)
-  const [positionType, setPositionType] = useState<string | undefined>(
-    undefined,
-  )
   const [positionDesription, setPositionDescription] = useState<
     string | undefined
+  >(undefined)
+  const [profitsAndLosses, setProfitsAndLosses] = useState<
+    [number, number] | undefined
   >(undefined)
 
   useAsync(async () => {
     if (position) {
       setSpentToken(etherGlobal.getTokenData(position!.spentToken))
       setObtainedToken(etherGlobal.getTokenData(position!.obtainedToken))
+      setCollateralToken(etherGlobal.getTokenData(position!.collateralToken))
       setOpenPrice(etherGlobal.getPositionOpenPrice(position!))
       setCurrentPrice(await etherGlobal.getPositionCurrentPrice(position!))
       setLeverage(etherGlobal.getPositionLeverage(position!))
-      setPositionType(etherGlobal.getPositionType(position))
       setPositionDescription(etherGlobal.getPositionShortDescription(position!))
+      setProfitsAndLosses(await etherGlobal.computeProfitsAndLosses(position!))
     }
   }, [position])
 
@@ -78,12 +82,7 @@ export const PositionPage = () => {
     }
 
     if (spentToken) {
-      setCollateral(
-        etherGlobal.formatUnits(
-          position!.collateralReceived!.toString(),
-          spentToken!.address,
-        ),
-      )
+      setCollateral(position!.collateralReceived!.toString())
     }
   }, [position, openPrice, leverage, spentToken])
 
@@ -130,18 +129,16 @@ export const PositionPage = () => {
             <div tw='flex flex-col gap-3 flex-grow'>
               <PositionDetailsCard
                 createdAt={timestampToDate(position!.createdAt.toString())}
-                collateral={collateral!}
-                openPrice={openPrice ? openPrice!.toString() : ''}
-                currentPrice={currentPrice ? currentPrice!.toString() : ''}
+                collateral={collateral!} // TODO: needs to be formated
+                openPrice={openPrice ? openPrice!.toString() : ''} // TODO: needs to be formated (most likely)
+                currentPrice={currentPrice ? currentPrice!.toString() : ''} // TODO: needs to be formated (most likely)
                 liquidationPrice={
                   liquidationPrice ? liquidationPrice!.toString() : ''
                 }
-                leverage={leverage?.toString()}
-                spentTokenSymbol={spentToken?.symbol}
-                obtainedTokenSymbol={obtainedToken?.symbol}
-                positionType={positionType}
+                collateralToken={collateralToken?.symbol}
                 distanceFromLiquidation={distanceFromLiquidation?.toString()}
                 positionDescription={positionDesription}
+                profitsAndLosses={profitsAndLosses}
               />
               <CollateralCard />
               <Liquidation
@@ -151,9 +148,10 @@ export const PositionPage = () => {
                 inputValue={liquidationInput}
                 inputOnChange={(value) => setLiquidationInput(value)}
                 onClick={liquidationAction}
+                tokenSymbol={collateralToken?.symbol as string}
               />
               <ClosePosition
-                token='USDC'
+                token={collateralToken?.symbol as string}
                 value={3000}
                 onClick={() => closePosition(positionId!)}
               />
