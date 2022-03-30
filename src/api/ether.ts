@@ -314,52 +314,72 @@ export class Ether {
 
   // ========= MARGIN TRADING =========
 
-  // TODO: This function is layed out but the data is wrong since we don't yet know precisely what data PositionWasOpened event returns.
-  // async computeProfitsAndLosses(
-  //   positionEvent: PositionWasOpenedEvent,
-  // ): Promise<ProfitsAndLosses> {
-  //   const marginTrading = ContractFactory.getMarginTradingStrategyContract(
-  //     await this.ensureSigner(),
-  //   )
+  async computeProfitsAndLosses(positionEvent: IParsedPositionWasOpenedEvent) {
+    try {
+      const {
+        amountIn,
+        interestRate,
+        toBorrow,
+        collateralReceived,
+        collateralToken,
+        spentToken,
+        obtainedToken,
+        createdAt,
+        positionId,
+      } = positionEvent
 
-  //   let profitsAndLosses = 0
+      const marginTrading = ContractFactory.getMarginTradingStrategyContract(
+        await this.ensureSigner(),
+      )
 
-  //   const createdAt = parseInt(positionEvent.createdAt, 16)
-  //   const principal = parseInt(positionEvent.principal, 16)
-  //   const interestRate = 0.002 // (positionEvent.interestRate) TODO: where do I get the interestRate?
-  //   const time = new Date().getTime() / 1000 - createdAt
-  //   const timeFees = (principal * interestRate * time) / 864000000
-  //   const positionFees = parseInt(positionEvent.fees, 16)
-  //   const fees = timeFees + positionFees
-  //   const allowance = parseInt(positionEvent.allowance, 16)
-  //   const collateral = parseInt(positionEvent.collateral, 16)
+      let profitsAndLosses: BigNumber | undefined = undefined
+      console.log(positionEvent)
 
-  //   if (positionEvent.heldToken === positionEvent.collateralToken) {
-  //     profitsAndLosses =
-  //       allowance -
-  //       marginTrading.quote(
-  //         positionEvent.owedToken,
-  //         positionEvent.heldToken,
-  //         positionEvent.principal + fees,
-  //       ) -
-  //       collateral
-  //   } else {
-  //     profitsAndLosses =
-  //       marginTrading.quote(
-  //         positionEvent.heldToken,
-  //         positionEvent.owedToken,
-  //         positionEvent.allowance,
-  //       ) -
-  //       principal -
-  //       collateral -
-  //       fees
-  //   }
+      const positionFees = (await marginTrading.positions(positionId)).fees
 
-  //   return {
-  //     currencyValue: profitsAndLosses,
-  //     percentageValue: (profitsAndLosses / collateral) * 100,
-  //   }
-  // }
+      const currentTime = BigNumber.from(
+        BigNumber.from(new Date().getTime()).div(BigNumber.from(1000)),
+      )
+      const time = currentTime.sub(createdAt)
+      const timeFees = toBorrow
+        .mul(interestRate)
+        .mul(time)
+        .div(BigNumber.from(864000000))
+
+      const fees = timeFees.add(positionFees)
+
+      if (obtainedToken === collateralToken) {
+        profitsAndLosses = amountIn
+          .sub(
+            (
+              await marginTrading.quote(
+                spentToken,
+                obtainedToken,
+                toBorrow.add(fees),
+              )
+            )[0],
+          )
+          .sub(collateralReceived)
+      } else {
+        profitsAndLosses = (
+          await marginTrading.quote(spentToken, obtainedToken, amountIn)
+        )[0]
+          .sub(toBorrow)
+          .sub(collateralReceived)
+          .sub(fees)
+      }
+
+      return [
+        profitsAndLosses?.toString(),
+        profitsAndLosses!
+          .div(collateralReceived)
+          .mul(BigNumber.from(100))
+          .toString(),
+      ]
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   parsePositionWasOpenedEvent(
     event: IPositionWasOpenedEvent,
