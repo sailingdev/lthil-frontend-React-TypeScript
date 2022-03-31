@@ -14,7 +14,7 @@ import { Txt } from '../shared/Txt'
 import { useEffect, useState } from 'react'
 import { usePosition } from '../state/hooks'
 import { useParams } from 'react-router-dom'
-import { etherGlobal } from '../api/ether'
+import { Ether, etherGlobal } from '../api/ether'
 import { useAddTransaction } from '../state/hooks'
 import { TokenDetails, TransactionType } from '../types'
 import { BigNumber } from 'ethers'
@@ -129,11 +129,34 @@ export const PositionPage = () => {
             <div tw='flex flex-col gap-3 flex-grow'>
               <PositionDetailsCard
                 createdAt={timestampToDate(position!.createdAt.toString())}
-                collateral={collateral!} // TODO: needs to be formated
-                openPrice={openPrice ? openPrice!.toString() : ''} // TODO: needs to be formated (most likely)
-                currentPrice={currentPrice ? currentPrice!.toString() : ''} // TODO: needs to be formated (most likely)
+                collateral={
+                  collateral && collateralToken
+                    ? Ether.formatUnits(collateral, collateralToken!.address)
+                    : ''
+                } // TODO: needs to be formated
+                openPrice={
+                  openPrice
+                    ? Ether.formatUnits(
+                        openPrice!.toString(),
+                        collateralToken!.address,
+                      )
+                    : ''
+                }
+                currentPrice={
+                  currentPrice
+                    ? Ether.formatUnits(
+                        currentPrice!.toString(),
+                        collateralToken!.address,
+                      )
+                    : ''
+                }
                 liquidationPrice={
-                  liquidationPrice ? liquidationPrice!.toString() : ''
+                  liquidationPrice
+                    ? Ether.formatUnits(
+                        liquidationPrice!.toString(),
+                        collateralToken!.address,
+                      )
+                    : ''
                 }
                 collateralToken={collateralToken?.symbol}
                 distanceFromLiquidation={distanceFromLiquidation?.toString()}
@@ -144,7 +167,14 @@ export const PositionPage = () => {
               <Liquidation
                 liquidationToken1={liquidationToken1}
                 liquidationToken2={liquidationToken2}
-                liquidationPrice={liquidationPrice ? liquidationPrice : 0}
+                liquidationPrice={
+                  liquidationPrice
+                    ? Ether.formatUnits(
+                        liquidationPrice!.toString(),
+                        collateralToken!.address,
+                      )
+                    : ''
+                }
                 inputValue={liquidationInput}
                 inputOnChange={(value) => setLiquidationInput(value)}
                 onClick={liquidationAction}
