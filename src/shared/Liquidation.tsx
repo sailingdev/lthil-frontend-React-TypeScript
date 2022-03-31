@@ -14,7 +14,7 @@ interface ILiquidation {
   onClick: () => void
   inputOnChange: (value: string) => void
   inputValue: string
-  liquidationPrice: number
+  liquidationPrice: string | undefined
   tokenSymbol: string
 }
 
