@@ -3,6 +3,7 @@ import 'twin.macro'
 import 'twin.macro'
 
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
+import { Ether, etherGlobal } from '../api/ether'
 import { Priority, TransactionType } from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
@@ -19,7 +20,6 @@ import { TokenInputField } from './TokenInputField'
 import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
 import { addresses } from '../assets/addresses.json'
-import { etherGlobal } from '../api/ether'
 import { getCTALabelForApproval } from '../utils'
 import { tokens } from '../assets/tokenlist.json'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
@@ -47,37 +47,20 @@ export const MarginTradingPage = () => {
   useAsync(async () => {
     try {
       if (etherGlobal && slippage && margin) {
-        const minObtained = etherGlobal.formatUnits(
-          (
-            await etherGlobal.computeMinObtained(
-              spentToken.address,
-              obtainedToken.address,
-              margin,
-              leverage,
-              priority,
-              positionType,
-              slippage,
-            )
-          ).toString(),
-          spentToken.address,
+        const [max, min] = await etherGlobal.marginTrading.computeMaxAndMin({
+          margin,
+          leverage,
+          priority,
+          positionType,
+          slippage,
+          deadline,
+          obtainedToken: obtainedToken.address,
+          spentToken: spentToken.address,
+        })
+        setMinObtained(
+          Ether.formatUnits(min.toString(), obtainedToken.address)!,
         )
-
-        const maxSpent = etherGlobal.formatUnits(
-          (
-            await etherGlobal.computeMaxSpent(
-              spentToken.address,
-              obtainedToken.address,
-              margin,
-              leverage,
-              priority,
-              positionType,
-              slippage,
-            )
-          ).toString(),
-          spentToken.address,
-        )
-        setMinObtained(minObtained!)
-        setMaxSpent(maxSpent!)
+        setMaxSpent(Ether.formatUnits(max.toString(), obtainedToken.address)!)
       }
     } catch (error) {
       console.log(error)
@@ -115,7 +98,9 @@ export const MarginTradingPage = () => {
         priority,
         deadline,
       }
-      const position = await etherGlobal.marginTradingOpenPosition(positionData)
+      const position = await etherGlobal.marginTrading.openPosition(
+        positionData,
+      )
       addTx(TransactionType.MTS_OPEN_POSITION, position.hash, positionData)
       setOpenPositionHash(position.hash)
     },

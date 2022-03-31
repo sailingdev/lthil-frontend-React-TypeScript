@@ -1,8 +1,8 @@
 import { BigNumber, Transaction, ethers } from 'ethers'
 import {
+  IOpenPosition,
   IParsedPositionWasOpenedEvent,
   IPositionWasOpenedEvent,
-  OpenPosition,
   PositionType,
   Priority,
   ProfitsAndLosses,
@@ -10,10 +10,11 @@ import {
 } from '../types'
 
 import { ContractFactory } from './contract-factory'
+import { MarginTrading } from './margin-trading'
+import { TokenDetails } from '../types'
 import addresses from '../assets/addresses.json'
 import { hexToDecimal } from '../utils'
 import { tokens } from '../assets/tokenlist.json'
-import { TokenDetails } from '../types'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
@@ -27,13 +28,18 @@ export const maxApproval: BigNumber = ethers.constants.MaxUint256
 export class Ether {
   private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner
+  public marginTrading!: MarginTrading
 
   constructor(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
-    this.ensureSigner()
+    this.signer = this.provider.getSigner()
+    this.marginTrading = new MarginTrading(this.provider, this.signer)
+  }
+  getSigner(): ethers.providers.JsonRpcSigner {
+    return this.signer
   }
 
-  parseUnits(
+  static parseUnits(
     amount: string,
     tokenAddress: string,
   ): ethers.BigNumber | undefined {
@@ -50,7 +56,7 @@ export class Ether {
     }
   }
 
-  formatUnits(amount: string, tokenAddress: string): string | undefined {
+  static formatUnits(amount: string, tokenAddress: string): string | undefined {
     try {
       const token = tokens.find((tkn) => tkn.address === tokenAddress)
       if (!token) {
@@ -79,13 +85,6 @@ export class Ether {
     } catch (error) {
       console.log(error)
     }
-  }
-
-  async ensureSigner() {
-    if (!this.signer) {
-      this.signer = await this.provider.getSigner()
-    }
-    return this.signer
   }
 
   getProvider() {
@@ -122,7 +121,7 @@ export class Ether {
   // ========= STAKE PAGE =========
 
   async getMaxWithdrawAmount(tokenAddress: string): Promise<number> {
-    const vault = ContractFactory.getVaultContract(await this.ensureSigner())
+    const vault = ContractFactory.getVaultContract(this.signer)
 
     // @ts-ignore
     const amount = (await vault.claimable(tokenAddress)).toHexString()
@@ -133,7 +132,7 @@ export class Ether {
   async getMaxDepositAmount(tokenAddress: string): Promise<number> {
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
-      await this.ensureSigner(),
+      this.signer,
     )
     const balance = (
       await tokenContract.balanceOf(this.getAccountAddress())
@@ -143,7 +142,7 @@ export class Ether {
   }
 
   async getTokenTvl(tokenAddress: string): Promise<number> {
-    const vault = ContractFactory.getVaultContract(await this.ensureSigner())
+    const vault = ContractFactory.getVaultContract(this.signer)
     //@ts-ignore
     const tvl = (await vault.balance(tokenAddress)).toHexString()
 
@@ -151,11 +150,8 @@ export class Ether {
   }
 
   async computeAnnualPercentageYield(tokenAddress: string): Promise<number> {
-    const vault = ContractFactory.getVaultContract(await this.ensureSigner())
-    const token = ContractFactory.getTokenContract(
-      tokenAddress,
-      await this.ensureSigner(),
-    )
+    const vault = ContractFactory.getVaultContract(this.signer)
+    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
 
     // @ts-ignore
     const tokenSubvault = await vault.vaults(tokenAddress)
@@ -179,7 +175,7 @@ export class Ether {
     const account = await this.getAccountAddress()
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
-      await this.ensureSigner(),
+      this.signer,
     )
     const allowance = await tokenContract.allowance(account, destinationAddress)
     return hexToDecimal(allowance.toHexString())
@@ -193,7 +189,7 @@ export class Ether {
     try {
       const tokenContract = ContractFactory.getTokenContract(
         tokenAddress,
-        await this.ensureSigner(),
+        this.signer,
       )
       const gasLimit = await this.getApprovalGasEstimation(
         tokenAddress,
@@ -203,7 +199,7 @@ export class Ether {
 
       return tokenContract.approve(
         destinationAddress,
-        this.parseUnits(amount.toString(), tokenAddress),
+        Ether.parseUnits(amount.toString(), tokenAddress),
         {
           gasLimit,
         },
@@ -220,11 +216,11 @@ export class Ether {
   ) {
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
-      await this.ensureSigner(),
+      this.signer,
     )
     const gas = await tokenContract.estimateGas.approve(
       destinationAddress,
-      this.parseUnits(amount.toString(), tokenAddress),
+      Ether.parseUnits(amount.toString(), tokenAddress),
     )
     return gas.mul(120).div(100)
   }
@@ -232,9 +228,7 @@ export class Ether {
     // THIS IS CURRENTLY NOT WORKING.
     // https://docs.ethers.io/v5/api/providers/provider/#Provider-estimateGas
     //
-    const gas = await (
-      await this.ensureSigner()
-    ).estimateGas({
+    const gas = await this.signer.estimateGas({
       from: account,
       to,
       value,
@@ -243,10 +237,7 @@ export class Ether {
   }
 
   async getUserTokenBalance(tokenAddress: string): Promise<number> {
-    const token = ContractFactory.getTokenContract(
-      tokenAddress,
-      await this.ensureSigner(),
-    )
+    const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
     const balance = await token.balanceOf(this.getAccountAddress())
     return hexToDecimal(balance.toHexString())
   }
@@ -281,12 +272,12 @@ export class Ether {
 
   async depositToken(tokenAddress: string, amount: string): Promise<any> {
     try {
-      const vault = ContractFactory.getVaultContract(await this.ensureSigner())
+      const vault = ContractFactory.getVaultContract(this.signer)
 
       //@ts-ignore
       const stake = await vault.stake(
         tokenAddress,
-        this.parseUnits(amount, tokenAddress),
+        Ether.parseUnits(amount, tokenAddress),
       )
       return stake
     } catch (error) {
@@ -296,12 +287,12 @@ export class Ether {
 
   async withdrawToken(tokenAddress: string, amount: string): Promise<any> {
     try {
-      const vault = ContractFactory.getVaultContract(await this.ensureSigner())
+      const vault = ContractFactory.getVaultContract(this.signer)
 
       //@ts-ignore
       const withdraw = await vault.unstake(
         tokenAddress,
-        this.parseUnits(amount, tokenAddress),
+        Ether.parseUnits(amount, tokenAddress),
         {
           gasLimit: 10000000, // GAS LIMIT
         },
@@ -331,7 +322,7 @@ export class Ether {
       } = positionEvent
 
       const marginTrading = ContractFactory.getMarginTradingStrategyContract(
-        await this.ensureSigner(),
+        this.signer,
       )
 
       let profitsAndLosses: BigNumber | undefined = undefined
@@ -373,7 +364,9 @@ export class Ether {
 
       // TODO: percentage is maybe wrong, double check it
       return [
-        Number(this.formatUnits(profitsAndLosses!.toString(), collateralToken)),
+        Number(
+          Ether.formatUnits(profitsAndLosses!.toString(), collateralToken),
+        ),
         Number(
           profitsAndLosses!.div(collateralReceived).mul(BigNumber.from(100)),
         ),
@@ -402,157 +395,11 @@ export class Ether {
     }
   }
 
-  async computeMinObtained(
-    spentToken: string,
-    obtainedToken: string,
-    margin: number,
-    leverage: number,
-    priority: Priority,
-    positionType: PositionType,
-    slippage: number,
-  ): Promise<BigNumber> {
-    const marginTrading = ContractFactory.getMarginTradingStrategyContract(
-      await this.ensureSigner(),
-    )
-
-    const Margin = this.parseUnits(margin.toString(), spentToken)
-    const Leverage = BigNumber.from(leverage)
-    const Slippage = BigNumber.from(slippage)
-
-    if (positionType === 'long') {
-      const quoted = await marginTrading.quote(
-        spentToken,
-        obtainedToken,
-        Margin!.mul(Leverage).toHexString(),
-      )
-
-      if (priority === 'buy') {
-        return quoted[0]
-      } else {
-        // priority is 'sell'
-        return quoted[0].mul(BigNumber.from(1).sub(Slippage.div(100)))
-      }
-    } else {
-      // positionType is 'short'
-
-      if (priority === 'buy') {
-        return Margin!.mul(Leverage)
-      } else {
-        // priority is 'sell'
-        return Margin!
-          .mul(Leverage)
-          .mul(BigNumber.from(1).sub(Slippage.div(100)))
-      }
-    }
-  }
-
-  async computeMaxSpent(
-    spentToken: string,
-    obtainedToken: string,
-    margin: number,
-    leverage: number,
-    priority: Priority,
-    positionType: PositionType,
-    slippage: number,
-  ): Promise<BigNumber> {
-    const MarginTrading = ContractFactory.getMarginTradingStrategyContract(
-      await this.ensureSigner(),
-    )
-
-    const Margin = this.parseUnits(margin.toString(), spentToken)
-    const Leverage = BigNumber.from(leverage)
-    const Slippage = BigNumber.from(slippage)
-
-    if (positionType === 'long') {
-      if (priority === 'buy') {
-        return Margin!
-          .mul(Leverage)
-          .div(BigNumber.from(1).sub(Slippage.div(100)))
-      } else {
-        // priority is 'sell'
-        return Margin!.mul(Leverage)
-      }
-    } else {
-      // positionType is 'short'
-
-      const quoted = await MarginTrading.quote(
-        obtainedToken,
-        spentToken,
-        Margin!.mul(Leverage).toHexString(),
-      )
-
-      if (priority === 'buy') {
-        return quoted[0].div(BigNumber.from(1).sub(Slippage.div(100)))
-      } else {
-        // priority is 'sell'
-        return quoted[0]
-      }
-    }
-  }
-
   // TODO: Update dashboard table after transaction gets verified
-  async marginTradingOpenPosition(positionData: OpenPosition): Promise<any> {
-    const {
-      spentToken,
-      obtainedToken,
-      leverage,
-      slippage,
-      deadline,
-      margin,
-      positionType,
-      priority,
-    } = positionData
-
-    const marginTrading = ContractFactory.getMarginTradingStrategyContract(
-      await this.ensureSigner(),
-    )
-
-    const marginValue = this.parseUnits(margin.toString(), spentToken)
-
-    const positionInfo = {
-      spentToken,
-      obtainedToken,
-      deadline: BigNumber.from(
-        Math.floor(Date.now() / 1000) + 60 * deadline,
-      ).toHexString(), // deadline should be integer representing minutes
-      collateral: marginValue!.toHexString(),
-      collateralIsSpentToken: positionType === 'long' ? true : false,
-      minObtained: (
-        await this.computeMinObtained(
-          spentToken,
-          obtainedToken,
-          margin,
-          leverage,
-          priority,
-          positionType,
-          slippage,
-        )
-      ).toHexString(),
-      maxSpent: (
-        await this.computeMaxSpent(
-          spentToken,
-          obtainedToken,
-          margin,
-          leverage,
-          priority,
-          positionType,
-          slippage,
-        )
-      ).toHexString(),
-    }
-    try {
-      const position = await marginTrading.openPosition(positionInfo, {
-        gasLimit: 10000000,
-      })
-      return position
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   async MarginTradingClosePosition(positionId: string): Promise<any> {
     const marginTrading = ContractFactory.getMarginTradingStrategyContract(
-      await this.ensureSigner(),
+      this.signer,
     )
     try {
       const closePosition = await marginTrading.closePosition(positionId, {
@@ -568,9 +415,7 @@ export class Ether {
     positionId: string,
   ): Promise<IParsedPositionWasOpenedEvent> {
     const marginTradingStrategy =
-      ContractFactory.getMarginTradingStrategyContract(
-        await this.ensureSigner(),
-      )
+      ContractFactory.getMarginTradingStrategyContract(this.signer)
 
     const events = await marginTradingStrategy.queryFilter(
       marginTradingStrategy.filters.PositionWasOpened(),
@@ -618,9 +463,7 @@ export class Ether {
         position
 
       const marginTradingStrategy =
-        ContractFactory.getMarginTradingStrategyContract(
-          await this.ensureSigner(),
-        )
+        ContractFactory.getMarginTradingStrategyContract(this.signer)
 
       if (collateralToken === spentToken) {
         console.log(

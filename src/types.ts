@@ -1,6 +1,7 @@
 import { Interpolation, Theme } from '@emotion/react'
-import { CSSProperties } from 'react'
+
 import { BigNumber } from 'ethers'
+import { CSSProperties } from 'react'
 
 export interface ISearchParams {
   term: string
@@ -149,7 +150,7 @@ export type Priority = 'buy' | 'sell'
 
 export type PositionType = 'long' | 'short'
 
-export interface OpenPosition {
+export interface IOpenPosition {
   positionType: PositionType
   spentToken: string
   obtainedToken: string

@@ -2,17 +2,16 @@ import {
   IParsedPositionWasOpenedEvent,
   IPositionWasOpenedEvent,
 } from '../../types'
+
+import { ContractFactory } from '../../api/contract-factory'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { etherGlobal } from '../../api/ether'
-import { ContractFactory } from '../../api/contract-factory'
 
 export const initializeActivePositions = createAsyncThunk(
   'stake/initializeActivePositions',
   async () => {
     const marginTradingStrategy =
-      ContractFactory.getMarginTradingStrategyContract(
-        await etherGlobal.ensureSigner(),
-      )
+      ContractFactory.getMarginTradingStrategyContract(etherGlobal.getSigner())
     const openEvents = await marginTradingStrategy.queryFilter(
       marginTradingStrategy.filters.PositionWasOpened(),
       '0x1',
