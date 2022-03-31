@@ -1,8 +1,9 @@
+import 'twin.macro'
+
+import { ArrowLeft, ArrowRight } from 'phosphor-react'
 /** @jsxImportSource @emotion/react */
 import React, { MouseEventHandler } from 'react'
 
-import { ArrowLeft, ArrowRight } from 'phosphor-react'
-import 'twin.macro'
 import tw from 'twin.macro'
 
 interface ICustomTablePaginationProps {
@@ -68,11 +69,13 @@ export const CustomTablePagination = (props: ICustomTablePaginationProps) => {
 
   return (
     <div css={tw`text-secondary  flex justify-center items-center`}>
-      <button onClick={() => setPage(Math.max(1, currentPage - 1))}>
-        <span tw='text-warning py-4'>
-          <PaginationButton active={false} icon={ArrowLeft} />
-        </span>
-      </button>
+      <span
+        tw='text-warning py-4'
+        onClick={() => setPage(Math.max(1, currentPage - 1))}
+      >
+        <PaginationButton active={false} icon={ArrowLeft} />
+      </span>
+
       <div tw='flex flex-row items-center'>
         {paginationItems.map((page, i) => {
           return (
@@ -87,15 +90,16 @@ export const CustomTablePagination = (props: ICustomTablePaginationProps) => {
           )
         })}
       </div>
-      <button onClick={() => setPage(Math.min(maxPage, currentPage + 1))}>
-        <span tw='text-action py-4'>
-          <PaginationButton
-            currentPage={currentPage}
-            active={false}
-            icon={ArrowRight}
-          />
-        </span>
-      </button>
+      <span
+        tw='text-action py-4'
+        onClick={() => setPage(Math.min(maxPage, currentPage + 1))}
+      >
+        <PaginationButton
+          currentPage={currentPage}
+          active={false}
+          icon={ArrowRight}
+        />
+      </span>
     </div>
   )
 }

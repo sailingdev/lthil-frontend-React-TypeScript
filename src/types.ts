@@ -150,7 +150,9 @@ export type Priority = 'buy' | 'sell'
 
 export type PositionType = 'long' | 'short'
 
-export interface IOpenPosition {
+export type PositionStatus = 'open' | 'closed'
+
+export interface IInputPosition {
   positionType: PositionType
   spentToken: string
   obtainedToken: string
@@ -161,111 +163,20 @@ export interface IOpenPosition {
   deadline: number
 }
 
-export interface IPositionWasOpenedEvent {
-  blockNumber: number
-  blockHash: string
-  transactionIndex: number
-  removed: boolean
-  address: string
-  data: string
-  topics: string[]
-  transactionHash: string
-  logIndex: number
-  event: 'PositionWasOpened'
-  eventSignature: 'PositionWasOpened(uint256,address,address,address,address,uint256,uint256,uint256,uint256,uint256)'
-  args: (BigNumber | string)[]
-}
-
-export interface IParsedPositionWasOpenedEvent {
-  blockNumber: number
-  blockHash: string
-  transactionIndex: number
-  removed: boolean
-  address: string
-  data: string
-  topics: string[]
-  transactionHash: string
-  logIndex: number
-  event: 'PositionWasOpened'
-  eventSignature: 'PositionWasOpened(uint256,address,address,address,address,uint256,uint256,uint256,uint256,uint256)'
-  // Naming scheme from current deployment as of writing this commit:
-  positionId: string // id
-  ownerId: string // owner
-  spentToken: string // owedToken
-  obtainedToken: string // heldToken
-  collateralToken: string // collateralToken
-  collateralReceived: BigNumber // collateral
-  toBorrow: BigNumber // principal (margin)
-  amountIn: BigNumber // allowance
-  interestRate: BigNumber // fees
-  createdAt: BigNumber // createdAt
-}
-export interface IPositionWasClosedEvent {
-  blockNumber: number
-  blockHash: string
-  transactionIndex: number
-  removed: boolean
-  address: string
-  data: string
-  topics: string[]
-  transactionHash: string
-  logIndex: number
-  event: 'PositionWasClosed'
-  eventSignature: 'PositionWasClosed(uint256)'
-  args: BigNumber[]
-}
-
-export interface IPrasedPositionWasClosedEvent {
-  blockNumber: number
-  blockHash: string
-  transactionIndex: number
-  removed: boolean
-  address: string
-  data: string
-  topics: string[]
-  transactionHash: string
-  logIndex: number
-  event: 'PositionWasClosed'
-  eventSignature: 'PositionWasClosed(uint256)'
-  positionId: BigNumber
-}
-
-export interface IPositionWasLiquidatedEvent {
-  blockNumber: number
-  blockHash: string
-  transactionIndex: number
-  removed: boolean
-  address: string
-  data: string
-  topics: string[]
-  transactionHash: string
-  logIndex: number
-  event: 'PositionWasClosed'
-  eventSignature: 'PositionWasClosed(uint256)'
-  args: BigNumber[]
-}
-
-export interface IPrasedPositionWasLiquidatedEvent {
-  blockNumber: number
-  blockHash: string
-  transactionIndex: number
-  removed: boolean
-  address: string
-  data: string
-  topics: string[]
-  transactionHash: string
-  logIndex: number
-  event: 'PositionWasLiquidated'
-  eventSignature: 'PositionWasLiquidated(uint256)'
-  positionId: BigNumber
-}
-export interface IPositionRow {
-  tokenPair: string
-  position: string
-  profit: {
-    currencyValue: number
-    percentageValue: number
-  }
-  trend: string
+export interface IPosition {
   positionId: string
+  ownerId: string
+  spentToken: TokenDetails
+  obtainedToken: TokenDetails
+  collateralToken: TokenDetails
+  collateralReceived: string
+  type: PositionType
+  leverage: number
+  toBorrow: string
+  amountIn: string
+  interestRate: string
+  createdAt: Date
+  status: PositionStatus
+  openPrice: string
+  liquidationPrice: string
 }

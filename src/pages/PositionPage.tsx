@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
+
+import { Ether, etherGlobal } from '../api/ether'
 
 import { BasicChart } from '../shared/charts/BasicChart'
 import { ClosePosition } from '../shared/ClosePosition'
@@ -11,114 +12,83 @@ import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabButton } from '../shared/TabButton'
 import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
-import { useEffect, useState } from 'react'
-import { usePosition } from '../state/hooks'
-import { useParams } from 'react-router-dom'
-import { Ether, etherGlobal } from '../api/ether'
+import { formatDate } from '../utils'
 import { useAddTransaction } from '../state/hooks'
-import { TokenDetails, TransactionType } from '../types'
-import { BigNumber } from 'ethers'
-import { useAsync } from 'react-use'
+import { useParams } from 'react-router-dom'
+import { usePosition } from '../state/hooks'
+import { useState } from 'react'
 
 export const PositionPage = () => {
-  const { positionId } = useParams()
-  const position = usePosition(positionId)
+  const { positionId } = useParams<{ positionId: string }>()
+  const position = usePosition(positionId!)
   const addTx = useAddTransaction()
 
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
-  const [spentToken, setSpentToken] = useState<TokenDetails | undefined>(
-    undefined,
-  )
-  const [obtainedToken, setObtainedToken] = useState<TokenDetails | undefined>(
-    undefined,
-  )
-  const [collateralToken, setCollateralToken] = useState<
-    TokenDetails | undefined
-  >(undefined)
-  const [collateral, setCollateral] = useState<string | undefined>('')
+
   const [distanceFromLiquidation, setDistanceFromLiquidation] = useState<
     number | undefined
   >(undefined)
   const [liquidationInput, setLiquidationInput] = useState<string>('')
-  const [liquidationToken1, setLiquidationToken1] = useState('ETH')
-  const [liquidationToken2, setLiquidationToken2] = useState('USDC')
-  const [liquidationPrice, setLiquidationPrice] = useState<number | undefined>(
-    undefined,
-  )
-  const [leverage, setLeverage] = useState<BigNumber | undefined>(undefined)
-  const [currentPrice, setCurrentPrice] = useState<BigNumber | undefined>(
-    undefined,
-  )
-  const [openPrice, setOpenPrice] = useState<BigNumber | undefined>(undefined)
-  const [positionDesription, setPositionDescription] = useState<
-    string | undefined
-  >(undefined)
   const [profitsAndLosses, setProfitsAndLosses] = useState<
     [number, number] | undefined
   >(undefined)
 
-  useAsync(async () => {
-    if (position) {
-      setSpentToken(etherGlobal.getTokenData(position!.spentToken))
-      setObtainedToken(etherGlobal.getTokenData(position!.obtainedToken))
-      setCollateralToken(etherGlobal.getTokenData(position!.collateralToken))
-      setOpenPrice(etherGlobal.getPositionOpenPrice(position!))
-      setCurrentPrice(await etherGlobal.getPositionCurrentPrice(position!))
-      setLeverage(etherGlobal.getPositionLeverage(position!))
-      setPositionDescription(etherGlobal.getPositionShortDescription(position!))
-      setProfitsAndLosses(await etherGlobal.computeProfitsAndLosses(position!))
-    }
-  }, [position])
+  if (!position) {
+    return null
+  }
 
-  useEffect(() => {
-    if (position && openPrice && leverage) {
-      setLiquidationPrice(
-        etherGlobal.getPositionLiquidationPrice(
-          position!,
-          openPrice as BigNumber,
-          leverage as BigNumber,
-        ),
-      )
-    }
+  const { obtainedToken, spentToken, collateralToken } = position
 
-    if (spentToken) {
-      setCollateral(position!.collateralReceived!.toString())
-    }
-  }, [position, openPrice, leverage, spentToken])
+  // useAsync(async () => {
+  //   if (position) {
+  //     // setProfitsAndLosses(await etherGlobal.computeProfitsAndLosses(position!))
+  //   }
+  // }, [position])
 
-  useEffect(() => {
-    if (currentPrice && liquidationPrice) {
-      setDistanceFromLiquidation(
-        etherGlobal.computeDistanceFromLiquidation(
-          position!,
-          liquidationPrice!,
-          currentPrice!.toNumber(),
-        ),
-      )
-    }
-  }, [currentPrice, liquidationPrice])
+  // useEffect(() => {
+  //   // if (position && openPrice && leverage) {
+  //   //   setLiquidationPrice(
+  //   //     etherGlobal.getPositionLiquidationPrice(
+  //   //       position!,
+  //   //       openPrice as BigNumber,
+  //   //       leverage as BigNumber,
+  //   //     ),
+  //   //   )
+  //   // }
+  // }, [position, openPrice, leverage])
+
+  // useEffect(() => {
+  //   // if (currentPrice && liquidationPrice) {
+  //   //   setDistanceFromLiquidation(
+  //   //     etherGlobal.computeDistanceFromLiquidation(
+  //   //       position!,
+  //   //       liquidationPrice!,
+  //   //       currentPrice!.toNumber(),
+  //   //     ),
+  //   //   )
+  //   // }
+  // }, [currentPrice, liquidationPrice])
 
   const liquidationAction = () => {
     console.log('liquidation action clicked.')
   }
 
   const closePosition = async (positionId: string) => {
-    const closePosition = await etherGlobal.MarginTradingClosePosition(
+    const closePosition = await etherGlobal.marginTrading.closePosition(
       positionId,
     )
-    const { spentToken, obtainedToken } =
-      await etherGlobal.getMarginTradingPositionById(positionId)
-    addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {
-      positionId: positionId,
-      spentToken: spentToken,
-      obtainedToken: obtainedToken,
-    })
+    // addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {
+    //   positionId: positionId,
+    //   spentToken: spentToken,
+    //   obtainedToken: obtainedToken,
+    // })
   }
 
-  const timestampToDate = (timestamp: string) => {
-    const dateObject = new Date(Number(timestamp) * 1000)
-    return dateObject.toLocaleDateString()
-  }
+  const tokenPair =
+    position.type === 'short'
+      ? `${spentToken.symbol}/${obtainedToken.symbol}`
+      : `${obtainedToken.symbol}/${spentToken.symbol}`
+  const description = `${tokenPair} ${position.leverage}x ${position.type}`
 
   return (
     <ContentContainer>
@@ -128,67 +98,57 @@ export const PositionPage = () => {
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
             <div tw='flex flex-col gap-3 flex-grow'>
               <PositionDetailsCard
-                createdAt={timestampToDate(position!.createdAt.toString())}
-                collateral={
-                  collateral && collateralToken
-                    ? Ether.formatUnits(collateral, collateralToken!.address)
-                    : ''
-                } // TODO: needs to be formated
-                openPrice={
-                  openPrice
-                    ? Ether.formatUnits(
-                        openPrice!.toString(),
-                        collateralToken!.address,
-                      )
-                    : ''
-                }
-                currentPrice={
-                  currentPrice
-                    ? Ether.formatUnits(
-                        currentPrice!.toString(),
-                        collateralToken!.address,
-                      )
-                    : ''
-                }
-                liquidationPrice={
-                  liquidationPrice
-                    ? Ether.formatUnits(
-                        liquidationPrice!.toString(),
-                        collateralToken!.address,
-                      )
-                    : ''
-                }
-                collateralToken={collateralToken?.symbol}
+                createdAt={formatDate(position.createdAt)}
+                collateral={Ether.formatUnits(
+                  position.collateralReceived,
+                  collateralToken.address,
+                )}
+                openPrice={Ether.formatUnits(
+                  position.openPrice.toString(),
+                  collateralToken.address,
+                )}
+                // currentPrice={
+                //   currentPrice
+                //     ? Ether.formatUnits(
+                //         currentPrice!.toString(),
+                //         collateralToken.address,
+                //       )
+                //     : ''
+                // }
+                currentPrice=''
+                liquidationPrice={Ether.formatUnits(
+                  position.liquidationPrice,
+                  collateralToken.address,
+                )}
+                collateralToken={collateralToken.symbol}
                 distanceFromLiquidation={distanceFromLiquidation?.toString()}
-                positionDescription={positionDesription}
+                positionDescription={description}
                 profitsAndLosses={profitsAndLosses}
               />
               <CollateralCard />
               <Liquidation
-                liquidationToken1={liquidationToken1}
-                liquidationToken2={liquidationToken2}
-                liquidationPrice={
-                  liquidationPrice
-                    ? Ether.formatUnits(
-                        liquidationPrice!.toString(),
-                        collateralToken!.address,
-                      )
-                    : ''
-                }
+                // liquidationToken1={liquidationToken1}
+                // liquidationToken2={liquidationToken2}
+                liquidationToken1={spentToken.symbol}
+                liquidationToken2={obtainedToken.symbol}
+                liquidationPrice={Ether.formatUnits(
+                  position.liquidationPrice,
+                  collateralToken.address,
+                )}
                 inputValue={liquidationInput}
                 inputOnChange={(value) => setLiquidationInput(value)}
                 onClick={liquidationAction}
-                tokenSymbol={collateralToken?.symbol as string}
+                tokenSymbol={collateralToken.symbol as string}
               />
               <ClosePosition
-                token={collateralToken?.symbol as string}
+                token={collateralToken.symbol as string}
                 value={3000}
                 onClick={() => closePosition(positionId!)}
               />
             </div>
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
               <div tw='w-full flex flex-row justify-between pb-5 '>
-                <Txt.Heading2>{`${obtainedToken?.symbol}/${spentToken?.symbol}`}</Txt.Heading2>
+                <Txt.Heading2>{`${obtainedToken.symbol}/${spentToken.symbol}`}</Txt.Heading2>
                 <div tw='hidden desktop:flex flex-row items-center gap-1'>
                   <Txt.Body2Regular tw='mr-4'>View:</Txt.Body2Regular>
                   <TabButton
@@ -206,11 +166,11 @@ export const PositionPage = () => {
               <div tw='w-full h-full  flex flex-col'>
                 {activeChart === 'basic' ? (
                   <BasicChart
-                    tokenSymbol={`${obtainedToken?.symbol}${spentToken?.symbol}`}
+                    tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
                   />
                 ) : (
                   <TradingChart
-                    tokenSymbol={`${obtainedToken?.symbol}${spentToken?.symbol}`}
+                    tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
                   />
                 )}
               </div>

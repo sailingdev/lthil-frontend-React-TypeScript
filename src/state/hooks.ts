@@ -1,20 +1,19 @@
 import {
   ApprovalTransactionMeta,
   ISearchParams,
+  MtsClosePositionMeta,
   MtsOpenPositionMeta,
   StakeTransactionMeta,
   Transaction,
   TransactionReceipt,
   TransactionType,
   WithdrawTransactionMeta,
-  MtsClosePositionMeta,
 } from '../types'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import {
   addTransaction,
   finalizeTransaction,
 } from './transaction/transaction.actions'
-import { initializePositions } from './position/position.actions'
 import {
   initializeAccountAddress,
   initializeAccountBalance,
@@ -22,6 +21,8 @@ import {
 } from './network/network.actions'
 
 import { RootState } from './store'
+import { createSelector } from '@reduxjs/toolkit'
+import { initializePositions } from './position/position.actions'
 // @ts-ignore
 import { initializeUserStakes } from './stake/stake.actions'
 import { toggleTheme } from './theme/theme.actions'
@@ -98,16 +99,15 @@ export const useInitStakeTokens = () => {
 }
 
 // POSITION HOOKS
+const positionsSelector = createSelector(
+  (state: RootState) => state.positions.positions,
+  (positions) => positions ?? [],
+)
+export const usePositions = () => useAppSelector(positionsSelector)
 
-export const useActivePositions = () =>
-  useAppSelector((state) => state.positions.activePositions)
-
-export const useClosedAndLiquidatedPositions = () =>
-  useAppSelector((state) => state.positions.closedAndLiquidatedPositions)
-
-export const usePosition = (positionId?: any) => {
-  const positions = useActivePositions()
-  return positions!.find((p) => positionId === p.positionId.toString())
+export const usePosition = (positionId: string) => {
+  const positions = usePositions()
+  return positions.find((p) => positionId === p.positionId)
 }
 
 export const useInitPositions = () => {

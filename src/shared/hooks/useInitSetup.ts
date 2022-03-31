@@ -3,6 +3,7 @@
 import {
   useInitAccountAddress,
   useInitAccountBalance,
+  useInitPositions,
   useUpdateBlock,
 } from '../../state/hooks'
 
@@ -14,6 +15,7 @@ export const useInitSetup = () => {
   const updateBlock = useUpdateBlock()
   const initAccountBalance = useInitAccountBalance()
   const initAccountAddress = useInitAccountAddress()
+  const initActivePositions = useInitPositions()
 
   useAsync(async () => {
     if (!isConnected) {
@@ -22,5 +24,6 @@ export const useInitSetup = () => {
     updateBlock()
     initAccountBalance()
     initAccountAddress()
+    initActivePositions()
   }, [isConnected])
 }

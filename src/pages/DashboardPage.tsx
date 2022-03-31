@@ -1,25 +1,22 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { useAddTransaction, useInitPositions } from '../state/hooks'
-import { useEffect, useState } from 'react'
+import { IPosition, ISearchParams, TransactionType } from '../types'
+import { useAddTransaction, usePositions } from '../state/hooks'
 
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
-import {
-  IParsedPositionWasOpenedEvent,
-  IPositionRow,
-  ISearchParams,
-} from '../types'
 import { TableCell } from '../shared/table/cells'
-import { TransactionType } from '../types'
 import { Txt } from '../shared/Txt'
 import { etherGlobal } from '../api/ether'
-import { useIsConnected } from '../shared/hooks/useIsConnected'
-import { populatePositions } from '../shared/hooks/populatePositions'
-import { useSearch } from '../shared/hooks/useSearch'
 import { useNavigate } from 'react-router-dom'
+import { useSearch } from '../shared/hooks/useSearch'
+import { useState } from 'react'
+
+/* eslint-disable */
+const cleanDeep = require('clean-deep')
+/* eslint-enable */
 
 const initialSearchParams: Partial<ISearchParams> = {
   orderField: 'name',
@@ -29,45 +26,24 @@ const initialSearchParams: Partial<ISearchParams> = {
 
 export const DashboardPage = () => {
   const navigate = useNavigate()
-
-  const isConnected = useIsConnected()
-  const initActivePositions = useInitPositions()
-
   const addTx = useAddTransaction()
 
-  useEffect(() => {
-    if (isConnected) {
-      initActivePositions()
-    }
-  }, [isConnected])
-
-  const { activePositions, closedAndLiquidatedPositions } = populatePositions()
-
+  const [activeTab, setActiveTab] = useState<'open' | 'closed'>('open')
+  const allPositions = usePositions()
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
-  const [activeTab, setActiveTab] = useState<'active' | 'closed'>('active')
-  const [currentPositions, setCurrentPositions] = useState<IPositionRow[]>([])
 
-  const closePosition = async (positionId: string) => {
-    const closePosition = await etherGlobal.MarginTradingClosePosition(
-      positionId,
-    )
-    const { spentToken, obtainedToken } =
-      await etherGlobal.getMarginTradingPositionById(positionId)
-    addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {
-      positionId: positionId,
-      spentToken: spentToken,
-      obtainedToken: obtainedToken,
+  const positions = allPositions.filter((p) => p.status === activeTab)
+
+  const closePosition = async (position: IPosition) => {
+    const tx = (await etherGlobal.marginTrading.closePosition(
+      position.positionId,
+    ))!
+    addTx(TransactionType.MTS_CLOSE_POSITION, tx.hash!, {
+      positionId: position.positionId,
+      spentToken: position.spentToken.symbol,
+      obtainedToken: position.obtainedToken.symbol,
     })
   }
-
-  useEffect(() => {
-    if (activeTab === 'active') {
-      setCurrentPositions(activePositions)
-    } else {
-      setCurrentPositions(closedAndLiquidatedPositions)
-    }
-  }, [activeTab, activePositions, closedAndLiquidatedPositions])
-
   return (
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>
@@ -77,9 +53,9 @@ export const DashboardPage = () => {
             <Txt.Body1Regular>View:</Txt.Body1Regular>
             <Button
               text='Active'
-              action={activeTab === 'active'}
-              bold={activeTab === 'active'}
-              onClick={() => setActiveTab('active')}
+              action={activeTab === 'open'}
+              bold={activeTab === 'open'}
+              onClick={() => setActiveTab('open')}
             />
             <Button
               text='Closed'
@@ -94,86 +70,104 @@ export const DashboardPage = () => {
             hover
             loading={false}
             maxPage={
-              currentPositions.length > 0
-                ? currentPositions.length / searchParams.size
-                : 1
+              positions.length > 0 ? positions.length / searchParams.size : 1
             }
             currentPage={searchParams.page}
             setPage={setPage}
             pageSize={searchParams.size}
-            data={currentPositions}
+            data={positions}
             mobileColumns={[
               {
                 Header: 'TokenPair',
+                // @ts-ignore
                 accessor: 'tokenPair',
                 align: 'left',
-                cell: (l) => <TableCell.Text value={l.tokenPair} />,
-              },
-              {
-                Header: 'Position',
-                accessor: 'position',
-                align: 'left',
-                cell: (l) => <TableCell.Text value={l.position} />,
-              },
-              {
-                Header: 'Profit',
-                accessor: 'profit',
-                align: 'left',
-                cell: (l) => (
-                  <TableCell.Profit
-                    currencyValue={l.profit.currencyValue}
-                    percentageValue={l.profit.percentageValue}
+                cell: (p) => (
+                  <TableCell.Text
+                    value={`${p.spentToken.symbol}/${p.obtainedToken.symbol}`}
                   />
                 ),
               },
+              {
+                Header: 'Position',
+                // @ts-ignore
+                accessor: 'position',
+                align: 'center',
+                cell: (p) => {
+                  const tokenPair =
+                    p.type === 'short'
+                      ? `${p.spentToken.symbol}/${p.obtainedToken.symbol}`
+                      : `${p.obtainedToken.symbol}/${p.spentToken.symbol}`
+                  return (
+                    <TableCell.Text
+                      value={`${tokenPair} ${p.leverage}x ${p.type}`}
+                    />
+                  )
+                },
+              },
             ]}
-            columns={[
+            columns={cleanDeep([
               {
                 Header: 'TokenPair',
+                // @ts-ignore
                 accessor: 'tokenPair',
                 align: 'left',
-                cell: (l) => <TableCell.Text value={l.tokenPair} />,
+                cell: (p: IPosition) => (
+                  <TableCell.Text
+                    value={`${p.spentToken.symbol}/${p.obtainedToken.symbol}`}
+                  />
+                ),
               },
               {
                 Header: 'Position',
+                // @ts-ignore
                 accessor: 'position',
                 align: 'center',
-                cell: (l) => <TableCell.Text value={l.position} />,
+                cell: (p: IPosition) => {
+                  const tokenPair =
+                    p.type === 'short'
+                      ? `${p.spentToken.symbol}/${p.obtainedToken.symbol}`
+                      : `${p.obtainedToken.symbol}/${p.spentToken.symbol}`
+                  return (
+                    <TableCell.Text
+                      value={`${tokenPair} ${p.leverage}x ${p.type}`}
+                    />
+                  )
+                },
               },
-              {
-                Header: 'Profit',
-                accessor: 'profit',
-                align: 'right',
-                cell: (l) => (
-                  <TableCell.Profit
-                    currencyValue={l.profit.currencyValue}
-                    percentageValue={l.profit.percentageValue}
-                  />
-                ),
-              },
+
+              //   {
+              //     Header: 'Profit',
+              //     accessor: 'profit',
+              //     align: 'right',
+              //     cell: (l) => (
+              //       <TableCell.Profit
+              //         currencyValue={l.profit.currencyValue}
+              //         percentageValue={l.profit.percentageValue}
+              //       />
+              //     ),
+              //   },
               {
                 Header: 'Trend',
+                // @ts-ignore
                 accessor: 'trend',
                 align: 'center',
-                cell: (l) => <TableCell.Text value={l.trend} />,
+                cell: () => <TableCell.Text value={'placeholder'} />,
               },
-              {
-                Header: '',
-                // @ts-ignore
-                accessor: 'action',
-                align: 'right',
-                cell: (l) => (
-                  <TableCell.ClosePosition
-                    onClick={
-                      activeTab === 'active'
-                        ? () => closePosition(l.positionId)
-                        : undefined
-                    }
-                    closed={activeTab === 'closed'}
-                  />
-                ),
-              },
-            ]}
+              activeTab === 'open'
+                ? {
+                    Header: '',
+                    // @ts-ignore
+                    accessor: 'action',
+                    align: 'right',
+                    cell: (p: IPosition) => (
+                      <TableCell.ClosePosition
+                        onClick={() => closePosition(p)}
+                      />
+                    ),
+                  }
+                : null,
+            ])}
           />
         </div>
       </div>
