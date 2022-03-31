@@ -14,7 +14,7 @@ import {
   addTransaction,
   finalizeTransaction,
 } from './transaction/transaction.actions'
-import { initializeActivePositions } from './position/position.actions'
+import { initializePositions } from './position/position.actions'
 import {
   initializeAccountAddress,
   initializeAccountBalance,
@@ -99,17 +99,20 @@ export const useInitStakeTokens = () => {
 
 // POSITION HOOKS
 
-export const usePositions = () =>
+export const useActivePositions = () =>
   useAppSelector((state) => state.positions.activePositions)
 
+export const useClosedAndLiquidatedPositions = () =>
+  useAppSelector((state) => state.positions.closedAndLiquidatedPositions)
+
 export const usePosition = (positionId?: any) => {
-  const positions = usePositions()
+  const positions = useActivePositions()
   return positions!.find((p) => positionId === p.positionId.toString())
 }
 
 export const useInitPositions = () => {
   const dispatch = useDispatch()
-  return () => dispatch(initializeActivePositions())
+  return () => dispatch(initializePositions())
 }
 
 // TRANSACTION HOOKS

@@ -230,6 +230,35 @@ export interface IPrasedPositionWasClosedEvent {
   positionId: BigNumber
 }
 
+export interface IPositionWasLiquidatedEvent {
+  blockNumber: number
+  blockHash: string
+  transactionIndex: number
+  removed: boolean
+  address: string
+  data: string
+  topics: string[]
+  transactionHash: string
+  logIndex: number
+  event: 'PositionWasClosed'
+  eventSignature: 'PositionWasClosed(uint256)'
+  args: BigNumber[]
+}
+
+export interface IPrasedPositionWasLiquidatedEvent {
+  blockNumber: number
+  blockHash: string
+  transactionIndex: number
+  removed: boolean
+  address: string
+  data: string
+  topics: string[]
+  transactionHash: string
+  logIndex: number
+  event: 'PositionWasLiquidated'
+  eventSignature: 'PositionWasLiquidated(uint256)'
+  positionId: BigNumber
+}
 export interface IPositionRow {
   tokenPair: string
   position: string

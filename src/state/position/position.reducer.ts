@@ -1,14 +1,16 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { IParsedPositionWasOpenedEvent } from '../../types'
 
-import { initializeActivePositions } from './position.actions'
+import { initializePositions } from './position.actions'
 
 export interface PositionState {
   activePositions: IParsedPositionWasOpenedEvent[] | undefined
+  closedAndLiquidatedPositions: IParsedPositionWasOpenedEvent[] | undefined
 }
 
 const initialState = {
   activePositions: [],
+  closedAndLiquidatedPositions: [],
 } as PositionState
 
 export default createSlice({
@@ -18,14 +20,18 @@ export default createSlice({
 
   extraReducers: (builder) => {
     builder.addCase(
-      initializeActivePositions.fulfilled,
+      initializePositions.fulfilled,
       (
         state,
         {
-          payload: activePositions,
-        }: PayloadAction<IParsedPositionWasOpenedEvent[]>,
+          payload: positions,
+        }: PayloadAction<{
+          active: IParsedPositionWasOpenedEvent[]
+          closedAndLiquidated: IParsedPositionWasOpenedEvent[]
+        }>,
       ) => {
-        state.activePositions = activePositions
+        state.activePositions = positions.active
+        state.closedAndLiquidatedPositions = positions.closedAndLiquidated
       },
     )
   },
