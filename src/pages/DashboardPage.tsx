@@ -13,7 +13,7 @@ import { TransactionType } from '../types'
 import { Txt } from '../shared/Txt'
 import { etherGlobal } from '../api/ether'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
-import { usePositions } from '../shared/hooks/usePositions'
+import { populatePositions } from '../shared/hooks/populatePositions'
 import { useSearch } from '../shared/hooks/useSearch'
 import { useNavigate } from 'react-router-dom'
 
@@ -37,7 +37,7 @@ export const DashboardPage = () => {
     }
   }, [isConnected])
 
-  const positions = usePositions()
+  const positions = populatePositions()
 
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
   const [activeTab, setActiveTab] = useState('active')
@@ -46,7 +46,6 @@ export const DashboardPage = () => {
     const closePosition = await etherGlobal.MarginTradingClosePosition(
       positionId,
     )
-    console.log(closePosition)
     const { spentToken, obtainedToken } =
       await etherGlobal.getMarginTradingPositionById(positionId)
     addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {

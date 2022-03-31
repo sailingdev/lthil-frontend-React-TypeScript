@@ -13,6 +13,7 @@ import { ContractFactory } from './contract-factory'
 import addresses from '../assets/addresses.json'
 import { hexToDecimal } from '../utils'
 import { tokens } from '../assets/tokenlist.json'
+import { TokenDetails } from '../types'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
@@ -58,6 +59,23 @@ export class Ether {
       const decimals = token.decimals
 
       return ethers.utils.formatUnits(amount, decimals)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  getTokenData(tokenAddress: string): TokenDetails | undefined {
+    try {
+      const token = tokens.find((tkn) => tkn.address === tokenAddress)
+      if (!token) {
+        throw new Error('token not found!')
+      }
+      return {
+        name: token.name,
+        symbol: token.symbol,
+        decimals: token.decimals,
+        address: token.address,
+      }
     } catch (error) {
       console.log(error)
     }
@@ -296,7 +314,9 @@ export class Ether {
 
   // ========= MARGIN TRADING =========
 
-  async computeProfitsAndLosses(positionEvent: IParsedPositionWasOpenedEvent) {
+  async computeProfitsAndLosses(
+    positionEvent: IParsedPositionWasOpenedEvent,
+  ): Promise<[number, number] | undefined> {
     try {
       const {
         amountIn,
@@ -330,7 +350,7 @@ export class Ether {
 
       const fees = timeFees.add(positionFees)
 
-      if (obtainedToken === collateralToken) {
+      if (this.getPositionType(positionEvent) === 'long') {
         profitsAndLosses = amountIn
           .sub(
             (
@@ -351,12 +371,12 @@ export class Ether {
           .sub(fees)
       }
 
+      // TODO: percentage is maybe wrong, double check it
       return [
-        profitsAndLosses?.toString(),
-        profitsAndLosses!
-          .div(collateralReceived)
-          .mul(BigNumber.from(100))
-          .toString(),
+        Number(this.formatUnits(profitsAndLosses!.toString(), collateralToken)),
+        Number(
+          profitsAndLosses!.div(collateralReceived).mul(BigNumber.from(100)),
+        ),
       ]
     } catch (error) {
       console.log(error)
@@ -522,11 +542,8 @@ export class Ether {
     }
     try {
       const position = await marginTrading.openPosition(positionInfo, {
-        // gasLimit: (await etherGlobal.getBlockGasLimit()).toNumber() - 1, // GAS LIMIT // TODO: testing max gas limit
         gasLimit: 10000000,
       })
-      console.log(positionInfo)
-      console.log(position)
       return position
     } catch (error) {
       console.log(error)
@@ -570,5 +587,171 @@ export class Ether {
     return this.parsePositionWasOpenedEvent(
       position[0] as unknown as IPositionWasOpenedEvent,
     )
+  }
+
+  getPositionOpenPrice(
+    position: IParsedPositionWasOpenedEvent,
+  ): BigNumber | undefined {
+    try {
+      const { collateralReceived, amountIn, toBorrow } = position
+      if (this.getPositionType(position) === 'long') {
+        const initalPositionValue = toBorrow.add(collateralReceived)
+        console.log(
+          'Open price: ',
+          initalPositionValue.div(amountIn).toString(),
+        )
+        return initalPositionValue.div(amountIn)
+      } else {
+        console.log('Current price: ', amountIn.div(toBorrow).toString())
+        return amountIn.div(toBorrow)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async getPositionCurrentPrice(
+    position: IParsedPositionWasOpenedEvent,
+  ): Promise<BigNumber | undefined> {
+    try {
+      const { spentToken, obtainedToken, amountIn, toBorrow, collateralToken } =
+        position
+
+      const marginTradingStrategy =
+        ContractFactory.getMarginTradingStrategyContract(
+          await this.ensureSigner(),
+        )
+
+      if (collateralToken === spentToken) {
+        console.log(
+          'Current price: ',
+          (
+            await marginTradingStrategy.quote(
+              obtainedToken,
+              spentToken,
+              amountIn,
+            )
+          )[0]
+            .div(amountIn)
+            .toString(),
+        )
+        return (
+          await marginTradingStrategy.quote(obtainedToken, spentToken, amountIn)
+        )[0].div(amountIn)
+      } else {
+        console.log(
+          'Current price: ',
+          (
+            await marginTradingStrategy.quote(
+              spentToken,
+              obtainedToken,
+              toBorrow,
+            )
+          )[0]
+            .div(toBorrow)
+            .toString(),
+        )
+        return (
+          await marginTradingStrategy.quote(spentToken, obtainedToken, toBorrow)
+        )[0].div(toBorrow)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  getPositionLeverage(
+    position: IParsedPositionWasOpenedEvent,
+  ): BigNumber | undefined {
+    try {
+      const { collateralReceived, toBorrow } = position
+      console.log('Collateral: ', collateralReceived.toString())
+      console.log('To borrow: ', toBorrow.toString())
+
+      console.log(
+        'Leverage: ',
+        BigNumber.from(1).add(toBorrow.div(collateralReceived)).toNumber(),
+        'x',
+      )
+      return BigNumber.from(1).add(toBorrow.div(collateralReceived))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // TODO: Using numbers there instead of BigNumber
+  getPositionLiquidationPrice(
+    position: IParsedPositionWasOpenedEvent,
+    openPrice: BigNumber,
+    leverage: BigNumber,
+  ): number | undefined {
+    try {
+      const openPriceNum = openPrice.toNumber()
+      const leverageNum = leverage.toNumber()
+
+      const { collateralToken, spentToken } = position
+
+      if (collateralToken === spentToken) {
+        console.log(
+          'Liquidation price: ',
+          openPriceNum * (1 - 1 / (0.5 * leverageNum)),
+        )
+        return openPriceNum * (1 - 1 / (0.5 * leverageNum))
+      } else {
+        console.log(
+          'Liquidation price: ',
+          openPriceNum * (1 + 1 / (0.5 * leverageNum)),
+        )
+        return openPriceNum * (1 + 1 / (0.5 * leverageNum))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  computeDistanceFromLiquidation(
+    position: IParsedPositionWasOpenedEvent,
+    liquidationPrice: number,
+    currentPrice: number,
+  ): number {
+    if (this.getPositionType(position) === 'long') {
+      console.log(
+        'Distance from liquidation: ',
+        1 - liquidationPrice / currentPrice,
+      )
+      return 1 - liquidationPrice / currentPrice
+    } else {
+      console.log(
+        'Distance from liquidation: ',
+        liquidationPrice / currentPrice - 1,
+      )
+      return liquidationPrice / currentPrice - 1
+    }
+  }
+
+  getPositionType(position: IParsedPositionWasOpenedEvent): 'long' | 'short' {
+    const { collateralToken, spentToken } = position
+
+    if (collateralToken === spentToken) {
+      console.log('Position type: ', 'long')
+      return 'long'
+    } else {
+      console.log('Position type: ', 'short')
+      return 'short'
+    }
+  }
+
+  getPositionShortDescription(position: IParsedPositionWasOpenedEvent): string {
+    const { spentToken, obtainedToken } = position
+
+    const leverage = this.getPositionLeverage(position)
+    const positionType = this.getPositionType(position)
+    const spentTokenSymbol = this.getTokenData(spentToken)?.symbol
+    const obtainedTokenSymbol = this.getTokenData(obtainedToken)?.symbol
+    if (positionType === 'long') {
+      return `${obtainedTokenSymbol}/${spentTokenSymbol} ${leverage}x ${positionType}`
+    } else {
+      return `${spentTokenSymbol}/${obtainedTokenSymbol} ${leverage}x ${positionType}`
+    }
   }
 }

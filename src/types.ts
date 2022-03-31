@@ -42,7 +42,7 @@ export interface TokenDetails {
   name: string
   symbol: string
   decimals: number
-  balance: string
+  address: string
 }
 
 export interface StakeToken {

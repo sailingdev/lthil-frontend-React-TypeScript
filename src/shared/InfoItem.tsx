@@ -16,7 +16,7 @@ const InfoItemText = (props: { value: string | number }) => {
 export const InfoItem = (props: {
   label: string
   details?: string
-  value: string | number
+  value: string | number | undefined
   valueColor?: 'black' | 'red' | 'green'
 }) => {
   const { label, details, value, valueColor } = props
