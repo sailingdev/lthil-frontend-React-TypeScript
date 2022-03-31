@@ -7,7 +7,11 @@ import { useEffect, useState } from 'react'
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
-import { ISearchParams } from '../types'
+import {
+  IParsedPositionWasOpenedEvent,
+  IPositionRow,
+  ISearchParams,
+} from '../types'
 import { TableCell } from '../shared/table/cells'
 import { TransactionType } from '../types'
 import { Txt } from '../shared/Txt'
@@ -37,10 +41,11 @@ export const DashboardPage = () => {
     }
   }, [isConnected])
 
-  const positions = populatePositions()
+  const { activePositions, closedAndLiquidatedPositions } = populatePositions()
 
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
-  const [activeTab, setActiveTab] = useState('active')
+  const [activeTab, setActiveTab] = useState<'active' | 'closed'>('active')
+  const [currentPositions, setCurrentPositions] = useState<IPositionRow[]>([])
 
   const closePosition = async (positionId: string) => {
     const closePosition = await etherGlobal.MarginTradingClosePosition(
@@ -54,6 +59,14 @@ export const DashboardPage = () => {
       obtainedToken: obtainedToken,
     })
   }
+
+  useEffect(() => {
+    if (activeTab === 'active') {
+      setCurrentPositions(activePositions)
+    } else {
+      setCurrentPositions(closedAndLiquidatedPositions)
+    }
+  }, [activeTab, activePositions, closedAndLiquidatedPositions])
 
   return (
     <ContentContainer>
@@ -81,12 +94,14 @@ export const DashboardPage = () => {
             hover
             loading={false}
             maxPage={
-              positions.length > 0 ? positions.length / searchParams.size : 1
+              currentPositions.length > 0
+                ? currentPositions.length / searchParams.size
+                : 1
             }
             currentPage={searchParams.page}
             setPage={setPage}
             pageSize={searchParams.size}
-            data={positions}
+            data={currentPositions}
             mobileColumns={[
               {
                 Header: 'TokenPair',
@@ -149,7 +164,12 @@ export const DashboardPage = () => {
                 align: 'right',
                 cell: (l) => (
                   <TableCell.ClosePosition
-                    onClick={() => closePosition(l.positionId)}
+                    onClick={
+                      activeTab === 'active'
+                        ? () => closePosition(l.positionId)
+                        : undefined
+                    }
+                    closed={activeTab === 'closed'}
                   />
                 ),
               },

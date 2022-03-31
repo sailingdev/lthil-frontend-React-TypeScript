@@ -7,46 +7,85 @@ import { ContractFactory } from '../../api/contract-factory'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { etherGlobal } from '../../api/ether'
 
-export const initializeActivePositions = createAsyncThunk(
-  'stake/initializeActivePositions',
+export const initializePositions = createAsyncThunk(
+  'stake/initializePositions',
   async () => {
-    const marginTradingStrategy =
-      ContractFactory.getMarginTradingStrategyContract(etherGlobal.getSigner())
-    const openEvents = await marginTradingStrategy.queryFilter(
-      marginTradingStrategy.filters.PositionWasOpened(),
-      '0x1',
-      'latest',
-    )
-    const closedEvents = await marginTradingStrategy.queryFilter(
-      marginTradingStrategy.filters.PositionWasClosed(),
-      '0x1',
-      'latest',
-    )
-
-    // Filtering out closed positions from opened positions
-    const events = openEvents.filter((el) => {
-      if (
-        closedEvents.every(
-          // @ts-ignore
-          (e) => e.args[0].toHexString() != el.args[0].toHexString(),
+    try {
+      const marginTradingStrategy =
+        ContractFactory.getMarginTradingStrategyContract(
+          etherGlobal.getSigner(),
         )
-      ) {
-        return el
-      }
-    })
 
-    const userAddress = await etherGlobal.getAccountAddress()
+      const userAddress = await etherGlobal.getAccountAddress()
 
-    // Prasing open positions and filtering out ones not created by user
-    return events.reduce((result, event) => {
-      const parsed = etherGlobal.parsePositionWasOpenedEvent(
-        event as unknown as IPositionWasOpenedEvent,
+      const openEvents = await marginTradingStrategy.queryFilter(
+        marginTradingStrategy.filters.PositionWasOpened(),
+        '0x1',
+        'latest',
       )
-      if (parsed.ownerId == userAddress) {
-        // @ts-ignore
-        result.push(parsed)
+      const closedEvents = await marginTradingStrategy.queryFilter(
+        marginTradingStrategy.filters.PositionWasClosed(),
+        '0x1',
+        'latest',
+      )
+
+      const liquidatedEvents = await marginTradingStrategy.queryFilter(
+        marginTradingStrategy.filters.PositionWasLiquidated(),
+        '0x1',
+        'latest',
+      )
+
+      const closedAndLiquidatedEvents = closedEvents.concat(liquidatedEvents)
+
+      // Filtering out closed and liquidated positions from opened positions
+      const currentlyOpenEvents = openEvents.filter((el) => {
+        if (
+          closedAndLiquidatedEvents.every(
+            // @ts-ignore
+            (e) => e.args[0].toHexString() != el.args[0].toHexString(),
+          )
+        ) {
+          return el
+        }
+      })
+
+      // Finding PositionWasOpened data for all closed and liquidated positions
+      const currentlyClosedAndLiquidatedEvents = closedAndLiquidatedEvents.map(
+        (e) => {
+          return openEvents.find((el) => {
+            return el.args![0].toHexString() === e.args![0].toHexString()
+          })
+        },
+      )
+
+      return {
+        active: currentlyOpenEvents.reduce((result, event) => {
+          const parsed = etherGlobal.parsePositionWasOpenedEvent(
+            event as unknown as IPositionWasOpenedEvent,
+          )
+          if (parsed.ownerId == userAddress) {
+            // @ts-ignore
+            result.push(parsed)
+          }
+          return result
+        }, []) as IParsedPositionWasOpenedEvent[],
+        closedAndLiquidated: currentlyClosedAndLiquidatedEvents.reduce(
+          (result, event) => {
+            const parsed = etherGlobal.parsePositionWasOpenedEvent(
+              event as unknown as IPositionWasOpenedEvent,
+            )
+            if (parsed.ownerId == userAddress) {
+              // @ts-ignore
+              result.push(parsed)
+            }
+            return result
+          },
+          [],
+        ) as IParsedPositionWasOpenedEvent[],
       }
-      return result
-    }, []) as IParsedPositionWasOpenedEvent[]
+    } catch (error) {
+      console.log(error)
+      return { active: [], closedAndLiquidated: [] }
+    }
   },
 )
