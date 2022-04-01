@@ -2,17 +2,14 @@
 
 import { Button } from '../shared/Button'
 import { CaretDown } from 'phosphor-react'
+import { TokenDetails } from '../types'
 import { TokenModal } from '../shared/TokenModal'
 import tw from 'twin.macro'
 import { useState } from 'react'
 
 interface ITokenInputField {
-  label: string
-  value: string
-  setValue(value: string): void
-  placeholder?: string
-  onTokenChange(token: any): void
-  token: any
+  onTokenChange(token: TokenDetails): void
+  token: TokenDetails
 }
 export const TokenInputField = (props: ITokenInputField) => {
   const [isModalOpen, setIsModalOpen] = useState(false)

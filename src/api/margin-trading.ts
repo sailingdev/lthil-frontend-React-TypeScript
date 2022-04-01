@@ -25,8 +25,11 @@ export class MarginTrading {
       positionData.margin.toString(),
       positionData.spentToken,
     )!
+
     const leverage = BigNumber.from(positionData.leverage)
     const slippage = BigNumber.from(positionData.slippage)
+
+    // Ether.utils.formatTokenUnits(min.toString(), obtainedToken.address)!,
 
     const base = BigNumber.from(1).sub(slippage.div(100))
 
@@ -189,8 +192,9 @@ export class MarginTrading {
       this.contract.filters.PositionWasLiquidated(),
     )
 
-    const positions = allPositions.map((p) => this.parsePosition(p))
-    // .filter((p) => p.ownerId === user)
+    const positions = allPositions
+      .map((p) => this.parsePosition(p))
+      .filter((p) => p.ownerId === user)
 
     const closedAndLiquidatedPositionsIds = [
       ...closedPositions,

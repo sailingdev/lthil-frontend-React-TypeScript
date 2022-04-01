@@ -4,7 +4,7 @@ import 'twin.macro'
 
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
 import { Ether, etherGlobal } from '../api/ether'
-import { Priority, TransactionType } from '../types'
+import { Priority, TokenDetails, TransactionType } from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
 import { BasicChart } from '../shared/charts/BasicChart'
@@ -31,8 +31,8 @@ export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
   const [positionType, setPositionType] = useState<'short' | 'long'>('long')
-  const [spentToken, setSpentToken] = useState<any>(tokens[0])
-  const [obtainedToken, setObtainedToken] = useState<any>(tokens[1])
+  const [spentToken, setSpentToken] = useState<TokenDetails>(tokens[0])
+  const [obtainedToken, setObtainedToken] = useState<TokenDetails>(tokens[1])
   const [leverage, setLeverage] = useState<number>(1)
   const [margin, setMargin] = useState<any>(2)
   const [slippage, setSlippage] = useState<any>(1)
@@ -42,11 +42,11 @@ export const MarginTradingPage = () => {
   const [minObtained, setMinObtained] = useState<string>('0')
   const [maxSpent, setMaxSpent] = useState<string>('0')
 
-  const isConn = useIsConnected()
+  const isConnected = useIsConnected()
 
   useAsync(async () => {
     try {
-      if (etherGlobal && slippage && margin) {
+      if (isConnected && slippage && margin) {
         const [max, min] = await etherGlobal.marginTrading.computeMaxAndMin({
           margin,
           leverage,
@@ -57,18 +57,14 @@ export const MarginTradingPage = () => {
           obtainedToken: obtainedToken.address,
           spentToken: spentToken.address,
         })
-        setMinObtained(
-          Ether.utils.formatTokenUnits(min.toString(), obtainedToken.address)!,
-        )
-        setMaxSpent(
-          Ether.utils.formatTokenUnits(max.toString(), obtainedToken.address)!,
-        )
+        // setMinObtained(min)
+        // setMaxSpent(max)
       }
     } catch (error) {
       console.error(error)
     }
   }, [
-    isConn,
+    isConnected,
     spentToken.address,
     obtainedToken.address,
     margin,
@@ -87,7 +83,7 @@ export const MarginTradingPage = () => {
     approvalMeta: {
       token: spentToken.address,
       destination: addresses.MarginTradingStrategy,
-      amount: Number.MAX_SAFE_INTEGER, // margin
+      amount: Number.MAX_SAFE_INTEGER,
     },
     onApproval: async () => {
       const positionData = {
@@ -132,27 +128,18 @@ export const MarginTradingPage = () => {
                 />
                 <div tw='flex w-full justify-between items-center'>
                   <TokenInputField
-                    label='Token 1'
-                    value={'0.0'}
                     token={spentToken}
-                    setValue={(value) => setSpentToken(value)}
                     onTokenChange={(value) => setSpentToken(value)}
                   />
                   <ArrowRight size={28} tw='text-font-200 mx-6' />
                   <TokenInputField
-                    label='Token 2'
-                    value={'0.0'}
                     token={obtainedToken}
-                    setValue={(value) => setObtainedToken(value)}
                     onTokenChange={(value) => setObtainedToken(value)}
                   />
                 </div>
                 <div tw='w-full'>
-                  <InfoItem
-                    label='Min. obtained'
-                    value={minObtained.toUpperCase()}
-                  />
-                  <InfoItem label='Max. spent' value={maxSpent.toUpperCase()} />
+                  <InfoItem label='Min. obtained' value={minObtained} />
+                  <InfoItem label='Max. spent' value={maxSpent} />
                 </div>
                 <InputField
                   label='Margin'

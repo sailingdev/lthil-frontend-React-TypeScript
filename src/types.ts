@@ -44,6 +44,7 @@ export interface TokenDetails {
   symbol: string
   decimals: number
   address: string
+  logoURI?: string | undefined
 }
 
 export interface StakeToken {
