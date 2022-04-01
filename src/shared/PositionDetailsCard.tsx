@@ -1,21 +1,42 @@
-/** @jsxImportSource @emotion/react */
-import { BigNumber } from 'ethers'
 import 'twin.macro'
 
+/** @jsxImportSource @emotion/react */
+import { BigNumber } from 'ethers'
+import { IPosition } from '../types'
 import { InfoItem } from './InfoItem'
 import { Txt } from './Txt'
+import { usePositionProfit } from './hooks/usePositionProfit'
 
 interface IPositionDetailsCard {
-  collateralToken: string | undefined
-  openPrice: string | undefined
-  currentPrice: string | undefined
-  liquidationPrice: string | undefined
-  collateral: string | undefined
-  createdAt: string | undefined
-  distanceFromLiquidation: string | undefined
-  positionDescription: string | undefined
-  profitsAndLosses: [number, number] | undefined
+  position: IPosition
 }
+
+// createdAt={formatDate(new Date(position.createdAt * 1000))}
+//                 collateral={Ether.utils.formatTokenUnits(
+//                   position.collateralReceived,
+//                   collateralToken.address,
+//                 )}
+//                 openPrice={Ether.utils.formatTokenUnits(
+//                   position.openPrice.toString(),
+//                   collateralToken.address,
+//                 )}
+//                 // currentPrice={
+//                 //   currentPrice
+//                 //     ? Ether.formatUnits(
+//                 //         currentPrice!.toString(),
+//                 //         collateralToken.address,
+//                 //       )
+//                 //     : ''
+//                 // }
+//                 currentPrice=''
+//                 liquidationPrice={Ether.utils.formatTokenUnits(
+//                   position.liquidationPrice,
+//                   collateralToken.address,
+//                 )}
+//                 collateralToken={collateralToken.symbol}
+//                 distanceFromLiquidation={distanceFromLiquidation?.toString()}
+//                 positionDescription={description}
+//                 profitsAndLosses={profitsAndLosses}
 
 export const PositionDetailsCard = (props: IPositionDetailsCard) => {
   const {
@@ -27,8 +48,9 @@ export const PositionDetailsCard = (props: IPositionDetailsCard) => {
     distanceFromLiquidation,
     collateralToken,
     positionDescription,
-    profitsAndLosses,
   } = props
+
+  const profit = usePositionProfit()
   return (
     <div tw='flex flex-col justify-between items-center w-full rounded-xl p-5 bg-primary-100'>
       <Txt.Heading2>Position details</Txt.Heading2>

@@ -86,34 +86,7 @@ export const PositionPage = () => {
           <Txt.Heading1 tw='mb-12'>Margin Trading Strategy</Txt.Heading1>
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
             <div tw='flex flex-col gap-3 flex-grow'>
-              <PositionDetailsCard
-                createdAt={formatDate(new Date(position.createdAt * 1000))}
-                collateral={Ether.utils.formatTokenUnits(
-                  position.collateralReceived,
-                  collateralToken.address,
-                )}
-                openPrice={Ether.utils.formatTokenUnits(
-                  position.openPrice.toString(),
-                  collateralToken.address,
-                )}
-                // currentPrice={
-                //   currentPrice
-                //     ? Ether.formatUnits(
-                //         currentPrice!.toString(),
-                //         collateralToken.address,
-                //       )
-                //     : ''
-                // }
-                currentPrice=''
-                liquidationPrice={Ether.utils.formatTokenUnits(
-                  position.liquidationPrice,
-                  collateralToken.address,
-                )}
-                collateralToken={collateralToken.symbol}
-                distanceFromLiquidation={distanceFromLiquidation?.toString()}
-                positionDescription={description}
-                profitsAndLosses={profitsAndLosses}
-              />
+              <PositionDetailsCard position={position} />
               {position.status === 'open' && (
                 <>
                   <CollateralCard />
