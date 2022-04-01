@@ -44,6 +44,11 @@ export const DashboardPage = () => {
       obtainedToken: position.obtainedToken.symbol,
     })
   }
+  //     //     calculatedActivePositions.push({
+  //     //       profit: {
+  //     //         currencyValue: profitsAndLosses![0],
+  //     //         percentageValue: profitsAndLosses![1],
+  //     //       },
   return (
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>

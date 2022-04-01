@@ -212,125 +212,85 @@ export class MarginTrading {
       return base.sub(BigNumber.from(1))
     }
   }
+
+  async computeProfitsAndLosses(
+    position: IPosition,
+  ): Promise<[number, number] | undefined> {
+    const { fees: positionFee } = await this.contract.positions(
+      position.positionId,
+    )
+    const currentTime = BigNumber.from(
+      BigNumber.from(new Date().getTime()).div(BigNumber.from(1000)),
+    )
+    const time = currentTime.sub(BigNumber.from(position.createdAt))
+    const timeFees = BigNumber.from(position.toBorrow)
+      .mul(BigNumber.from(position.interestRate))
+      .mul(time)
+      .div(BigNumber.from(864000000))
+
+    const fees = timeFees.add(positionFee)
+    const quoteAmount = (
+      await this.contract.quote(
+        position.spentToken.address,
+        position.obtainedToken.address,
+        position.type === 'long'
+          ? BigNumber.from(position.toBorrow).add(fees)
+          : BigNumber.from(position.amountIn),
+      )
+    )[0]
+
+    const profit =
+      position.type === 'long'
+        ? BigNumber.from(position.amountIn)
+            .sub(quoteAmount)
+            .sub(BigNumber.from(position.collateralReceived))
+        : quoteAmount.sub(
+            BigNumber.from(position.toBorrow)
+              .sub(BigNumber.from(position.collateralReceived))
+              .sub(fees),
+          )
+
+    return [
+      Number(
+        Ether.formatUnits(profit.toString(), position.collateralToken.address),
+      ),
+      Number(
+        profit
+          .div(BigNumber.from(position.collateralReceived))
+          .mul(BigNumber.from(100)),
+      ),
+    ]
+  }
+
+  async getPositionCurrentPrice(
+    position: IPosition,
+  ): Promise<BigNumber | undefined> {
+    try {
+      const { spentToken, obtainedToken, amountIn, toBorrow, collateralToken } =
+        position
+
+      // strange condition
+      if (collateralToken === spentToken) {
+        const quoteAmount = (
+          await this.contract.quote(
+            position.obtainedToken.address,
+            position.spentToken.address,
+            BigNumber.from(position.amountIn),
+          )
+        )[0]
+        return quoteAmount.div(amountIn)
+      } else {
+        const quoteAmount = (
+          await this.contract.quote(
+            position.spentToken.address,
+            position.obtainedToken.address,
+            BigNumber.from(position.toBorrow),
+          )
+        )[0]
+        return quoteAmount.div(toBorrow)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
-
-// async computeProfitsAndLosses(
-//   positionEvent: IParsedPositionWasOpenedEvent,
-// ): Promise<[number, number] | undefined> {
-//   try {
-//     const {
-//       amountIn,
-//       interestRate,
-//       toBorrow,
-//       collateralReceived,
-//       collateralToken,
-//       spentToken,
-//       obtainedToken,
-//       createdAt,
-//       positionId,
-//     } = positionEvent
-
-//     const marginTrading = ContractFactory.getMarginTradingStrategyContract(
-//       this.signer,
-//     )
-//     const positionFees = (await marginTrading.positions(positionId)).fees
-//     const currentTime = BigNumber.from(
-//       BigNumber.from(new Date().getTime()).div(BigNumber.from(1000)),
-//     )
-//     const time = currentTime.sub(createdAt)
-//     const timeFees = toBorrow
-//       .mul(interestRate)
-//       .mul(time)
-//       .div(BigNumber.from(864000000))
-
-//     const fees = timeFees.add(positionFees)
-
-//     if (this.getPositionType(positionEvent) === 'long') {
-//       profitsAndLosses = amountIn
-//         .sub(
-//           (
-//             await marginTrading.quote(
-//               spentToken,
-//               obtainedToken,
-//               toBorrow.add(fees),
-//             )
-//           )[0],
-//         )
-//         .sub(collateralReceived)
-//     } else {
-//       profitsAndLosses = (
-//         await marginTrading.quote(spentToken, obtainedToken, amountIn)
-//       )[0]
-//         .sub(toBorrow)
-//         .sub(collateralReceived)
-//         .sub(fees)
-//     }
-
-//     // TODO: percentage is maybe wrong, double check it
-//     return [
-//       Number(
-//         Ether.formatUnits(profitsAndLosses!.toString(), collateralToken),
-//       ),
-//       Number(
-//         profitsAndLosses!.div(collateralReceived).mul(BigNumber.from(100)),
-//       ),
-//     ]
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
-//     //     const profitsAndLosses = await etherGlobal.computeProfitsAndLosses(e)
-//     //     calculatedActivePositions.push({
-//     //       profit: {
-//     //         currencyValue: profitsAndLosses![0],
-//     //         percentageValue: profitsAndLosses![1],
-//     //       },
-
-// async getPositionCurrentPrice(
-//   position: IParsedPositionWasOpenedEvent,
-// ): Promise<BigNumber | undefined> {
-//   try {
-//     const { spentToken, obtainedToken, amountIn, toBorrow, collateralToken } =
-//       position
-
-//     const marginTradingStrategy =
-//       ContractFactory.getMarginTradingStrategyContract(this.signer)
-
-//     if (collateralToken === spentToken) {
-//       console.log(
-//         'Current price: ',
-//         (
-//           await marginTradingStrategy.quote(
-//             obtainedToken,
-//             spentToken,
-//             amountIn,
-//           )
-//         )[0]
-//           .div(amountIn)
-//           .toString(),
-//       )
-//       return (
-//         await marginTradingStrategy.quote(obtainedToken, spentToken, amountIn)
-//       )[0].div(amountIn)
-//     } else {
-//       console.log(
-//         'Current price: ',
-//         (
-//           await marginTradingStrategy.quote(
-//             spentToken,
-//             obtainedToken,
-//             toBorrow,
-//           )
-//         )[0]
-//           .div(toBorrow)
-//           .toString(),
-//       )
-//       return (
-//         await marginTradingStrategy.quote(spentToken, obtainedToken, toBorrow)
-//       )[0].div(toBorrow)
-//     }
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
