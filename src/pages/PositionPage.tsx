@@ -11,6 +11,7 @@ import { Liquidation } from '../shared/Liquidation'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabButton } from '../shared/TabButton'
 import { TradingChart } from '../shared/charts/TradingChart'
+import { TransactionType } from '../types'
 import { Txt } from '../shared/Txt'
 import { formatDate } from '../utils'
 import { useAddTransaction } from '../state/hooks'
@@ -77,11 +78,11 @@ export const PositionPage = () => {
     const closePosition = await etherGlobal.marginTrading.closePosition(
       positionId,
     )
-    // addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {
-    //   positionId: positionId,
-    //   spentToken: spentToken,
-    //   obtainedToken: obtainedToken,
-    // })
+    addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {
+      positionId: positionId,
+      spentToken: position.spentToken.symbol,
+      obtainedToken: position.obtainedToken.symbol,
+    })
   }
 
   const tokenPair =
@@ -125,26 +126,30 @@ export const PositionPage = () => {
                 positionDescription={description}
                 profitsAndLosses={profitsAndLosses}
               />
-              <CollateralCard />
-              <Liquidation
-                // liquidationToken1={liquidationToken1}
-                // liquidationToken2={liquidationToken2}
-                liquidationToken1={spentToken.symbol}
-                liquidationToken2={obtainedToken.symbol}
-                liquidationPrice={Ether.utils.formatTokenUnits(
-                  position.liquidationPrice,
-                  collateralToken.address,
-                )}
-                inputValue={liquidationInput}
-                inputOnChange={(value) => setLiquidationInput(value)}
-                onClick={liquidationAction}
-                tokenSymbol={collateralToken.symbol as string}
-              />
-              <ClosePosition
-                token={collateralToken.symbol as string}
-                value={3000}
-                onClick={() => closePosition(positionId!)}
-              />
+              {position.status === 'open' && (
+                <>
+                  <CollateralCard />
+                  <Liquidation
+                    // liquidationToken1={liquidationToken1}
+                    // liquidationToken2={liquidationToken2}
+                    liquidationToken1={spentToken.symbol}
+                    liquidationToken2={obtainedToken.symbol}
+                    liquidationPrice={Ether.utils.formatTokenUnits(
+                      position.liquidationPrice,
+                      collateralToken.address,
+                    )}
+                    inputValue={liquidationInput}
+                    inputOnChange={(value) => setLiquidationInput(value)}
+                    onClick={liquidationAction}
+                    tokenSymbol={collateralToken.symbol as string}
+                  />
+                  <ClosePosition
+                    token={collateralToken.symbol as string}
+                    value={3000}
+                    onClick={() => closePosition(positionId!)}
+                  />
+                </>
+              )}
             </div>
             <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
               <div tw='w-full flex flex-row justify-between pb-5 '>
