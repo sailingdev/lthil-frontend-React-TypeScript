@@ -4,6 +4,7 @@ import { IInputPosition, IPosition } from '../types'
 import { ContractFactory } from './contract-factory'
 import { Ether } from './ether'
 import tokenList from './../assets/tokenlist.json'
+import { Utils } from './utils'
 
 export class MarginTrading {
   private signer!: ethers.providers.JsonRpcSigner
@@ -301,6 +302,26 @@ export class MarginTrading {
         )[0]
         return quoteAmount.div(toBorrow)
       }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async editPosition(
+    positionId: string,
+    newCollateral: string,
+    collateralToken: string,
+  ): Promise<any> {
+    try {
+      const editPosition = this.contract.editPosition(
+        positionId,
+        Utils.parseTokenUnits(newCollateral, collateralToken),
+        {
+          gasLimit: 10000000,
+        },
+      )
+
+      return editPosition
     } catch (error) {
       console.log(error)
     }

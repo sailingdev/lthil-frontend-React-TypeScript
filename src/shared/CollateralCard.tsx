@@ -45,7 +45,7 @@ export const CollateralCard = () => {
         max={150}
         step={0.1}
         value={sliderValue}
-        onChange={onSliderChange}
+        // onChange={onSliderChange}
       />
       <div tw='w-full flex flex-row justify-between'>
         <Txt.CaptionMedium tw='text-font-100'>Withdraw</Txt.CaptionMedium>

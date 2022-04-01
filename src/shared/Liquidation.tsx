@@ -15,7 +15,7 @@ interface ILiquidation {
   inputOnChange: (value: string) => void
   inputValue: string
   liquidationPrice: string | undefined
-  tokenSymbol: string
+  // tokenSymbol: string
 }
 
 export const Liquidation = (props: ILiquidation) => {
@@ -26,7 +26,7 @@ export const Liquidation = (props: ILiquidation) => {
     onClick,
     inputOnChange,
     inputValue,
-    tokenSymbol,
+    // tokenSymbol,
   } = props
 
   return (
@@ -44,16 +44,16 @@ export const Liquidation = (props: ILiquidation) => {
         placeholder='0'
         value={inputValue}
         onChange={(value) => inputOnChange(value)}
-        renderRight={
-          <Button
-            css={[
-              tw`bg-primary-400 dark:bg-primary-300 h-6 tablet:h-7 desktop:h-8`,
-            ]}
-            text={tokenSymbol}
-            leftIcon={CurrEth}
-            rightIcon={ArrowDown}
-          />
-        }
+        // renderRight={
+        //   <Button
+        //     css={[
+        //       tw`bg-primary-400 dark:bg-primary-300 h-6 tablet:h-7 desktop:h-8`,
+        //     ]}
+        //     text={tokenSymbol}
+        //     leftIcon={CurrEth}
+        //     rightIcon={ArrowDown}
+        //   />
+        // }
       />
       <Button text='Top up' action full bold onClick={onClick} />
     </div>
