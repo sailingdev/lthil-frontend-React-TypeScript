@@ -308,11 +308,15 @@ export class MarginTrading {
     }
   }
 
-  async editPosition(positionId: string, newCollateral: string): Promise<any> {
+  async editPosition(
+    positionId: string,
+    newCollateral: string,
+    collateralToken: string,
+  ): Promise<any> {
     try {
       const editPosition = this.contract.editPosition(
         positionId,
-        Utils.parseUnits(newCollateral),
+        Utils.parseTokenUnits(newCollateral, collateralToken),
         {
           gasLimit: 10000000,
         },
