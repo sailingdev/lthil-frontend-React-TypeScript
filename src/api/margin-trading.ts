@@ -6,15 +6,10 @@ import { Ether } from './ether'
 import tokenList from './../assets/tokenlist.json'
 
 export class MarginTrading {
-  private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner
   private contract!: Contract
 
-  constructor(
-    provider: ethers.providers.Web3Provider,
-    signer: ethers.providers.JsonRpcSigner,
-  ) {
-    this.provider = provider
+  constructor(signer: ethers.providers.JsonRpcSigner) {
     this.signer = signer
     this.contract = ContractFactory.getMarginTradingStrategyContract(
       this.signer,
@@ -25,7 +20,7 @@ export class MarginTrading {
     priority,
     ...positionData
   }: IInputPosition): Promise<[BigNumber, BigNumber]> {
-    const margin = Ether.parseUnits(
+    const margin = Ether.utils.parseTokenUnits(
       positionData.margin.toString(),
       positionData.spentToken,
     )!
@@ -75,7 +70,10 @@ export class MarginTrading {
     const { spentToken, obtainedToken, deadline, margin, positionType } =
       positionData
 
-    const marginValue = Ether.parseUnits(margin.toString(), spentToken)
+    const marginValue = Ether.utils.parseTokenUnits(
+      margin.toString(),
+      spentToken,
+    )
 
     const [maxSpent, minObtained] = await this.computeMaxAndMin(positionData)
 
@@ -118,7 +116,6 @@ export class MarginTrading {
     return this.parsePositionWasOpenedEvent(position[0])
   }
   parsePositionWasOpenedEvent(event: any): Omit<IPosition, 'status'> {
-    debugger
     const { args } = event
     const spentToken = tokenList.tokens.find(
       (token) => (args[2] as string) === token.address,
@@ -129,29 +126,42 @@ export class MarginTrading {
     const collateralToken = tokenList.tokens.find(
       (token) => (args[4] as string) === token.address,
     )!
-    const toBorrow = args![6] as BigNumber
-    const collateralReceived = args![5] as BigNumber
-    const leverage = BigNumber.from(1).add(toBorrow.div(collateralReceived))
+    const toBorrow = Ether.utils.parseUnits(args![6] as BigNumber)
+    const collateralReceived = Ether.utils.parseUnits(args![5] as BigNumber)
+    const amountIn = Ether.utils.parseUnits(args![7] as BigNumber)
+
+    const leverage = Ether.utils
+      .parseUnits(1)
+      .add(toBorrow.div(collateralReceived))
 
     const type =
       collateralToken.address === spentToken.address ? 'long' : 'short'
-    const amountIn = args![7] as BigNumber
+
+    const liquidationPriceBase = Ether.utils
+      .parseUnits(1)
+      .div(leverage.mul(Ether.utils.parseUnits(0.5)))
 
     const openPrice =
       type === 'long'
-        ? BigNumber.from(0)
-        : // ? toBorrow.add(collateralReceived).div(amountIn)
-          // division by zero
-          // : amountIn.div(toBorrow)
-          BigNumber.from(0)
-    const liquidationPriceBase = BigNumber.from(1).div(
-      leverage.div(BigNumber.from(2)),
-    )
+        ? amountIn.isZero()
+          ? Ether.utils.zero
+          : toBorrow.add(collateralReceived).div(amountIn)
+        : toBorrow.isZero()
+        ? Ether.utils.zero
+        : amountIn.div(toBorrow)
     const liquidationPrice =
       type === 'long'
-        ? openPrice.mul(BigNumber.from(1).sub(liquidationPriceBase))
-        : openPrice.mul(BigNumber.from(1).add(liquidationPriceBase))
-    const createdAt = new Date((args![9] as BigNumber).toNumber())
+        ? openPrice.mul(Ether.utils.parseUnits(1).sub(liquidationPriceBase))
+        : openPrice.mul(Ether.utils.parseUnits(1).add(liquidationPriceBase))
+
+    console.log('liqudationPrice:', liquidationPrice)
+    console.log('leverage:', Ether.utils.formatUnits(leverage))
+    console.log('openPrice:', Ether.utils.formatUnits(openPrice))
+
+    console.log(
+      'liquidationPriceBase: ',
+      Ether.utils.formatUnits(liquidationPriceBase),
+    )
 
     return {
       type,
@@ -160,14 +170,16 @@ export class MarginTrading {
       spentToken,
       obtainedToken,
       collateralToken,
-      collateralReceived: collateralReceived.toHexString(),
-      leverage: leverage.toNumber(),
-      liquidationPrice: liquidationPrice.toHexString(),
-      toBorrow: toBorrow.toHexString(),
-      amountIn: amountIn.toHexString(),
-      interestRate: (args![8] as BigNumber).toHexString(),
-      createdAt,
-      openPrice: openPrice.toHexString(),
+      collateralReceived: Ether.utils.formatUnits(collateralReceived),
+      leverage: Ether.utils.formatUnits(leverage),
+      liquidationPrice: Ether.utils.formatUnits(liquidationPrice),
+      toBorrow: Ether.utils.formatUnits(toBorrow),
+      amountIn: Ether.utils.formatUnits(amountIn),
+      interestRate: Ether.utils.formatUnits(
+        Ether.utils.parseUnits(args![8] as BigNumber),
+      ),
+      createdAt: (args![9] as BigNumber).toNumber(),
+      openPrice: Ether.utils.formatUnits(openPrice),
     }
   }
   private async getEventPositions(event: ethers.EventFilter) {
@@ -252,7 +264,10 @@ export class MarginTrading {
 
     return [
       Number(
-        Ether.formatUnits(profit.toString(), position.collateralToken.address),
+        Ether.utils.formatTokenUnits(
+          profit.toString(),
+          position.collateralToken.address,
+        ),
       ),
       Number(
         profit

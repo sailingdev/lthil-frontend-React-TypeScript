@@ -98,12 +98,12 @@ export const PositionPage = () => {
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
             <div tw='flex flex-col gap-3 flex-grow'>
               <PositionDetailsCard
-                createdAt={formatDate(position.createdAt)}
-                collateral={Ether.formatUnits(
+                createdAt={formatDate(new Date(position.createdAt * 1000))}
+                collateral={Ether.utils.formatTokenUnits(
                   position.collateralReceived,
                   collateralToken.address,
                 )}
-                openPrice={Ether.formatUnits(
+                openPrice={Ether.utils.formatTokenUnits(
                   position.openPrice.toString(),
                   collateralToken.address,
                 )}
@@ -116,7 +116,7 @@ export const PositionPage = () => {
                 //     : ''
                 // }
                 currentPrice=''
-                liquidationPrice={Ether.formatUnits(
+                liquidationPrice={Ether.utils.formatTokenUnits(
                   position.liquidationPrice,
                   collateralToken.address,
                 )}
@@ -131,7 +131,7 @@ export const PositionPage = () => {
                 // liquidationToken2={liquidationToken2}
                 liquidationToken1={spentToken.symbol}
                 liquidationToken2={obtainedToken.symbol}
-                liquidationPrice={Ether.formatUnits(
+                liquidationPrice={Ether.utils.formatTokenUnits(
                   position.liquidationPrice,
                   collateralToken.address,
                 )}

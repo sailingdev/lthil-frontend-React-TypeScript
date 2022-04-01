@@ -166,17 +166,17 @@ export interface IInputPosition {
 export interface IPosition {
   positionId: string
   ownerId: string
+  status: PositionStatus
+  type: PositionType
   spentToken: TokenDetails
   obtainedToken: TokenDetails
   collateralToken: TokenDetails
   collateralReceived: string
-  type: PositionType
-  leverage: number
+  leverage: string
   toBorrow: string
   amountIn: string
   interestRate: string
-  createdAt: Date
-  status: PositionStatus
   openPrice: string
   liquidationPrice: string
+  createdAt: number
 }

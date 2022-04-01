@@ -58,9 +58,11 @@ export const MarginTradingPage = () => {
           spentToken: spentToken.address,
         })
         setMinObtained(
-          Ether.formatUnits(min.toString(), obtainedToken.address)!,
+          Ether.utils.formatTokenUnits(min.toString(), obtainedToken.address)!,
         )
-        setMaxSpent(Ether.formatUnits(max.toString(), obtainedToken.address)!)
+        setMaxSpent(
+          Ether.utils.formatTokenUnits(max.toString(), obtainedToken.address)!,
+        )
       }
     } catch (error) {
       console.log(error)

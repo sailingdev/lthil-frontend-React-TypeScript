@@ -4,6 +4,7 @@ import { ContractFactory } from './contract-factory'
 import { MarginTrading } from './margin-trading'
 import { TokenDetails } from '../types'
 import { TransactionReceipt } from '../types'
+import { Utils } from './utils'
 import addresses from '../assets/addresses.json'
 import { hexToDecimal } from '../utils'
 import { tokens } from '../assets/tokenlist.json'
@@ -21,45 +22,15 @@ export class Ether {
   private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner
   public marginTrading!: MarginTrading
+  public static utils = Utils
 
   constructor(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
     this.signer = this.provider.getSigner()
-    this.marginTrading = new MarginTrading(this.provider, this.signer)
+    this.marginTrading = new MarginTrading(this.signer)
   }
   getSigner(): ethers.providers.JsonRpcSigner {
     return this.signer
-  }
-
-  static parseUnits(
-    amount: string,
-    tokenAddress: string,
-  ): ethers.BigNumber | undefined {
-    try {
-      const token = tokens.find((tkn) => tkn.address === tokenAddress)
-      if (!token) {
-        throw new Error('token not found!')
-      }
-      const decimals = token.decimals
-
-      return ethers.utils.parseUnits(amount, decimals)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  static formatUnits(amount: string, tokenAddress: string): string | undefined {
-    try {
-      const token = tokens.find((tkn) => tkn.address === tokenAddress)
-      if (!token) {
-        throw new Error('token not found!')
-      }
-      const decimals = token.decimals
-
-      return ethers.utils.formatUnits(amount, decimals)
-    } catch (error) {
-      console.log(error)
-    }
   }
 
   getTokenData(tokenAddress: string): TokenDetails | undefined {
@@ -191,7 +162,7 @@ export class Ether {
 
       return tokenContract.approve(
         destinationAddress,
-        Ether.parseUnits(amount.toString(), tokenAddress),
+        Ether.utils.parseTokenUnits(amount.toString(), tokenAddress),
         {
           gasLimit,
         },
@@ -212,7 +183,7 @@ export class Ether {
     )
     const gas = await tokenContract.estimateGas.approve(
       destinationAddress,
-      Ether.parseUnits(amount.toString(), tokenAddress),
+      Ether.utils.parseTokenUnits(amount.toString(), tokenAddress),
     )
     return gas.mul(120).div(100)
   }
@@ -269,7 +240,7 @@ export class Ether {
       //@ts-ignore
       const stake = await vault.stake(
         tokenAddress,
-        Ether.parseUnits(amount, tokenAddress),
+        Ether.utils.parseTokenUnits(amount, tokenAddress),
       )
       return stake
     } catch (error) {
@@ -284,7 +255,7 @@ export class Ether {
       //@ts-ignore
       const withdraw = await vault.unstake(
         tokenAddress,
-        Ether.parseUnits(amount, tokenAddress),
+        Ether.utils.parseTokenUnits(amount, tokenAddress),
         {
           gasLimit: 10000000,
         },
