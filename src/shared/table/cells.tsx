@@ -1,8 +1,10 @@
 import 'twin.macro'
 
+import { IPosition } from '../../types'
 import { Txt } from '../Txt'
 import { isDesktop } from '../../utils'
 import tw from 'twin.macro'
+import { usePositionProfit } from '../hooks/usePositionProfit'
 
 /** @jsxImportSource @emotion/react */
 
@@ -43,8 +45,14 @@ const Percentage = (props: { value?: number }) => {
   )
 }
 
-const Profit = (props: { currencyValue: number; percentageValue: number }) => {
-  const { currencyValue, percentageValue } = props
+const Profit = (props: { position: IPosition }) => {
+  const profit = usePositionProfit(props.position)
+  if (!profit) {
+    return null
+  }
+  console.log(profit)
+
+  const [currencyValue, percentageValue] = profit
 
   const currency = currencyValue
     ? new Intl.NumberFormat('en-us', {

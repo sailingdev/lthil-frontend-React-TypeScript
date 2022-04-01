@@ -214,8 +214,8 @@ export class MarginTrading {
   }
   getDistanceFromLiquidation(position: IPosition, price: number) {
     const liquidationPrice = BigNumber.from(position.liquidationPrice)
-    const currenctPrice = BigNumber.from(price)
-    const base = liquidationPrice.div(currenctPrice)
+    const currentPrice = BigNumber.from(price)
+    const base = liquidationPrice.div(currentPrice)
     if (position.type === 'long') {
       return BigNumber.from(1).sub(base)
     } else {
@@ -223,54 +223,53 @@ export class MarginTrading {
     }
   }
 
-  async computeProfitsAndLosses(
+  async computePositionProfit(
     position: IPosition,
   ): Promise<[number, number] | undefined> {
-    const { fees: positionFee } = await this.contract.positions(
-      position.positionId,
-    )
-    const currentTime = BigNumber.from(
-      BigNumber.from(new Date().getTime()).div(BigNumber.from(1000)),
-    )
-    const time = currentTime.sub(BigNumber.from(position.createdAt))
-    const timeFees = BigNumber.from(position.toBorrow)
-      .mul(BigNumber.from(position.interestRate))
-      .mul(time)
-      .div(BigNumber.from(864000000))
+    const { fees } = await this.contract.positions(position.positionId)
+    const positionFee = Ether.utils.parseUnits(fees)
+    const currentTime = Ether.utils.parseUnits(new Date().getTime() / 1000)
+    const time = currentTime.sub(Ether.utils.parseUnits(position.createdAt))
 
-    const fees = timeFees.add(positionFee)
+    const timeFees = Ether.utils
+      .parseUnits(position.toBorrow)
+      .mul(Ether.utils.parseUnits(position.interestRate))
+      .mul(time)
+      .div(Ether.utils.parseUnits(864000000))
+
+    const totalFees = timeFees.add(positionFee)
     const quoteAmount = (
       await this.contract.quote(
         position.spentToken.address,
         position.obtainedToken.address,
         position.type === 'long'
-          ? BigNumber.from(position.toBorrow).add(fees)
-          : BigNumber.from(position.amountIn),
+          ? Ether.utils.parseUnits(position.toBorrow).add(totalFees)
+          : Ether.utils.parseUnits(position.amountIn),
       )
     )[0]
 
     const profit =
       position.type === 'long'
-        ? BigNumber.from(position.amountIn)
+        ? Ether.utils
+            .parseUnits(position.amountIn)
             .sub(quoteAmount)
-            .sub(BigNumber.from(position.collateralReceived))
+            .sub(Ether.utils.parseUnits(position.collateralReceived))
         : quoteAmount.sub(
-            BigNumber.from(position.toBorrow)
-              .sub(BigNumber.from(position.collateralReceived))
-              .sub(fees),
+            Ether.utils
+              .parseUnits(position.toBorrow)
+              .sub(Ether.utils.parseUnits(position.collateralReceived))
+              .sub(totalFees),
           )
 
     return [
+      Number(Ether.utils.formatUnits(profit)),
+
       Number(
-        Ether.utils.formatTokenUnits(
-          profit.toString(),
-          position.collateralToken.address,
+        Ether.utils.formatUnits(
+          profit
+            .div(Ether.utils.parseUnits(position.collateralReceived))
+            .mul(Ether.utils.parseUnits(100)),
         ),
-      ),
-      Number(
-        profit
-          .div(BigNumber.from(position.collateralReceived))
-          .mul(BigNumber.from(100)),
       ),
     ]
   }
