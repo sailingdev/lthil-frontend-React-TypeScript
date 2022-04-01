@@ -58,15 +58,23 @@ export const PositionPage = () => {
   //   // }
   // }, [currentPrice, liquidationPrice])
 
-  const liquidationAction = () => {
-    console.log('liquidation action clicked.')
-  }
-
   const closePosition = async (positionId: string) => {
     const closePosition = await etherGlobal.marginTrading.closePosition(
       positionId,
     )
     addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {
+      positionId: positionId,
+      spentToken: position.spentToken.symbol,
+      obtainedToken: position.obtainedToken.symbol,
+    })
+  }
+
+  const editPosition = async (positionId: string, newCollateral: string) => {
+    const editPosition = await etherGlobal.marginTrading.editPosition(
+      positionId,
+      newCollateral,
+    )
+    addTx(TransactionType.MTS_EDIT_POSTITION, editPosition.hash!, {
       positionId: positionId,
       spentToken: position.spentToken.symbol,
       obtainedToken: position.obtainedToken.symbol,
@@ -128,8 +136,8 @@ export const PositionPage = () => {
                     )}
                     inputValue={liquidationInput}
                     inputOnChange={(value) => setLiquidationInput(value)}
-                    onClick={liquidationAction}
-                    tokenSymbol={collateralToken.symbol as string}
+                    onClick={() => editPosition(positionId!, liquidationInput)}
+                    // tokenSymbol={collateralToken.symbol as string}
                   />
                   <ClosePosition
                     token={collateralToken.symbol as string}
