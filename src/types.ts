@@ -72,6 +72,7 @@ export enum TransactionType {
   WITHDRAW = 'WITHDRAW',
   MTS_OPEN_POSITION = 'MTS_OPEN_POSITION',
   MTS_CLOSE_POSITION = 'MTS_CLOSE_POSITION',
+  MTS_EDIT_POSTITION = 'MTS_EDIT_POSTITION',
 }
 
 export interface Transaction {
@@ -83,6 +84,7 @@ export interface Transaction {
     | ApprovalTransactionMeta
     | MtsOpenPositionMeta
     | MtsClosePositionMeta
+    | MtsEditPositionMeta
   tx: string
   status: 'pending' | 'verified'
   receipt?: TransactionReceipt
@@ -144,6 +146,13 @@ export interface MtsClosePositionMeta {
   positionId: string
   spentToken: string
   obtainedToken: string
+}
+
+export interface MtsEditPositionMeta {
+  positionId: string
+  spentToken: string
+  obtainedToken: string
+  newCollateral: string
 }
 
 export type Priority = 'buy' | 'sell'

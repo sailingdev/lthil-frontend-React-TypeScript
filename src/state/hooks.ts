@@ -3,6 +3,7 @@ import {
   ISearchParams,
   MtsClosePositionMeta,
   MtsOpenPositionMeta,
+  MtsEditPositionMeta,
   StakeTransactionMeta,
   Transaction,
   TransactionReceipt,
@@ -155,7 +156,8 @@ export const useAddTransaction = () => {
       | StakeTransactionMeta
       | ApprovalTransactionMeta
       | MtsOpenPositionMeta
-      | MtsClosePositionMeta,
+      | MtsClosePositionMeta
+      | MtsEditPositionMeta,
   ) => {
     if (!chainId) {
       return

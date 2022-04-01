@@ -3,6 +3,7 @@ import {
   ApprovalTransactionMeta,
   MtsClosePositionMeta,
   MtsOpenPositionMeta,
+  MtsEditPositionMeta,
   StakeTransactionMeta,
   Transaction,
   TransactionType,
@@ -75,6 +76,15 @@ export const getTransactionLabel = (t: Transaction) => {
       (t) => t.address === meta.spentToken,
     )?.symbol
     return `Closed ${obtainedTokenName}/${spentTokenName} position`
+  } else if (t.type === TransactionType.MTS_EDIT_POSTITION) {
+    const meta = t.meta as MtsEditPositionMeta
+    const obtainedTokenName = tokenList.tokens.find(
+      (t) => t.address === meta.obtainedToken,
+    )?.symbol
+    const spentTokenName = tokenList.tokens.find(
+      (t) => t.address === meta.spentToken,
+    )?.symbol
+    return `New collateral set on ${obtainedTokenName}/${spentTokenName} position`
   }
   return 'Transaction'
 }
