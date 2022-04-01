@@ -141,17 +141,17 @@ export const DashboardPage = () => {
                 },
               },
 
-              //   {
-              //     Header: 'Profit',
-              //     accessor: 'profit',
-              //     align: 'right',
-              //     cell: (l) => (
-              //       <TableCell.Profit
-              //         currencyValue={l.profit.currencyValue}
-              //         percentageValue={l.profit.percentageValue}
-              //       />
-              //     ),
-              //   },
+              // {
+              //   Header: 'Profit',
+              //   accessor: 'profit',
+              //   align: 'right',
+              //   cell: (l) => (
+              //     <TableCell.Profit
+              //       currencyValue={l.profit.currencyValue}
+              //       percentageValue={l.profit.percentageValue}
+              //     />
+              //   ),
+              // },
               {
                 Header: 'Trend',
                 // @ts-ignore
@@ -166,8 +166,9 @@ export const DashboardPage = () => {
                     accessor: 'action',
                     align: 'right',
                     cell: (p: IPosition) => (
-                      <TableCell.ClosePosition
+                      <TableCell.Button
                         onClick={() => closePosition(p)}
+                        text='Close'
                       />
                     ),
                   }
