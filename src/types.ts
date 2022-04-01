@@ -51,7 +51,7 @@ export interface StakeToken {
   vaultName: string
   annualPercentageYield: number
   totalValueLocked: number
-  owned: number
+  staked: number
   tokenAddress: string
 }
 

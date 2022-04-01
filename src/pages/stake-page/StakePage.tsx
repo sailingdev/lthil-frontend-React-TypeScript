@@ -78,12 +78,12 @@ export const StakePage = () => {
                 }}
               />
               <Button
-                text='Owned'
-                action={searchParams.orderField === 'owned'}
-                bold={searchParams.orderField === 'owned'}
+                text='Staked'
+                action={searchParams.orderField === 'staked'}
+                bold={searchParams.orderField === 'staked'}
                 onClick={() => {
                   setOrder('DESC')
-                  setOrderField('owned')
+                  setOrderField('staked')
                 }}
               />
             </div>
@@ -153,8 +153,8 @@ export const StakePage = () => {
                 ),
               },
               {
-                Header: 'Owned',
-                accessor: 'owned',
+                Header: 'Staked',
+                accessor: 'staked',
                 align: 'right',
                 cell: (l: StakeToken) => <TableCell.Text value={l.owned} />,
               },
