@@ -310,7 +310,6 @@ export class MarginTrading {
 
   async editPosition(positionId: string, newCollateral: string): Promise<any> {
     try {
-      console.log(Utils.parseUnits(newCollateral))
       const editPosition = this.contract.editPosition(
         positionId,
         Utils.parseUnits(newCollateral),
