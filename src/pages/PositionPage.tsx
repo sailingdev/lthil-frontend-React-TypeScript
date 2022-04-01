@@ -2,6 +2,7 @@
 import 'twin.macro'
 
 import { Ether, etherGlobal } from '../api/ether'
+import { MtsClosePositionMeta, TransactionType } from '../types'
 
 import { BasicChart } from '../shared/charts/BasicChart'
 import { ClosePosition } from '../shared/ClosePosition'
@@ -11,7 +12,6 @@ import { Liquidation } from '../shared/Liquidation'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabButton } from '../shared/TabButton'
 import { TradingChart } from '../shared/charts/TradingChart'
-import { TransactionType } from '../types'
 import { Txt } from '../shared/Txt'
 import { formatDate } from '../utils'
 import { useAddTransaction } from '../state/hooks'
@@ -22,17 +22,11 @@ import { useState } from 'react'
 export const PositionPage = () => {
   const { positionId } = useParams<{ positionId: string }>()
   const position = usePosition(positionId!)
-  const addTx = useAddTransaction()
+  const addTx = useAddTransaction<MtsClosePositionMeta>()
 
   const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
 
-  const [distanceFromLiquidation, setDistanceFromLiquidation] = useState<
-    number | undefined
-  >(undefined)
   const [liquidationInput, setLiquidationInput] = useState<string>('')
-  const [profitsAndLosses, setProfitsAndLosses] = useState<
-    [number, number] | undefined
-  >(undefined)
 
   if (!position) {
     return null
@@ -58,39 +52,32 @@ export const PositionPage = () => {
   //   // }
   // }, [currentPrice, liquidationPrice])
 
-  const closePosition = async (positionId: string) => {
+  const closePosition = async () => {
     const closePosition = await etherGlobal.marginTrading.closePosition(
-      positionId,
+      position.positionId,
     )
     addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {
-      positionId: positionId,
-      spentToken: position.spentToken.symbol,
-      obtainedToken: position.obtainedToken.symbol,
+      positionId: position.positionId,
+      spentToken: position.spentToken.address,
+      obtainedToken: position.obtainedToken.address,
     })
   }
 
   const editPosition = async (
-    positionId: string,
     newCollateral: string,
     collateralToken: string,
   ) => {
     const editPosition = await etherGlobal.marginTrading.editPosition(
-      positionId,
+      position.positionId,
       newCollateral,
       collateralToken,
     )
     addTx(TransactionType.MTS_EDIT_POSTITION, editPosition.hash!, {
-      positionId: positionId,
-      spentToken: position.spentToken.symbol,
-      obtainedToken: position.obtainedToken.symbol,
+      positionId: position.positionId,
+      spentToken: position.spentToken.address,
+      obtainedToken: position.obtainedToken.address,
     })
   }
-
-  const tokenPair =
-    position.type === 'short'
-      ? `${spentToken.symbol}/${obtainedToken.symbol}`
-      : `${obtainedToken.symbol}/${spentToken.symbol}`
-  const description = `${tokenPair} ${position.leverage}x ${position.type}`
 
   return (
     <ContentContainer>
@@ -115,18 +102,14 @@ export const PositionPage = () => {
                     inputValue={liquidationInput}
                     inputOnChange={(value) => setLiquidationInput(value)}
                     onClick={() =>
-                      editPosition(
-                        positionId!,
-                        liquidationInput,
-                        collateralToken.address,
-                      )
+                      editPosition(liquidationInput, collateralToken.address)
                     }
                     // tokenSymbol={collateralToken.symbol as string}
                   />
                   <ClosePosition
                     token={collateralToken.symbol as string}
                     value={3000}
-                    onClick={() => closePosition(positionId!)}
+                    onClick={closePosition}
                   />
                 </>
               )}

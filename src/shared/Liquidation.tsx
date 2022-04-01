@@ -1,12 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { ArrowDown } from 'phosphor-react'
 import { Button } from '../shared/Button'
-import { ReactComponent as CurrEth } from '../assets/images/currencyEthereum.svg'
 import { InputField } from '../shared/InputField'
 import { Txt } from '../shared/Txt'
-import tw from 'twin.macro'
 
 interface ILiquidation {
   liquidationToken1: string
@@ -15,7 +12,6 @@ interface ILiquidation {
   inputOnChange: (value: string) => void
   inputValue: string
   liquidationPrice: string | undefined
-  // tokenSymbol: string
 }
 
 export const Liquidation = (props: ILiquidation) => {
@@ -26,7 +22,6 @@ export const Liquidation = (props: ILiquidation) => {
     onClick,
     inputOnChange,
     inputValue,
-    // tokenSymbol,
   } = props
 
   return (

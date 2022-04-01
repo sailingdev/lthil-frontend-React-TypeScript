@@ -111,7 +111,6 @@ export const AccountModal = (props: IAccountModal) => {
                   </Txt.Body2Bold>
                 </a>
                 <Txt.Body2Regular tw='text-font-200'>
-                  {/* @ts-ignore */}
                   {getTransactionLabel(t)}
                 </Txt.Body2Regular>
               </div>

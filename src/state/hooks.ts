@@ -1,14 +1,9 @@
 import {
-  ApprovalTransactionMeta,
   ISearchParams,
-  MtsClosePositionMeta,
-  MtsOpenPositionMeta,
-  MtsEditPositionMeta,
-  StakeTransactionMeta,
   Transaction,
+  TransactionMeta,
   TransactionReceipt,
   TransactionType,
-  WithdrawTransactionMeta,
 } from '../types'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import {
@@ -145,20 +140,10 @@ export const useApprovalTransactions = () => {
   return transactions.filter((t) => t.type === TransactionType.APPROVAL)
 }
 
-export const useAddTransaction = () => {
+export const useAddTransaction = <T extends TransactionMeta>() => {
   const { chainId } = useWeb3React()
   const dispatch = useDispatch()
-  return (
-    type: TransactionType,
-    tx: string,
-    meta:
-      | WithdrawTransactionMeta
-      | StakeTransactionMeta
-      | ApprovalTransactionMeta
-      | MtsOpenPositionMeta
-      | MtsClosePositionMeta
-      | MtsEditPositionMeta,
-  ) => {
+  return (type: TransactionType, tx: string, meta: T) => {
     if (!chainId) {
       return
     }
@@ -167,7 +152,7 @@ export const useAddTransaction = () => {
         chainId,
         type,
         tx,
-        meta,
+        meta: meta as T,
       }),
     )
   }

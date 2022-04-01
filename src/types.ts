@@ -75,16 +75,17 @@ export enum TransactionType {
   MTS_EDIT_POSTITION = 'MTS_EDIT_POSTITION',
 }
 
+export type TransactionMeta =
+  | WithdrawTransactionMeta
+  | StakeTransactionMeta
+  | ApprovalTransactionMeta
+  | MtsOpenPositionMeta
+  | MtsClosePositionMeta
+  | MtsEditPositionMeta
 export interface Transaction {
   type: TransactionType
   chainId: number
-  meta:
-    | WithdrawTransactionMeta
-    | StakeTransactionMeta
-    | ApprovalTransactionMeta
-    | MtsOpenPositionMeta
-    | MtsClosePositionMeta
-    | MtsEditPositionMeta
+  meta: TransactionMeta
   tx: string
   status: 'pending' | 'verified'
   receipt?: TransactionReceipt

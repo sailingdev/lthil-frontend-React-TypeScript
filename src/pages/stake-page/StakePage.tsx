@@ -167,7 +167,6 @@ export const StakePage = () => {
                     <ChartLine
                       onClick={(e) => {
                         e.stopPropagation()
-                        // TODO VALENTIN
                         window.open(
                           `https://etherscan.io/token/${l.tokenAddress}`,
                           '_blank',

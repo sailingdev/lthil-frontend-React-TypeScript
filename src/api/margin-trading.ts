@@ -3,8 +3,8 @@ import { IInputPosition, IPosition } from '../types'
 
 import { ContractFactory } from './contract-factory'
 import { Ether } from './ether'
-import tokenList from './../assets/tokenlist.json'
 import { Utils } from './utils'
+import tokenList from './../assets/tokenlist.json'
 
 export class MarginTrading {
   private signer!: ethers.providers.JsonRpcSigner
@@ -171,6 +171,7 @@ export class MarginTrading {
       spentToken,
       obtainedToken,
       collateralToken,
+      // @todo
       collateralReceived: Ether.utils.formatUnits(collateralReceived),
       leverage: Ether.utils.formatUnits(leverage),
       liquidationPrice: Ether.utils.formatUnits(liquidationPrice),
@@ -282,8 +283,7 @@ export class MarginTrading {
       const { spentToken, obtainedToken, amountIn, toBorrow, collateralToken } =
         position
 
-      // strange condition
-      if (collateralToken === spentToken) {
+      if (position.type === 'long') {
         const quoteAmount = (
           await this.contract.quote(
             position.obtainedToken.address,
