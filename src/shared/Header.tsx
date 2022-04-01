@@ -17,6 +17,7 @@ import { WalletModal } from './WalletModal'
 import { useIsConnected } from './hooks/useIsConnected'
 import { useState } from 'react'
 import { useTheme } from '../state/hooks'
+import { Menu } from './Menu'
 
 /** @jsxImportSource @emotion/react */
 
@@ -25,6 +26,7 @@ export const Header = () => {
   const isConnected = useIsConnected()
   const [isOpenWallet, setIsOpenWallet] = useState(false)
   const [isOpenAccount, setIsOpenAccount] = useState(false)
+  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(true)
 
   return (
     <div tw='w-full px-5 desktop:w-[calc(100% - 9rem)] my-6 tablet:mx-auto flex flex-row items-center justify-between'>
@@ -61,18 +63,19 @@ export const Header = () => {
         ) : (
           <Button text='Connect' action onClick={() => setIsOpenWallet(true)} />
         )}
-        {/* <button tw='border-0 rounded-md cursor-pointer flex flex-row items-center justify-center h-9 tablet:h-10 desktop:h-11 w-9 tablet:w-10 desktop:w-11 px-2 bg-primary-200 dark:text-secondary'>
-          <DotsThree size={24} />
-        </button> */}
+        <WalletModal
+          modalIsOpen={isOpenWallet}
+          onClose={() => setIsOpenWallet(false)}
+        />
+        <AccountModal
+          modalIsOpen={isOpenAccount}
+          onClose={() => setIsOpenAccount(false)}
+        />
+        <Menu
+          menuIsOpen={menuIsOpen}
+          onMenuChange={(state) => setMenuIsOpen(state)}
+        />
       </span>
-      <WalletModal
-        modalIsOpen={isOpenWallet}
-        onClose={() => setIsOpenWallet(false)}
-      />
-      <AccountModal
-        modalIsOpen={isOpenAccount}
-        onClose={() => setIsOpenAccount(false)}
-      />
     </div>
   )
 }
