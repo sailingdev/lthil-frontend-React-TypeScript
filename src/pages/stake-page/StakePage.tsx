@@ -134,7 +134,7 @@ export const StakePage = () => {
                 Header: 'Vault Name',
                 accessor: 'vaultName',
                 align: 'left',
-                cell: (l) => <TableCell.Text value={l.vaultName} />,
+                cell: (l) => <TableCell.VaultName tokenSymbol={l.vaultName} />,
               },
               {
                 Header: 'Annual Percentage Yield',
