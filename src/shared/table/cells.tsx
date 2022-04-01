@@ -72,20 +72,17 @@ const Profit = (props: { currencyValue: number; percentageValue: number }) => {
   )
 }
 
-const ClosePosition = (props: {
+const Button = (props: {
   onClick?: React.MouseEventHandler<HTMLButtonElement>
-  closed?: boolean
+  text: string
 }) => {
   return (
     <div onClick={(e) => e.stopPropagation()} tw='flex flex-row justify-end'>
       <button
         onClick={props.onClick}
-        css={[
-          tw`rounded-md py-1 px-2 border border-primary-400 text-font-100`,
-          props.closed && tw`opacity-30`,
-        ]}
+        css={[tw`rounded-md py-1 px-2 border border-primary-400 text-font-100`]}
       >
-        {props.closed ? 'Closed' : 'Close'}
+        {props.text}
       </button>
     </div>
   )
@@ -96,5 +93,5 @@ export const TableCell = {
   Currency,
   Percentage,
   Profit,
-  ClosePosition,
+  Button,
 }
