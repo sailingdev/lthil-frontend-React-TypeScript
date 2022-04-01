@@ -47,6 +47,20 @@ export const TokenPair = (props: {
   )
 }
 
+const VaultName = (props: { tokenSymbol: string }) => {
+  const { tokenSymbol } = props
+  return (
+    <div tw='flex flex-row justify-start items-center gap-3'>
+      <img
+        tw='w-6 h-6'
+        src={tokens.find((token) => token.symbol === tokenSymbol)?.logoURI}
+        alt={tokenSymbol}
+      />
+      <Text value={tokenSymbol} />
+    </div>
+  )
+}
+
 const Currency = (props: { value?: number }) => {
   const value = props.value ?? 0
   const currency = new Intl.NumberFormat('en-us', {
@@ -54,11 +68,7 @@ const Currency = (props: { value?: number }) => {
     currency: 'USD',
     currencyDisplay: 'narrowSymbol',
   }).format(value)
-  return isDesktop ? (
-    <Txt.Body2Regular tw='text-secondary'>{currency}</Txt.Body2Regular>
-  ) : (
-    <Txt.Body1Regular tw='text-secondary'>{currency}</Txt.Body1Regular>
-  )
+  return <Text value={currency} />
 }
 
 const Percentage = (props: { value?: number }) => {
@@ -67,11 +77,7 @@ const Percentage = (props: { value?: number }) => {
     style: 'percent',
   }).format(value * 10)
 
-  return isDesktop ? (
-    <Txt.Body2Regular tw='text-secondary'>{percentage}</Txt.Body2Regular>
-  ) : (
-    <Txt.Body1Regular tw='text-secondary'>{percentage}</Txt.Body1Regular>
-  )
+  return <Text value={percentage} />
 }
 
 const Profit = (props: { position: IPosition }) => {
@@ -132,4 +138,5 @@ export const TableCell = {
   Profit,
   Button,
   TokenPair,
+  VaultName,
 }
