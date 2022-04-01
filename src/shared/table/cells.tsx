@@ -9,8 +9,6 @@ import { tokens } from '../../assets/tokenlist.json'
 
 /** @jsxImportSource @emotion/react */
 
-// TODO: Use the Text component where applicable
-
 const Text = (props: { value: string | number }) => {
   return isDesktop ? (
     <Txt.Body2Regular tw='text-secondary'>{props.value}</Txt.Body2Regular>
@@ -19,12 +17,42 @@ const Text = (props: { value: string | number }) => {
   )
 }
 
+export const TokenPair = (props: {
+  spentTokenSymbol: string
+  obtainedTokenSymbol: string
+}) => {
+  const { spentTokenSymbol, obtainedTokenSymbol } = props
+  return (
+    <div tw='flex flex-row justify-start items-center gap-6'>
+      <div tw='relative'>
+        <div tw='w-7 h-7 border-radius[100%] bg-primary-100 absolute bottom[-2px] left[10px] z-index[2]'></div>
+        <img
+          tw='w-6 h-6 z-index[3]'
+          src={
+            tokens.find((token) => token.symbol === spentTokenSymbol)?.logoURI
+          }
+          alt={spentTokenSymbol}
+        />
+        <img
+          tw='w-6 h-6 left-3 bottom-0 absolute z-index[4]'
+          src={
+            tokens.find((token) => token.symbol === obtainedTokenSymbol)
+              ?.logoURI
+          }
+          alt={obtainedTokenSymbol}
+        />
+      </div>
+      <Text value={`${spentTokenSymbol}/${obtainedTokenSymbol}`} />
+    </div>
+  )
+}
+
 const VaultName = (props: { tokenSymbol: string }) => {
   const { tokenSymbol } = props
   return (
     <div tw='flex flex-row justify-start items-center gap-3'>
       <img
-        tw='w-5 h-5'
+        tw='w-6 h-6'
         src={tokens.find((token) => token.symbol === tokenSymbol)?.logoURI}
         alt={tokenSymbol}
       />
@@ -109,5 +137,6 @@ export const TableCell = {
   Percentage,
   Profit,
   Button,
+  TokenPair,
   VaultName,
 }

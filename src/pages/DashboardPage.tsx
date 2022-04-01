@@ -89,8 +89,17 @@ export const DashboardPage = () => {
                 accessor: 'tokenPair',
                 align: 'left',
                 cell: (p) => (
-                  <TableCell.Text
-                    value={`${p.spentToken.symbol}/${p.obtainedToken.symbol}`}
+                  <TableCell.TokenPair
+                    spentTokenSymbol={
+                      p.type === 'short'
+                        ? p.spentToken.symbol
+                        : p.obtainedToken.symbol
+                    }
+                    obtainedTokenSymbol={
+                      p.type === 'short'
+                        ? p.obtainedToken.symbol
+                        : p.spentToken.symbol
+                    }
                   />
                 ),
               },
@@ -119,8 +128,17 @@ export const DashboardPage = () => {
                 accessor: 'tokenPair',
                 align: 'left',
                 cell: (p: IPosition) => (
-                  <TableCell.Text
-                    value={`${p.spentToken.symbol}/${p.obtainedToken.symbol}`}
+                  <TableCell.TokenPair
+                    spentTokenSymbol={
+                      p.type === 'short'
+                        ? p.spentToken.symbol
+                        : p.obtainedToken.symbol
+                    }
+                    obtainedTokenSymbol={
+                      p.type === 'short'
+                        ? p.obtainedToken.symbol
+                        : p.spentToken.symbol
+                    }
                   />
                 ),
               },
