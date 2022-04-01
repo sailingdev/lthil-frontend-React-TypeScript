@@ -156,7 +156,7 @@ export const StakePage = () => {
                 Header: 'Owned',
                 accessor: 'owned',
                 align: 'right',
-                cell: (l: StakeToken) => <TableCell.Currency value={l.owned} />,
+                cell: (l: StakeToken) => <TableCell.Text value={l.owned} />,
               },
               {
                 Header: '',

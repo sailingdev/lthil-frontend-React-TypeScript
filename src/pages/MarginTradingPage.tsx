@@ -4,12 +4,14 @@ import 'twin.macro'
 
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
 import { Ether, etherGlobal } from '../api/ether'
+import { FixedNumber, ethers } from 'ethers'
 import { Priority, TokenDetails, TransactionType } from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
 import { BasicChart } from '../shared/charts/BasicChart'
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
+import { FixedFormat } from '@ethersproject/bignumber'
 import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
 import { RadioGroup } from '../shared/RadioGroup'
@@ -21,6 +23,7 @@ import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
 import { addresses } from '../assets/addresses.json'
 import { getCTALabelForApproval } from '../utils'
+import { showErrorNotification } from '../shared/notification'
 import { tokens } from '../assets/tokenlist.json'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
@@ -34,16 +37,17 @@ export const MarginTradingPage = () => {
   const [spentToken, setSpentToken] = useState<TokenDetails>(tokens[0])
   const [obtainedToken, setObtainedToken] = useState<TokenDetails>(tokens[1])
   const [leverage, setLeverage] = useState<number>(1)
-  const [margin, setMargin] = useState<any>(2)
+  const [margin, setMargin] = useState<string>('2')
   const [slippage, setSlippage] = useState<any>(1)
   const [deadline, setDeadline] = useState<any>(20)
   const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
   const [priority, setPriority] = useState<Priority>('buy')
-  const [minObtained, setMinObtained] = useState<string>('0')
-  const [maxSpent, setMaxSpent] = useState<string>('0')
+  const [minObtained, setMinObtained] = useState<FixedNumber>(
+    FixedNumber.from('0'),
+  )
+  const [maxSpent, setMaxSpent] = useState<FixedNumber>(FixedNumber.from('0'))
 
   const isConnected = useIsConnected()
-
   useAsync(async () => {
     try {
       if (isConnected && slippage && margin) {
@@ -57,11 +61,12 @@ export const MarginTradingPage = () => {
           obtainedToken: obtainedToken.address,
           spentToken: spentToken.address,
         })
-        // setMinObtained(min)
-        // setMaxSpent(max)
+        setMinObtained(min)
+        setMaxSpent(max)
       }
     } catch (error) {
       console.error(error)
+      showErrorNotification(`Can't compute min obtained and max spent`)
     }
   }, [
     isConnected,
@@ -138,8 +143,14 @@ export const MarginTradingPage = () => {
                   />
                 </div>
                 <div tw='w-full'>
-                  <InfoItem label='Min. obtained' value={minObtained} />
-                  <InfoItem label='Max. spent' value={maxSpent} />
+                  <InfoItem
+                    label='Min. obtained'
+                    value={minObtained.round(4).toString()}
+                  />
+                  <InfoItem
+                    label='Max. spent'
+                    value={maxSpent.round(4).toString()}
+                  />
                 </div>
                 <InputField
                   label='Margin'

@@ -137,7 +137,7 @@ export interface MtsOpenPositionMeta {
   positionType: PositionType
   spentToken: string
   obtainedToken: string
-  margin: number
+  margin: string
   slippage: number
   priority: Priority
   leverage: number
@@ -167,7 +167,7 @@ export interface IInputPosition {
   positionType: PositionType
   spentToken: string
   obtainedToken: string
-  margin: number
+  margin: string
   slippage: number
   priority: Priority
   leverage: number

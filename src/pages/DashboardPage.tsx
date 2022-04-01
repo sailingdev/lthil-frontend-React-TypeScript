@@ -7,6 +7,7 @@ import { useAddTransaction, usePositions } from '../state/hooks'
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
+import { FixedNumber } from 'ethers'
 import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
 import { etherGlobal } from '../api/ether'
@@ -45,8 +46,8 @@ export const DashboardPage = () => {
     ))!
     addTx(TransactionType.MTS_CLOSE_POSITION, tx.hash!, {
       positionId: position.positionId,
-      spentToken: position.spentToken.symbol,
-      obtainedToken: position.obtainedToken.symbol,
+      spentToken: position.spentToken.address,
+      obtainedToken: position.obtainedToken.address,
     })
   }
 
@@ -154,7 +155,9 @@ export const DashboardPage = () => {
                       : `${p.obtainedToken.symbol}/${p.spentToken.symbol}`
                   return (
                     <TableCell.Text
-                      value={`${tokenPair} ${p.leverage}x ${p.type}`}
+                      value={`${tokenPair} ${FixedNumber.from(p.leverage)
+                        .round(4)
+                        .toString()}x ${p.type}`}
                     />
                   )
                 },

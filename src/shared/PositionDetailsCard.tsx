@@ -1,7 +1,7 @@
 import 'twin.macro'
 
+import { FixedNumber } from 'ethers'
 /** @jsxImportSource @emotion/react */
-import { BigNumber } from 'ethers'
 import { IPosition } from '../types'
 import { InfoItem } from './InfoItem'
 import { Txt } from './Txt'
@@ -25,13 +25,15 @@ export const PositionDetailsCard = ({ position }: IPositionDetailsCard) => {
       <div tw='flex flex-col justify-between w-full px-2 mt-6 gap-2'>
         <InfoItem
           label='Position'
-          details={`${tokenPair} ${position.leverage}x ${position.type}`}
+          details={`${tokenPair} ${FixedNumber.from(position.leverage)
+            .round(4)
+            .toString()}x ${position.type}`}
           value={'2.00'}
         />
         <InfoItem
           label='Open price'
           details={collateralToken.symbol}
-          value={position.openPrice}
+          value={FixedNumber.from(position.openPrice).round(4).toString()}
         />
         {/* <InfoItem
           label='Current price'
@@ -41,12 +43,16 @@ export const PositionDetailsCard = ({ position }: IPositionDetailsCard) => {
         <InfoItem
           label='Liq. price'
           details={collateralToken.symbol}
-          value={position.liquidationPrice}
+          value={FixedNumber.from(position.liquidationPrice)
+            .round(4)
+            .toString()}
         />
         <InfoItem
           label='Collateral'
           details={collateralToken.symbol}
-          value={position.collateralReceived}
+          value={FixedNumber.from(position.collateralReceived)
+            .round(4)
+            .toString()}
         />
         {/* <InfoItem
           label='Distance from liquidation'
@@ -57,7 +63,7 @@ export const PositionDetailsCard = ({ position }: IPositionDetailsCard) => {
           <InfoItem
             label='Profit'
             value={`${profit[0]}(${profit[1]})`}
-            valueColor={profit[0] > 0 ? 'green' : 'red'}
+            valueColor={profit[0].isNegative() ? 'green' : 'red'}
           />
         )}
         <InfoItem

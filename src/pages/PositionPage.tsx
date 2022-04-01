@@ -95,10 +95,11 @@ export const PositionPage = () => {
                     // liquidationToken2={liquidationToken2}
                     liquidationToken1={spentToken.symbol}
                     liquidationToken2={obtainedToken.symbol}
-                    liquidationPrice={Ether.utils.formatTokenUnits(
-                      position.liquidationPrice,
-                      collateralToken.address,
-                    )}
+                    // liquidationPrice={Ether.utils.formatTokenUnits(
+                    //   position.liquidationPrice,
+                    //   collateralToken.address,
+                    // )}
+                    liquidationPrice='TODOTODOTOD'
                     inputValue={liquidationInput}
                     inputOnChange={(value) => setLiquidationInput(value)}
                     onClick={() =>

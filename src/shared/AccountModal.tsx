@@ -98,7 +98,7 @@ export const AccountModal = (props: IAccountModal) => {
 
         {transactions.map((t) => {
           return (
-            <div tw='flex flex-row justify-between'>
+            <div key={t.tx} tw='flex flex-row justify-between'>
               <div tw='flex flex-col justify-between'>
                 <a
                   tw='mb-1'

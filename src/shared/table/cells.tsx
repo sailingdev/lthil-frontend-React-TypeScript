@@ -3,9 +3,9 @@ import 'twin.macro'
 import { IPosition } from '../../types'
 import { Txt } from '../Txt'
 import { isDesktop } from '../../utils'
+import { tokens } from '../../assets/tokenlist.json'
 import tw from 'twin.macro'
 import { usePositionProfit } from '../hooks/usePositionProfit'
-import { tokens } from '../../assets/tokenlist.json'
 
 /** @jsxImportSource @emotion/react */
 
@@ -85,7 +85,6 @@ const Profit = (props: { position: IPosition }) => {
   if (!profit) {
     return null
   }
-  console.log(profit)
 
   const [currencyValue, percentageValue] = profit
 
@@ -95,22 +94,26 @@ const Profit = (props: { position: IPosition }) => {
         currency: 'USD',
         currencyDisplay: 'narrowSymbol',
         signDisplay: 'always',
-      }).format(currencyValue)
+      }).format(currencyValue.toUnsafeFloat())
     : ''
   const percentage = percentageValue
     ? new Intl.NumberFormat('en-us', {
         style: 'percent',
         signDisplay: 'always',
-      }).format(percentageValue * 10)
+      }).format(percentageValue.toUnsafeFloat() * 10)
     : ''
 
   return isDesktop ? (
     <Txt.Body2Regular
-      css={[percentageValue > 0 ? tw`text-success` : tw`text-error`]}
+      css={[
+        percentageValue.toUnsafeFloat() > 0 ? tw`text-success` : tw`text-error`,
+      ]}
     >{`${currency} (${percentage})`}</Txt.Body2Regular>
   ) : (
     <Txt.Body1Regular
-      css={[percentageValue > 0 ? tw`text-success` : tw`text-error`]}
+      css={[
+        percentageValue.toUnsafeFloat() > 0 ? tw`text-success` : tw`text-error`,
+      ]}
     >{`${currency} (${percentage})`}</Txt.Body1Regular>
   )
 }
