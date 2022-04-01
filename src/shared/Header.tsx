@@ -26,7 +26,7 @@ export const Header = () => {
   const isConnected = useIsConnected()
   const [isOpenWallet, setIsOpenWallet] = useState(false)
   const [isOpenAccount, setIsOpenAccount] = useState(false)
-  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(true)
+  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false)
 
   return (
     <div tw='w-full px-5 desktop:w-[calc(100% - 9rem)] my-6 tablet:mx-auto flex flex-row items-center justify-between'>
