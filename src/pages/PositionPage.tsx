@@ -47,18 +47,6 @@ export const PositionPage = () => {
   // }, [position])
 
   // useEffect(() => {
-  //   // if (position && openPrice && leverage) {
-  //   //   setLiquidationPrice(
-  //   //     etherGlobal.getPositionLiquidationPrice(
-  //   //       position!,
-  //   //       openPrice as BigNumber,
-  //   //       leverage as BigNumber,
-  //   //     ),
-  //   //   )
-  //   // }
-  // }, [position, openPrice, leverage])
-
-  // useEffect(() => {
   //   // if (currentPrice && liquidationPrice) {
   //   //   setDistanceFromLiquidation(
   //   //     etherGlobal.computeDistanceFromLiquidation(

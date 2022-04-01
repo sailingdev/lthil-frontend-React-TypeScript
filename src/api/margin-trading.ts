@@ -113,9 +113,9 @@ export class MarginTrading {
         position!.args![0].toHexString() == positionId.toHexString(),
     )
 
-    return this.parsePositionWasOpenedEvent(position[0])
+    return this.parsePosition(position[0])
   }
-  parsePositionWasOpenedEvent(event: any): Omit<IPosition, 'status'> {
+  parsePosition(event: any): Omit<IPosition, 'status'> {
     const { args } = event
     const spentToken = tokenList.tokens.find(
       (token) => (args[2] as string) === token.address,
@@ -196,9 +196,7 @@ export class MarginTrading {
       this.contract.filters.PositionWasLiquidated(),
     )
 
-    const positions = allPositions.map((p) =>
-      this.parsePositionWasOpenedEvent(p),
-    )
+    const positions = allPositions.map((p) => this.parsePosition(p))
     // .filter((p) => p.ownerId === user)
 
     const closedAndLiquidatedPositionsIds = [
