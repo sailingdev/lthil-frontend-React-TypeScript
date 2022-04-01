@@ -1,7 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { DotsThree, GithubLogo } from 'phosphor-react'
+import {
+  BookOpen,
+  DiscordLogo,
+  DotsThree,
+  GithubLogo,
+  Info,
+} from 'phosphor-react'
 import { useRef, useState } from 'react'
 
 import { Txt } from './Txt'
@@ -48,13 +54,9 @@ export const Menu = (props: IMenu) => {
             // onClick={(e) => e.stopPropagation()}
             tw='border-0 rounded-md cursor-pointer flex flex-col justify-start gap-3 py-4 pr-16 pl-4 bg-primary-200 absolute top[70px] right[20px] tablet:top-20 tablet:right[20px] desktop:top-20 desktop:right[92px]'
           >
+            <MenuItem icon={Info} label='About' url='https://www.google.com' />
             <MenuItem
-              icon={GithubLogo}
-              label='About'
-              url='https://www.google.com'
-            />
-            <MenuItem
-              icon={GithubLogo}
+              icon={BookOpen}
               label='Docs'
               url='https://www.google.com'
             />
@@ -64,7 +66,7 @@ export const Menu = (props: IMenu) => {
               url='https://www.google.com'
             />
             <MenuItem
-              icon={GithubLogo}
+              icon={DiscordLogo}
               label='Discord'
               url='https://www.google.com'
             />
