@@ -10,6 +10,7 @@ import { ReactComponent as LogoFullDark } from '../assets/images/logoFullDark.sv
 import { ReactComponent as LogoFullLight } from '../assets/images/logoFullLight.svg'
 import { ReactComponent as LogoSymbolDark } from '../assets/images/logoSymbolDark.svg'
 import { ReactComponent as LogoSymbolLight } from '../assets/images/logoSymbolLight.svg'
+import { Menu } from './Menu'
 import { NavigationMenu } from './NavigationMenu'
 import { ThemeSwitch } from './ThemeSwitch'
 import { WalletIndicator } from './WalletIndicator'
@@ -17,7 +18,6 @@ import { WalletModal } from './WalletModal'
 import { useIsConnected } from './hooks/useIsConnected'
 import { useState } from 'react'
 import { useTheme } from '../state/hooks'
-import { Menu } from './Menu'
 
 /** @jsxImportSource @emotion/react */
 

@@ -62,7 +62,7 @@ export class MarginTrading {
         gasLimit: 10000000,
       })
     } catch (error) {
-      console.log(error)
+      console.error(error)
       throw error
     }
   }
@@ -98,7 +98,7 @@ export class MarginTrading {
       )
       return position
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
   async getPositionById(positionId: string) {
@@ -154,15 +154,6 @@ export class MarginTrading {
       type === 'long'
         ? openPrice.mul(Ether.utils.parseUnits(1).sub(liquidationPriceBase))
         : openPrice.mul(Ether.utils.parseUnits(1).add(liquidationPriceBase))
-
-    console.log('liqudationPrice:', liquidationPrice)
-    console.log('leverage:', Ether.utils.formatUnits(leverage))
-    console.log('openPrice:', Ether.utils.formatUnits(openPrice))
-
-    console.log(
-      'liquidationPriceBase: ',
-      Ether.utils.formatUnits(liquidationPriceBase),
-    )
 
     return {
       type,
@@ -303,7 +294,7 @@ export class MarginTrading {
         return quoteAmount.div(toBorrow)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -323,7 +314,7 @@ export class MarginTrading {
 
       return editPosition
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 }

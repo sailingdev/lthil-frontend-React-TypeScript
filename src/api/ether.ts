@@ -34,19 +34,15 @@ export class Ether {
   }
 
   getTokenData(tokenAddress: string): TokenDetails | undefined {
-    try {
-      const token = tokens.find((tkn) => tkn.address === tokenAddress)
-      if (!token) {
-        throw new Error('token not found!')
-      }
-      return {
-        name: token.name,
-        symbol: token.symbol,
-        decimals: token.decimals,
-        address: token.address,
-      }
-    } catch (error) {
-      console.log(error)
+    const token = tokens.find((tkn) => tkn.address === tokenAddress)
+    if (!token) {
+      throw new Error('token not found!')
+    }
+    return {
+      name: token.name,
+      symbol: token.symbol,
+      decimals: token.decimals,
+      address: token.address,
     }
   }
 
@@ -244,7 +240,7 @@ export class Ether {
       )
       return stake
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -262,7 +258,7 @@ export class Ether {
       )
       return withdraw
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 }

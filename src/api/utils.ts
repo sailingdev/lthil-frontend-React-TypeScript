@@ -17,7 +17,7 @@ export class Utils {
 
       return ethers.utils.parseUnits(amount, decimals)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -34,7 +34,7 @@ export class Utils {
 
       return ethers.utils.formatUnits(amount, decimals)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
   static parseUnits(value: string | BigNumber | number): BigNumber {

@@ -28,9 +28,14 @@ export const DashboardPage = () => {
   const navigate = useNavigate()
   const addTx = useAddTransaction()
 
-  const [activeTab, setActiveTab] = useState<'open' | 'closed'>('open')
+  const [activeTab, setTab] = useState<'open' | 'closed'>('open')
   const allPositions = usePositions()
   const [searchParams, { setPage }] = useSearch(initialSearchParams)
+
+  const setActiveTab = (tab: 'open' | 'closed') => {
+    setTab(tab)
+    setPage(1)
+  }
 
   const positions = allPositions.filter((p) => p.status === activeTab)
 
@@ -44,11 +49,7 @@ export const DashboardPage = () => {
       obtainedToken: position.obtainedToken.symbol,
     })
   }
-  //     //     calculatedActivePositions.push({
-  //     //       profit: {
-  //     //         currencyValue: profitsAndLosses![0],
-  //     //         percentageValue: profitsAndLosses![1],
-  //     //       },
+
   return (
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>
