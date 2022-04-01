@@ -1,10 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
-import { Txt } from './Txt'
+
 import { DotsThree, GithubLogo } from 'phosphor-react'
-import { useOutsideAlerter } from './hooks/useOutsideAlerter'
-import { useState, useRef } from 'react'
+import { useRef, useState } from 'react'
+
+import { Txt } from './Txt'
+import tw from 'twin.macro'
+import { useOutsideClick } from './hooks/useOutsideAlerter'
 
 const MenuItem = (props: { icon: any; label: string; url: string }) => {
   const { icon, label, url } = props
@@ -28,10 +30,8 @@ export const Menu = (props: IMenu) => {
   const { menuIsOpen, onMenuChange } = props
 
   const divRef = useRef(null)
-  useOutsideAlerter(divRef, () => {
-    if (menuIsOpen) {
-      onMenuChange(false)
-    }
+  useOutsideClick(divRef, () => {
+    onMenuChange(false)
   })
 
   return (
