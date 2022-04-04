@@ -1,5 +1,6 @@
 import 'twin.macro'
 
+import { FixedNumber } from 'ethers'
 import { IPosition } from '../../types'
 import { Txt } from '../Txt'
 import { isDesktop } from '../../utils'
@@ -9,11 +10,26 @@ import { usePositionProfit } from '../hooks/usePositionProfit'
 
 /** @jsxImportSource @emotion/react */
 
-const Text = (props: { value: string | number }) => {
+const Text = (props: { value: string }) => {
   return isDesktop ? (
     <Txt.Body2Regular tw='text-secondary'>{props.value}</Txt.Body2Regular>
   ) : (
     <Txt.Body1Regular tw='text-secondary'>{props.value}</Txt.Body1Regular>
+  )
+}
+
+const Number = (props: { value: number | FixedNumber }) => {
+  const value = (
+    props.value instanceof FixedNumber
+      ? props.value
+      : FixedNumber.from(props.value.toString())
+  )
+    .round(4)
+    .toString()
+  return isDesktop ? (
+    <Txt.Body2Regular tw='text-secondary'>{value}</Txt.Body2Regular>
+  ) : (
+    <Txt.Body1Regular tw='text-secondary'>{value}</Txt.Body1Regular>
   )
 }
 
@@ -142,4 +158,5 @@ export const TableCell = {
   Button,
   TokenPair,
   VaultName,
+  Number,
 }

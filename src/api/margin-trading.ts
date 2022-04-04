@@ -288,7 +288,6 @@ export class MarginTrading {
               .subUnsafe(FixedNumber.from(position.collateralReceived))
               .subUnsafe(totalFees),
           )
-    debugger
 
     return [
       profit,
