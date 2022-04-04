@@ -49,17 +49,18 @@ export const StakePage = () => {
       <div tw='flex flex-col w-full items-center'>
         <div tw='w-full desktop:w-10/12 flex flex-col items-center'>
           <Txt.Heading1 tw='mb-12'>Stake</Txt.Heading1>
-          <div tw='flex items-center justify-start flex-row w-full'>
+          <div tw='flex items-center justify-start flex-col tablet:flex-row w-full mb-2'>
             <InputField
-              tw='desktop:width[500px] desktop:self-start mr-9'
+              tw='tablet:w-auto desktop:width[500px] self-start mr-9'
               placeholder='Search tokens...'
               value={searchParams.term}
               onChange={(value) => setTerm(value)}
               renderRight={<MagnifyingGlass tw='text-secondary' />}
             />
-            <div tw='flex space-x-2 items-center'>
+            <div tw='flex space-x-1 tablet:space-x-2 items-center'>
               <Txt.Body2Regular>Sort by :</Txt.Body2Regular>
               <Button
+                tw='w-auto'
                 text='APY - highest'
                 action={searchParams.orderField === 'annualPercentageYield'}
                 bold={searchParams.orderField === 'annualPercentageYield'}
@@ -69,6 +70,7 @@ export const StakePage = () => {
                 }}
               />
               <Button
+                tw='w-auto'
                 text='TVL - highest'
                 action={searchParams.orderField === 'totalValueLocked'}
                 bold={searchParams.orderField === 'totalValueLocked'}
@@ -78,6 +80,7 @@ export const StakePage = () => {
                 }}
               />
               <Button
+                tw='w-auto'
                 text='Staked'
                 action={searchParams.orderField === 'staked'}
                 bold={searchParams.orderField === 'staked'}
