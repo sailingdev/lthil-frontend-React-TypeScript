@@ -1,10 +1,9 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import tw from 'twin.macro'
 
 import { ArrowLeft, ArrowRight } from 'phosphor-react'
-/** @jsxImportSource @emotion/react */
 import React, { MouseEventHandler } from 'react'
-
-import tw from 'twin.macro'
 
 interface ICustomTablePaginationProps {
   currentPage: number
@@ -42,9 +41,9 @@ const PaginationButton = (props: {
   return (
     <button
       css={[
-        tw`border-0 rounded-md cursor-pointer flex flex-row items-center px-2.5 py-2.5 bg-primary-200 width[36px] height[36px] flex justify-center items-center mx-1 font-sans font-sans`,
+        tw`border-0 rounded-md cursor-pointer flex flex-row items-center px-2.5 py-2.5 bg-primary-200 width[36px] height[36px] flex justify-center items-center mx-1 font-sans font-sans hover:bg-hover-light dark:hover:bg-hover-dark`,
         active &&
-          tw`bg-action text-primary-100 font-bold dark:text-secondary-100`,
+          tw`bg-action text-primary-100 font-bold dark:text-secondary-100 hover:bg-hover-action dark:hover:bg-hover-action`,
       ]}
       onClick={props.onClick}
     >

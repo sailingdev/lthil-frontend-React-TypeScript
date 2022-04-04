@@ -15,7 +15,7 @@ export const WalletIndicator = () => {
   const ProviderIcon = provider?.icon ?? null
 
   return (
-    <div tw='bg-primary-200 border-0 rounded-md cursor-pointer flex flex-row items-center h-9 max-h-9 tablet:h-10 desktop:h-11 desktop:max-h-11 px-2'>
+    <div tw='bg-primary-200 border-0 rounded-md cursor-pointer flex flex-row items-center h-9 max-h-9 tablet:h-10 desktop:h-11 desktop:max-h-11 px-2 hover:bg-hover-light dark:hover:bg-hover-dark'>
       {!isMobile && (
         <>
           <Txt.ButtonMedium tw='mr-1'>
