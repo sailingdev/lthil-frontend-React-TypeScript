@@ -115,7 +115,7 @@ export const PositionPage = () => {
                 </>
               )}
             </div>
-            <div tw='w-full desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
+            <div tw='w-full height[500px] tablet:height[500px] desktop:height[700px] desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
               <div tw='w-full flex flex-row justify-between pb-5 '>
                 <Txt.Heading2>{`${obtainedToken.symbol}/${spentToken.symbol}`}</Txt.Heading2>
                 <div tw='hidden desktop:flex flex-row items-center gap-1'>

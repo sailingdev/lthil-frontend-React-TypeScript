@@ -8,7 +8,7 @@ export const TradingChart = (props: { tokenSymbol: string }) => {
     const tradingChartProperites = {
       width: `100%`,
       height: '100%',
-      symbol: `UNISWAP:${props.tokenSymbol}`,
+      symbol: `${props.tokenSymbol}`,
       // BINANCE:ETHBTC
       timezone: 'Etc/UTC',
       theme: theme ? 'dark' : 'light',
