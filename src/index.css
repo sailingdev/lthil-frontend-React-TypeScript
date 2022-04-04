@@ -29,6 +29,13 @@ body > div {
   --primary-error: 243, 89, 89;
   --primary-warning: 233, 207, 74;
   --primary-warning-light: 243, 231, 168;
+  --button-hover-action: 6, 107, 194;
+  --button-hover-light: 226, 229, 229;
+  --button-hover-dark: 21, 26, 41;
+  --button-disabled-light: 206, 209, 209;
+  --button-disabled-dark: 21, 26, 41;
+  --button-disabled-action: 164, 177, 190;
+
 
   --fontsize-mobile-medium: 10px;
   --lineheight-mobile-medium: 16px;

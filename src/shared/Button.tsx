@@ -29,8 +29,9 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
       className={props.className}
       css={[
         tw`border-0 rounded-md cursor-pointer flex flex-row items-center justify-center h-9 tablet:h-10 desktop:h-11 px-2`,
-        primary && tw`bg-primary-200`,
-        props.action && tw`bg-action`,
+        primary &&
+          tw`bg-primary-200 hover:bg-hover-light dark:hover:bg-hover-dark`,
+        props.action && tw`bg-action hover:bg-hover-action`,
         props.full && tw`w-full`,
       ]}
       onClick={props.onClick}

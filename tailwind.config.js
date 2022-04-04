@@ -65,6 +65,16 @@ module.exports = {
       'warning-light': {
         DEFAULT:  generateColorClass('primary-warning-light'),
       },
+      hover: {
+        light: generateColorClass('button-hover-light'),
+        dark: generateColorClass('button-hover-dark'),
+        action: generateColorClass('button-hover-action'),
+      },
+      disabled: {
+        light: generateColorClass('button-disabled-light'),
+        dark: generateColorClass('button-disabled-dark'),
+        action: generateColorClass('button-disabled-action'),
+      },
       white: {
         DEFAULT:  '#FFFFFF',
         100: '#F2F5F6',
