@@ -1,3 +1,5 @@
+import 'twin.macro'
+
 import {
   Column,
   useFlexLayout,
@@ -10,10 +12,9 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 import { CustomTablePagination } from './CustomTablePagination'
 import { Txt } from '../Txt'
-import { isMobile } from '../../utils'
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import 'twin.macro'
+import { isMobile } from '../../utils'
 import tw from 'twin.macro'
 
 const tableContainerStyle = css`
@@ -22,12 +23,8 @@ const tableContainerStyle = css`
     tr {
       ${tw`desktop:py-3`}
     }
-
-    /* tr:hover > td {
-      ${tw`bg-primary-300`}
-    } */
     tr:first-of-type {
-      ${tw`pt-3`}
+      ${tw`pt-3 rounded-t-xl`}
     }
     tr:last-of-type {
       ${tw`pb-3`}
@@ -36,34 +33,20 @@ const tableContainerStyle = css`
       ${tw` ml-6`}
     }
     tr > th:last-of-type {
-      ${tw` mr-6 rounded-tr-xl`}/* rounded-tr-xl */
-    }
-    tr:not(:last-child) > td:first-of-type {
-      ${tw``}
-    }
-    tr:not(:last-child) > td:last-of-type {
-      ${tw``}
-    }
-    thead {
-      ${tw``}
+      ${tw` mr-6 `}
     }
 
     tr:last-of-type {
       ${tw`bg-primary-100`}
     }
 
-    tbody > tr:last-of-type {
-      ${tw`rounded-b-xl rounded-bl-xl rounded-br-xl`}/*This is last row rounded-bl-xl rounded-br-md */
-    }
     /* tbody > tr:nth-last-child(2) {
       ${tw`rounded-b-xl`}
-    }
-    tbody > tr:nth-last-child(1) {
-      ${tw``}
     } */
-    th {
-      ${tw``}/* This is where the top row border is */
+    tbody > tr:last-of-type {
+      ${tw`rounded-b-xl`}
     }
+
     td {
       ${tw`self-center`}
     }
@@ -153,11 +136,11 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
 
   return (
     <div tw='w-full'>
-      <div tw='overflow-x-auto rounded-xl' css={tableContainerStyle}>
+      <div css={tableContainerStyle}>
         <table {...getTableProps()} css={tw`w-full`} className='table'>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} tw='rounded-t-xl'>
+              <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const { style, ...rest } = column.getHeaderProps(
                     column.getSortByToggleProps(),
@@ -239,7 +222,6 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                     </tr>
                     <tr
                       {...row.getRowProps()}
-                      // tw='bg-action'
                       css={[
                         tw`cursor-pointer bg-primary-100`,
                         hover && tw`hover:bg-primary-200`,
@@ -269,12 +251,14 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                         )
                       })}
                     </tr>
-                    <tr>
-                      <td tw='bg-primary-100' colSpan={columns.length}>
-                        {props.activeRow == row.original &&
-                          props.renderExpanded}
-                      </td>
-                    </tr>
+                    {props.activeRow == row.original && (
+                      <tr>
+                        <td tw='bg-primary-100' colSpan={columns.length}>
+                          {props.activeRow == row.original &&
+                            props.renderExpanded}
+                        </td>
+                      </tr>
+                    )}
                   </React.Fragment>
                 )
               })}

@@ -2,8 +2,8 @@ import {
   Approval,
   ApprovalTransactionMeta,
   MtsClosePositionMeta,
-  MtsOpenPositionMeta,
   MtsEditPositionMeta,
+  MtsOpenPositionMeta,
   StakeTransactionMeta,
   Transaction,
   TransactionType,
@@ -39,7 +39,7 @@ export const isDesktop = window.screen.width >= DESKTOP_BREAKPOINT
 export const isTablet = window.screen.width >= TABLET_BREAKPOINT
 export const isMobile = !isDesktop && !isTablet
 
-export const getTransactionLabel = (t: Transaction) => {
+export const getTransactionLabel = (t: Pick<Transaction, 'type' | 'meta'>) => {
   if (t.type === TransactionType.APPROVAL) {
     const meta = t.meta as ApprovalTransactionMeta
     const tokenName = tokenList.tokens.find(
