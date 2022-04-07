@@ -29,6 +29,7 @@ import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useState } from 'react'
+import AdvancedPlaceholderImg from '../assets/images/advancedSectionPlaceholderImg.png'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
@@ -115,7 +116,7 @@ export const MarginTradingPage = () => {
         <div tw='w-full tablet:w-9/12 desktop:w-10/12 flex flex-col items-center'>
           <Txt.Heading1 tw='mb-12'>Margin Trading Strategy </Txt.Heading1>
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
-            <div tw='flex flex-col gap-3 flex-grow'>
+            <div tw='flex flex-col gap-3 flex-grow w-full desktop:w-4/12'>
               <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100 gap-7'>
                 <TabsSwitch
                   activeIndex={positionType}
@@ -186,6 +187,12 @@ export const MarginTradingPage = () => {
                           <Txt.Body2Regular>Close</Txt.Body2Regular>
                         </button>
                       </div>
+                      {/* TODO: Placeholder */}
+                      <img
+                        tw='w-full my-5'
+                        src={AdvancedPlaceholderImg}
+                        alt='advancedSectionPlaceholder'
+                      />
                       <div tw='flex flex-col w-full gap-7'>
                         <InputField
                           label='Slippage'
@@ -252,7 +259,7 @@ export const MarginTradingPage = () => {
                 </Txt.CaptionMedium>
               </div>
             </div>
-            <div tw='w-full height[500px] tablet:height[500px] desktop:height[700px] desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
+            <div tw='w-full height[500px] tablet:height[500px] desktop:height[700px] w-full flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100 desktop:w-8/12'>
               <div tw='w-full flex flex-row justify-between pb-5 '>
                 <Txt.Heading2>
                   {obtainedToken.symbol}/{spentToken.symbol}

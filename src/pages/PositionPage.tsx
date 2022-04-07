@@ -18,6 +18,7 @@ import { useAddTransaction } from '../state/hooks'
 import { useParams } from 'react-router-dom'
 import { usePosition } from '../state/hooks'
 import { useState } from 'react'
+import { TopUp } from '../shared/TopUp'
 
 export const PositionPage = () => {
   const { positionId } = useParams<{ positionId: string }>()
@@ -85,11 +86,18 @@ export const PositionPage = () => {
         <div tw='w-full tablet:w-9/12 desktop:w-10/12 flex flex-col items-center'>
           <Txt.Heading1 tw='mb-12'>Margin Trading Strategy</Txt.Heading1>
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
-            <div tw='flex flex-col gap-3 flex-grow'>
+            <div tw='flex flex-col gap-3 flex-grow w-full desktop:w-4/12'>
               <PositionDetailsCard position={position} />
               {position.status === 'open' && (
                 <>
-                  <CollateralCard />
+                  <TopUp
+                    inputValue={liquidationInput}
+                    inputOnChange={(value) => setLiquidationInput(value)}
+                    onClick={() =>
+                      editPosition(liquidationInput, collateralToken.address)
+                    }
+                  />
+                  {/* <CollateralCard />
                   <Liquidation
                     // liquidationToken1={liquidationToken1}
                     // liquidationToken2={liquidationToken2}
@@ -106,7 +114,7 @@ export const PositionPage = () => {
                       editPosition(liquidationInput, collateralToken.address)
                     }
                     // tokenSymbol={collateralToken.symbol as string}
-                  />
+                  /> */}
                   <ClosePosition
                     token={collateralToken.symbol as string}
                     value={3000}
