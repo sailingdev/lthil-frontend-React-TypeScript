@@ -8,6 +8,8 @@ import { Txt } from './Txt'
 import { formatDate } from '../utils'
 import { usePositionProfit } from './hooks/usePositionProfit'
 
+import AdvancedPlaceholderImg from '../assets/images/advancedSectionPlaceholderImg.png'
+
 interface IPositionDetailsCard {
   position: IPosition
 }
@@ -69,6 +71,12 @@ export const PositionDetailsCard = ({ position }: IPositionDetailsCard) => {
         <InfoItem
           label='Opened'
           value={formatDate(new Date(position.createdAt * 1000))}
+        />
+        {/* TODO: Placeholder */}
+        <img
+          tw='w-full my-5'
+          src={AdvancedPlaceholderImg}
+          alt='advancedSectionPlaceholder'
         />
       </div>
     </div>

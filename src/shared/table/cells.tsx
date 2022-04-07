@@ -41,7 +41,7 @@ export const TokenPair = (props: {
   return (
     <div tw='flex flex-row justify-start items-center gap-6'>
       <div tw='relative'>
-        <div tw='w-7 h-7 border-radius[100%] bg-primary-100 absolute bottom[-2px] left[10px] z-index[2]'></div>
+        <div tw='w-7 h-7 border-radius[100%] bg-primary-100 absolute bottom[-2px] left[18px] z-index[2]'></div>
         <img
           tw='w-6 h-6 z-index[3]'
           src={
@@ -50,7 +50,7 @@ export const TokenPair = (props: {
           alt={spentTokenSymbol}
         />
         <img
-          tw='w-6 h-6 left-3 bottom-0 absolute z-index[4]'
+          tw='w-6 h-6 left-5 bottom-0 absolute z-index[4]'
           src={
             tokens.find((token) => token.symbol === obtainedTokenSymbol)
               ?.logoURI

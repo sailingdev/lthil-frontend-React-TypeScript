@@ -54,7 +54,7 @@ export const Menu = (props: IMenu) => {
         {menuIsOpen && (
           <div
             // onClick={(e) => e.stopPropagation()}
-            tw='border-0 rounded-md cursor-pointer flex flex-col justify-start gap-3 py-4 pr-16 pl-4 bg-primary-200 absolute top[70px] right[20px] tablet:top-20 tablet:right[20px] desktop:top-20 desktop:right[92px]'
+            tw='border-0 rounded-md cursor-pointer flex flex-col justify-start gap-3 py-4 pr-16 pl-4 bg-primary-100 absolute top[70px] right[20px] tablet:top-20 tablet:right[20px] desktop:top-20 desktop:right[92px] border border-primary-400'
           >
             <MenuItem icon={Info} label='About' url='https://www.google.com' />
             <MenuItem
@@ -65,12 +65,12 @@ export const Menu = (props: IMenu) => {
             <MenuItem
               icon={GithubLogo}
               label='Source'
-              url='https://www.google.com'
+              url='https://github.com/Ithil-protocol'
             />
             <MenuItem
               icon={DiscordLogo}
               label='Discord'
-              url='https://www.google.com'
+              url='https://discord.gg/tEaGBcGdQC'
             />
           </div>
         )}
