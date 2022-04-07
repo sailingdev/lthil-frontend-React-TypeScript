@@ -171,13 +171,6 @@ export const DashboardPage = () => {
                   return <TableCell.Profit position={p} />
                 },
               },
-              {
-                Header: 'Trend',
-                // @ts-ignore
-                accessor: 'trend',
-                align: 'center',
-                cell: () => <TableCell.Text value={'placeholder'} />,
-              },
               activeTab === 'open'
                 ? {
                     Header: '',
