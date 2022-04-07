@@ -5,6 +5,7 @@ import tw from 'twin.macro'
 import { useEffect, useState } from 'react'
 
 import { Txt } from './Txt'
+import { Tooltip } from './Tooltip'
 
 interface IInputFieldProps {
   label?: string
@@ -13,6 +14,7 @@ interface IInputFieldProps {
   renderRight?: React.ReactNode
   placeholder?: string
   className?: string | undefined
+  tooltip?: boolean
 }
 
 export const InputField = (props: IInputFieldProps) => {
@@ -28,7 +30,10 @@ export const InputField = (props: IInputFieldProps) => {
       className={props.className}
       tw='flex flex-col justify-center gap-1 my-2 w-full'
     >
-      {props.label && <Txt.Body2Regular>{props.label}</Txt.Body2Regular>}
+      <div tw='flex flex-row gap-2 items-center text-font-200'>
+        {props.label && <Txt.Body2Regular>{props.label}</Txt.Body2Regular>}
+        {props.tooltip && <Tooltip />}
+      </div>
       <div
         css={[
           tw`flex flex-row items-center bg-primary-200 rounded-md tablet:height[48px] height[43px] px-3 gap-1`,

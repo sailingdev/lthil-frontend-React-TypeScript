@@ -2,9 +2,9 @@
 import tw from 'twin.macro'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
-import { Question } from 'phosphor-react'
 
 import { Txt } from './Txt'
+import { Tooltip } from './Tooltip'
 interface ISliderProps {
   label?: string
   min: number
@@ -24,7 +24,7 @@ export const SliderBar = (props: ISliderProps) => {
         {props.label && (
           <Txt.Body2Regular tw='self-start'>{props.label}</Txt.Body2Regular>
         )}
-        {props.tooltip && <Question tw='dark:text-font-200' />}
+        {props.tooltip && <Tooltip />}
       </div>
       <span tw='px-2'>
         <Slider

@@ -5,6 +5,7 @@ import { ReactComponent as RadioButtonNotSelected } from '../assets/images/radio
 import { ReactComponent as RadioButtonSelected } from '../assets/images/radioButton/selected.svg'
 import { Txt } from './Txt'
 import tw from 'twin.macro'
+import { Tooltip } from './Tooltip'
 
 /** @jsxImportSource @emotion/react */
 
@@ -18,6 +19,7 @@ interface IRadioGroupProps {
   items: IRadioItem[]
   activeRadio: string
   onChange: (value: string) => void
+  tooltip?: boolean
 }
 
 const RadioButton = (props: {
@@ -36,10 +38,13 @@ const RadioButton = (props: {
 }
 
 export const RadioGroup = (props: IRadioGroupProps) => {
-  const { label, activeRadio, onChange } = props
+  const { label, activeRadio, onChange, tooltip } = props
   return (
     <div tw='w-full flex flex-col gap-3'>
-      <Txt.Body2Regular>{label}:</Txt.Body2Regular>
+      <div tw='flex items-center gap-2'>
+        <Txt.Body2Regular>{label}</Txt.Body2Regular>
+        {tooltip && <Tooltip />}
+      </div>
       <div tw='flex flex-row gap-10'>
         {props.items.map((radio) => (
           <RadioButton

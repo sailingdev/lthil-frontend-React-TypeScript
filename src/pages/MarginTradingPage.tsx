@@ -30,6 +30,7 @@ import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useState } from 'react'
 import AdvancedPlaceholderImg from '../assets/images/advancedSectionPlaceholderImg.png'
+import { Tooltip } from '../shared/Tooltip'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
@@ -145,16 +146,19 @@ export const MarginTradingPage = () => {
                 </div>
                 <div tw='w-full'>
                   <InfoItem
+                    tooltip
                     label='Min. obtained'
                     value={minObtained.round(4).toString()}
                   />
                   <InfoItem
+                    tooltip
                     label='Max. spent'
                     value={maxSpent.round(4).toString()}
                   />
                 </div>
                 <InputField
                   label='Margin'
+                  tooltip
                   placeholder='0'
                   value={margin}
                   onChange={(value) => setMargin(value)}
@@ -195,6 +199,7 @@ export const MarginTradingPage = () => {
                       />
                       <div tw='flex flex-col w-full gap-7'>
                         <InputField
+                          tooltip
                           label='Slippage'
                           placeholder='0'
                           value={slippage}
@@ -204,6 +209,7 @@ export const MarginTradingPage = () => {
                           }
                         />
                         <RadioGroup
+                          tooltip
                           label='Priority'
                           items={[
                             {
@@ -219,6 +225,7 @@ export const MarginTradingPage = () => {
                           onChange={(value) => setPriority(value as Priority)}
                         />
                         <InputField
+                          tooltip
                           label='Deadline'
                           placeholder='30 mins'
                           value={deadline}
