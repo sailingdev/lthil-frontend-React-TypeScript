@@ -13,7 +13,6 @@ interface IInputFieldProps {
   renderRight?: React.ReactNode
   placeholder?: string
   className?: string | undefined
-  unit?: string
 }
 
 export const InputField = (props: IInputFieldProps) => {
@@ -50,9 +49,6 @@ export const InputField = (props: IInputFieldProps) => {
           }}
         />
         {props.renderRight}
-        {props.unit && (
-          <Txt.InputText tw='text-font-100'>{props.unit}</Txt.InputText>
-        )}
       </div>
     </div>
   )
