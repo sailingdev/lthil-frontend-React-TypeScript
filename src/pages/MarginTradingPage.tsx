@@ -158,6 +158,11 @@ export const MarginTradingPage = () => {
                   placeholder='0'
                   value={margin}
                   onChange={(value) => setMargin(value)}
+                  renderRight={
+                    <Txt.InputText tw='text-font-100'>
+                      {spentToken.symbol}
+                    </Txt.InputText>
+                  }
                 />
                 <SliderBar
                   label='Leverage'
@@ -226,6 +231,11 @@ export const MarginTradingPage = () => {
                           placeholder='30 mins'
                           value={deadline}
                           onChange={(value) => setDeadline(value)}
+                          renderRight={
+                            <Txt.InputText tw='text-font-100'>
+                              min
+                            </Txt.InputText>
+                          }
                         />
                       </div>
                     </>

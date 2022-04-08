@@ -13,6 +13,7 @@ import tw from 'twin.macro'
 import { useApprovalAction } from '../../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useState } from 'react'
+import { InputFieldMax } from '../../shared/InputFieldMax'
 
 interface IDepositWithdrawProps extends IBaseProps {
   tokenAddress: string
@@ -100,19 +101,11 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
             {userTokenBalance} {props.tokenSymbol}
           </Txt.Heading2>
         </div>
-        <InputField
+        <InputFieldMax
           value={depositValue}
           onChange={(value) => setDepositValue(value)}
-          renderRight={
-            <button
-              onClick={getMaxDeposit}
-              css={[
-                tw`border-primary-400 dark:border-primary-300 rounded-md border-2 h-8 px-2`,
-              ]}
-            >
-              <Txt.Body2Regular>Max</Txt.Body2Regular>
-            </button>
-          }
+          unit={props.tokenSymbol}
+          onMaxClick={getMaxDeposit}
         />
         <Button
           text={getCTALabelForApproval('Deposit', stakeApproval)}
@@ -136,19 +129,11 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
             {userTokenStakedBalance} {props.tokenSymbol}
           </Txt.Heading2>
         </div>
-        <InputField
+        <InputFieldMax
           value={withdrawValue}
           onChange={(value) => setWithdrawValue(value)}
-          renderRight={
-            <button
-              onClick={getMaxWithdraw}
-              css={[
-                tw`border-primary-400 dark:border-primary-300 rounded-md border-2 h-8 px-2`,
-              ]}
-            >
-              <Txt.Body2Regular>Max</Txt.Body2Regular>
-            </button>
-          }
+          unit={props.tokenSymbol}
+          onMaxClick={getMaxWithdraw}
         />
         <Button
           text='Withdraw'
