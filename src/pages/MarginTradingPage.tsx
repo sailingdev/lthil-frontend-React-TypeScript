@@ -141,6 +141,7 @@ export const MarginTradingPage = () => {
                   />
                 </div>
                 <div tw='w-full'>
+                  <InfoItem tooltip label='Leverage' value={`${leverage}x`} />
                   <InfoItem
                     tooltip
                     label='Min. obtained'
@@ -169,15 +170,9 @@ export const MarginTradingPage = () => {
                   tooltip
                   min={1}
                   max={5}
+                  step={0.1}
                   value={leverage}
                   onChange={(value) => setLeverage(value)}
-                  marks={{
-                    1: '1x',
-                    2: '2x',
-                    3: '3x',
-                    4: '4x',
-                    5: '5x',
-                  }}
                 />
                 <div tw='w-full'>
                   {showAdvancedOptions ? (
