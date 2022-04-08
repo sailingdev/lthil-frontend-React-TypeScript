@@ -101,6 +101,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
           </Txt.Heading2>
         </div>
         <InputField
+          unit={props.tokenSymbol}
           value={depositValue}
           onChange={(value) => setDepositValue(value)}
           renderRight={
@@ -137,6 +138,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
           </Txt.Heading2>
         </div>
         <InputField
+          unit={props.tokenSymbol}
           value={withdrawValue}
           onChange={(value) => setWithdrawValue(value)}
           renderRight={

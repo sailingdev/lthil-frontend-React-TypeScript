@@ -91,6 +91,7 @@ export const PositionPage = () => {
               {position.status === 'open' && (
                 <>
                   <TopUp
+                    collateralTokenSymbol={collateralToken.symbol}
                     inputValue={liquidationInput}
                     inputOnChange={(value) => setLiquidationInput(value)}
                     onClick={() =>

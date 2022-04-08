@@ -158,6 +158,7 @@ export const MarginTradingPage = () => {
                   placeholder='0'
                   value={margin}
                   onChange={(value) => setMargin(value)}
+                  unit={`${spentToken.symbol}`}
                 />
                 <SliderBar
                   label='Leverage'
@@ -199,9 +200,7 @@ export const MarginTradingPage = () => {
                           placeholder='0'
                           value={slippage}
                           onChange={(value) => setSlippage(value)}
-                          renderRight={
-                            <Txt.InputText tw='text-font-100'>%</Txt.InputText>
-                          }
+                          unit='%'
                         />
                         <RadioGroup
                           label='Priority'
@@ -223,6 +222,7 @@ export const MarginTradingPage = () => {
                           placeholder='30 mins'
                           value={deadline}
                           onChange={(value) => setDeadline(value)}
+                          unit='min'
                         />
                       </div>
                     </>

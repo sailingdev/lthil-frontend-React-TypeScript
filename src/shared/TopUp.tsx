@@ -27,6 +27,7 @@ interface ILiquidation {
   onClick: () => void
   inputOnChange: (value: string) => void
   inputValue: string
+  collateralTokenSymbol: string
 }
 
 export const TopUp = (props: ILiquidation) => {
@@ -36,7 +37,7 @@ export const TopUp = (props: ILiquidation) => {
   //   setSliderValue(value)
   // }
 
-  const { onClick, inputOnChange, inputValue } = props
+  const { onClick, inputOnChange, inputValue, collateralTokenSymbol } = props
 
   return (
     <>
@@ -66,6 +67,7 @@ export const TopUp = (props: ILiquidation) => {
         </div>
         <div tw='my-6 w-full gap-2 flex flex-col'>
           <InputField
+            unit={collateralTokenSymbol}
             label='Top up'
             placeholder='0'
             value={inputValue}
