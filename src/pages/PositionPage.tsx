@@ -5,12 +5,14 @@ import { Ether, etherGlobal } from '../api/ether'
 import { MtsClosePositionMeta, TransactionType } from '../types'
 
 import { BasicChart } from '../shared/charts/BasicChart'
+import { ChartCard } from '../shared/charts/ChartCard'
 import { ClosePosition } from '../shared/ClosePosition'
 import { CollateralCard } from '../shared/CollateralCard'
 import { ContentContainer } from '../shared/ContentContainer'
 import { Liquidation } from '../shared/Liquidation'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
 import { TabButton } from '../shared/TabButton'
+import { TopUp } from '../shared/TopUp'
 import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
 import { formatDate } from '../utils'
@@ -18,7 +20,6 @@ import { useAddTransaction } from '../state/hooks'
 import { useParams } from 'react-router-dom'
 import { usePosition } from '../state/hooks'
 import { useState } from 'react'
-import { TopUp } from '../shared/TopUp'
 
 export const PositionPage = () => {
   const { positionId } = useParams<{ positionId: string }>()
@@ -123,35 +124,11 @@ export const PositionPage = () => {
                 </>
               )}
             </div>
-            <div tw='w-full height[500px] tablet:height[500px] desktop:height[700px] desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
-              <div tw='w-full flex flex-row justify-between pb-5 '>
-                <Txt.Heading2>{`${obtainedToken.symbol}/${spentToken.symbol}`}</Txt.Heading2>
-                <div tw='hidden desktop:flex flex-row items-center gap-1'>
-                  <Txt.Body2Regular tw='mr-4'>View:</Txt.Body2Regular>
-                  <TabButton
-                    text='Basic'
-                    active={activeChart === 'basic'}
-                    onClick={() => setActiveChart('basic')}
-                  />
-                  <TabButton
-                    text='Trading'
-                    active={activeChart === 'trading'}
-                    onClick={() => setActiveChart('trading')}
-                  />
-                </div>
-              </div>
-              <div tw='w-full h-full  flex flex-col'>
-                {activeChart === 'basic' ? (
-                  <BasicChart
-                    tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
-                  />
-                ) : (
-                  <TradingChart
-                    tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
-                  />
-                )}
-              </div>
-            </div>
+            <ChartCard
+              firstToken={obtainedToken}
+              secondToken={spentToken}
+              disableTrading={false}
+            />
           </div>
         </div>
       </div>

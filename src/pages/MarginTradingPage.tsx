@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import 'twin.macro'
 
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
 import { Ether, etherGlobal } from '../api/ether'
@@ -8,8 +7,10 @@ import { FixedNumber, ethers } from 'ethers'
 import { Priority, TokenDetails, TransactionType } from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
+import AdvancedPlaceholderImg from '../assets/images/advancedSectionPlaceholderImg.png'
 import { BasicChart } from '../shared/charts/BasicChart'
 import { Button } from '../shared/Button'
+import { ChartCard } from '../shared/charts/ChartCard'
 import { ContentContainer } from '../shared/ContentContainer'
 import { FixedFormat } from '@ethersproject/bignumber'
 import { InfoItem } from '../shared/InfoItem'
@@ -29,7 +30,6 @@ import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useState } from 'react'
-import AdvancedPlaceholderImg from '../assets/images/advancedSectionPlaceholderImg.png'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
@@ -259,37 +259,11 @@ export const MarginTradingPage = () => {
                 </Txt.CaptionMedium>
               </div>
             </div>
-            <div tw='w-full height[500px] tablet:height[500px] desktop:height[700px] w-full flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100 desktop:w-8/12'>
-              <div tw='w-full flex flex-row justify-between pb-5 '>
-                <Txt.Heading2>
-                  {obtainedToken.symbol}/{spentToken.symbol}
-                </Txt.Heading2>
-                <div tw='hidden desktop:flex flex-row items-center gap-1'>
-                  <Txt.Body2Regular tw='mr-4'>View:</Txt.Body2Regular>
-                  <TabButton
-                    text='Basic'
-                    active={activeChart === 'basic'}
-                    onClick={() => setActiveChart('basic')}
-                  />
-                  <TabButton
-                    text='Trading'
-                    active={activeChart === 'trading'}
-                    onClick={() => setActiveChart('trading')}
-                  />
-                </div>
-              </div>
-              <div tw='w-full h-full flex flex-col'>
-                {activeChart === 'basic' ? (
-                  <BasicChart
-                    tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
-                  />
-                ) : (
-                  <TradingChart
-                    tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
-                  />
-                )}
-              </div>
-            </div>
+            <ChartCard
+              firstToken={obtainedToken}
+              secondToken={spentToken}
+              disableTrading={false}
+            />
           </div>
         </div>
       </div>
