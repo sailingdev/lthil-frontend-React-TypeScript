@@ -4,6 +4,7 @@ import tw from 'twin.macro'
 
 import { isDesktop } from '../utils'
 import { Txt } from './Txt'
+import { Tooltip } from './Tooltip'
 
 const InfoItemText = (props: { value: string | number }) => {
   return isDesktop ? (
@@ -18,11 +19,15 @@ export const InfoItem = (props: {
   details?: string
   value: string | number | undefined
   valueColor?: 'black' | 'red' | 'green'
+  tooltip?: boolean
 }) => {
-  const { label, details, value, valueColor } = props
+  const { label, details, value, valueColor, tooltip } = props
   return (
     <div tw='flex flex-row justify-between w-full'>
-      <InfoItemText value={label} />
+      <div tw='flex gap-2 items-center'>
+        <InfoItemText value={label} />
+        {tooltip && <Tooltip />}
+      </div>
       <div tw='flex flex-row gap-2'>
         {details && <InfoItemText value={details} />}
         {value && (
