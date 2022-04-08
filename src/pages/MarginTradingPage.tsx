@@ -2,8 +2,6 @@
 import 'twin.macro'
 
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
-import { Ether, etherGlobal } from '../api/ether'
-import { FixedNumber, ethers } from 'ethers'
 import { Priority, TokenDetails, TransactionType } from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
@@ -12,17 +10,16 @@ import { BasicChart } from '../shared/charts/BasicChart'
 import { Button } from '../shared/Button'
 import { ChartCard } from '../shared/charts/ChartCard'
 import { ContentContainer } from '../shared/ContentContainer'
-import { FixedFormat } from '@ethersproject/bignumber'
+import { FixedNumber } from 'ethers'
 import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
 import { RadioGroup } from '../shared/RadioGroup'
 import { SliderBar } from '../shared/SliderBar'
-import { TabButton } from '../shared/TabButton'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { TokenInputField } from './TokenInputField'
-import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
 import { addresses } from '../assets/addresses.json'
+import { etherGlobal } from '../api/ether'
 import { getCTALabelForApproval } from '../utils'
 import { showErrorNotification } from '../shared/notification'
 import { tokens } from '../assets/tokenlist.json'
@@ -145,16 +142,19 @@ export const MarginTradingPage = () => {
                 </div>
                 <div tw='w-full'>
                   <InfoItem
+                    tooltip
                     label='Min. obtained'
                     value={minObtained.round(4).toString()}
                   />
                   <InfoItem
+                    tooltip
                     label='Max. spent'
                     value={maxSpent.round(4).toString()}
                   />
                 </div>
                 <InputField
                   label='Margin'
+                  tooltip
                   placeholder='0'
                   value={margin}
                   onChange={(value) => setMargin(value)}
@@ -195,6 +195,7 @@ export const MarginTradingPage = () => {
                       />
                       <div tw='flex flex-col w-full gap-7'>
                         <InputField
+                          tooltip
                           label='Slippage'
                           placeholder='0'
                           value={slippage}
@@ -204,6 +205,7 @@ export const MarginTradingPage = () => {
                           }
                         />
                         <RadioGroup
+                          tooltip
                           label='Priority'
                           items={[
                             {
@@ -219,6 +221,7 @@ export const MarginTradingPage = () => {
                           onChange={(value) => setPriority(value as Priority)}
                         />
                         <InputField
+                          tooltip
                           label='Deadline'
                           placeholder='30 mins'
                           value={deadline}
