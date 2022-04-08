@@ -16,6 +16,11 @@ export class MarginTrading {
       this.signer,
     )
   }
+
+  async getMaxLeverage(): Promise<FixedNumber> {
+    return FixedNumber.from('5')
+  }
+
   async computeMaxAndMin({
     positionType,
     priority,
