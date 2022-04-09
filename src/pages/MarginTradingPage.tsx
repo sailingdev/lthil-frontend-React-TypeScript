@@ -43,12 +43,16 @@ export const MarginTradingPage = () => {
   const [minObtained, setMinObtained] = useState<FixedNumber>(
     FixedNumber.from('0'),
   )
+  const [maxLeverage, setMaxLeverage] = useState<FixedNumber>(
+    FixedNumber.from('5'),
+  )
   const [maxSpent, setMaxSpent] = useState<FixedNumber>(FixedNumber.from('0'))
 
   const isConnected = useIsConnected()
   useAsync(async () => {
     try {
       if (isConnected && slippage && margin) {
+        setMaxLeverage(await etherGlobal.marginTrading.getMaxLeverage())
         const [max, min] = await etherGlobal.marginTrading.computeMaxAndMin({
           margin,
           leverage,
@@ -141,6 +145,7 @@ export const MarginTradingPage = () => {
                   />
                 </div>
                 <div tw='w-full'>
+                  <InfoItem tooltip label='Leverage' value={`${leverage}x`} />
                   <InfoItem
                     tooltip
                     label='Min. obtained'
@@ -168,16 +173,10 @@ export const MarginTradingPage = () => {
                   label='Leverage'
                   tooltip
                   min={1}
-                  max={5}
+                  max={Number(maxLeverage.toString())}
+                  step={0.1}
                   value={leverage}
                   onChange={(value) => setLeverage(value)}
-                  marks={{
-                    1: '1x',
-                    2: '2x',
-                    3: '3x',
-                    4: '4x',
-                    5: '5x',
-                  }}
                 />
                 <div tw='w-full'>
                   {showAdvancedOptions ? (

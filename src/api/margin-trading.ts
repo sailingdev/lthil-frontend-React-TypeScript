@@ -16,13 +16,18 @@ export class MarginTrading {
       this.signer,
     )
   }
+
+  async getMaxLeverage(): Promise<FixedNumber> {
+    return FixedNumber.from('5')
+  }
+
   async computeMaxAndMin({
     positionType,
     priority,
     ...positionData
-  }: IInputPosition): Promise<[FixedNumber, FixedNumber]> {
+  }: IInputPosition): Promise<any> {
     const margin = FixedNumber.from(positionData.margin)
-    const leverage = FixedNumber.from(positionData.leverage)
+    const leverage = FixedNumber.from(positionData.leverage.toString())
     const slippage = FixedNumber.from(positionData.slippage)
     const base = FixedNumber.from('1').subUnsafe(
       slippage.divUnsafe(FixedNumber.from('100')),
