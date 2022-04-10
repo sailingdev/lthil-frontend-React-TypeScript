@@ -1,4 +1,4 @@
-import { BigNumber, Transaction, ethers } from 'ethers'
+import { BigNumber, FixedNumber, Transaction, ethers } from 'ethers'
 
 import { ContractFactory } from './contract-factory'
 import { MarginTrading } from './margin-trading'
@@ -77,15 +77,13 @@ export class Ether {
     ).gasLimit
   }
 
-  // ========= STAKE PAGE =========
-
-  async getMaxWithdrawAmount(tokenAddress: string): Promise<number> {
+  async getMaxWithdrawAmount(tokenAddress: string): Promise<FixedNumber> {
     const vault = ContractFactory.getVaultContract(this.signer)
 
     // @ts-ignore
-    const amount = (await vault.claimable(tokenAddress)).toHexString()
+    const amount = await vault.claimable(tokenAddress)
 
-    return hexToDecimal(amount)
+    return FixedNumber.from(Ether.utils.formatUnits(amount))
   }
 
   async getMaxDepositAmount(tokenAddress: string): Promise<number> {
@@ -100,12 +98,11 @@ export class Ether {
     return hexToDecimal(balance)
   }
 
-  async getTokenTvl(tokenAddress: string): Promise<number> {
+  async getTokenTvl(tokenAddress: string): Promise<FixedNumber> {
     const vault = ContractFactory.getVaultContract(this.signer)
     //@ts-ignore
-    const tvl = (await vault.balance(tokenAddress)).toHexString()
-
-    return hexToDecimal(tvl)
+    const tvl = await vault.balance(tokenAddress)
+    return FixedNumber.from(Ether.utils.formatUnits(tvl))
   }
 
   async computeAnnualPercentageYield(tokenAddress: string): Promise<number> {
@@ -195,10 +192,10 @@ export class Ether {
     return gas
   }
 
-  async getUserTokenBalance(tokenAddress: string): Promise<number> {
+  async getUserTokenBalance(tokenAddress: string): Promise<FixedNumber> {
     const token = ContractFactory.getTokenContract(tokenAddress, this.signer)
     const balance = await token.balanceOf(this.getAccountAddress())
-    return hexToDecimal(balance.toHexString())
+    return FixedNumber.from(Ether.utils.formatTokenUnits(balance, tokenAddress))
   }
   async getSerializableTransactionReceipt(
     tx: string,

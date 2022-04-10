@@ -1,19 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import 'twin.macro'
 
 import { IBaseProps, TransactionType } from '../../types'
 import { useAddTransaction, useTransaction } from '../../state/hooks'
 
 import { Button } from '../../shared/Button'
-import { InputField } from '../../shared/InputField'
+import { FixedNumber } from 'ethers'
+import { InputFieldMax } from '../../shared/InputFieldMax'
 import { Txt } from '../../shared/Txt'
 import { etherGlobal } from '../../api/ether'
 import { getCTALabelForApproval } from '../../utils'
-import tw from 'twin.macro'
 import { useApprovalAction } from '../../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useState } from 'react'
-import { InputFieldMax } from '../../shared/InputFieldMax'
 
 interface IDepositWithdrawProps extends IBaseProps {
   tokenAddress: string
@@ -23,9 +23,11 @@ interface IDepositWithdrawProps extends IBaseProps {
 export const DepositWithdraw = (props: IDepositWithdrawProps) => {
   const [depositValue, setDepositValue] = useState<string>('0')
   const [withdrawValue, setWithdrawValue] = useState<string>('0')
-  const [userTokenBalance, setUserTokenBalance] = useState<number>(0)
+  const [userTokenBalance, setUserTokenBalance] = useState<FixedNumber>(
+    FixedNumber.from('0'),
+  )
   const [userTokenStakedBalance, setUserTokenStakedBalance] =
-    useState<number>(0)
+    useState<FixedNumber>(FixedNumber.from('0'))
   const [stakeHash, setStakeHash] = useState<string | undefined>(undefined)
   const [withdrawHash, setWithdrawHash] = useState<string | undefined>(
     undefined,
@@ -99,7 +101,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
         <div tw='flex flex-row w-full justify-between'>
           <Txt.Heading2>Deposit</Txt.Heading2>
           <Txt.Heading2>
-            {userTokenBalance} {props.tokenSymbol}
+            {userTokenBalance.round(4).toString()} {props.tokenSymbol}
           </Txt.Heading2>
         </div>
         <InputFieldMax
@@ -127,7 +129,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
         <div tw='flex flex-row w-full justify-between'>
           <Txt.Heading2>Withdraw</Txt.Heading2>
           <Txt.Heading2>
-            {userTokenStakedBalance} {props.tokenSymbol}
+            {userTokenStakedBalance.round(4).toString()} {props.tokenSymbol}
           </Txt.Heading2>
         </div>
         <InputFieldMax

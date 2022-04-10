@@ -20,8 +20,8 @@ export const initializeUserStakes = createAsyncThunk<any, number>(
         stakes.push({
           vaultName: token.symbol,
           annualPercentageYield,
-          totalValueLocked,
-          staked,
+          totalValueLocked: totalValueLocked.round(4).toString(),
+          staked: staked.round(4).toString(),
           tokenAddress: token.address,
         })
       } catch (e) {

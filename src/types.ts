@@ -1,6 +1,6 @@
+import { BigNumber, FixedNumber } from 'ethers'
 import { Interpolation, Theme } from '@emotion/react'
 
-import { BigNumber } from 'ethers'
 import { CSSProperties } from 'react'
 
 export interface ISearchParams {
@@ -50,8 +50,8 @@ export interface TokenDetails {
 export interface StakeToken {
   vaultName: string
   annualPercentageYield: number
-  totalValueLocked: number
-  staked: number
+  totalValueLocked: string
+  staked: string
   tokenAddress: string
 }
 

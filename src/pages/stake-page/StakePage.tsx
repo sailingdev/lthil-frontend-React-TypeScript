@@ -130,7 +130,7 @@ export const StakePage = () => {
                 Header: 'TVL',
                 accessor: 'totalValueLocked',
                 cell: (l: StakeToken) => (
-                  <TableCell.Number value={l.totalValueLocked} />
+                  <TableCell.Text value={l.totalValueLocked} />
                 ),
               },
             ]}
@@ -154,14 +154,14 @@ export const StakePage = () => {
                 accessor: 'totalValueLocked',
                 align: 'right',
                 cell: (l: StakeToken) => (
-                  <TableCell.Number value={l.totalValueLocked} />
+                  <TableCell.Text value={l.totalValueLocked} />
                 ),
               },
               {
                 Header: 'Staked',
                 accessor: 'staked',
                 align: 'right',
-                cell: (l: StakeToken) => <TableCell.Number value={l.staked} />,
+                cell: (l: StakeToken) => <TableCell.Text value={l.staked} />,
               },
               {
                 Header: '',
