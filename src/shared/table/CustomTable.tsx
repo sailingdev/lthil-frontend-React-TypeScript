@@ -7,7 +7,7 @@ import {
   useSortBy,
   useTable,
 } from 'react-table'
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 import { CustomTablePagination } from './CustomTablePagination'
@@ -85,10 +85,57 @@ interface ICustomTableProps<T extends object> {
   mobileColumns?: ICustomColumnProps<T>[]
   pageSize: number
   loading: boolean
-  renderExpanded?: React.ReactNode
+  renderExpanded(row: T): React.ReactNode
   onActiveRowChange?: (row: T) => void
   activeRow?: T | undefined
   hover?: boolean | undefined
+}
+
+const TableRow = (props: any) => {
+  const [expanded, setExpanded] = useState(false)
+  const { row } = props
+  return (
+    <React.Fragment key={row.id}>
+      <tr>
+        <td css={[tw`h-0.5 mx-10 bg-primary-300`]}></td>
+      </tr>
+      <tr
+        {...row.getRowProps()}
+        css={[
+          tw`cursor-pointer bg-primary-100`,
+          props.hover && tw`hover:bg-primary-200`,
+        ]}
+        onClick={() => {
+          setExpanded(!expanded)
+        }}
+      >
+        {/* @ts-ignore */}
+        {row.cells.map((cell) => {
+          const { style, ...rest } = cell.getCellProps()
+          /* eslint-disable no-debugger */
+          return (
+            <td
+              {...rest}
+              style={{
+                ...style,
+                // @ts-ignore
+                textAlign: cell.column.align ?? 'left',
+              }}
+              css={tw`py-4 cursor-pointer`}
+            >
+              {/* @ts-ignore */}
+              {cell.column.cell(cell.row.original)}
+            </td>
+          )
+        })}
+      </tr>
+      <tr style={{ display: !expanded ? 'none' : undefined }}>
+        <td tw='bg-primary-100' colSpan={props.columns.length}>
+          {props.renderExpanded(row)}
+        </td>
+      </tr>
+    </React.Fragment>
+  )
 }
 
 export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
@@ -216,50 +263,12 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
               {page.map((row) => {
                 prepareRow(row)
                 return (
-                  <React.Fragment key={row.id}>
-                    <tr>
-                      <td css={[tw`h-0.5 mx-10 bg-primary-300`]}></td>
-                    </tr>
-                    <tr
-                      {...row.getRowProps()}
-                      css={[
-                        tw`cursor-pointer bg-primary-100`,
-                        hover && tw`hover:bg-primary-200`,
-                      ]}
-                      onClick={() => {
-                        props.onActiveRowChange &&
-                          props.onActiveRowChange(row.original as T)
-                      }}
-                      // @ts-ignore
-                    >
-                      {row.cells.map((cell) => {
-                        const { style, ...rest } = cell.getCellProps()
-                        /* eslint-disable no-debugger */
-                        return (
-                          <td
-                            {...rest}
-                            style={{
-                              ...style,
-                              // @ts-ignore
-                              textAlign: cell.column.align ?? 'left',
-                            }}
-                            css={tw`py-4 cursor-pointer`}
-                          >
-                            {/* @ts-ignore */}
-                            {cell.column.cell(cell.row.original)}
-                          </td>
-                        )
-                      })}
-                    </tr>
-                    {props.activeRow == row.original && (
-                      <tr>
-                        <td tw='bg-primary-100' colSpan={columns.length}>
-                          {props.activeRow == row.original &&
-                            props.renderExpanded}
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
+                  <TableRow
+                    row={row}
+                    columns={columns}
+                    hover={hover}
+                    renderExpanded={props.renderExpanded}
+                  />
                 )
               })}
             </tbody>

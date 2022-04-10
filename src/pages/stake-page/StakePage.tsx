@@ -95,12 +95,14 @@ export const StakePage = () => {
             hover
             activeRow={activeRow}
             onActiveRowChange={onRowClick}
-            renderExpanded={
-              <DepositWithdraw
-                tokenAddress={activeRow?.tokenAddress ?? undefined}
-                tokenSymbol={activeRow?.vaultName ?? undefined}
-              />
-            }
+            renderExpanded={(row) => {
+              return (
+                <DepositWithdraw
+                  tokenAddress={row.original.tokenAddress ?? undefined}
+                  tokenSymbol={row.original.vaultName ?? undefined}
+                />
+              )
+            }}
             loading={false}
             maxPage={
               stakeTokens.length > 0

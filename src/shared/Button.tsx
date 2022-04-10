@@ -1,8 +1,9 @@
 import 'twin.macro'
 
-import { ICSSProps } from '../types'
 /** @jsxImportSource @emotion/react */
-import { MouseEventHandler } from 'react'
+import { MouseEventHandler, useState } from 'react'
+
+import { ICSSProps } from '../types'
 import { Txt } from './Txt'
 import tw from 'twin.macro'
 
@@ -17,12 +18,14 @@ interface IButtonProps extends ICSSProps {
   onClick?: MouseEventHandler<HTMLButtonElement>
   className?: string | undefined
   bold?: boolean | undefined
+  isLoading?: boolean
 }
 
 export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
   const primary = !props.action
   const LeftIcon = props.leftIcon
   const RightIcon = props.rightIcon
+  const [loading, setLoading] = useState(false)
   return (
     <button
       type={props.type ?? 'button'}

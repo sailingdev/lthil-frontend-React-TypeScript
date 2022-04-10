@@ -6,7 +6,6 @@ import { Priority, TokenDetails, TransactionType } from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
 import AdvancedPlaceholderImg from '../assets/images/advancedSectionPlaceholderImg.png'
-import { BasicChart } from '../shared/charts/BasicChart'
 import { Button } from '../shared/Button'
 import { ChartCard } from '../shared/charts/ChartCard'
 import { ContentContainer } from '../shared/ContentContainer'
@@ -30,7 +29,6 @@ import { useState } from 'react'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
-  const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
   const [positionType, setPositionType] = useState<'short' | 'long'>('long')
   const [spentToken, setSpentToken] = useState<TokenDetails>(tokens[0])
   const [obtainedToken, setObtainedToken] = useState<TokenDetails>(tokens[1])
