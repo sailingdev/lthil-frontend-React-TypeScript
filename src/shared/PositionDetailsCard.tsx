@@ -1,5 +1,6 @@
 import 'twin.macro'
 
+import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
 import { FixedNumber } from 'ethers'
 /** @jsxImportSource @emotion/react */
 import { IPosition } from '../types'
@@ -7,8 +8,6 @@ import { InfoItem } from './InfoItem'
 import { Txt } from './Txt'
 import { formatDate } from '../utils'
 import { usePositionProfit } from './hooks/usePositionProfit'
-
-import AdvancedPlaceholderImg from '../assets/images/advancedSectionPlaceholderImg.png'
 
 interface IPositionDetailsCard {
   position: IPosition
@@ -72,10 +71,9 @@ export const PositionDetailsCard = ({ position }: IPositionDetailsCard) => {
           label='Opened'
           value={formatDate(new Date(position.createdAt * 1000))}
         />
-        {/* TODO: Placeholder */}
         <img
           tw='w-full my-5'
-          src={AdvancedPlaceholderImg}
+          src={AdvancedSectionImg}
           alt='advancedSectionPlaceholder'
         />
       </div>

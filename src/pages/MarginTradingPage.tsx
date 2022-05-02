@@ -1,14 +1,14 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
 import { Priority, TokenDetails, TransactionType } from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
-import AdvancedPlaceholderImg from '../assets/images/advancedSectionPlaceholderImg.png'
+import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
 import { Button } from '../shared/Button'
 import { ChartCard } from '../shared/charts/ChartCard'
 import { ContentContainer } from '../shared/ContentContainer'
+/** @jsxImportSource @emotion/react */
 import { FixedNumber } from 'ethers'
 import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
@@ -189,10 +189,9 @@ export const MarginTradingPage = () => {
                           <Txt.Body2Regular>Close</Txt.Body2Regular>
                         </button>
                       </div>
-                      {/* TODO: Placeholder */}
                       <img
                         tw='w-full my-5'
-                        src={AdvancedPlaceholderImg}
+                        src={AdvancedSectionImg}
                         alt='advancedSectionPlaceholder'
                       />
                       <div tw='flex flex-col w-full gap-7'>
