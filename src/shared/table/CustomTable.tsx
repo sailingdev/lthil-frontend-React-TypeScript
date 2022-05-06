@@ -129,11 +129,13 @@ const TableRow = (props: any) => {
           )
         })}
       </tr>
-      <tr style={{ display: !expanded ? 'none' : undefined }}>
-        <td tw='bg-primary-100' colSpan={props.columns.length}>
-          {props.renderExpanded(row)}
-        </td>
-      </tr>
+      {props.renderExpanded && (
+        <tr style={{ display: !expanded ? 'none' : undefined }}>
+          <td tw='bg-primary-100' colSpan={props.columns.length}>
+            {props.renderExpanded(row)}
+          </td>
+        </tr>
+      )}
     </React.Fragment>
   )
 }
@@ -260,10 +262,11 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
             </tbody>
           ) : (
             <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
+              {page.map((row, i) => {
                 prepareRow(row)
                 return (
                   <TableRow
+                    key={i}
                     row={row}
                     columns={columns}
                     hover={hover}
