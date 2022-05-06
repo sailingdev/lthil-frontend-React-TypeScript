@@ -5,9 +5,9 @@ import { MarginTrading } from './margin-trading'
 import { TokenDetails } from '../types'
 import { TransactionReceipt } from '../types'
 import { Utils } from './utils'
-import addresses from '../assets/addresses.json'
 import { hexToDecimal } from '../utils'
-import { tokens } from '../assets/tokenlist.json'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
+import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
@@ -68,7 +68,7 @@ export class Ether {
   }
 
   getAddresses() {
-    return addresses.addresses
+    return addresses
   }
 
   async getBlockGasLimit() {

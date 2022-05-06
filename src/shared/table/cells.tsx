@@ -4,7 +4,7 @@ import { FixedNumber } from 'ethers'
 import { IPosition } from '../../types'
 import { Txt } from '../Txt'
 import { isDesktop } from '../../utils'
-import { tokens } from '../../assets/tokenlist.json'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 import tw from 'twin.macro'
 import { usePositionProfit } from '../hooks/usePositionProfit'
 

@@ -17,15 +17,15 @@ import { SliderBar } from '../shared/SliderBar'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { TokenInputField } from './TokenInputField'
 import { Txt } from '../shared/Txt'
-import { addresses } from '../assets/addresses.json'
 import { etherGlobal } from '../api/ether'
 import { getCTALabelForApproval } from '../utils'
 import { showErrorNotification } from '../shared/notification'
-import { tokens } from '../assets/tokenlist.json'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useState } from 'react'
+import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()

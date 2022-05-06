@@ -5,7 +5,7 @@ import { InputField } from './InputField'
 /** @jsxImportSource @emotion/react */
 import { MagnifyingGlass } from 'phosphor-react'
 import { Txt } from './Txt'
-import { tokens } from '../assets/tokenlist.json'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 import { useState } from 'react'
 
 interface IToken {
