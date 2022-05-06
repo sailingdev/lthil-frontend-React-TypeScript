@@ -106,7 +106,11 @@ const TableRow = (props: any) => {
           props.hover && tw`hover:bg-primary-200`,
         ]}
         onClick={() => {
-          setExpanded(!expanded)
+          if (props.renderExpanded) {
+            setExpanded(!expanded)
+          } else {
+            props.onActiveRowChange(row.original)
+          }
         }}
       >
         {/* @ts-ignore */}
@@ -270,6 +274,7 @@ export const CustomTable = <T extends object>(props: ICustomTableProps<T>) => {
                     row={row}
                     columns={columns}
                     hover={hover}
+                    onActiveRowChange={props.onActiveRowChange}
                     renderExpanded={props.renderExpanded}
                   />
                 )
