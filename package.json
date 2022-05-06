@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/core": "^11.0.0",
     "@heroicons/react": "^1.0.5",
+    "@ithil-protocol/deployed": "github:Ithil-protocol/deployed",
     "@reduxjs/toolkit": "^1.8.0",
     "@types/lodash": "^4.14.177",
     "@types/react-redux": "^7.1.23",

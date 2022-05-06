@@ -4,7 +4,7 @@ import { IInputPosition, IPosition } from '../types'
 import { ContractFactory } from './contract-factory'
 import { Ether } from './ether'
 import { Utils } from './utils'
-import tokenList from './../assets/tokenlist.json'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 
 export class MarginTrading {
   private signer!: ethers.providers.JsonRpcSigner
@@ -126,13 +126,13 @@ export class MarginTrading {
   }
   parsePosition(event: any): Omit<IPosition, 'status'> {
     const { args } = event
-    const spentToken = tokenList.tokens.find(
+    const spentToken = tokens.find(
       (token) => (args[2] as string) === token.address,
     )!
-    const obtainedToken = tokenList.tokens.find(
+    const obtainedToken = tokens.find(
       (token) => (args[3] as string) === token.address,
     )!
-    const collateralToken = tokenList.tokens.find(
+    const collateralToken = tokens.find(
       (token) => (args[4] as string) === token.address,
     )!
 
