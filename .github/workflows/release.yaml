@@ -26,6 +26,9 @@ jobs:
 
       - name: Build the ReactJS bundle
         run: yarn build
+        env:
+          REACT_APP_BACKEND_URL: "http://localhost:3001"
+          PORT: 4000
 
       - name: Pin to IPFS
         id: upload
