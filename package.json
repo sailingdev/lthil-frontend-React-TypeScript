@@ -55,7 +55,7 @@
   "scripts": {
     "start": "react-scripts start",
     "dev": "react-scripts start",
-    "build": "sh -ac '. ./.env.${REACT_APP_ENV}; react-scripts build'",
+    "build": "react-scripts build'",
     "build:staging": "npm install && REACT_APP_ENV=staging npm run build",
     "get-types": "ts-typie",
     "tw-view": "tailwind-config-viewer -o",
