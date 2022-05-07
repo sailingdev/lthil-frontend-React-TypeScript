@@ -1,6 +1,6 @@
 import { BigNumber, FixedNumber, ethers } from 'ethers'
 
-import { tokens } from '../assets/tokenlist.json'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 
 export class Utils {
   static zero = FixedNumber.from('0')
