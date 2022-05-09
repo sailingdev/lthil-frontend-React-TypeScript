@@ -9,8 +9,11 @@ import {
   TransactionType,
 } from './types'
 import { BigNumber, ethers } from 'ethers'
+
 import { format } from 'date-fns'
 import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
+
+export const isDev = process.env.NODE_ENV === 'development'
 
 export const mapErrorToCode = (e: any): number => {
   return e?.response?.status ?? 500

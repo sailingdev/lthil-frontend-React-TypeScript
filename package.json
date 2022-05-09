@@ -53,10 +53,11 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "dev": "react-scripts start",
+    "start": "REACT_APP_ENV=development react-scripts start",
+    "dev": "REACT_APP_ENV=development react-scripts start",
     "build": "react-scripts build",
     "build:staging": "npm install && REACT_APP_ENV=staging npm run build",
+    "build:production": "npm install && REACT_APP_ENV=production npm run build",
     "get-types": "ts-typie",
     "tw-view": "tailwind-config-viewer -o",
     "count": "find src -name '*.ts*' | xargs wc -l | sort -n",

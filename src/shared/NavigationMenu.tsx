@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import tw from 'twin.macro'
 import { Link, useLocation } from 'react-router-dom'
+
 import { Txt } from './Txt'
+import tw from 'twin.macro'
 
 const items = [
   { url: '/', label: 'Trade' },
@@ -12,10 +13,6 @@ const items = [
   {
     url: '/dashboard',
     label: 'Dashboard',
-  },
-  {
-    url: '/charts',
-    label: 'Charts',
   },
 ]
 
