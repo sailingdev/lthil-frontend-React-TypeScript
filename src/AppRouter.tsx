@@ -43,15 +43,13 @@ export const AppRouter = () => {
           <Header />
           <div tw='flex-grow'>
             <Routes>
-              <Route path='/' element={<MarginTradingPage />} />
+              <Route path='/' element={<TradePage />} />
+              <Route path='/margin' element={<MarginTradingPage />} />
               <Route path='/dashboard' element={<DashboardPage />} />
               <Route path='/margintrading' element={<MarginTradingPage />} />
               <Route path='/position/:positionId' element={<PositionPage />} />
               <Route path='/stake' element={<StakePage />} />
               <Route path='/charts' element={<ChartsPage />} />
-              <Route path='/abc' element={<TradePage />} />
-
-              {/* <Route path='*' element={<Navigate to='/trade' />} /> */}
             </Routes>
           </div>
           {!isDesktop && <Footer />}
