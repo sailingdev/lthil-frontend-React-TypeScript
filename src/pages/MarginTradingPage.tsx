@@ -172,7 +172,7 @@ export const MarginTradingPage = () => {
                   tooltip
                   min={1}
                   max={Number(maxLeverage.toString())}
-                  step={0.1}
+                  step={0.2}
                   value={leverage}
                   onChange={(value) => setLeverage(value)}
                 />
