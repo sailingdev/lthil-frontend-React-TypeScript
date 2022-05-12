@@ -1,6 +1,6 @@
 import 'twin.macro'
 
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { ChartsPage } from './pages/ChartsPage'
 import { DashboardPage } from './pages/DashboardPage'
@@ -43,13 +43,16 @@ export const AppRouter = () => {
           <Header />
           <div tw='flex-grow'>
             <Routes>
-              <Route path='/' element={<TradePage />} />
-              <Route path='/margin' element={<MarginTradingPage />} />
+              <Route path='/trade' element={<TradePage />} />
+              <Route
+                path='/trade/margin-trading'
+                element={<MarginTradingPage />}
+              />
               <Route path='/dashboard' element={<DashboardPage />} />
-              <Route path='/margintrading' element={<MarginTradingPage />} />
               <Route path='/position/:positionId' element={<PositionPage />} />
               <Route path='/stake' element={<StakePage />} />
               <Route path='/charts' element={<ChartsPage />} />
+              <Route path='*' element={<Navigate to='/trade' replace />} />
             </Routes>
           </div>
           {!isDesktop && <Footer />}

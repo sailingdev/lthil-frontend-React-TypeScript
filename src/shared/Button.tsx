@@ -1,9 +1,9 @@
 import 'twin.macro'
 
-/** @jsxImportSource @emotion/react */
-import { MouseEventHandler, useState } from 'react'
-
+import { ClipLoader } from 'react-spinners'
 import { ICSSProps } from '../types'
+/** @jsxImportSource @emotion/react */
+import { MouseEventHandler } from 'react'
 import { Txt } from './Txt'
 import tw from 'twin.macro'
 
@@ -25,7 +25,14 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
   const primary = !props.action
   const LeftIcon = props.leftIcon
   const RightIcon = props.rightIcon
-  const [loading, setLoading] = useState(false)
+
+  const onClickHandler = async (e: any) => {
+    if (props.onClick && !props.isLoading) {
+      await props.onClick(e)
+    }
+  }
+
+  const disabled = props.isLoading
   return (
     <button
       type={props.type ?? 'button'}
@@ -36,40 +43,50 @@ export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
           tw`bg-primary-200 hover:bg-hover-light dark:hover:bg-hover-dark`,
         props.action && tw`bg-action hover:bg-hover-action`,
         props.full && tw`w-full`,
+        tw`disabled:bg-disabled-action`,
       ]}
-      onClick={props.onClick}
+      disabled={disabled}
+      onClick={onClickHandler}
     >
-      {LeftIcon && (
-        <LeftIcon
-          css={[
-            primary && tw`text-secondary`,
-            props.action && tw`text-primary-100`,
-          ]}
-          tw='mr-2'
-          size={16}
-        />
-      )}
+      {props.isLoading ? (
+        <div tw='relative h-full flex items-center justify-center px-8'>
+          <ClipLoader color={'#ffffff'} loading size={24} />
+        </div>
+      ) : (
+        <>
+          {LeftIcon && (
+            <LeftIcon
+              css={[
+                primary && tw`text-secondary`,
+                props.action && tw`text-primary-100`,
+              ]}
+              tw='mr-2'
+              size={16}
+            />
+          )}
 
-      <Txt.ButtonMedium
-        css={[
-          tw`flex-grow`,
-          primary && tw`text-secondary`,
-          props.action && tw`text-white`,
-          props.bold && tw`font-bold`,
-        ]}
-      >
-        {props.text}
-      </Txt.ButtonMedium>
+          <Txt.ButtonMedium
+            css={[
+              tw`flex-grow`,
+              primary && tw`text-secondary`,
+              props.action && tw`text-white`,
+              props.bold && tw`font-bold`,
+            ]}
+          >
+            {props.text}
+          </Txt.ButtonMedium>
 
-      {RightIcon && (
-        <RightIcon
-          css={[
-            primary && tw`text-secondary`,
-            props.action && tw`text-primary-100`,
-          ]}
-          tw='ml-2'
-          size={16}
-        />
+          {RightIcon && (
+            <RightIcon
+              css={[
+                primary && tw`text-secondary`,
+                props.action && tw`text-primary-100`,
+              ]}
+              tw='ml-2'
+              size={16}
+            />
+          )}
+        </>
       )}
     </button>
   )
