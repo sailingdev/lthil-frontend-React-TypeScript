@@ -22,7 +22,9 @@ export const SliderBar = (props: ISliderProps) => {
     <div tw='my-2 flex w-full flex-col gap-4'>
       <div tw='flex flex-row gap-2 items-center text-font-200'>
         {props.label && (
-          <Txt.Body2Regular tw='self-start'>{props.label}</Txt.Body2Regular>
+          <Txt.Body2Regular tw='self-start'>
+            {props.label + ':  ' + props.value}
+          </Txt.Body2Regular>
         )}
         {props.tooltip && <Tooltip />}
       </div>
