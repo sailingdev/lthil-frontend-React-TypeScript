@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { Button } from '../shared/Button'
+import { Button } from './TransactionButton'
 import { InputField } from '../shared/InputField'
 import { Txt } from '../shared/Txt'
 

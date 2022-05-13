@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { Button } from '../shared/Button'
+import { Button } from '../shared/TransactionButton'
 import { CaretDown } from 'phosphor-react'
 import { TokenDetails } from '../types'
 import { TokenModal } from '../shared/TokenModal'

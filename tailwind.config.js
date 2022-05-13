@@ -94,6 +94,9 @@ module.exports = {
       maxWidth: {
         1920: '1920px'
       },
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
+      },
       screens: {
         'tablet': '480px',
         'desktop': '1024px'

@@ -61,7 +61,12 @@ export const Header = () => {
             <WalletIndicator tw='cursor-pointer' />
           </div>
         ) : (
-          <Button text='Connect' action onClick={() => setIsOpenWallet(true)} />
+          <Button
+            text='Connect'
+            staticButton={true}
+            action
+            onClick={() => setIsOpenWallet(true)}
+          />
         )}
         <WalletModal
           modalIsOpen={isOpenWallet}

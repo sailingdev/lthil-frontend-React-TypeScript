@@ -4,7 +4,7 @@ import 'twin.macro'
 import { IPosition, ISearchParams, TransactionType } from '../types'
 import { useAddTransaction, usePositions } from '../state/hooks'
 
-import { Button } from '../shared/Button'
+import { Button } from '../shared/TransactionButton'
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
 import { FixedNumber } from 'ethers'

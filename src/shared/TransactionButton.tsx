@@ -2,6 +2,8 @@ import 'twin.macro'
 
 /** @jsxImportSource @emotion/react */
 import { MouseEventHandler, useState } from 'react'
+import { BigNumber } from 'ethers'
+import { Contract } from '@ethersproject/contracts'
 
 import { ICSSProps } from '../types'
 import { Txt } from './Txt'
@@ -22,6 +24,20 @@ interface IButtonProps extends ICSSProps {
   isLoading?: boolean
 }
 
+export async function evaluateTransaction(
+  contract: Contract | null,
+  methodName: string,
+  args: Array<string | number | BigNumber>,
+): Promise<any> {
+  try {
+    const methods = await contract?.callStatic
+    const bcValues = await methods?.[methodName](...args)
+    return bcValues
+  } catch (e) {
+    console.log(e)
+    return e
+  }
+}
 export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
   const primary = !props.action
   const LeftIcon = props.leftIcon
