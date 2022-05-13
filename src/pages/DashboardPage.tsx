@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
 import { IPosition, ISearchParams, TransactionType } from '../types'
@@ -7,6 +6,7 @@ import { useAddTransaction, usePositions } from '../state/hooks'
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
+/** @jsxImportSource @emotion/react */
 import { FixedNumber } from 'ethers'
 import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
@@ -41,9 +41,7 @@ export const DashboardPage = () => {
   const positions = allPositions.filter((p) => p.status === activeTab)
 
   const closePosition = async (position: IPosition) => {
-    const tx = (await etherGlobal.marginTrading.closePosition(
-      position.positionId,
-    ))!
+    const tx = (await etherGlobal.marginTrading.closePosition(position))!
     addTx(TransactionType.MTS_CLOSE_POSITION, tx.hash!, {
       positionId: position.positionId,
       spentToken: position.spentToken.address,

@@ -1,24 +1,17 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { Ether, etherGlobal } from '../api/ether'
 import { MtsClosePositionMeta, TransactionType } from '../types'
+import { useAddTransaction, usePosition } from '../state/hooks'
 
-import { BasicChart } from '../shared/charts/BasicChart'
 import { ChartCard } from '../shared/charts/ChartCard'
 import { ClosePosition } from '../shared/ClosePosition'
-import { CollateralCard } from '../shared/CollateralCard'
 import { ContentContainer } from '../shared/ContentContainer'
-import { Liquidation } from '../shared/Liquidation'
 import { PositionDetailsCard } from '../shared/PositionDetailsCard'
-import { TabButton } from '../shared/TabButton'
 import { TopUp } from '../shared/TopUp'
-import { TradingChart } from '../shared/charts/TradingChart'
 import { Txt } from '../shared/Txt'
-import { formatDate } from '../utils'
-import { useAddTransaction } from '../state/hooks'
+import { etherGlobal } from '../api/ether'
 import { useParams } from 'react-router-dom'
-import { usePosition } from '../state/hooks'
+/** @jsxImportSource @emotion/react */
 import { useState } from 'react'
 
 export const PositionPage = () => {
@@ -56,7 +49,7 @@ export const PositionPage = () => {
 
   const closePosition = async () => {
     const closePosition = await etherGlobal.marginTrading.closePosition(
-      position.positionId,
+      position,
     )
     addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {
       positionId: position.positionId,

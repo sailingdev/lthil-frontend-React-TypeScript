@@ -65,11 +65,18 @@ export class MarginTrading {
       }
     }
   }
-  async closePosition(positionId: string): Promise<Transaction> {
+  async closePosition(position: IPosition): Promise<Transaction> {
     try {
-      return this.contract.closePosition(positionId, {
-        gasLimit: 10000000,
-      })
+      const p = await this.contract.positions(position.positionId)
+      const fees = p.fees as BigNumber
+      const allowance = p.allowance as BigNumber
+      const principal = p.principal as BigNumber
+      const maxOrMin =
+        position.collateralToken.name != position.spentToken.name
+          ? principal.add(fees)
+          : allowance
+
+      return this.contract.closePosition(position.positionId, maxOrMin)
     } catch (error) {
       console.error(error)
       throw error

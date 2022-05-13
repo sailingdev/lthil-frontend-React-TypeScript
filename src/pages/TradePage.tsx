@@ -53,7 +53,11 @@ export const TradePage = () => {
 
           <div tw='flex flex-row gap-x-4 flex-wrap gap-y-4 justify-center'>
             {strategies.map((s) => (
-              <Strategy {...s} onClick={() => s.url && navigate(s.url)} />
+              <Strategy
+                key={s.id}
+                {...s}
+                onClick={() => s.url && navigate(s.url)}
+              />
             ))}
           </div>
         </div>
