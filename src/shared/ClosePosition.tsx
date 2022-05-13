@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { Button } from './TransactionButton'
+import { Button } from './Button'
 import { Txt } from '../shared/Txt'
 
 interface IClosePosition {

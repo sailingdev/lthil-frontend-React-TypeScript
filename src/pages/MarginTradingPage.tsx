@@ -5,7 +5,8 @@ import { Priority, TokenDetails, TransactionType } from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
 import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
-import { Button } from '../shared/TransactionButton'
+import { TransactionButton } from '../shared/TransactionButton'
+import { Button } from '../shared/Button'
 import { ChartCard } from '../shared/charts/ChartCard'
 import { ContentContainer } from '../shared/ContentContainer'
 /** @jsxImportSource @emotion/react */
@@ -267,7 +268,7 @@ export const MarginTradingPage = () => {
                     </button>
                   )}
                 </div>
-                <Button
+                <TransactionButton
                   text={getCTALabelForApproval(
                     `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`,
                     positionApproval,

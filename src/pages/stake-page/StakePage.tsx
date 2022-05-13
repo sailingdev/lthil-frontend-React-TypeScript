@@ -6,7 +6,7 @@ import { ISearchParams, StakeToken } from '../../types'
 import { useEffect, useState } from 'react'
 import { useInitStakeTokens, useStakeTokens } from '../../state/hooks'
 
-import { Button } from '../../shared/TransactionButton'
+import { Button } from '../../shared/Button'
 import { ContentContainer } from '../../shared/ContentContainer'
 import { CustomTable } from '../../shared/table/CustomTable'
 import { DepositWithdraw } from './DepositWithdraw'

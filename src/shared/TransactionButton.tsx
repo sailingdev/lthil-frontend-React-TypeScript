@@ -23,8 +23,7 @@ interface IButtonProps extends ICSSProps {
   bold?: boolean | undefined
   isLoading?: boolean
 }
-
-export async function evaluateTransaction(
+async function evaluateTransaction(
   contract: Contract | null,
   methodName: string,
   args: Array<string | number | BigNumber>,
@@ -39,7 +38,9 @@ export async function evaluateTransaction(
   }
 }
 
-export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
+export const TransactionButton: React.FC<IButtonProps> = (
+  props: IButtonProps,
+) => {
   const primary = !props.action
   const LeftIcon = props.leftIcon
   const RightIcon = props.rightIcon

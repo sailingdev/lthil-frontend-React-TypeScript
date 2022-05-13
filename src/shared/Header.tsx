@@ -3,7 +3,7 @@ import 'twin.macro'
 import { isDesktop, isTablet } from '../utils'
 
 import { AccountModal } from './AccountModal'
-import { Button } from './TransactionButton'
+import { Button } from './Button'
 import { CaretDown } from 'phosphor-react'
 import { ReactComponent as CurrEth } from '../assets/images/currencyEthereum.svg'
 import { ReactComponent as LogoFullDark } from '../assets/images/logoFullDark.svg'

@@ -5,7 +5,7 @@ import 'twin.macro'
 import { IBaseProps, TransactionType } from '../../types'
 import { useAddTransaction, useTransaction } from '../../state/hooks'
 
-import { Button } from '../../shared/TransactionButton'
+import { Button } from '../../shared/Button'
 import { FixedNumber } from 'ethers'
 import { InputFieldMax } from '../../shared/InputFieldMax'
 import { Txt } from '../../shared/Txt'
