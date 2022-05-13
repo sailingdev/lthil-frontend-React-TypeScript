@@ -1,7 +1,7 @@
 import 'twin.macro'
 
+import { Approval, Priority, TokenDetails, TransactionType } from '../types'
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
-import { Priority, TokenDetails, TransactionType } from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
 import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
@@ -18,9 +18,11 @@ import { SliderBar } from '../shared/SliderBar'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { TokenInputField } from './TokenInputField'
 import { Txt } from '../shared/Txt'
+import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
 import { etherGlobal } from '../api/ether'
 import { getCTALabelForApproval } from '../utils'
 import { showErrorNotification } from '../shared/notification'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
@@ -110,7 +112,12 @@ export const MarginTradingPage = () => {
       setOpenPositionHash(position.hash)
     },
   })
-
+  const isLoading =
+    positionApproval === Approval.PENDING
+      ? true
+      : !openPositionTx
+      ? false
+      : openPositionTx.status !== 'verified'
   return (
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>
@@ -277,6 +284,7 @@ export const MarginTradingPage = () => {
                   staticButton={false}
                   action
                   bold
+                  isLoading={isLoading}
                   onClick={() => openPosition()}
                 />
                 <Txt.CaptionMedium>

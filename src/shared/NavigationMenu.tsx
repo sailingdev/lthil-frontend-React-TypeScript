@@ -5,7 +5,7 @@ import { Txt } from './Txt'
 import tw from 'twin.macro'
 
 const items = [
-  { url: '/', label: 'Trade' },
+  { url: '/trade', label: 'Trade' },
   {
     url: '/stake',
     label: 'Stake',

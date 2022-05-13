@@ -1,11 +1,10 @@
-/** @jsxImportSource @emotion/react */
-import 'twin.macro'
 import 'twin.macro'
 
-import { IBaseProps, TransactionType } from '../../types'
+import { Approval, IBaseProps, TransactionType } from '../../types'
 import { useAddTransaction, useTransaction } from '../../state/hooks'
 
 import { Button } from '../../shared/Button'
+/** @jsxImportSource @emotion/react */
 import { FixedNumber } from 'ethers'
 import { InputFieldMax } from '../../shared/InputFieldMax'
 import { Txt } from '../../shared/Txt'
@@ -90,6 +89,16 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
     ).toString()
     setWithdrawValue(value)
   }
+  const isStakeLoading =
+    stakeApproval === Approval.PENDING
+      ? true
+      : !stakeTx
+      ? false
+      : stakeTx.status !== 'verified'
+
+  const isWithdrawLoading = !withdrawTx
+    ? false
+    : withdrawTx.status !== 'verified'
 
   return (
     <div
@@ -115,6 +124,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
           bold
           action
           full
+          isLoading={isStakeLoading}
           onClick={() => deposit(props.tokenAddress, depositValue)}
         />
         <Txt.CaptionMedium>
@@ -143,6 +153,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
           bold
           action
           full
+          isLoading={isWithdrawLoading}
           onClick={() => withdraw(props.tokenAddress, withdrawValue)}
         />
         <Txt.CaptionMedium>

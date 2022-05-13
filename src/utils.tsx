@@ -45,7 +45,7 @@ export const getTransactionLabel = (t: Pick<Transaction, 'type' | 'meta'>) => {
   if (t.type === TransactionType.APPROVAL) {
     const meta = t.meta as ApprovalTransactionMeta
     const tokenName = tokens.find((t) => t.address === meta.token)?.symbol
-    return `Approval for ${meta.amount} ${tokenName}`
+    return `Approval for ${tokenName}`
   } else if (t.type === TransactionType.DEPOSIT) {
     const meta = t.meta as StakeTransactionMeta
     const tokenName = tokens.find((t) => t.address === meta.token)?.symbol

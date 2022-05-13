@@ -14,7 +14,7 @@ const strategies = [
     apyMin: '0',
     apyMax: '∞x',
     risk: 'High',
-    url: '/margin',
+    url: '/trade/margin-trading',
   },
   {
     id: 2,
