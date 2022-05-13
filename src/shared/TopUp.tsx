@@ -6,7 +6,7 @@ import { Txt } from './Txt'
 import { isDesktop } from '../utils'
 import { SliderBar } from './SliderBar'
 import { Question } from 'phosphor-react'
-import { Button } from '../shared/Button'
+import { Button } from './Button'
 import { InputField } from '../shared/InputField'
 
 import TopUpSectionPlaceholder from '../assets/images/topUpSectionPlaceholder.png'
