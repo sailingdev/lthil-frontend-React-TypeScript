@@ -38,6 +38,7 @@ export async function evaluateTransaction(
     return e
   }
 }
+
 export const Button: React.FC<IButtonProps> = (props: IButtonProps) => {
   const primary = !props.action
   const LeftIcon = props.leftIcon

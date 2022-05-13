@@ -3,7 +3,7 @@ import 'twin.macro'
 import { isDesktop, isTablet } from '../utils'
 
 import { AccountModal } from './AccountModal'
-import { Button } from './Button'
+import { Button } from './TransactionButton'
 import { CaretDown } from 'phosphor-react'
 import { ReactComponent as CurrEth } from '../assets/images/currencyEthereum.svg'
 import { ReactComponent as LogoFullDark } from '../assets/images/logoFullDark.svg'
@@ -61,12 +61,7 @@ export const Header = () => {
             <WalletIndicator tw='cursor-pointer' />
           </div>
         ) : (
-          <Button
-            text='Connect'
-            staticButton={true}
-            action
-            onClick={() => setIsOpenWallet(true)}
-          />
+          <Button text='Connect' action onClick={() => setIsOpenWallet(true)} />
         )}
         <WalletModal
           modalIsOpen={isOpenWallet}
