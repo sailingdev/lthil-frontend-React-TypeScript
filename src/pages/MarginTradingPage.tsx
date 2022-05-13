@@ -27,8 +27,6 @@ import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useState } from 'react'
-import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
-import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 import Loader from 'react-spinners/ClipLoader'
 
 export const MarginTradingPage = () => {
