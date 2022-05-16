@@ -1,15 +1,13 @@
-/** @jsxImportSource @emotion/react */
-import tw from 'twin.macro'
-import { useState } from 'react'
-
-import { Txt } from './Txt'
-import { isDesktop } from '../utils'
-import { SliderBar } from './SliderBar'
-import { Question } from 'phosphor-react'
 import { Button } from './Button'
 import { InputField } from '../shared/InputField'
-
+/** @jsxImportSource @emotion/react */
+import { Question } from 'phosphor-react'
+import { SliderBar } from './SliderBar'
 import TopUpSectionPlaceholder from '../assets/images/topUpSectionPlaceholder.png'
+import { Txt } from './Txt'
+import { isDesktop } from '../utils'
+import tw from 'twin.macro'
+import { useState } from 'react'
 
 const Text = (props: { value: string | number; bold?: boolean }) => {
   return isDesktop ? (
@@ -31,13 +29,13 @@ interface ILiquidation {
 }
 
 export const TopUp = (props: ILiquidation) => {
-  const [sliderValue, setSliderValue] = useState(100)
+  const [sliderValue] = useState(100)
 
   // const onSliderChange = (value: number) => {
   //   setSliderValue(value)
   // }
 
-  const { onClick, inputOnChange, inputValue, collateralTokenSymbol } = props
+  const { onClick, inputOnChange, inputValue } = props
 
   return (
     <>

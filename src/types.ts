@@ -1,4 +1,3 @@
-import { BigNumber, FixedNumber } from 'ethers'
 import { Interpolation, Theme } from '@emotion/react'
 
 import { CSSProperties } from 'react'

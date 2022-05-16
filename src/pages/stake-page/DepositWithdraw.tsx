@@ -31,7 +31,6 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
   const [withdrawHash, setWithdrawHash] = useState<string | undefined>(
     undefined,
   )
-  const [loading, setLoading] = useState(false)
   const addTx = useAddTransaction()
 
   const stakeTx = useTransaction(stakeHash)

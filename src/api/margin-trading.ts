@@ -315,8 +315,7 @@ export class MarginTrading {
     position: IPosition,
   ): Promise<BigNumber | undefined> {
     try {
-      const { spentToken, obtainedToken, amountIn, toBorrow, collateralToken } =
-        position
+      const { amountIn, toBorrow } = position
 
       if (position.type === 'long') {
         const quoteAmount = (

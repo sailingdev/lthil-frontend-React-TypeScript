@@ -19,8 +19,6 @@ export const PositionPage = () => {
   const position = usePosition(positionId!)
   const addTx = useAddTransaction<MtsClosePositionMeta>()
 
-  const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
-
   const [liquidationInput, setLiquidationInput] = useState<string>('')
 
   if (!position) {

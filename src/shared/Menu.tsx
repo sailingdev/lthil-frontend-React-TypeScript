@@ -1,6 +1,6 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
+/** @jsxImportSource @emotion/react */
 import {
   BookOpen,
   DiscordLogo,
@@ -8,11 +8,11 @@ import {
   GithubLogo,
   Info,
 } from 'phosphor-react'
-import { useRef, useState } from 'react'
 
 import { Txt } from './Txt'
 import tw from 'twin.macro'
 import { useOutsideClick } from './hooks/useOutsideAlerter'
+import { useRef } from 'react'
 
 const MenuItem = (props: { icon: any; label: string; url: string }) => {
   const { icon, label, url } = props
