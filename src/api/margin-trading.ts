@@ -5,9 +5,6 @@ import { ContractFactory } from './contract-factory'
 import { Ether } from './ether'
 import { Utils } from './utils'
 import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
-import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
-import MarginStrategy from '@ithil-protocol/deployed/abi/MarginTradingStrategy.json'
-import { useProviderInfo } from '../shared/hooks/useProviderInfo'
 
 export class MarginTrading {
   private signer!: ethers.providers.JsonRpcSigner
@@ -85,19 +82,6 @@ export class MarginTrading {
       throw error
     }
   }
-
-  // getEthereumContract = (baseProvider: any) => {
-  //   const provider = useProviderInfo()
-
-  //   const signer = provider?.getSigner()
-  //   const transactionContract = new ethers.Contract(
-  //     addresses.MarginTradingStrategy,
-  //     MarginStrategy,
-  //     signer,
-  //   )
-
-  //   return transactionContract
-  // }
 
   async openPosition(positionData: IInputPosition): Promise<any> {
     const { spentToken, obtainedToken, deadline, margin, positionType } =

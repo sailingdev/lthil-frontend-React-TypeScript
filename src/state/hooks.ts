@@ -122,12 +122,7 @@ export const useTransactions = () => {
     return Object.values(state.transactions.transactions[chainId!] ?? {})
   })
 }
-export const getReciept = (tx?: number) => {
-  if (tx != 0) {
-    return true
-  }
-  return false
-}
+
 export const useTransaction = (tx?: string) => {
   const transactions = useTransactions()
   return transactions.find((t) => t.tx === tx)
@@ -149,7 +144,6 @@ export const useAddTransaction = <T extends TransactionMeta>() => {
   const { chainId } = useWeb3React()
   const dispatch = useDispatch()
   return (type: TransactionType, tx: string, meta: T) => {
-    console.log(chainId)
     if (!chainId) {
       return
     }
