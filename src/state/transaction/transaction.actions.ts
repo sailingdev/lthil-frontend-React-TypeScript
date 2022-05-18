@@ -8,7 +8,7 @@ export const addTransaction = createAsyncThunk<
   CreatableTransaction,
   CreatableTransaction
 >('transactions/add', async (t) => {
-  showInfoNotification(`${getTransactionLabel(t)} pending`)
+  showInfoNotification(String(t))
   return t
 })
 

@@ -2,7 +2,7 @@ import 'twin.macro'
 
 import { Approval, Priority, TokenDetails, TransactionType } from '../types'
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
-import { useAddTransaction, useTransaction } from '../state/hooks'
+import { useAddTransaction, useTransaction, getReciept } from '../state/hooks'
 
 import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
 import { Button } from '../shared/Button'
@@ -26,9 +26,11 @@ import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useState } from 'react'
+import { useProviderInfo } from '../shared/hooks/useProviderInfo'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
+
   const [positionType, setPositionType] = useState<'short' | 'long'>('long')
   const [spentToken, setSpentToken] = useState<TokenDetails>(tokens[0])
   const [obtainedToken, setObtainedToken] = useState<TokenDetails>(tokens[1])
@@ -38,6 +40,8 @@ export const MarginTradingPage = () => {
   const [deadline, setDeadline] = useState<any>(20)
   const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
   const [priority, setPriority] = useState<Priority>('buy')
+  const [Status, setStatus] = useState('')
+
   const [minObtained, setMinObtained] = useState<FixedNumber>(
     FixedNumber.from('0'),
   )
@@ -84,6 +88,7 @@ export const MarginTradingPage = () => {
   )
   const openPositionTx = useTransaction(openPositionHash)
 
+  const [isLoading, setisLoading] = useState(false)
   const [positionApproval, openPosition] = useApprovalAction({
     approvalMeta: {
       token: spentToken.address,
@@ -104,16 +109,40 @@ export const MarginTradingPage = () => {
       const position = await etherGlobal.marginTrading.openPosition(
         positionData,
       )
+      setisLoading(true)
+
+      await new Promise((resolve) => setTimeout(resolve, 10000)) // 15 sec
+
+      const txReceipt = await etherGlobal.getSerializableTransactionReceipt(
+        position.hash,
+      )
+
+      if (getReciept(txReceipt?.status)) {
+        setStatus('Transcaction Verified')
+      } else {
+        setStatus('Transcaction Failed')
+      }
+
+      if (txReceipt && txReceipt.blockNumber) {
+        setisLoading(false)
+        return txReceipt
+      }
+
       addTx(TransactionType.MTS_OPEN_POSITION, position.hash, positionData)
+
       setOpenPositionHash(position.hash)
+
+      setisLoading(false)
     },
   })
-  const isLoading =
-    positionApproval === Approval.PENDING
-      ? true
-      : !openPositionTx
-      ? false
-      : openPositionTx.status !== 'verified'
+
+  // const isLoading =
+  //   positionApproval === Approval.PENDING
+  //     ? true
+  //     : !openPositionTx
+  //     ? false
+  //     : openPositionTx.status !== 'verified'
+
   return (
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>
@@ -216,6 +245,7 @@ export const MarginTradingPage = () => {
                         src={AdvancedSectionImg}
                         alt='advancedSectionPlaceholder'
                       />
+
                       <div tw='flex flex-col w-full gap-7'>
                         <InputField
                           tooltip
@@ -282,13 +312,7 @@ export const MarginTradingPage = () => {
                   isLoading={isLoading}
                   onClick={() => openPosition()}
                 />
-                <Txt.CaptionMedium>
-                  {!openPositionTx
-                    ? ''
-                    : openPositionTx.status == 'verified'
-                    ? 'Transaction verified.'
-                    : 'Transaction pending...'}
-                </Txt.CaptionMedium>
+                <Txt.CaptionMedium>{Status}</Txt.CaptionMedium>
               </div>
             </div>
             <ChartCard
