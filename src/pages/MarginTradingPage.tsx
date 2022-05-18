@@ -5,7 +5,6 @@ import { ArrowRight, FadersHorizontal } from 'phosphor-react'
 import { useAddTransaction, useTransaction, getReciept } from '../state/hooks'
 
 import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
-import { Button } from '../shared/Button'
 import { ChartCard } from '../shared/charts/ChartCard'
 import { ContentContainer } from '../shared/ContentContainer'
 /** @jsxImportSource @emotion/react */
@@ -16,6 +15,7 @@ import { RadioGroup } from '../shared/RadioGroup'
 import { SliderBar } from '../shared/SliderBar'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { TokenInputField } from './TokenInputField'
+import { TransactionButton } from '../shared/TransactionButton'
 import { Txt } from '../shared/Txt'
 import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
 import { etherGlobal } from '../api/ether'
@@ -301,12 +301,13 @@ export const MarginTradingPage = () => {
                     </button>
                   )}
                 </div>
-                <Button
+                <TransactionButton
                   text={getCTALabelForApproval(
                     `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`,
                     positionApproval,
                   )}
                   full
+                  staticButton={false}
                   action
                   bold
                   isLoading={isLoading}
