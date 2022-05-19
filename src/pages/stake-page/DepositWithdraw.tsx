@@ -116,6 +116,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
           value={depositValue}
           onChange={(value) => setDepositValue(value)}
           unit={props.tokenSymbol}
+          address={props.tokenAddress}
           onMaxClick={getMaxDeposit}
         />
         <Button
@@ -142,6 +143,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
           </Txt.Heading2>
         </div>
         <InputFieldMax
+          address={props.tokenAddress}
           value={withdrawValue}
           onChange={(value) => setWithdrawValue(value)}
           unit={props.tokenSymbol}
