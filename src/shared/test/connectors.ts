@@ -36,7 +36,7 @@ export const connectors = [
     name: 'WalletConnect',
     icon: WalletConnectIcon,
     connector: new WalletConnectConnector({
-      infuraId: '4a06377afcb842f394dc13f47f6cac54',
+      infuraId: 'a39977b637f440808224bf89d840b420',
       bridge: 'https://bridge.walletconnect.org',
       qrcode: true,
       supportedChainIds: allChainIds,

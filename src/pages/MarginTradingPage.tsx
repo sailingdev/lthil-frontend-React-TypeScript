@@ -39,6 +39,7 @@ export const MarginTradingPage = () => {
   const [deadline, setDeadline] = useState<any>(20)
   const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
   const [priority, setPriority] = useState<Priority>('buy')
+
   const [minObtained, setMinObtained] = useState<FixedNumber>(
     FixedNumber.from('0'),
   )

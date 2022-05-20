@@ -36,7 +36,7 @@ export class MarginTrading {
     const [minQ] = await this.contract.quote(
       positionData.spentToken,
       positionData.obtainedToken,
-      margin.mulUnsafe(leverage).toHexString(),
+      margin.mulUnsafe(leverage),
     )
     const minObtainedQuote = FixedNumber.from(
       Ether.utils.formatTokenUnits(minQ, positionData.spentToken),
@@ -45,7 +45,7 @@ export class MarginTrading {
     const [maxQ] = await this.contract.quote(
       positionData.obtainedToken,
       positionData.spentToken,
-      margin.mulUnsafe(leverage).toHexString(),
+      margin.mulUnsafe(leverage),
     )
     const maxSpentQuote = FixedNumber.from(
       Ether.utils.formatTokenUnits(maxQ, positionData.spentToken),
@@ -101,11 +101,11 @@ export class MarginTrading {
           obtainedToken,
           deadline: BigNumber.from(
             Math.floor(Date.now() / 1000) + 60 * deadline,
-          ).toHexString(),
-          collateral: marginValue.toHexString(),
+          ),
+          collateral: marginValue,
           collateralIsSpentToken: positionType === 'long' ? true : false,
-          minObtained: minObtained.toHexString(),
-          maxSpent: maxSpent.toHexString(),
+          minObtained: minObtained,
+          maxSpent: maxSpent,
         },
         {
           gasLimit: 10000000,
@@ -126,7 +126,7 @@ export class MarginTrading {
     const position = events.filter(
       (position) =>
         // @ts-ignore
-        position!.args![0].toHexString() == positionId.toHexString(),
+        position!.args![0] == positionId,
     )
 
     return this.parsePosition(position[0])
@@ -198,7 +198,7 @@ export class MarginTrading {
 
     return {
       type,
-      positionId: (args![0] as BigNumber).toHexString(),
+      positionId: (args![0] as BigNumber).toString(),
       ownerId: args[1] as string,
       spentToken,
       obtainedToken,
@@ -234,7 +234,7 @@ export class MarginTrading {
     const closedAndLiquidatedPositionsIds = [
       ...closedPositions,
       ...liquidatedPositions,
-    ].map((p) => p.args![0].toHexString())
+    ].map((p) => p.args![0])
 
     return positions.map<IPosition>((p) => {
       const isClosed = closedAndLiquidatedPositionsIds.includes(p.positionId)
@@ -280,10 +280,8 @@ export class MarginTrading {
         position.spentToken.address,
         position.obtainedToken.address,
         position.type === 'long'
-          ? FixedNumber.from(position.toBorrow)
-              .addUnsafe(totalFees)
-              .toHexString()
-          : FixedNumber.from(position.amountIn).toHexString(),
+          ? FixedNumber.from(position.toBorrow).addUnsafe(totalFees)
+          : FixedNumber.from(position.amountIn),
       )
     )[0]
     const quoteAmount = FixedNumber.from(
