@@ -12,6 +12,7 @@ import { ContentContainer } from '../shared/ContentContainer'
 import { FixedNumber } from 'ethers'
 import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
+import { InputFieldMax } from '../shared/InputFieldMax'
 import { RadioGroup } from '../shared/RadioGroup'
 import { SliderBar } from '../shared/SliderBar'
 import { TabsSwitch } from '../shared/TabsSwitch'
@@ -165,10 +166,11 @@ export const MarginTradingPage = () => {
                     value={maxSpent.round(4).toString()}
                   />
                 </div>
-                <InputField
+                <InputFieldMax
                   label='Margin'
-                  tooltip
                   placeholder='0'
+                  unit={spentToken.symbol}
+                  address={spentToken.address}
                   value={margin}
                   onChange={(value) => setMargin(value)}
                   renderRight={
