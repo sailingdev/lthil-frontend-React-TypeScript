@@ -84,9 +84,6 @@ export const TopUp = (props: ILiquidation) => {
           value={sliderValue}
           onChange={onSliderChange}
         />
-        <div tw='w-full flex flex-row justify-between'>
-          <Txt.CaptionMedium tw='text-font-100'>Top up</Txt.CaptionMedium>
-        </div>
         <div tw='my-6 w-full gap-2 flex flex-col'>
           <InputField
             renderRight={
