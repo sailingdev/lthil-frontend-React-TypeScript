@@ -1,11 +1,11 @@
-import 'twin.macro'
 import 'rc-slider/assets/index.css'
+import 'twin.macro'
 
 import { ReactComponent as RadioButtonNotSelected } from '../assets/images/radioButton/notSelected.svg'
 import { ReactComponent as RadioButtonSelected } from '../assets/images/radioButton/selected.svg'
+import { Tooltip } from './Tooltip'
 import { Txt } from './Txt'
 import tw from 'twin.macro'
-import { Tooltip } from './Tooltip'
 
 /** @jsxImportSource @emotion/react */
 
@@ -19,7 +19,7 @@ interface IRadioGroupProps {
   items: IRadioItem[]
   activeRadio: string
   onChange: (value: string) => void
-  tooltip?: boolean
+  tooltipText?: string
 }
 
 const RadioButton = (props: {
@@ -38,12 +38,12 @@ const RadioButton = (props: {
 }
 
 export const RadioGroup = (props: IRadioGroupProps) => {
-  const { label, activeRadio, onChange, tooltip } = props
+  const { label, activeRadio, onChange, tooltipText } = props
   return (
     <div tw='w-full flex flex-col gap-3'>
       <div tw='flex items-center gap-2'>
         <Txt.Body2Regular>{label}</Txt.Body2Regular>
-        {tooltip && <Tooltip />}
+        {tooltipText && <Tooltip text={tooltipText} />}
       </div>
       <div tw='flex flex-row gap-10'>
         {props.items.map((radio) => (

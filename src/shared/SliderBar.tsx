@@ -1,10 +1,11 @@
-/** @jsxImportSource @emotion/react */
-import tw from 'twin.macro'
-import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 
-import { Txt } from './Txt'
+/** @jsxImportSource @emotion/react */
+import Slider from 'rc-slider'
 import { Tooltip } from './Tooltip'
+import { Txt } from './Txt'
+import tw from 'twin.macro'
+
 interface ISliderProps {
   label?: string
   min: number
@@ -13,7 +14,7 @@ interface ISliderProps {
   onChange?: (value: number) => void
   value: number
   step?: number
-  tooltip?: boolean
+  tooltipText?: string
 }
 
 export const SliderBar = (props: ISliderProps) => {
@@ -26,7 +27,7 @@ export const SliderBar = (props: ISliderProps) => {
             {props.label + ':  ' + props.value}
           </Txt.Body2Regular>
         )}
-        {props.tooltip && <Tooltip />}
+        {props.tooltipText && <Tooltip text={props.tooltipText} />}
       </div>
       <span tw='px-2'>
         <Slider

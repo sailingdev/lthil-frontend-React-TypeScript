@@ -153,21 +153,25 @@ export const MarginTradingPage = () => {
                   />
                 </div>
                 <div tw='w-full'>
-                  <InfoItem tooltip label='Leverage' value={`${leverage}x`} />
                   <InfoItem
-                    tooltip
+                    tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+                    label='Leverage'
+                    value={`${leverage}x`}
+                  />
+                  <InfoItem
+                    tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                     label='Min. obtained'
                     value={minObtained.round(4).toString()}
                   />
                   <InfoItem
-                    tooltip
+                    tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                     label='Max. spent'
                     value={maxSpent.round(4).toString()}
                   />
                 </div>
                 <InputField
                   label='Margin'
-                  tooltip
+                  tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                   placeholder='0'
                   value={margin}
                   onChange={(value) => setMargin(value)}
@@ -179,7 +183,7 @@ export const MarginTradingPage = () => {
                 />
                 <SliderBar
                   label='Leverage'
-                  tooltip
+                  tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                   min={1}
                   max={Number(maxLeverage.toString())}
                   step={0.2}
@@ -218,7 +222,7 @@ export const MarginTradingPage = () => {
                       />
                       <div tw='flex flex-col w-full gap-7'>
                         <InputField
-                          tooltip
+                          tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                           label='Slippage'
                           placeholder='0'
                           value={slippage}
@@ -228,7 +232,7 @@ export const MarginTradingPage = () => {
                           }
                         />
                         <RadioGroup
-                          tooltip
+                          tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                           label='Priority'
                           items={[
                             {
@@ -244,7 +248,7 @@ export const MarginTradingPage = () => {
                           onChange={(value) => setPriority(value as Priority)}
                         />
                         <InputField
-                          tooltip
+                          tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                           label='Deadline'
                           placeholder='30 mins'
                           value={deadline}

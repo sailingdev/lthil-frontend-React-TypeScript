@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
 
-import { isDesktop } from '../utils'
-import { Txt } from './Txt'
 import { Tooltip } from './Tooltip'
+import { Txt } from './Txt'
+import { isDesktop } from '../utils'
+import tw from 'twin.macro'
 
 const InfoItemText = (props: { value: string | number }) => {
   return isDesktop ? (
@@ -19,14 +19,14 @@ export const InfoItem = (props: {
   details?: string
   value: string | number | undefined
   valueColor?: 'black' | 'red' | 'green'
-  tooltip?: boolean
+  tooltipText?: string
 }) => {
-  const { label, details, value, valueColor, tooltip } = props
+  const { label, details, value, valueColor, tooltipText } = props
   return (
     <div tw='flex flex-row justify-between w-full'>
       <div tw='flex gap-2 items-center'>
         <InfoItemText value={label} />
-        {tooltip && <Tooltip />}
+        {tooltipText && <Tooltip text={tooltipText} />}
       </div>
       <div tw='flex flex-row gap-2'>
         {details && <InfoItemText value={details} />}
