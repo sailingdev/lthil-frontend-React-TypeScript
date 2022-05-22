@@ -27,7 +27,6 @@ import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useState } from 'react'
-import x from '../assets/images/radioButton/icons8-macos-close-32.png'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
