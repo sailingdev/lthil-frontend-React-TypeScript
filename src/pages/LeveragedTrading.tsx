@@ -1,19 +1,16 @@
 import 'twin.macro'
 
-import { Approval, Priority, TokenDetails } from '../types'
+import { Approval, TokenDetails } from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 import { useEffect, useState } from 'react'
 
-import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
 import { FadersHorizontal } from 'phosphor-react'
 /** @jsxImportSource @emotion/react */
 import { FixedNumber } from 'ethers'
-import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
 import { ReactComponent as LidoLogo } from '../assets/images/lido.svg'
-import { RadioGroup } from '../shared/RadioGroup'
 import { SliderBar } from '../shared/SliderBar'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { TokenInputField } from './TokenInputField'
@@ -33,20 +30,15 @@ export const LeveragedTradingPage = () => {
   const [token, setToken] = useState<TokenDetails>(tokens[0])
   const [tokenInput, setTokenInput] = useState<string>('')
   const [availableTokens, setAvailableTokens] = useState(tokens)
-
   const [leverage, setLeverage] = useState<number>(1)
   const [slippage, setSlippage] = useState<any>(1)
   const [deadline, setDeadline] = useState<any>(20)
-  const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
-  const [priority, setPriority] = useState<Priority>('buy')
 
-  const [minObtained, setMinObtained] = useState<FixedNumber>(
-    FixedNumber.from('0'),
-  )
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
+
   const [maxLeverage, setMaxLeverage] = useState<FixedNumber>(
     FixedNumber.from('5'),
   )
-  const [maxSpent, setMaxSpent] = useState<FixedNumber>(FixedNumber.from('0'))
 
   const isConnected = useIsConnected()
 
@@ -165,36 +157,7 @@ export const LeveragedTradingPage = () => {
                     onTokenChange={(value) => setToken(value)}
                   />
                 </div>
-                <div tw='w-full'>
-                  <InfoItem
-                    tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
-                    label='Leverage'
-                    value={`${leverage}x`}
-                  />
-                  <InfoItem
-                    tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
-                    label='Min. obtained'
-                    value={minObtained.round(4).toString()}
-                  />
-                  <InfoItem
-                    tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
-                    label='Max. spent'
-                    value={maxSpent.round(4).toString()}
-                  />
-                </div>
-                {/* <InputFieldMax
-                  label='Margin'
-                  placeholder='0'
-                  unit={spentToken.symbol}
-                  address={spentToken.address}
-                  value={margin}
-                  onChange={(value) => setMargin(value)}
-                  renderRight={
-                    <Txt.InputText tw='text-font-100'>
-                      {spentToken.symbol}
-                    </Txt.InputText>
-                  }
-                /> */}
+
                 <SliderBar
                   label='Leverage'
                   tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
@@ -220,11 +183,7 @@ export const LeveragedTradingPage = () => {
                           </button>{' '}
                         </div>
                       </div>
-                      <img
-                        tw='w-full my-5'
-                        src={AdvancedSectionImg}
-                        alt='advancedSectionPlaceholder'
-                      />
+
                       <div tw='flex flex-col w-full gap-7'>
                         <InputField
                           tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
@@ -235,22 +194,6 @@ export const LeveragedTradingPage = () => {
                           renderRight={
                             <Txt.InputText tw='text-font-100'>%</Txt.InputText>
                           }
-                        />
-                        <RadioGroup
-                          tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
-                          label='Priority'
-                          items={[
-                            {
-                              label: 'Buy',
-                              value: 'buy',
-                            },
-                            {
-                              label: 'Sell',
-                              value: 'sell',
-                            },
-                          ]}
-                          activeRadio={priority}
-                          onChange={(value) => setPriority(value as Priority)}
                         />
                         <InputField
                           tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
@@ -282,7 +225,7 @@ export const LeveragedTradingPage = () => {
                 </div>
                 <Button
                   text={getCTALabelForApproval(
-                    `${priority.toUpperCase()} / ${positionProtocol.toUpperCase()} TKN`,
+                    `${positionProtocol.toUpperCase()} TKN`,
                     positionApproval,
                   )}
                   full
