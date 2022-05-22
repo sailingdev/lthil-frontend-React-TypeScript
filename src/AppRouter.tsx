@@ -6,6 +6,7 @@ import { ChartsPage } from './pages/ChartsPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { Footer } from './shared/Footer'
 import { Header } from './shared/Header'
+import { LeveragedTradingPage } from './pages/LeveragedTrading'
 import { MarginTradingPage } from './pages/MarginTradingPage'
 import { PositionPage } from './pages/PositionPage'
 import { StakePage } from './pages/stake-page/StakePage'
@@ -47,6 +48,10 @@ export const AppRouter = () => {
               <Route
                 path='/trade/margin-trading'
                 element={<MarginTradingPage />}
+              />
+              <Route
+                path='/trade/leveraged-trading'
+                element={<LeveragedTradingPage />}
               />
               <Route path='/dashboard' element={<DashboardPage />} />
               <Route path='/position/:positionId' element={<PositionPage />} />

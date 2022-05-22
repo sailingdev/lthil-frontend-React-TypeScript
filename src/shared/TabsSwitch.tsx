@@ -7,20 +7,23 @@ import tw from 'twin.macro'
 interface ITab {
   title: string
   value: string
+  icon?: any
 }
 
 interface ITabsProps {
   className?: string | undefined
   items: ITab[]
-  activeIndex: PositionType
-  onChange: (value: PositionType) => void
+  activeIndex: string
+  onChange: (value: string) => void
 }
 
 const TabButton = (props: {
   text: string
   onClick: MouseEventHandler<HTMLButtonElement>
   active?: boolean
+  icon?: any
 }) => {
+  const Icon = props.icon
   return (
     <button
       css={[
@@ -30,9 +33,11 @@ const TabButton = (props: {
       ]}
       onClick={props.onClick}
     >
+      {Icon && <Icon />}
       <Txt.Body1Regular
         css={[
           tw`text-secondary`,
+          Icon && tw`ml-2`,
           props.active && tw`text-primary-100 font-bold`,
         ]}
       >
@@ -55,6 +60,7 @@ export const TabsSwitch = (props: ITabsProps) => {
         {props.items.map((tab) => (
           <TabButton
             key={tab.value}
+            icon={tab.icon}
             text={tab.title}
             active={tab.value == activeIndex}
             onClick={() => onChange(tab.value as PositionType)}

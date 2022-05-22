@@ -1,36 +1,34 @@
 import 'twin.macro'
 
-import { Approval, Priority, TokenDetails, TransactionType } from '../types'
+import { Approval, Priority, TokenDetails } from '../types'
 import { ArrowRight, FadersHorizontal } from 'phosphor-react'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
 import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
 import { Button } from '../shared/Button'
-import { ChartCard } from '../shared/charts/ChartCard'
 import { ContentContainer } from '../shared/ContentContainer'
 /** @jsxImportSource @emotion/react */
 import { FixedNumber } from 'ethers'
 import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
 import { InputFieldMax } from '../shared/InputFieldMax'
+import { ReactComponent as LidoLogo } from '../assets/images/lido.svg'
 import { RadioGroup } from '../shared/RadioGroup'
 import { SliderBar } from '../shared/SliderBar'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { TokenInputField } from './TokenInputField'
 import { Txt } from '../shared/Txt'
+import { ReactComponent as YearnLogo } from '../assets/images/yearn.svg'
 import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
-import { etherGlobal } from '../api/ether'
 import { getCTALabelForApproval } from '../utils'
-import { showErrorNotification } from '../shared/notification'
 import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
-import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useState } from 'react'
 
-export const MarginTradingPage = () => {
+export const LeveragedTradingPage = () => {
   const addTx = useAddTransaction()
-  const [positionType, setPositionType] = useState<'short' | 'long'>('long')
+  const [positionType, setPositionType] = useState<'yearn' | 'lido'>('yearn')
   const [spentToken, setSpentToken] = useState<TokenDetails>(tokens[0])
   const [obtainedToken, setObtainedToken] = useState<TokenDetails>(tokens[1])
   const [leverage, setLeverage] = useState<number>(1)
@@ -49,37 +47,37 @@ export const MarginTradingPage = () => {
   const [maxSpent, setMaxSpent] = useState<FixedNumber>(FixedNumber.from('0'))
 
   const isConnected = useIsConnected()
-  useAsync(async () => {
-    try {
-      if (isConnected && slippage && margin) {
-        setMaxLeverage(await etherGlobal.marginTrading.getMaxLeverage())
-        const [max, min] = await etherGlobal.marginTrading.computeMaxAndMin({
-          margin,
-          leverage,
-          priority,
-          positionType,
-          slippage,
-          deadline,
-          obtainedToken: obtainedToken.address,
-          spentToken: spentToken.address,
-        })
-        setMinObtained(min)
-        setMaxSpent(max)
-      }
-    } catch (error) {
-      console.error(error)
-      showErrorNotification(`Can't compute min obtained and max spent`)
-    }
-  }, [
-    isConnected,
-    spentToken.address,
-    obtainedToken.address,
-    margin,
-    leverage,
-    priority,
-    positionType,
-    slippage,
-  ])
+  // useAsync(async () => {
+  //   try {
+  //     if (isConnected && slippage && margin) {
+  //       setMaxLeverage(await etherGlobal.marginTrading.getMaxLeverage())
+  //       const [max, min] = await etherGlobal.marginTrading.computeMaxAndMin({
+  //         margin,
+  //         leverage,
+  //         priority,
+  //         positionType,
+  //         slippage,
+  //         deadline,
+  //         obtainedToken: obtainedToken.address,
+  //         spentToken: spentToken.address,
+  //       })
+  //       setMinObtained(min)
+  //       setMaxSpent(max)
+  //     }
+  //   } catch (error) {
+  //     console.error(error)
+  //     showErrorNotification(`Can't compute min obtained and max spent`)
+  //   }
+  // }, [
+  //   isConnected,
+  //   spentToken.address,
+  //   obtainedToken.address,
+  //   margin,
+  //   leverage,
+  //   priority,
+  //   positionType,
+  //   slippage,
+  // ])
 
   const [openPositionHash, setOpenPositionHash] = useState<string | undefined>(
     undefined,
@@ -103,11 +101,11 @@ export const MarginTradingPage = () => {
         priority,
         deadline,
       }
-      const position = await etherGlobal.marginTrading.openPosition(
-        positionData,
-      )
-      addTx(TransactionType.MTS_OPEN_POSITION, position.hash, positionData)
-      setOpenPositionHash(position.hash)
+      // const position = await etherGlobal.marginTrading.openPosition(
+      //   positionData,
+      // )
+      // addTx(TransactionType.MTS_OPEN_POSITION, position.hash, positionData)
+      // setOpenPositionHash(position.hash)
     },
   })
   const isLoading =
@@ -120,7 +118,7 @@ export const MarginTradingPage = () => {
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>
         <div tw='w-full tablet:w-9/12 desktop:w-10/12 flex flex-col items-center'>
-          <Txt.Heading1 tw='mb-12'>Margin Trading Strategy </Txt.Heading1>
+          <Txt.Heading1 tw='mb-12'>Leveraged staking </Txt.Heading1>
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
             <link
               href='https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css'
@@ -134,12 +132,14 @@ export const MarginTradingPage = () => {
                   onChange={(value: any) => setPositionType(value)}
                   items={[
                     {
-                      title: 'Long',
-                      value: 'long',
+                      title: 'YFI',
+                      icon: YearnLogo,
+                      value: 'yearn',
                     },
                     {
-                      title: 'Short',
-                      value: 'short',
+                      title: 'CRV',
+                      icon: LidoLogo,
+                      value: 'lido',
                     },
                   ]}
                 />
@@ -289,11 +289,12 @@ export const MarginTradingPage = () => {
                 </Txt.CaptionMedium>
               </div>
             </div>
-            <ChartCard
+            {/* <ChartCard
               firstToken={obtainedToken}
               secondToken={spentToken}
               disableTrading={false}
-            />
+            /> */}
+            <div tw='w-full height[500px] tablet:height[500px] desktop:height[700px] desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'></div>
           </div>
         </div>
       </div>
