@@ -1,17 +1,17 @@
 import 'twin.macro'
 
 import { Approval, Priority, TokenDetails } from '../types'
-import { ArrowRight, FadersHorizontal } from 'phosphor-react'
 import { useAddTransaction, useTransaction } from '../state/hooks'
+import { useEffect, useState } from 'react'
 
 import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
+import { FadersHorizontal } from 'phosphor-react'
 /** @jsxImportSource @emotion/react */
 import { FixedNumber } from 'ethers'
 import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
-import { InputFieldMax } from '../shared/InputFieldMax'
 import { ReactComponent as LidoLogo } from '../assets/images/lido.svg'
 import { RadioGroup } from '../shared/RadioGroup'
 import { SliderBar } from '../shared/SliderBar'
@@ -24,15 +24,17 @@ import { getCTALabelForApproval } from '../utils'
 import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
-import { useState } from 'react'
 
 export const LeveragedTradingPage = () => {
   const addTx = useAddTransaction()
-  const [positionType, setPositionType] = useState<'yearn' | 'lido'>('yearn')
-  const [spentToken, setSpentToken] = useState<TokenDetails>(tokens[0])
-  const [obtainedToken, setObtainedToken] = useState<TokenDetails>(tokens[1])
+  const [positionProtocol, setPositionProtocol] = useState<'yearn' | 'lido'>(
+    'yearn',
+  )
+  const [token, setToken] = useState<TokenDetails>(tokens[0])
+  const [tokenInput, setTokenInput] = useState<string>('')
+  const [availableTokens, setAvailableTokens] = useState(tokens)
+
   const [leverage, setLeverage] = useState<number>(1)
-  const [margin, setMargin] = useState<string>('2')
   const [slippage, setSlippage] = useState<any>(1)
   const [deadline, setDeadline] = useState<any>(20)
   const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
@@ -47,6 +49,15 @@ export const LeveragedTradingPage = () => {
   const [maxSpent, setMaxSpent] = useState<FixedNumber>(FixedNumber.from('0'))
 
   const isConnected = useIsConnected()
+
+  useEffect(() => {
+    const newTokens =
+      positionProtocol === 'lido'
+        ? tokens.filter((f) => f.symbol === 'WETH')
+        : tokens
+    setAvailableTokens(newTokens)
+    setToken(newTokens[0])
+  }, [positionProtocol])
   // useAsync(async () => {
   //   try {
   //     if (isConnected && slippage && margin) {
@@ -86,21 +97,22 @@ export const LeveragedTradingPage = () => {
 
   const [positionApproval, openPosition] = useApprovalAction({
     approvalMeta: {
-      token: spentToken.address,
+      // @ts-ignore
+      token: token.address,
       destination: addresses.MarginTradingStrategy,
       amount: Number.MAX_SAFE_INTEGER,
     },
     onApproval: async () => {
-      const positionData = {
-        positionType,
-        spentToken: spentToken.address,
-        obtainedToken: obtainedToken.address,
-        margin,
-        slippage,
-        leverage,
-        priority,
-        deadline,
-      }
+      // const positionData = {
+      //   positionType,
+      //   spentToken: spentToken.address,
+      //   obtainedToken: obtainedToken.address,
+      //   margin,
+      //   slippage,
+      //   leverage,
+      //   priority,
+      //   deadline,
+      // }
       // const position = await etherGlobal.marginTrading.openPosition(
       //   positionData,
       // )
@@ -128,8 +140,8 @@ export const LeveragedTradingPage = () => {
             <div tw='flex flex-col gap-3 flex-grow w-full desktop:w-4/12'>
               <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100 gap-7'>
                 <TabsSwitch
-                  activeIndex={positionType}
-                  onChange={(value: any) => setPositionType(value)}
+                  activeIndex={positionProtocol}
+                  onChange={(value: any) => setPositionProtocol(value)}
                   items={[
                     {
                       title: 'YFI',
@@ -145,13 +157,12 @@ export const LeveragedTradingPage = () => {
                 />
                 <div tw='flex w-full justify-between items-center'>
                   <TokenInputField
-                    token={spentToken}
-                    onTokenChange={(value) => setSpentToken(value)}
-                  />
-                  <ArrowRight size={28} tw='text-font-200 mx-6' />
-                  <TokenInputField
-                    token={obtainedToken}
-                    onTokenChange={(value) => setObtainedToken(value)}
+                    label='Margin'
+                    availableTokens={availableTokens}
+                    value={tokenInput}
+                    setValue={setTokenInput}
+                    token={token}
+                    onTokenChange={(value) => setToken(value)}
                   />
                 </div>
                 <div tw='w-full'>
@@ -171,7 +182,7 @@ export const LeveragedTradingPage = () => {
                     value={maxSpent.round(4).toString()}
                   />
                 </div>
-                <InputFieldMax
+                {/* <InputFieldMax
                   label='Margin'
                   placeholder='0'
                   unit={spentToken.symbol}
@@ -183,7 +194,7 @@ export const LeveragedTradingPage = () => {
                       {spentToken.symbol}
                     </Txt.InputText>
                   }
-                />
+                /> */}
                 <SliderBar
                   label='Leverage'
                   tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
@@ -271,7 +282,7 @@ export const LeveragedTradingPage = () => {
                 </div>
                 <Button
                   text={getCTALabelForApproval(
-                    `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`,
+                    `${priority.toUpperCase()} / ${positionProtocol.toUpperCase()} TKN`,
                     positionApproval,
                   )}
                   full

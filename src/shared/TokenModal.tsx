@@ -1,12 +1,13 @@
 import 'twin.macro'
 
+import { useEffect, useState } from 'react'
+
 import { CenteredModal } from './CenteredModal'
 import { InputField } from './InputField'
 /** @jsxImportSource @emotion/react */
 import { MagnifyingGlass } from 'phosphor-react'
 import { Txt } from './Txt'
 import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
-import { useState } from 'react'
 
 interface IToken {
   name: string
@@ -19,13 +20,23 @@ interface IToken {
 
 interface ITokenModal {
   modalIsOpen: boolean
+  availableTokens?: any[]
   onModalChange: (value: boolean) => void
   onSelect(token: any): void
 }
 
 export const TokenModal = (props: ITokenModal) => {
   const [search, setSearch] = useState('')
-  const [filteredTokenList, setFilteredTokenList] = useState<IToken[]>(tokens)
+  const [filteredTokenList, setFilteredTokenList] = useState<IToken[]>(
+    props.availableTokens ?? tokens,
+  )
+
+  useEffect(() => {
+    if (props.availableTokens) {
+      setSearch('')
+      setFilteredTokenList(props.availableTokens)
+    }
+  }, [props.availableTokens])
 
   const searchOnChange = (value: string) => {
     setSearch(value)

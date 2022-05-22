@@ -23,6 +23,7 @@ const strategies = [
     apyMin: '0',
     apyMax: '10x',
     risk: 'Low',
+    url: '/trade/leveraged-trading',
   },
   {
     id: 3,

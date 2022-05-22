@@ -16,7 +16,7 @@ import { InputFieldMax } from '../shared/InputFieldMax'
 import { RadioGroup } from '../shared/RadioGroup'
 import { SliderBar } from '../shared/SliderBar'
 import { TabsSwitch } from '../shared/TabsSwitch'
-import { TokenInputField } from './TokenInputField'
+import { TokenField } from './TokenField'
 import { Txt } from '../shared/Txt'
 import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
 import { etherGlobal } from '../api/ether'
@@ -144,12 +144,12 @@ export const MarginTradingPage = () => {
                   ]}
                 />
                 <div tw='flex w-full justify-between items-center'>
-                  <TokenInputField
+                  <TokenField
                     token={spentToken}
                     onTokenChange={(value) => setSpentToken(value)}
                   />
                   <ArrowRight size={28} tw='text-font-200 mx-6' />
-                  <TokenInputField
+                  <TokenField
                     token={obtainedToken}
                     onTokenChange={(value) => setObtainedToken(value)}
                   />
