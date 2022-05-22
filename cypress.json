@@ -1,0 +1,8 @@
+{
+    "projectId": "j8dk8r",
+    "baseUrl": "http://localhost:3000",
+    "pluginsFile": false,
+    "supportFile": "cypress/support/index.js",
+    "video": false,
+    "defaultCommandTimeout": 10000
+}
