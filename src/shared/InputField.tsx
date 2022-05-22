@@ -1,11 +1,11 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
-import tw from 'twin.macro'
 
+/** @jsxImportSource @emotion/react */
 import { useEffect, useState } from 'react'
 
-import { Txt } from './Txt'
 import { Tooltip } from './Tooltip'
+import { Txt } from './Txt'
+import tw from 'twin.macro'
 
 interface IInputFieldProps {
   label?: string
@@ -14,7 +14,7 @@ interface IInputFieldProps {
   renderRight?: React.ReactNode
   placeholder?: string
   className?: string | undefined
-  tooltip?: boolean
+  tooltipText?: string
 }
 
 export const InputField = (props: IInputFieldProps) => {
@@ -32,7 +32,7 @@ export const InputField = (props: IInputFieldProps) => {
     >
       <div tw='flex flex-row gap-2 items-center text-font-200'>
         {props.label && <Txt.Body2Regular>{props.label}</Txt.Body2Regular>}
-        {props.tooltip && <Tooltip />}
+        {props.tooltipText && <Tooltip text={props.tooltipText} />}
       </div>
       <div
         css={[

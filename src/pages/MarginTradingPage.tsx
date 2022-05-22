@@ -27,7 +27,6 @@ import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useState } from 'react'
-import x from '../assets/images/radioButton/icons8-macos-close-32.png'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
@@ -156,14 +155,18 @@ export const MarginTradingPage = () => {
                   />
                 </div>
                 <div tw='w-full'>
-                  <InfoItem tooltip label='Leverage' value={`${leverage}x`} />
                   <InfoItem
-                    tooltip
+                    tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+                    label='Leverage'
+                    value={`${leverage}x`}
+                  />
+                  <InfoItem
+                    tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                     label='Min. obtained'
                     value={minObtained.round(4).toString()}
                   />
                   <InfoItem
-                    tooltip
+                    tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                     label='Max. spent'
                     value={maxSpent.round(4).toString()}
                   />
@@ -183,7 +186,7 @@ export const MarginTradingPage = () => {
                 />
                 <SliderBar
                   label='Leverage'
-                  tooltip
+                  tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                   min={1}
                   max={Number(maxLeverage.toString())}
                   step={0.2}
@@ -213,7 +216,7 @@ export const MarginTradingPage = () => {
                       />
                       <div tw='flex flex-col w-full gap-7'>
                         <InputField
-                          tooltip
+                          tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                           label='Slippage'
                           placeholder='0'
                           value={slippage}
@@ -223,7 +226,7 @@ export const MarginTradingPage = () => {
                           }
                         />
                         <RadioGroup
-                          tooltip
+                          tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                           label='Priority'
                           items={[
                             {
@@ -239,7 +242,7 @@ export const MarginTradingPage = () => {
                           onChange={(value) => setPriority(value as Priority)}
                         />
                         <InputField
-                          tooltip
+                          tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                           label='Deadline'
                           placeholder='30 mins'
                           value={deadline}
