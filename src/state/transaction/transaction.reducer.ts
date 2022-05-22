@@ -1,7 +1,7 @@
 import { addTransaction, finalizeTransaction } from './transaction.actions'
-import { createReducer, createSlice } from '@reduxjs/toolkit'
 
 import { Transaction } from '../../types'
+import { createSlice } from '@reduxjs/toolkit'
 
 export interface TransactionState {
   transactions: {

@@ -6,9 +6,7 @@ import { etherGlobal } from '../../api/ether'
 export const initializeAccountBalance = createAsyncThunk(
   'network/initializeAccountBalance',
   async () => {
-    return utils.formatEther(
-      BigNumber.from(parseInt(await etherGlobal.getBalance(), 16).toString()),
-    )
+    return utils.formatEther(BigNumber.from(await etherGlobal.getBalance()))
   },
 )
 export const updateBlockNumber = createAsyncThunk(

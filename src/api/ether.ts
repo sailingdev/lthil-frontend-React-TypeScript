@@ -58,9 +58,10 @@ export class Ether {
   }
 
   async getBalance() {
+    //Used to return in Hex
     const account = await this.getAccountAddress()
     const balance = await this.provider.getBalance(account!)
-    return balance.toHexString()
+    return balance
   }
   async getAccountAddress(): Promise<string | null> {
     const accounts = await this.provider.listAccounts()
@@ -86,16 +87,14 @@ export class Ether {
     return FixedNumber.from(Ether.utils.formatUnits(amount))
   }
 
-  async getMaxDepositAmount(tokenAddress: string): Promise<number> {
+  async getMaxDepositAmount(tokenAddress: string): Promise<BigNumber> {
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
       this.signer,
     )
-    const balance = (
-      await tokenContract.balanceOf(this.getAccountAddress())
-    ).toHexString()
+    const balance = await tokenContract.balanceOf(this.getAccountAddress())
 
-    return hexToDecimal(balance)
+    return BigNumber.from(balance)
   }
 
   async getTokenTvl(tokenAddress: string): Promise<FixedNumber> {
@@ -111,13 +110,13 @@ export class Ether {
 
     // @ts-ignore
     const tokenSubvault = await vault.vaults(tokenAddress)
-    const createdAt = parseInt(tokenSubvault.creationTime.toHexString(), 16)
+    const createdAt = parseInt(tokenSubvault.creationTime, 16)
     const daysFromStart = Math.floor(
       (new Date().getTime() / 1000 - createdAt) / 86400,
     )
     // @ts-ignore
-    const balance = (await vault.balance(tokenAddress)).toHexString()
-    const tokenTotalSupply = (await token.totalSupply()).toHexString()
+    const balance = await vault.balance(tokenAddress)
+    const tokenTotalSupply = await token.totalSupply()
 
     return Math.pow(
       parseInt(balance) / parseInt(tokenTotalSupply),
@@ -134,7 +133,7 @@ export class Ether {
       this.signer,
     )
     const allowance = await tokenContract.allowance(account, destinationAddress)
-    return hexToDecimal(allowance.toHexString())
+    return allowance
   }
 
   async approve(
@@ -184,12 +183,25 @@ export class Ether {
     // THIS IS CURRENTLY NOT WORKING.
     // https://docs.ethers.io/v5/api/providers/provider/#Provider-estimateGas
     //
-    const gas = await this.signer.estimateGas({
-      from: account,
-      to,
-      value,
+    const tes = await this.provider.getTransaction(
+      '0x67c64199f93d4d05a1dab145259207d9ba9cd9334fa20d967f42bdeea011e9e0',
+    )
+
+    const idk = await this.signer.getGasPrice()
+    const t = '0x419fed4d'.toString()
+    console.log(t)
+
+    const gas = await this.provider.estimateGas({
+      to: tes.to,
+
+      // `function deposit() payable`
+      data: tes.data,
+
+      // 1 ether
+      value: tes.value,
     })
-    return gas
+
+    return t
   }
 
   async getUserTokenBalance(tokenAddress: string): Promise<FixedNumber> {

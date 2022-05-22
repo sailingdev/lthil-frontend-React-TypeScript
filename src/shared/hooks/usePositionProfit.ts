@@ -1,14 +1,8 @@
 /** @jsxImportSource @emotion/react */
 
-import { Ether, etherGlobal } from '../../api/ether'
-import {
-  useFinalizeTransaction,
-  useLatestBlock,
-  usePendingTransactions,
-} from '../../state/hooks'
-
 import { FixedNumber } from 'ethers'
 import { IPosition } from '../../types'
+import { etherGlobal } from '../../api/ether'
 import { useAsync } from 'react-use'
 import { useState } from 'react'
 

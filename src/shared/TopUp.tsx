@@ -1,15 +1,17 @@
-/** @jsxImportSource @emotion/react */
-import tw from 'twin.macro'
-import { useState } from 'react'
-
-import { Txt } from './Txt'
-import { isDesktop } from '../utils'
-import { SliderBar } from './SliderBar'
-import { Question } from 'phosphor-react'
 import { Button } from './Button'
 import { InputField } from '../shared/InputField'
-
+/** @jsxImportSource @emotion/react */
+import { Question } from 'phosphor-react'
+import { SliderBar } from './SliderBar'
+import { TransactionType } from '../types'
 import TopUpSectionPlaceholder from '../assets/images/topUpSectionPlaceholder.png'
+import { Txt } from './Txt'
+import { isDesktop } from '../utils'
+import tw from 'twin.macro'
+import { useState } from 'react'
+import { etherGlobal } from '../api/ether'
+import { IPosition, MtsClosePositionMeta } from '../types'
+import { useAddTransaction } from '../state/hooks'
 
 const Text = (props: { value: string | number; bold?: boolean }) => {
   return isDesktop ? (
@@ -27,17 +29,38 @@ interface ILiquidation {
   onClick: () => void
   inputOnChange: (value: string) => void
   inputValue: string
-  collateralTokenSymbol: string
+  position: IPosition
 }
 
 export const TopUp = (props: ILiquidation) => {
   const [sliderValue, setSliderValue] = useState(100)
+  const [inputTextValue, setInputTextValue] = useState(100)
+  const addTx = useAddTransaction<MtsClosePositionMeta>()
 
-  // const onSliderChange = (value: number) => {
-  //   setSliderValue(value)
-  // }
+  const onSliderChange = (value: number) => {
+    setSliderValue(value)
+    const topUpAmount =
+      parseInt(props.position.collateralReceived) * (value / 100)
+    setInputTextValue(topUpAmount)
+  }
 
-  const { onClick, inputOnChange, inputValue, collateralTokenSymbol } = props
+  const editPosition = async (
+    newCollateral: string,
+    collateralToken: string,
+  ) => {
+    const editPosition = await etherGlobal.marginTrading.editPosition(
+      props.position.positionId,
+      newCollateral,
+      collateralToken,
+    )
+    console.log('here')
+    addTx(TransactionType.MTS_EDIT_POSTITION, editPosition.hash!, {
+      positionId: props.position.positionId,
+      spentToken: props.position.spentToken.address,
+      obtainedToken: props.position.obtainedToken.address,
+    })
+  }
+  const { onClick, inputOnChange, inputValue } = props
 
   return (
     <>
@@ -55,26 +78,22 @@ export const TopUp = (props: ILiquidation) => {
 
         <SliderBar
           tw='my-2'
-          min={50}
+          min={0}
           max={150}
-          step={0.1}
+          step={10}
           value={sliderValue}
-          // onChange={onSliderChange}
+          onChange={onSliderChange}
         />
-        <div tw='w-full flex flex-row justify-between'>
-          <Txt.CaptionMedium tw='text-font-100'>Withdraw</Txt.CaptionMedium>
-          <Txt.CaptionMedium tw='text-font-100'>Top up</Txt.CaptionMedium>
-        </div>
         <div tw='my-6 w-full gap-2 flex flex-col'>
           <InputField
             renderRight={
               <Txt.InputText tw='text-font-100'>
-                {props.collateralTokenSymbol}
+                {props.position.collateralToken.symbol}
               </Txt.InputText>
             }
             label='Top up'
             placeholder='0'
-            value={inputValue}
+            value={inputTextValue.toString()}
             onChange={(value) => inputOnChange(value)}
           />
           <Button text='Top up' action full bold onClick={onClick} />

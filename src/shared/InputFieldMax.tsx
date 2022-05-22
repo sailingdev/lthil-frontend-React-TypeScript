@@ -3,22 +3,31 @@ import 'twin.macro'
 import tw from 'twin.macro'
 
 import { useEffect, useState } from 'react'
+import { etherGlobal } from '../api/ether'
 
 import { Txt } from './Txt'
+import { BigNumber, ethers } from 'ethers'
 
 interface IInputFieldMaxProps {
   label?: string
   onChange: (value: string) => void
+  renderRight?: React.ReactNode
   value: string
   unit: string
+  address: string
   placeholder?: string
   className?: string | undefined
-  onMaxClick: () => void
+  onMaxClick?: () => void
 }
 
 export const InputFieldMax = (props: IInputFieldMaxProps) => {
   const [value, setValue] = useState(props.value)
   const [inputIsFocused, setInputIsFocused] = useState(false)
+
+  const getMax = async (tokenAddress: string) => {
+    const getMax = await etherGlobal.getMaxDepositAmount(tokenAddress)
+    setValue(ethers.utils.formatUnits(getMax).toString())
+  }
 
   useEffect(() => {
     setValue(props.value)
@@ -50,7 +59,7 @@ export const InputFieldMax = (props: IInputFieldMaxProps) => {
           }}
         />
         <button
-          onClick={props.onMaxClick}
+          onClick={() => getMax(props.address)}
           css={[
             tw`border-primary-400 dark:border-primary-300 rounded-md border-2 h-8 px-2`,
           ]}

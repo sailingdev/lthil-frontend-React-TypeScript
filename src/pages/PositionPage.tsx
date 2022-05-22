@@ -19,8 +19,6 @@ export const PositionPage = () => {
   const position = usePosition(positionId!)
   const addTx = useAddTransaction<MtsClosePositionMeta>()
 
-  const [activeChart, setActiveChart] = useState<'basic' | 'trading'>('basic')
-
   const [liquidationInput, setLiquidationInput] = useState<string>('')
 
   if (!position) {
@@ -85,9 +83,9 @@ export const PositionPage = () => {
               {position.status === 'open' && (
                 <>
                   <TopUp
-                    collateralTokenSymbol={collateralToken.symbol}
                     inputValue={liquidationInput}
                     inputOnChange={(value) => setLiquidationInput(value)}
+                    position={position}
                     onClick={() =>
                       editPosition(liquidationInput, collateralToken.address)
                     }
