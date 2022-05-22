@@ -44,6 +44,7 @@ export const Menu = (props: IMenu) => {
     <>
       <div ref={divRef}>
         <div
+          id='menu'
           onClick={() => onMenuChange(!menuIsOpen)}
           css={[
             tw`border-0 rounded-md cursor-pointer h-9 tablet:h-10 desktop:h-11 w-9 tablet:w-10 desktop:w-11 px-2 bg-primary-200 relative flex justify-center items-center hover:bg-hover-light dark:hover:bg-hover-dark`,
