@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { etherGlobal } from '../api/ether'
 
 import { Txt } from './Txt'
+import { BigNumber, ethers } from 'ethers'
 
 interface IInputFieldMaxProps {
   label?: string
@@ -22,12 +23,10 @@ interface IInputFieldMaxProps {
 export const InputFieldMax = (props: IInputFieldMaxProps) => {
   const [value, setValue] = useState(props.value)
   const [inputIsFocused, setInputIsFocused] = useState(false)
-  const [maxAvailable, setMaxAvailable] = useState(Number)
 
   const getMax = async (tokenAddress: string) => {
-    const getMax = etherGlobal.getMaxDepositAmount(tokenAddress)
-    setMaxAvailable(await getMax)
-    setValue((await getMax).toString())
+    const getMax = await etherGlobal.getMaxDepositAmount(tokenAddress)
+    setValue(ethers.utils.formatUnits(getMax).toString())
   }
 
   useEffect(() => {
