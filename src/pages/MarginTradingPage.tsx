@@ -192,6 +192,13 @@ export const MarginTradingPage = () => {
                   step={0.2}
                   value={leverage}
                   onChange={(value) => setLeverage(value)}
+                  marks={{
+                    1: '1x',
+                    2: '2x',
+                    3: '3x',
+                    4: '4x',
+                    5: '5x',
+                  }}
                 />
                 <div tw='w-full'>
                   {showAdvancedOptions ? (
