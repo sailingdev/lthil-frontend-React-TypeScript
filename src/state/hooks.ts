@@ -145,6 +145,7 @@ export const useAddTransaction = <T extends TransactionMeta>() => {
   const dispatch = useDispatch()
   return (type: TransactionType, tx: string, meta: T) => {
     if (!chainId) {
+      console.log('inside useadd')
       return
     }
     return dispatch(

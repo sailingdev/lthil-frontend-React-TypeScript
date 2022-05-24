@@ -179,27 +179,26 @@ export class Ether {
     )
     return gas.mul(120).div(100)
   }
-  async getTransactionGasEstimate(account: string, to: string, value: number) {
+  async getTransactionGasEstimate(data: any) {
     // THIS IS CURRENTLY NOT WORKING.
     // https://docs.ethers.io/v5/api/providers/provider/#Provider-estimateGas
     //
-    const tes = await this.provider.getTransaction(
-      '0x67c64199f93d4d05a1dab145259207d9ba9cd9334fa20d967f42bdeea011e9e0',
-    )
+    const tes = await this.provider.estimateGas(data)
+    console.log(tes)
 
     const idk = await this.signer.getGasPrice()
     const t = '0x419fed4d'.toString()
     console.log(t)
 
-    const gas = await this.provider.estimateGas({
-      to: tes.to,
+    // const gas = await this.provider.estimateGas({
+    //   to: tes.to,
 
-      // `function deposit() payable`
-      data: tes.data,
+    //   // `function deposit() payable`
+    //   data: tes.data,
 
-      // 1 ether
-      value: tes.value,
-    })
+    //   // 1 ether
+    //   value: tes.value,
+    // })
 
     return t
   }

@@ -113,7 +113,9 @@ export class MarginTrading {
       )
       return position
     } catch (error) {
+      console.log('inside useadd')
       console.error(error)
+      return error
     }
   }
   async getPositionById(positionId: string) {
