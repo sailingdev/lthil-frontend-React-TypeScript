@@ -39,6 +39,8 @@ export const MarginTradingPage = () => {
   const [deadline, setDeadline] = useState<any>(20)
   const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
   const [priority, setPriority] = useState<Priority>('buy')
+  const [isLoading, setisLoading] = useState(false)
+  const [Status, setStatus] = useState('')
 
   const [minObtained, setMinObtained] = useState<FixedNumber>(
     FixedNumber.from('0'),
@@ -103,19 +105,35 @@ export const MarginTradingPage = () => {
         priority,
         deadline,
       }
-      const position = await etherGlobal.marginTrading.openPosition(
-        positionData,
-      )
-      addTx(TransactionType.MTS_OPEN_POSITION, position.hash, positionData)
-      setOpenPositionHash(position.hash)
+      try {
+        setisLoading(true)
+        setStatus('Transaction Pending')
+        const position = await etherGlobal.marginTrading.openPosition(
+          positionData,
+        )
+        let txReceipt
+        do {
+          txReceipt = await etherGlobal.getSerializableTransactionReceipt(
+            position.hash,
+          )
+        } while (txReceipt?.status ?? true)
+
+        if (txReceipt?.status != 0) {
+          setStatus('Transaction Verified')
+        } else {
+          setStatus('Transaction Failed')
+          setisLoading(false)
+        }
+
+        addTx(TransactionType.MTS_OPEN_POSITION, position.hash, positionData)
+        setOpenPositionHash(position.hash)
+      } catch (error) {
+        setStatus('Transaction Failed')
+        setisLoading(false)
+        console.error(error)
+      }
     },
   })
-  const isLoading =
-    positionApproval === Approval.PENDING
-      ? true
-      : !openPositionTx
-      ? false
-      : openPositionTx.status !== 'verified'
   return (
     <ContentContainer>
       <div tw='flex flex-col w-full items-center'>
@@ -280,13 +298,7 @@ export const MarginTradingPage = () => {
                   isLoading={isLoading}
                   onClick={() => openPosition()}
                 />
-                <Txt.CaptionMedium>
-                  {!openPositionTx
-                    ? ''
-                    : openPositionTx.status == 'verified'
-                    ? 'Transaction verified.'
-                    : 'Transaction pending...'}
-                </Txt.CaptionMedium>
+                <Txt.CaptionMedium>{Status}</Txt.CaptionMedium>
               </div>
             </div>
             <ChartCard
