@@ -184,11 +184,6 @@ export class Ether {
     // https://docs.ethers.io/v5/api/providers/provider/#Provider-estimateGas
     //
     const tes = await this.provider.estimateGas(data)
-    console.log(tes)
-
-    const idk = await this.signer.getGasPrice()
-    const t = '0x419fed4d'.toString()
-    console.log(t)
 
     // const gas = await this.provider.estimateGas({
     //   to: tes.to,
@@ -200,7 +195,7 @@ export class Ether {
     //   value: tes.value,
     // })
 
-    return t
+    return tes
   }
 
   async getUserTokenBalance(tokenAddress: string): Promise<FixedNumber> {
