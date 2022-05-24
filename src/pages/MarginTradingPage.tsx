@@ -1,7 +1,7 @@
 import 'twin.macro'
 
 import { Approval, Priority, TokenDetails, TransactionType } from '../types'
-import { ArrowRight, FadersHorizontal } from 'phosphor-react'
+import { ArrowRight, FadersHorizontal, XCircle } from 'phosphor-react'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 
 import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
@@ -205,7 +205,7 @@ export const MarginTradingPage = () => {
                               setShowAdvancedOptions(!showAdvancedOptions)
                             }
                           >
-                            <FadersHorizontal size={20} tw='text-font-100' />
+                            <XCircle size={20} tw='text-font-100' />
                           </button>{' '}
                         </div>
                       </div>

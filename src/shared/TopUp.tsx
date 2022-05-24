@@ -71,6 +71,14 @@ export const TopUp = (props: ILiquidation) => {
   return (
     <>
       <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100'>
+        <GaugeChart
+          id='gauge-chart3'
+          nrOfLevels={30}
+          arcWidth={0.3}
+          percent={inputGuageValue}
+          needleColor='#070B07'
+          needleBaseColor='#070B07'
+        />
         <div tw='w-full flex flex-row justify-between'>
           <div tw='flex flex-row items-center'>
             <Text value='Collateral' />
@@ -104,12 +112,6 @@ export const TopUp = (props: ILiquidation) => {
           <Button text='Top up' action full bold onClick={onClick} />
         </div>
         {/* TODO: Placeholder */}
-        <GaugeChart
-          id='gauge-chart3'
-          nrOfLevels={30}
-          arcWidth={0.3}
-          percent={inputGuageValue}
-        />
       </div>
     </>
   )
