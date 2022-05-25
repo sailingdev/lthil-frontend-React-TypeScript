@@ -2,7 +2,7 @@
 import 'twin.macro'
 import tw from 'twin.macro'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Dispatch, SetStateAction } from 'react'
 import { etherGlobal } from '../api/ether'
 
 import { Txt } from './Txt'
@@ -18,6 +18,7 @@ interface IInputFieldMaxProps {
   placeholder?: string
   className?: string | undefined
   onMaxClick?: () => void
+  StateChanger: Dispatch<SetStateAction<string>>
 }
 
 export const InputFieldMax = (props: IInputFieldMaxProps) => {
@@ -26,7 +27,8 @@ export const InputFieldMax = (props: IInputFieldMaxProps) => {
 
   const getMax = async (tokenAddress: string) => {
     const getMax = await etherGlobal.getMaxDepositAmount(tokenAddress)
-    setValue(ethers.utils.formatUnits(getMax).toString())
+    props.StateChanger(getMax.toString())
+    setValue(getMax.toString())
   }
 
   useEffect(() => {

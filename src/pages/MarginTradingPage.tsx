@@ -9,7 +9,7 @@ import { Button } from '../shared/Button'
 import { ChartCard } from '../shared/charts/ChartCard'
 import { ContentContainer } from '../shared/ContentContainer'
 /** @jsxImportSource @emotion/react */
-import { FixedNumber } from 'ethers'
+import { BigNumber, FixedNumber } from 'ethers'
 import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
 import { InputFieldMax } from '../shared/InputFieldMax'
@@ -27,6 +27,7 @@ import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useState } from 'react'
+import { SIGINT } from 'constants'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
@@ -41,6 +42,7 @@ export const MarginTradingPage = () => {
   const [priority, setPriority] = useState<Priority>('buy')
   const [isLoading, setisLoading] = useState(false)
   const [Status, setStatus] = useState('')
+  const [buttonText, setButtonText] = useState<any>('')
 
   const [minObtained, setMinObtained] = useState<FixedNumber>(
     FixedNumber.from('0'),
@@ -86,8 +88,16 @@ export const MarginTradingPage = () => {
   const [openPositionHash, setOpenPositionHash] = useState<string | undefined>(
     undefined,
   )
-  const openPositionTx = useTransaction(openPositionHash)
 
+  const CreatePosition = async (tokenAddress: string) => {
+    const getMax = await etherGlobal.getMaxDepositAmount(tokenAddress)
+    if (parseFloat(margin) > getMax) {
+      setButtonText('INSUFFICIENT FUNDS')
+    } else {
+      setisLoading(true)
+      openPosition()
+    }
+  }
   const [positionApproval, openPosition] = useApprovalAction({
     approvalMeta: {
       token: spentToken.address,
@@ -116,10 +126,11 @@ export const MarginTradingPage = () => {
           txReceipt = await etherGlobal.getSerializableTransactionReceipt(
             position.hash,
           )
-        } while (txReceipt?.status ?? true)
+        } while (txReceipt?.status == undefined || txReceipt?.status == null)
 
         if (txReceipt?.status != 0) {
           setStatus('Transaction Verified')
+          setisLoading(false)
         } else {
           setStatus('Transaction Failed')
           setisLoading(false)
@@ -194,8 +205,12 @@ export const MarginTradingPage = () => {
                   placeholder='0'
                   unit={spentToken.symbol}
                   address={spentToken.address}
-                  value={margin}
-                  onChange={(value) => setMargin(value)}
+                  value={margin.toString()}
+                  StateChanger={setMargin}
+                  onChange={(value) => {
+                    setMargin(value)
+                    setButtonText('')
+                  }}
                   renderRight={
                     <Txt.InputText tw='text-font-100'>
                       {spentToken.symbol}
@@ -203,7 +218,7 @@ export const MarginTradingPage = () => {
                   }
                 />
                 <SliderBar
-                  label='Leverage'
+                  label='Leve  rage'
                   tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                   min={1}
                   max={Number(maxLeverage.toString())}
@@ -288,15 +303,21 @@ export const MarginTradingPage = () => {
                   )}
                 </div>
                 <Button
-                  text={getCTALabelForApproval(
-                    `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`,
-                    positionApproval,
-                  )}
+                  text={
+                    buttonText
+                      ? buttonText
+                      : getCTALabelForApproval(
+                          `${priority.toUpperCase()} / ${positionType.toUpperCase()} TKN`,
+                          positionApproval,
+                        )
+                  }
                   full
                   action
                   bold
                   isLoading={isLoading}
-                  onClick={() => openPosition()}
+                  onClick={() => {
+                    CreatePosition(spentToken.address)
+                  }}
                 />
                 <Txt.CaptionMedium>{Status}</Txt.CaptionMedium>
               </div>

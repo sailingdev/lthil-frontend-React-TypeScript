@@ -87,14 +87,14 @@ export class Ether {
     return FixedNumber.from(Ether.utils.formatUnits(amount))
   }
 
-  async getMaxDepositAmount(tokenAddress: string): Promise<BigNumber> {
+  async getMaxDepositAmount(tokenAddress: string): Promise<Number> {
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
       this.signer,
     )
     const balance = await tokenContract.balanceOf(this.getAccountAddress())
 
-    return BigNumber.from(balance)
+    return parseFloat(ethers.utils.formatUnits(BigNumber.from(balance)))
   }
 
   async getTokenTvl(tokenAddress: string): Promise<FixedNumber> {
@@ -179,23 +179,29 @@ export class Ether {
     )
     return gas.mul(120).div(100)
   }
-  async getTransactionGasEstimate(data: any) {
+  async getTransactionGasEstimate(account: string, to: string, value: number) {
     // THIS IS CURRENTLY NOT WORKING.
     // https://docs.ethers.io/v5/api/providers/provider/#Provider-estimateGas
     //
-    const tes = await this.provider.estimateGas(data)
+    const tes = await this.provider.getTransaction(
+      '0x67c64199f93d4d05a1dab145259207d9ba9cd9334fa20d967f42bdeea011e9e0',
+    )
 
-    // const gas = await this.provider.estimateGas({
-    //   to: tes.to,
+    const idk = await this.signer.getGasPrice()
+    const t = '0x419fed4d'.toString()
+    console.log(t)
 
-    //   // `function deposit() payable`
-    //   data: tes.data,
+    const gas = await this.provider.estimateGas({
+      to: tes.to,
 
-    //   // 1 ether
-    //   value: tes.value,
-    // })
+      // `function deposit() payable`
+      data: tes.data,
 
-    return tes
+      // 1 ether
+      value: tes.value,
+    })
+
+    return t
   }
 
   async getUserTokenBalance(tokenAddress: string): Promise<FixedNumber> {

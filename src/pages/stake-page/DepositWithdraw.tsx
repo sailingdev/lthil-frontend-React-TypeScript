@@ -118,6 +118,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
           unit={props.tokenSymbol}
           address={props.tokenAddress}
           onMaxClick={getMaxDeposit}
+          StateChanger={setDepositValue}
         />
         <Button
           text={getCTALabelForApproval('Deposit', stakeApproval)}
@@ -148,6 +149,7 @@ export const DepositWithdraw = (props: IDepositWithdrawProps) => {
           onChange={(value) => setWithdrawValue(value)}
           unit={props.tokenSymbol}
           onMaxClick={getMaxWithdraw}
+          StateChanger={setDepositValue}
         />
         <Button
           text='Withdraw'
