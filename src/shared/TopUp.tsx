@@ -12,6 +12,7 @@ import { useState } from 'react'
 import { etherGlobal } from '../api/ether'
 import { IPosition, MtsClosePositionMeta } from '../types'
 import { useAddTransaction } from '../state/hooks'
+import GaugeChart from 'react-gauge-chart'
 
 const Text = (props: { value: string | number; bold?: boolean }) => {
   return isDesktop ? (
@@ -35,6 +36,8 @@ interface ILiquidation {
 export const TopUp = (props: ILiquidation) => {
   const [sliderValue, setSliderValue] = useState(100)
   const [inputTextValue, setInputTextValue] = useState(100)
+  const [inputGuageValue, setInputGuageValue] = useState(1)
+
   const addTx = useAddTransaction<MtsClosePositionMeta>()
 
   const onSliderChange = (value: number) => {
@@ -44,6 +47,10 @@ export const TopUp = (props: ILiquidation) => {
     setInputTextValue(topUpAmount)
   }
 
+  const onGuageChange = (value: number) => {
+    //TODO: Add logic to change guage Value
+    setInputGuageValue(value)
+  }
   const editPosition = async (
     newCollateral: string,
     collateralToken: string,
@@ -53,7 +60,6 @@ export const TopUp = (props: ILiquidation) => {
       newCollateral,
       collateralToken,
     )
-    console.log('here')
     addTx(TransactionType.MTS_EDIT_POSTITION, editPosition.hash!, {
       positionId: props.position.positionId,
       spentToken: props.position.spentToken.address,
@@ -65,6 +71,14 @@ export const TopUp = (props: ILiquidation) => {
   return (
     <>
       <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100'>
+        <GaugeChart
+          id='gauge-chart3'
+          nrOfLevels={30}
+          arcWidth={0.3}
+          percent={inputGuageValue}
+          needleColor='#070B07'
+          needleBaseColor='#070B07'
+        />
         <div tw='w-full flex flex-row justify-between'>
           <div tw='flex flex-row items-center'>
             <Text value='Collateral' />
@@ -75,7 +89,6 @@ export const TopUp = (props: ILiquidation) => {
           </div>
           <Text bold value={`${sliderValue}%`} />
         </div>
-
         <SliderBar
           tw='my-2'
           min={0}
@@ -99,11 +112,6 @@ export const TopUp = (props: ILiquidation) => {
           <Button text='Top up' action full bold onClick={onClick} />
         </div>
         {/* TODO: Placeholder */}
-        <img
-          tw='mt-4'
-          src={TopUpSectionPlaceholder}
-          alt='topUpSectionPlaceholder'
-        />
       </div>
     </>
   )

@@ -87,14 +87,14 @@ export class Ether {
     return FixedNumber.from(Ether.utils.formatUnits(amount))
   }
 
-  async getMaxDepositAmount(tokenAddress: string): Promise<BigNumber> {
+  async getMaxDepositAmount(tokenAddress: string): Promise<Number> {
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
       this.signer,
     )
     const balance = await tokenContract.balanceOf(this.getAccountAddress())
 
-    return BigNumber.from(balance)
+    return parseFloat(ethers.utils.formatUnits(BigNumber.from(balance)))
   }
 
   async getTokenTvl(tokenAddress: string): Promise<FixedNumber> {
