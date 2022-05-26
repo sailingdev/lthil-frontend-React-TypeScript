@@ -8,7 +8,7 @@ import { Footer } from './shared/Footer'
 import { Header } from './shared/Header'
 import { LeveragedTradingPage } from './pages/LeveragedTrading'
 import { MarginTradingPage } from './pages/MarginTradingPage'
-import { PositionPage } from './pages/PositionPage'
+import { PositionPage } from './pages/position-page/PositionPage'
 import { StakePage } from './pages/stake-page/StakePage'
 import { TradePage } from './pages/TradePage'
 import { UnsupportedNetworkWarning } from './shared/UnsupportedNetworkWarning'
@@ -54,7 +54,10 @@ export const AppRouter = () => {
                 element={<LeveragedTradingPage />}
               />
               <Route path='/dashboard' element={<DashboardPage />} />
-              <Route path='/position/:positionId' element={<PositionPage />} />
+              <Route
+                path='/:strategy/position/:positionId'
+                element={<PositionPage />}
+              />
               <Route path='/stake' element={<StakePage />} />
               <Route path='/charts' element={<ChartsPage />} />
               <Route path='*' element={<Navigate to='/trade' replace />} />

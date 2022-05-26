@@ -1,20 +1,20 @@
 import 'twin.macro'
 
-import { MtsClosePositionMeta, TransactionType } from '../types'
-import { useAddTransaction, usePosition } from '../state/hooks'
+import { MtsClosePositionMeta, TransactionType } from '../../types'
+import { useAddTransaction, usePosition } from '../../state/hooks'
 
-import { ChartCard } from '../shared/charts/ChartCard'
-import { ClosePosition } from '../shared/ClosePosition'
-import { ContentContainer } from '../shared/ContentContainer'
-import { PositionDetailsCard } from '../shared/PositionDetailsCard'
-import { TopUp } from '../shared/TopUp'
-import { Txt } from '../shared/Txt'
-import { etherGlobal } from '../api/ether'
+import { ChartCard } from '../../shared/charts/ChartCard'
+import { ClosePosition } from '../../shared/ClosePosition'
+import { ContentContainer } from '../../shared/ContentContainer'
+import { PositionDetailsCard } from '../../shared/PositionDetailsCard'
+import { TopUp } from '../../shared/TopUp'
+import { Txt } from '../../shared/Txt'
+import { etherGlobal } from '../../api/ether'
 import { useParams } from 'react-router-dom'
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react'
 
-export const PositionPage = () => {
+export const MarginPositionPage = () => {
   const { positionId } = useParams<{ positionId: string }>()
   const position = usePosition(positionId!)
   const addTx = useAddTransaction<MtsClosePositionMeta>()

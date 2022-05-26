@@ -73,7 +73,9 @@ export const DashboardPage = () => {
             />
           </div>
           <CustomTable
-            onActiveRowChange={(row) => navigate(`/position/${row.positionId}`)}
+            onActiveRowChange={(row) =>
+              navigate(`/${row.strategy}/position/${row.positionId}`)
+            }
             activeRow={undefined}
             hover
             loading={false}
