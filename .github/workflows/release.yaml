@@ -22,13 +22,13 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm install --frozen-lockfile
 
       - name: Build the ReactJS bundle
-        run: yarn build
+        run: npm run build
         env:
-          REACT_APP_BACKEND_URL: "http://localhost:3001"
-          PORT: 4000
+          REACT_APP_BACKEND_URL: "http://localhost:3000"
+          PORT: 80
 
       - name: Pin to IPFS
         id: upload
