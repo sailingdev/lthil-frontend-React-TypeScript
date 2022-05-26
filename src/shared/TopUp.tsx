@@ -1,18 +1,17 @@
+import { IPosition, MtsClosePositionMeta, TransactionType } from '../types'
+
 import { Button } from './Button'
+import GaugeChart from 'react-gauge-chart'
 import { InputField } from '../shared/InputField'
 /** @jsxImportSource @emotion/react */
 import { Question } from 'phosphor-react'
 import { SliderBar } from './SliderBar'
-import { TransactionType } from '../types'
-import TopUpSectionPlaceholder from '../assets/images/topUpSectionPlaceholder.png'
 import { Txt } from './Txt'
+import { etherGlobal } from '../api/ether'
 import { isDesktop } from '../utils'
 import tw from 'twin.macro'
-import { useState } from 'react'
-import { etherGlobal } from '../api/ether'
-import { IPosition, MtsClosePositionMeta } from '../types'
 import { useAddTransaction } from '../state/hooks'
-import GaugeChart from 'react-gauge-chart'
+import { useState } from 'react'
 
 const Text = (props: { value: string | number; bold?: boolean }) => {
   return isDesktop ? (
@@ -55,11 +54,9 @@ export const TopUp = (props: ILiquidation) => {
     newCollateral: string,
     collateralToken: string,
   ) => {
-    const editPosition = await etherGlobal.marginTrading.editPosition(
-      props.position.positionId,
-      newCollateral,
-      collateralToken,
-    )
+    const editPosition = await etherGlobal.position
+      .getMarginStrategy()
+      .editPosition(props.position.positionId, newCollateral, collateralToken)
     addTx(TransactionType.MTS_EDIT_POSTITION, editPosition.hash!, {
       positionId: props.position.positionId,
       spentToken: props.position.spentToken.address,

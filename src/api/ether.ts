@@ -1,13 +1,11 @@
 import { BigNumber, FixedNumber, Transaction, ethers } from 'ethers'
+import { TokenDetails, TransactionReceipt } from '../types'
 
 import { ContractFactory } from './contract-factory'
-import { MarginTrading } from './margin-trading'
-import { TokenDetails } from '../types'
-import { TransactionReceipt } from '../types'
+import { PositionAggregate } from './positions'
 import { Utils } from './utils'
-import { hexToDecimal } from '../utils'
-import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 
 // THIS GLOBAL INSTANCE IS USED TO SIMPLIFY ARHITECTURE
 export let etherGlobal: Ether
@@ -21,13 +19,13 @@ export const maxApproval: BigNumber = ethers.constants.MaxUint256
 export class Ether {
   private provider!: ethers.providers.Web3Provider
   private signer!: ethers.providers.JsonRpcSigner
-  public marginTrading!: MarginTrading
+  public position: PositionAggregate
   public static utils = Utils
 
   constructor(baseProvider: any) {
     this.provider = new ethers.providers.Web3Provider(baseProvider)
     this.signer = this.provider.getSigner()
-    this.marginTrading = new MarginTrading(this.signer)
+    this.position = new PositionAggregate(this.signer)
   }
   getSigner(): ethers.providers.JsonRpcSigner {
     return this.signer

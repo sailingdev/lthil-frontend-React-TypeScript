@@ -1,20 +1,22 @@
-import { BigNumber, Contract, FixedNumber, Transaction, ethers } from 'ethers'
+import { BaseStrategy, StrategyIdentifier } from './base-strategy'
+import { BigNumber, FixedNumber, Transaction, ethers } from 'ethers'
 import { IInputPosition, IPosition } from '../types'
 
 import { ContractFactory } from './contract-factory'
 import { Ether } from './ether'
 import { Utils } from './utils'
-import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 
-export class MarginTrading {
-  private signer!: ethers.providers.JsonRpcSigner
-  private contract!: Contract
-
+export class MarginTrading extends BaseStrategy {
   constructor(signer: ethers.providers.JsonRpcSigner) {
+    super()
     this.signer = signer
     this.contract = ContractFactory.getMarginTradingStrategyContract(
       this.signer,
     )
+  }
+
+  getStrategyIdentifier(): StrategyIdentifier {
+    return 'margin'
   }
 
   async getMaxLeverage(): Promise<FixedNumber> {
@@ -91,9 +93,7 @@ export class MarginTrading {
       margin.toString(),
       spentToken,
     )
-
     const [maxSpent, minObtained] = await this.computeMaxAndMin(positionData)
-
     try {
       const position = await this.contract.openPosition(
         {
@@ -117,144 +117,16 @@ export class MarginTrading {
       return error
     }
   }
-  async getPositionById(positionId: string) {
-    const events = await this.contract.queryFilter(
-      this.contract.filters.PositionWasOpened(),
-      '0x1',
-      'latest',
-    )
-
-    const position = events.filter(
-      (position) =>
-        // @ts-ignore
-        position!.args![0] == positionId,
-    )
-
-    return this.parsePosition(position[0])
-  }
-  parsePosition(event: any): Omit<IPosition, 'status'> {
-    const { args } = event
-    const spentToken = tokens.find(
-      (token) => (args[2] as string) === token.address,
-    )!
-    const obtainedToken = tokens.find(
-      (token) => (args[3] as string) === token.address,
-    )!
-    const collateralToken = tokens.find(
-      (token) => (args[4] as string) === token.address,
-    )!
-
-    const toBorrow = FixedNumber.from(
-      Ether.utils.formatTokenUnits(
-        args![6] as BigNumber,
-        collateralToken.address,
-      ),
-    )
-    const collateralReceived = FixedNumber.from(
-      Ether.utils.formatTokenUnits(
-        args![5] as BigNumber,
-        collateralToken.address,
-      ),
-    )
-    const amountIn = FixedNumber.from(
-      Ether.utils.formatTokenUnits(
-        args![7] as BigNumber,
-        collateralToken.address,
-      ),
-    )
-    const interestRate = FixedNumber.from(
-      Ether.utils.formatTokenUnits(
-        args![9] as BigNumber,
-        collateralToken.address,
-      ),
-    )
-
-    const leverage = FixedNumber.from('1').addUnsafe(
-      toBorrow.divUnsafe(collateralReceived),
-    )
-
-    const type =
-      collateralToken.address === spentToken.address ? 'long' : 'short'
-
-    const liquidationPriceBase = FixedNumber.from('1').divUnsafe(
-      leverage.mulUnsafe(FixedNumber.from('0.5')),
-    )
-
-    const openPrice =
-      type === 'long'
-        ? amountIn.isZero()
-          ? Ether.utils.zero
-          : toBorrow.addUnsafe(collateralReceived).divUnsafe(amountIn)
-        : toBorrow.isZero()
-        ? Ether.utils.zero
-        : amountIn.divUnsafe(toBorrow)
-    const liquidationPrice =
-      type === 'long'
-        ? openPrice.mulUnsafe(
-            FixedNumber.from('1').subUnsafe(liquidationPriceBase),
-          )
-        : openPrice.mulUnsafe(
-            FixedNumber.from('1').addUnsafe(liquidationPriceBase),
-          )
-
-    return {
-      type,
-      positionId: (args![0] as BigNumber).toString(),
-      ownerId: args[1] as string,
-      spentToken,
-      obtainedToken,
-      collateralToken,
-      collateralReceived: collateralReceived.toString(),
-      leverage: leverage.toString(),
-      liquidationPrice: liquidationPrice.toString(),
-      toBorrow: toBorrow.toString(),
-      amountIn: amountIn.toString(),
-      interestRate: interestRate.toString(),
-      createdAt: (args![9] as BigNumber).toNumber(),
-      openPrice: openPrice.toString(),
-    }
-  }
-  private async getEventPositions(event: ethers.EventFilter) {
-    return this.contract.queryFilter(event, '0x1', 'latest')
-  }
-  async getUserPositions(user: string): Promise<IPosition[]> {
-    const allPositions = await this.getEventPositions(
-      this.contract.filters.PositionWasOpened(),
-    )
-    const closedPositions = await this.getEventPositions(
-      this.contract.filters.PositionWasClosed(),
-    )
-    const liquidatedPositions = await this.getEventPositions(
-      this.contract.filters.PositionWasLiquidated(),
-    )
-
-    const positions = allPositions
-      .map((p) => this.parsePosition(p))
-      .filter((p) => p.ownerId === user)
-
-    const closedAndLiquidatedPositionsIds = [
-      ...closedPositions,
-      ...liquidatedPositions,
-    ].map((p) => p.args![0])
-
-    return positions.map<IPosition>((p) => {
-      const isClosed = closedAndLiquidatedPositionsIds.includes(p.positionId)
-      return {
-        ...p,
-        status: isClosed ? 'closed' : 'open',
-      }
-    })
-  }
-  getDistanceFromLiquidation(position: IPosition, price: number) {
-    const liquidationPrice = BigNumber.from(position.liquidationPrice)
-    const currentPrice = BigNumber.from(price)
-    const base = liquidationPrice.div(currentPrice)
-    if (position.type === 'long') {
-      return BigNumber.from(1).sub(base)
-    } else {
-      return base.sub(BigNumber.from(1))
-    }
-  }
+  //   getDistanceFromLiquidation(position: IPosition, price: number) {
+  //     const liquidationPrice = BigNumber.from(position.liquidationPrice)
+  //     const currentPrice = BigNumber.from(price)
+  //     const base = liquidationPrice.div(currentPrice)
+  //     if (position.type === 'long') {
+  //       return BigNumber.from(1).sub(base)
+  //     } else {
+  //       return base.sub(BigNumber.from(1))
+  //     }
+  //   }
 
   async computePositionProfit(
     position: IPosition,
@@ -300,6 +172,10 @@ export class MarginTrading {
               .subUnsafe(totalFees),
           )
 
+    // console.log('Amount in:', position.amountIn)
+    // console.log('To borrow:', position.toBorrow)
+    // console.log('Collateral received:', position.collateralReceived)
+
     return [
       profit,
       profit.divUnsafe(
@@ -308,36 +184,6 @@ export class MarginTrading {
         ),
       ),
     ]
-  }
-
-  async getPositionCurrentPrice(
-    position: IPosition,
-  ): Promise<BigNumber | undefined> {
-    try {
-      const { amountIn, toBorrow } = position
-
-      if (position.type === 'long') {
-        const quoteAmount = (
-          await this.contract.quote(
-            position.obtainedToken.address,
-            position.spentToken.address,
-            BigNumber.from(position.amountIn),
-          )
-        )[0]
-        return quoteAmount.div(amountIn)
-      } else {
-        const quoteAmount = (
-          await this.contract.quote(
-            position.spentToken.address,
-            position.obtainedToken.address,
-            BigNumber.from(position.toBorrow),
-          )
-        )[0]
-        return quoteAmount.div(toBorrow)
-      }
-    } catch (error) {
-      console.error(error)
-    }
   }
 
   async editPosition(

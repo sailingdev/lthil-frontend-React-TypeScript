@@ -12,9 +12,9 @@ export const usePositionProfit = (position?: IPosition) => {
     if (!position) {
       return null
     }
-    const value = await etherGlobal.marginTrading.computePositionProfit(
-      position,
-    )
+    const value = await etherGlobal.position
+      .getMarginStrategy()
+      .computePositionProfit(position)
     setProfit(value)
   }, [position])
 

@@ -1,15 +1,14 @@
 import 'twin.macro'
 
-import { Approval, Priority, TokenDetails, TransactionType } from '../types'
 import { ArrowRight, FadersHorizontal, XCircle } from 'phosphor-react'
-import { useAddTransaction, useTransaction } from '../state/hooks'
+import { Priority, TokenDetails, TransactionType } from '../types'
 
 import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
 import { Button } from '../shared/Button'
 import { ChartCard } from '../shared/charts/ChartCard'
 import { ContentContainer } from '../shared/ContentContainer'
 /** @jsxImportSource @emotion/react */
-import { BigNumber, FixedNumber } from 'ethers'
+import { FixedNumber } from 'ethers'
 import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
 import { InputFieldMax } from '../shared/InputFieldMax'
@@ -23,11 +22,11 @@ import { etherGlobal } from '../api/ether'
 import { getCTALabelForApproval } from '../utils'
 import { showErrorNotification } from '../shared/notification'
 import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
+import { useAddTransaction } from '../state/hooks'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
 import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { useState } from 'react'
-import { SIGINT } from 'constants'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
@@ -56,17 +55,21 @@ export const MarginTradingPage = () => {
   useAsync(async () => {
     try {
       if (isConnected && slippage && margin) {
-        setMaxLeverage(await etherGlobal.marginTrading.getMaxLeverage())
-        const [max, min] = await etherGlobal.marginTrading.computeMaxAndMin({
-          margin,
-          leverage,
-          priority,
-          positionType,
-          slippage,
-          deadline,
-          obtainedToken: obtainedToken.address,
-          spentToken: spentToken.address,
-        })
+        setMaxLeverage(
+          await etherGlobal.position.getMarginStrategy().getMaxLeverage(),
+        )
+        const [max, min] = await etherGlobal.position
+          .getMarginStrategy()
+          .computeMaxAndMin({
+            margin,
+            leverage,
+            priority,
+            positionType,
+            slippage,
+            deadline,
+            obtainedToken: obtainedToken.address,
+            spentToken: spentToken.address,
+          })
         setMinObtained(min)
         setMaxSpent(max)
       }
@@ -118,9 +121,9 @@ export const MarginTradingPage = () => {
       try {
         setisLoading(true)
         setStatus('Transaction Pending')
-        const position = await etherGlobal.marginTrading.openPosition(
-          positionData,
-        )
+        const position = await etherGlobal.position
+          .getMarginStrategy()
+          .openPosition(positionData)
         let txReceipt
         do {
           txReceipt = await etherGlobal.getSerializableTransactionReceipt(
@@ -218,7 +221,7 @@ export const MarginTradingPage = () => {
                   }
                 />
                 <SliderBar
-                  label='Leve  rage'
+                  label='Leverage'
                   tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
                   min={1}
                   max={Number(maxLeverage.toString())}

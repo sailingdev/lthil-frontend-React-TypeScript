@@ -41,7 +41,10 @@ export const DashboardPage = () => {
   const positions = allPositions.filter((p) => p.status === activeTab)
 
   const closePosition = async (position: IPosition) => {
-    const tx = (await etherGlobal.marginTrading.closePosition(position))!
+    const tx = (await etherGlobal.position
+      .getStrategy(position.strategy)
+      // @ts-ignore
+      .closePosition(position))!
     addTx(TransactionType.MTS_CLOSE_POSITION, tx.hash!, {
       positionId: position.positionId,
       spentToken: position.spentToken.address,

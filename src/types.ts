@@ -1,6 +1,7 @@
 import { Interpolation, Theme } from '@emotion/react'
 
 import { CSSProperties } from 'react'
+import { StrategyIdentifier } from './api/base-strategy'
 
 export interface ISearchParams {
   term: string
@@ -176,6 +177,7 @@ export interface IInputPosition {
 export interface IPosition {
   positionId: string
   ownerId: string
+  strategy: StrategyIdentifier
   status: PositionStatus
   type: PositionType
   spentToken: TokenDetails
