@@ -7,6 +7,7 @@ import { BigNumber, FixedNumber, ethers } from 'ethers'
 
 import { Ether } from './ether'
 import { IPosition } from '../types'
+import { LeveragedTrading } from './leveraged-trading'
 import { MarginTrading } from './margin-trading'
 import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 
@@ -14,7 +15,7 @@ export class PositionAggregate {
   public strategies: BaseStrategy[] = []
 
   constructor(signer: ethers.providers.JsonRpcSigner) {
-    this.strategies = [new MarginTrading(signer)]
+    this.strategies = [new MarginTrading(signer), new LeveragedTrading(signer)]
   }
 
   public getStrategy(id: StrategyIdentifier) {
@@ -22,6 +23,9 @@ export class PositionAggregate {
   }
   public getMarginStrategy() {
     return this.getStrategy('margin') as MarginTrading
+  }
+  public getLeveragedStrategy() {
+    return this.getStrategy('leveraged') as LeveragedTrading
   }
   parsePosition(
     event: ethers.Event,

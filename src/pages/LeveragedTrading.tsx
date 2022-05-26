@@ -1,6 +1,11 @@
 import 'twin.macro'
 
-import { Approval, TokenDetails } from '../types'
+import {
+  Approval,
+  TokenDetails,
+  TransactionType,
+  YearnOpenPositionMeta,
+} from '../types'
 import { useAddTransaction, useTransaction } from '../state/hooks'
 import { useEffect, useState } from 'react'
 
@@ -9,6 +14,7 @@ import { ContentContainer } from '../shared/ContentContainer'
 import { FadersHorizontal } from 'phosphor-react'
 /** @jsxImportSource @emotion/react */
 import { FixedNumber } from 'ethers'
+import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
 import { ReactComponent as LidoLogo } from '../assets/images/lido.svg'
 import { SliderBar } from '../shared/SliderBar'
@@ -17,13 +23,16 @@ import { TokenInputField } from './TokenInputField'
 import { Txt } from '../shared/Txt'
 import { ReactComponent as YearnLogo } from '../assets/images/yearn.svg'
 import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
+import { etherGlobal } from '../api/ether'
 import { getCTALabelForApproval } from '../utils'
+import { showErrorNotification } from '../shared/notification'
 import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 import { useApprovalAction } from '../shared/hooks/useApprovalAction'
+import { useAsync } from 'react-use'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
 
 export const LeveragedTradingPage = () => {
-  const addTx = useAddTransaction()
+  const addTx = useAddTransaction<YearnOpenPositionMeta>()
   const [positionProtocol, setPositionProtocol] = useState<'yearn' | 'lido'>(
     'yearn',
   )
@@ -33,6 +42,7 @@ export const LeveragedTradingPage = () => {
   const [leverage, setLeverage] = useState<number>(1)
   const [slippage, setSlippage] = useState<any>(1)
   const [deadline, setDeadline] = useState<any>(20)
+  const [maxSpent, setMaxSpent] = useState<FixedNumber>(FixedNumber.from('0'))
 
   const [showAdvancedOptions, setShowAdvancedOptions] = useState<any>(false)
 
@@ -50,37 +60,29 @@ export const LeveragedTradingPage = () => {
     setAvailableTokens(newTokens)
     setToken(newTokens[0])
   }, [positionProtocol])
-  // useAsync(async () => {
-  //   try {
-  //     if (isConnected && slippage && margin) {
-  //       setMaxLeverage(await etherGlobal.marginTrading.getMaxLeverage())
-  //       const [max, min] = await etherGlobal.marginTrading.computeMaxAndMin({
-  //         margin,
-  //         leverage,
-  //         priority,
-  //         positionType,
-  //         slippage,
-  //         deadline,
-  //         obtainedToken: obtainedToken.address,
-  //         spentToken: spentToken.address,
-  //       })
-  //       setMinObtained(min)
-  //       setMaxSpent(max)
-  //     }
-  //   } catch (error) {
-  //     console.error(error)
-  //     showErrorNotification(`Can't compute min obtained and max spent`)
-  //   }
-  // }, [
-  //   isConnected,
-  //   spentToken.address,
-  //   obtainedToken.address,
-  //   margin,
-  //   leverage,
-  //   priority,
-  //   positionType,
-  //   slippage,
-  // ])
+  useAsync(async () => {
+    try {
+      if (isConnected && slippage && tokenInput) {
+        setMaxLeverage(
+          await etherGlobal.position.getLeveragedStrategy().getMaxLeverage(),
+        )
+        const max = await etherGlobal.position
+          .getLeveragedStrategy()
+          .computeMaxSpent({
+            margin: tokenInput,
+            leverage,
+            slippage,
+            deadline,
+            token: token.address,
+          })
+        debugger
+        setMaxSpent(max)
+      }
+    } catch (error) {
+      console.error(error)
+      showErrorNotification(`Can't compute min obtained and max spent`)
+    }
+  }, [isConnected, tokenInput, leverage, slippage])
 
   const [openPositionHash, setOpenPositionHash] = useState<string | undefined>(
     undefined,
@@ -95,21 +97,18 @@ export const LeveragedTradingPage = () => {
       amount: Number.MAX_SAFE_INTEGER,
     },
     onApproval: async () => {
-      // const positionData = {
-      //   positionType,
-      //   spentToken: spentToken.address,
-      //   obtainedToken: obtainedToken.address,
-      //   margin,
-      //   slippage,
-      //   leverage,
-      //   priority,
-      //   deadline,
-      // }
-      // const position = await etherGlobal.marginTrading.openPosition(
-      //   positionData,
-      // )
-      // addTx(TransactionType.MTS_OPEN_POSITION, position.hash, positionData)
-      // setOpenPositionHash(position.hash)
+      const positionData = {
+        margin: tokenInput,
+        slippage,
+        leverage,
+        token: token.address,
+        deadline,
+      }
+      const position = await etherGlobal.position
+        .getLeveragedStrategy()
+        .openPosition(positionData)
+      addTx(TransactionType.YEARN_OPEN_POSITION, position.hash, positionData)
+      setOpenPositionHash(position.hash)
     },
   })
   const isLoading =
@@ -155,6 +154,13 @@ export const LeveragedTradingPage = () => {
                     setValue={setTokenInput}
                     token={token}
                     onTokenChange={(value) => setToken(value)}
+                  />
+                </div>
+                <div tw='w-full'>
+                  <InfoItem
+                    tooltipText='Lorem Ipsum is simply dummy text of the printing and typesetting industry'
+                    label='Max. spent'
+                    value={maxSpent.round(4).toString()}
                   />
                 </div>
 

@@ -24,8 +24,7 @@ export const TokenInputField = (props: ITokenInputField) => {
       <InputField
         label={props.label}
         value={props.value}
-        // onChange={props.setValue}
-        onChange={() => {}}
+        onChange={props.setValue}
         placeholder={props.placeholder ?? '0'}
         renderRight={
           <>

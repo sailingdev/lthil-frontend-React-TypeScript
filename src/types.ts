@@ -74,6 +74,9 @@ export enum TransactionType {
   MTS_OPEN_POSITION = 'MTS_OPEN_POSITION',
   MTS_CLOSE_POSITION = 'MTS_CLOSE_POSITION',
   MTS_EDIT_POSTITION = 'MTS_EDIT_POSTITION',
+  YEARN_OPEN_POSITION = 'YEARN_OPEN_POSITION',
+  YEARN_CLOSE_POSITION = 'YEARN_CLOSE_POSITION',
+  YEARN_EDIT_POSTITION = 'YEARN_EDIT_POSTITION',
 }
 
 export type TransactionMeta =
@@ -83,6 +86,9 @@ export type TransactionMeta =
   | MtsOpenPositionMeta
   | MtsClosePositionMeta
   | MtsEditPositionMeta
+  | YearnClosePositionMeta
+  | YearnEditPositionMeta
+  | YearnOpenPositionMeta
 export interface Transaction {
   type: TransactionType
   chainId: number
@@ -157,13 +163,32 @@ export interface MtsEditPositionMeta {
   newCollateral: string
 }
 
+export interface YearnOpenPositionMeta {
+  margin: string
+  slippage: number
+  leverage: number
+  deadline: number
+  token: string
+}
+
+export interface YearnClosePositionMeta {
+  positionId: string
+  token: string
+}
+
+export interface YearnEditPositionMeta {
+  positionId: string
+  newCollateral: string
+  token: string
+}
+
 export type Priority = 'buy' | 'sell'
 
 export type PositionType = 'long' | 'short'
 
 export type PositionStatus = 'open' | 'closed'
 
-export interface IInputPosition {
+export interface MarginInputPosition {
   positionType: PositionType
   spentToken: string
   obtainedToken: string
@@ -172,6 +197,13 @@ export interface IInputPosition {
   priority: Priority
   leverage: number
   deadline: number
+}
+export interface LeveragedInputPosition {
+  margin: string
+  slippage: number
+  leverage: number
+  deadline: number
+  token: string
 }
 
 export interface IPosition {
