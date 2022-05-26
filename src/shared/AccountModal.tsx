@@ -107,7 +107,7 @@ export const AccountModal = (props: IAccountModal) => {
                   target='_blank'
                 >
                   <Txt.Body2Bold tw='text-secondary underline'>
-                    Link
+                    View Tx
                   </Txt.Body2Bold>
                 </a>
                 <Txt.Body2Regular tw='text-font-200'>

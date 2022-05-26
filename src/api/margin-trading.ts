@@ -276,29 +276,41 @@ export class MarginTrading {
       .divUnsafe(FixedNumber.from(864000000))
 
     const totalFees = timeFees.addUnsafe(positionFee)
-    const amount = (
-      await this.contract.quote(
+
+    let amount
+    if (position.type === 'long') {
+      amount = await this.contract.quote(
+        position.obtainedToken.address,
+        position.spentToken.address,
+        FixedNumber.from(position.amountIn),
+      )
+    } else {
+      amount = await this.contract.quote(
         position.spentToken.address,
         position.obtainedToken.address,
-        position.type === 'long'
-          ? FixedNumber.from(position.toBorrow).addUnsafe(totalFees)
-          : FixedNumber.from(position.amountIn),
+        FixedNumber.from(position.toBorrow),
       )
-    )[0]
+    }
+
     const quoteAmount = FixedNumber.from(
-      Ether.utils.formatTokenUnits(amount, position.spentToken.address),
+      Ether.utils.formatTokenUnits(amount[0], position.collateralToken.address),
     )
 
+    /*
+      if(long)
+        P&L = quote(position.heldToken, position.owedToken, position.allowance) - position.principal - position.collateral;
+      else 
+        P&L = position.allowance - quote(position.owedToken, position.heldToken, position.principal) 
+    */
     const profit =
       position.type === 'long'
-        ? FixedNumber.from(position.amountIn)
-            .subUnsafe(quoteAmount)
+        ? quoteAmount
+            .subUnsafe(FixedNumber.from(position.toBorrow))
             .subUnsafe(FixedNumber.from(position.collateralReceived))
-        : quoteAmount.subUnsafe(
-            FixedNumber.from(position.toBorrow)
-              .subUnsafe(FixedNumber.from(position.collateralReceived))
-              .subUnsafe(totalFees),
-          )
+            .subUnsafe(totalFees)
+        : FixedNumber.from(position.amountIn)
+            .subUnsafe(quoteAmount)
+            .subUnsafe(totalFees)
 
     return [
       profit,
