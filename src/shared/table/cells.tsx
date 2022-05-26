@@ -116,7 +116,7 @@ const Profit = (props: { position: IPosition }) => {
     ? new Intl.NumberFormat('en-us', {
         style: 'percent',
         signDisplay: 'always',
-      }).format(percentageValue.toUnsafeFloat() * 10)
+      }).format(percentageValue.toUnsafeFloat())
     : ''
 
   return isDesktop ? (

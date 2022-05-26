@@ -7,6 +7,9 @@ import {
   StakeTransactionMeta,
   Transaction,
   TransactionType,
+  YearnClosePositionMeta,
+  YearnEditPositionMeta,
+  YearnOpenPositionMeta,
 } from './types'
 import { BigNumber, ethers } from 'ethers'
 
@@ -81,6 +84,20 @@ export const getTransactionLabel = (t: Pick<Transaction, 'type' | 'meta'>) => {
       (t) => t.address === meta.spentToken,
     )?.symbol
     return `New collateral set on ${obtainedTokenName}/${spentTokenName} position`
+  } else if (t.type === TransactionType.YEARN_OPEN_POSITION) {
+    const meta = t.meta as YearnOpenPositionMeta
+    const token = tokens.find((t) => t.address === meta.token)?.symbol
+
+    return `Opened position ${token}`
+  } else if (t.type === TransactionType.YEARN_CLOSE_POSITION) {
+    const meta = t.meta as YearnClosePositionMeta
+    const token = tokens.find((t) => t.address === meta.token)?.symbol
+    return `Closed ${token} position`
+  } else if (t.type === TransactionType.YEARN_EDIT_POSTITION) {
+    const meta = t.meta as YearnEditPositionMeta
+    const token = tokens.find((t) => t.address === meta.token)?.symbol
+
+    return `Edited ${token} position`
   }
   return 'Transaction'
 }

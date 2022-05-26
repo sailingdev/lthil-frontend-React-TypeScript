@@ -6,7 +6,7 @@ export const initializePositions = createAsyncThunk(
   async () => {
     const userAddress = await etherGlobal.getAccountAddress()
     try {
-      const positions = await etherGlobal.marginTrading.getUserPositions(
+      const positions = await etherGlobal.position.getUserPositions(
         userAddress!,
       )
       return positions

@@ -7,6 +7,7 @@ import MockTaxedTokenAbi from '@ithil-protocol/deployed/abi/MockTaxedToken.json'
 import MockWETHAbi from '@ithil-protocol/deployed/abi/MockWETH.json'
 import VaultAbi from '@ithil-protocol/deployed/abi/Vault.json'
 import { VaultInterface } from '../config/typings'
+import YearnStrategyAbi from '@ithil-protocol/deployed/abi/YearnStrategy.json'
 import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
 
 export class ContractFactory {
@@ -49,5 +50,10 @@ export class ContractFactory {
       MarginTradingStrategyAbi,
       signer,
     )
+  }
+  public static getYearnStrategyContract(
+    signer: ethers.providers.JsonRpcSigner,
+  ) {
+    return new Contract(addresses.YearnStrategy, YearnStrategyAbi, signer)
   }
 }

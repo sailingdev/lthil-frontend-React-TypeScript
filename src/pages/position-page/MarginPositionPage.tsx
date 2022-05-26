@@ -1,20 +1,20 @@
 import 'twin.macro'
 
-import { MtsClosePositionMeta, TransactionType } from '../types'
-import { useAddTransaction, usePosition } from '../state/hooks'
+import { MtsClosePositionMeta, TransactionType } from '../../types'
+import { useAddTransaction, usePosition } from '../../state/hooks'
 
-import { ChartCard } from '../shared/charts/ChartCard'
-import { ClosePosition } from '../shared/ClosePosition'
-import { ContentContainer } from '../shared/ContentContainer'
-import { PositionDetailsCard } from '../shared/PositionDetailsCard'
-import { TopUp } from '../shared/TopUp'
-import { Txt } from '../shared/Txt'
-import { etherGlobal } from '../api/ether'
+import { ChartCard } from '../../shared/charts/ChartCard'
+import { ClosePosition } from '../../shared/ClosePosition'
+import { ContentContainer } from '../../shared/ContentContainer'
+import { PositionDetailsCard } from '../../shared/PositionDetailsCard'
+import { TopUp } from '../../shared/TopUp'
+import { Txt } from '../../shared/Txt'
+import { etherGlobal } from '../../api/ether'
 import { useParams } from 'react-router-dom'
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react'
 
-export const PositionPage = () => {
+export const MarginPositionPage = () => {
   const { positionId } = useParams<{ positionId: string }>()
   const position = usePosition(positionId!)
   const addTx = useAddTransaction<MtsClosePositionMeta>()
@@ -27,28 +27,10 @@ export const PositionPage = () => {
 
   const { obtainedToken, spentToken, collateralToken } = position
 
-  // useAsync(async () => {
-  //   if (position) {
-  //     // setProfitsAndLosses(await etherGlobal.computeProfitsAndLosses(position!))
-  //   }
-  // }, [position])
-
-  // useEffect(() => {
-  //   // if (currentPrice && liquidationPrice) {
-  //   //   setDistanceFromLiquidation(
-  //   //     etherGlobal.computeDistanceFromLiquidation(
-  //   //       position!,
-  //   //       liquidationPrice!,
-  //   //       currentPrice!.toNumber(),
-  //   //     ),
-  //   //   )
-  //   // }
-  // }, [currentPrice, liquidationPrice])
-
   const closePosition = async () => {
-    const closePosition = await etherGlobal.marginTrading.closePosition(
-      position,
-    )
+    const closePosition = await etherGlobal.position
+      .getMarginStrategy()
+      .closePosition(position)
     addTx(TransactionType.MTS_CLOSE_POSITION, closePosition.hash!, {
       positionId: position.positionId,
       spentToken: position.spentToken.address,
@@ -60,11 +42,9 @@ export const PositionPage = () => {
     newCollateral: string,
     collateralToken: string,
   ) => {
-    const editPosition = await etherGlobal.marginTrading.editPosition(
-      position.positionId,
-      newCollateral,
-      collateralToken,
-    )
+    const editPosition = await etherGlobal.position
+      .getMarginStrategy()
+      .editPosition(position.positionId, newCollateral, collateralToken)
     addTx(TransactionType.MTS_EDIT_POSTITION, editPosition.hash!, {
       positionId: position.positionId,
       spentToken: position.spentToken.address,
