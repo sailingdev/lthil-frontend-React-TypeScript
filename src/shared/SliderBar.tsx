@@ -30,6 +30,7 @@ export const SliderBar = (props: ISliderProps) => {
         {props.tooltipText && <Tooltip text={props.tooltipText} />}
       </div>
       <span tw='px-2'>
+        {/* @ts-ignore */}
         <Slider
           onChange={onChange}
           min={min}

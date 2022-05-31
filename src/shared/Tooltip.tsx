@@ -23,6 +23,7 @@ export const Tooltip = (props: ITooltip) => {
   return (
     <>
       <Question data-tip data-for={id} tw='text-font-200 dark:text-font-200' />
+      {/* @ts-ignore */}
       <ReactTooltip
         id={id}
         type='info'

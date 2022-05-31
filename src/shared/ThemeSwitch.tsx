@@ -13,6 +13,7 @@ export const ThemeSwitch = (props: IBaseProps) => {
   const toggleTheme = useToggleTheme()
 
   return (
+    // @ts-ignore
     <Switch
       className={props.className}
       onChange={toggleTheme}

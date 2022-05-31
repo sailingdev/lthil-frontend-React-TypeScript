@@ -21,6 +21,7 @@ import { SliderBar } from '../shared/SliderBar'
 import { TabsSwitch } from '../shared/TabsSwitch'
 import { TokenInputField } from './TokenInputField'
 import { Txt } from '../shared/Txt'
+import { YearnChart } from '../shared/charts/YearnChart'
 import { ReactComponent as YearnLogo } from '../assets/images/yearn.svg'
 import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
 import { etherGlobal } from '../api/ether'
@@ -261,7 +262,9 @@ export const LeveragedTradingPage = () => {
               secondToken={spentToken}
               disableTrading={false}
             /> */}
-            <div tw='w-full height[500px] tablet:height[500px] desktop:height[700px] desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'></div>
+            <div tw='w-full height[500px] tablet:height[500px] desktop:height[700px] desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
+              <YearnChart tokenAddress={token.address} />
+            </div>
           </div>
         </div>
       </div>

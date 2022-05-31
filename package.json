@@ -21,6 +21,7 @@
     "date-fns": "^2.25.0",
     "ethers": "^5.5.4",
     "fortmatic": "^2.2.1",
+    "lightweight-charts": "^3.8.0",
     "lodash": "^4.17.21",
     "phosphor-react": "^1.4.0",
     "postcss": "^7.0.39",
