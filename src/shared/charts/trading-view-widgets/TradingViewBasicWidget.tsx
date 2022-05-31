@@ -3,10 +3,10 @@ import 'twin.macro'
 /** @jsxImportSource @emotion/react */
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
-import { TabButton } from '../TabButton'
-import { useTheme } from '../../state/hooks'
+import { TabButton } from '../../TabButton'
+import { useTheme } from '../../../state/hooks'
 
-export const BasicChart = (props: { tokenSymbol: string }) => {
+export const TradingViewBasicChart = (props: { tokenSymbol: string }) => {
   const theme = useTheme()
 
   const ref = useRef<any>()

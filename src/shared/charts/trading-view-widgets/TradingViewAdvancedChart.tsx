@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { useTheme } from '../../state/hooks'
+import { useTheme } from '../../../state/hooks'
 
-export const TradingChart = (props: { tokenSymbol: string }) => {
+export const TradingViewAdvancedChart = (props: { tokenSymbol: string }) => {
   const theme = useTheme()
 
   useEffect(() => {

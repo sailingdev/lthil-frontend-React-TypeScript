@@ -1,11 +1,11 @@
-/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { BasicChart } from './BasicChart'
 import { TabButton } from '../TabButton'
 import { TokenDetails } from '../../types'
-import { TradingChart } from './TradingChart'
+import { TradingViewAdvancedChart } from './trading-view-widgets/TradingViewAdvancedChart'
+import { TradingViewBasicChart } from './trading-view-widgets/TradingViewBasicWidget'
 import { Txt } from '../Txt'
+/** @jsxImportSource @emotion/react */
 import { useState } from 'react'
 
 export interface IChartCardProps {
@@ -39,11 +39,11 @@ export const ChartCard = (props: IChartCardProps) => {
       </div>
       <div tw='w-full h-full  flex flex-col'>
         {activeChart === 'basic' ? (
-          <BasicChart
+          <TradingViewBasicChart
             tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
           />
         ) : (
-          <TradingChart
+          <TradingViewAdvancedChart
             tokenSymbol={`${obtainedToken.symbol}${spentToken.symbol}`}
           />
         )}
