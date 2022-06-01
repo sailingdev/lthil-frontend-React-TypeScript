@@ -25,22 +25,6 @@ const strategies = [
     risk: 'Low',
     url: '/trade/leveraged-trading',
   },
-  {
-    id: 3,
-    title: 'Degenbox',
-    description: 'MIM and TIME Aave looping',
-    apyMin: '0',
-    apyMax: '∞x',
-    risk: 'High',
-  },
-  {
-    id: 4,
-    title: 'Options',
-    description: 'Play with Put and Call options',
-    apyMin: '0',
-    apyMax: '100x',
-    risk: 'Medium',
-  },
 ]
 
 export const TradePage = () => {
