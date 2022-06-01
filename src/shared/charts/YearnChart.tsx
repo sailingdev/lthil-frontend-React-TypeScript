@@ -81,14 +81,25 @@ export const YearnChart = (props: { tokenAddress: string }) => {
         ...styles.chart,
         width: ref.current.clientWidth,
         height: ref.current.clientHeight,
+        timeScale: { timeVisible: true },
       })
       // @ts-ignore
       series.applyOptions(styles.series)
 
       const data = await http.getYearnHistoricalEarnings(1, props.tokenAddress)
 
-      console.log(data)
-      series.setData(data)
+      if (data.length > 0) {
+        series.setData(
+          data,
+          // [{ time: data[0].time, value: 0 }, ...data],
+          // data,
+          // [
+          //   { time: '2022-05-05T00:00:00.000Z', value: 0 },
+          //   { time: '2022-05-05T00:00:00.000Z', value: 2897949877499956087439 },
+          //   { time: '2022-05-06T00:00:00.000Z', value: 2897949877499956087439 },
+          // ],
+        )
+      }
       chart.timeScale().fitContent()
     },
     [theme, props.tokenAddress],

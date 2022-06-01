@@ -76,7 +76,6 @@ export const LeveragedTradingPage = () => {
             deadline,
             token: token.address,
           })
-        debugger
         setMaxSpent(max)
       }
     } catch (error) {

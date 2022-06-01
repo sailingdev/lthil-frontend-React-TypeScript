@@ -10,11 +10,25 @@ class HTTP {
     )
     // TODO THIS NEEDS TO BE FILTERED BY USING THE TOKEN ADDRESS.
     // INSTEAD WE RETURN THE FIRST ITEM FROM THE ARRAY
-    const item = data[0]
+    const item = data[15]
 
-    return (item.metadata.historicalEarnings ?? []).map((i: any) => {
-      return { time: i.date, value: i.earnings.amount }
+    const result = (item.metadata.historicEarnings ?? []).map((i: any) => {
+      return { time: i.date, value: i.earnings.amountUsdc }
     })
+
+    const withoutDuplicates: any[] = []
+
+    for (const row of result) {
+      const alreadyAdded = withoutDuplicates.find(
+        (r: any) => r.date === row.date,
+      )
+      if (!alreadyAdded) {
+        withoutDuplicates.push(row)
+      }
+    }
+    console.log(withoutDuplicates)
+
+    return withoutDuplicates
   }
 }
 

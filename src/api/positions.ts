@@ -133,6 +133,8 @@ export class PositionAggregate {
         '0x1',
         'latest',
       )
+      console.log(identifier, this.getFilter(s, filter))
+      console.log(events)
       const strategyEvents = events.map((e) => ({
         event: e,
         identifier,

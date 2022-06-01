@@ -57,18 +57,19 @@ export class LeveragedTrading extends BaseStrategy {
     )
     const maxSpent = await this.computeMaxSpent(positionData)
     try {
-      const position = await this.contract.openPosition(
-        {
-          deadline: BigNumber.from(
-            Math.floor(Date.now() / 1000) + 60 * deadline,
-          ),
-          collateral: marginValue,
-          maxSpent: maxSpent,
-        },
-        {
-          gasLimit: 10000000,
-        },
-      )
+      const data = {
+        deadline: BigNumber.from(Math.floor(Date.now() / 1000) + 60 * deadline),
+        collateral: marginValue,
+        spentToken: positionData.token,
+        obtainedToken: positionData.token,
+        collateralIsSpentToken: true,
+        minObtained: maxSpent,
+        maxSpent,
+      }
+      const position = await this.contract.openPosition(data, {
+        gasLimit: 10000000,
+      })
+
       return position
     } catch (error) {
       console.error(error)
@@ -119,10 +120,6 @@ export class LeveragedTrading extends BaseStrategy {
               .subUnsafe(FixedNumber.from(position.collateralReceived))
               .subUnsafe(totalFees),
           )
-
-    // console.log('Amount in:', position.amountIn)
-    // console.log('To borrow:', position.toBorrow)
-    // console.log('Collateral received:', position.collateralReceived)
 
     return [
       profit,
