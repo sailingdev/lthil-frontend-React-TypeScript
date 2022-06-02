@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { ChartsPage } from './pages/ChartsPage'
 import { DashboardPage } from './pages/DashboardPage'
+import { FaucetsPage } from './pages/FaucetsPage'
 import { Footer } from './shared/Footer'
 import { Header } from './shared/Header'
 import { LeveragedTradingPage } from './pages/LeveragedTrading'
@@ -59,6 +60,7 @@ export const AppRouter = () => {
                 element={<PositionPage />}
               />
               <Route path='/stake' element={<StakePage />} />
+              <Route path='/faucets' element={<FaucetsPage />} />
               <Route path='/charts' element={<ChartsPage />} />
               <Route path='*' element={<Navigate to='/trade' replace />} />
             </Routes>

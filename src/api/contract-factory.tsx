@@ -17,6 +17,7 @@ export class ContractFactory {
   ) {
     return new Contract(tokenAddress, ERC20Abi, signer)
   }
+
   public static getMockKyberNetworkProxyContract(
     signer: ethers.providers.JsonRpcSigner,
   ) {
