@@ -19,12 +19,12 @@ export const FaucetsPage = () => {
   const isConnected = useIsConnected()
 
   const onSelect = async (tokenAddress: string, tokenName: string) => {
-    const contract: any = ContractFactory.getTokenContract(
+    const contract: any = ContractFactory.getSmartTokenContract(
       tokenAddress,
       etherGlobal.getSigner(),
     )
     try {
-      await contract.mint(tokenAddress)
+      await contract.mint()
       showInfoNotification(`You redeemed ${tokenName}`)
     } catch (e) {
       console.error(e)
