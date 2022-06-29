@@ -1,11 +1,10 @@
-import 'twin.macro'
-
 /** @jsxImportSource @emotion/react */
+import 'twin.macro'
+import { useNavigate } from 'react-router-dom'
+
 import { ContentContainer } from '../shared/ContentContainer'
 import { Strategy } from '../shared/Strategy'
 import { Txt } from '../shared/Txt'
-import { useNavigate } from 'react-router-dom'
-
 const strategies = [
   {
     id: 1,

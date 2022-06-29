@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-
 import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 
 import { ISearchParams } from '../../types'

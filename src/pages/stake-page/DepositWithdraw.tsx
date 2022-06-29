@@ -1,18 +1,18 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { Approval, IBaseProps, TransactionType } from '../../types'
-import { useAddTransaction, useTransaction } from '../../state/hooks'
+import { useState } from 'react'
+import { useAsync } from 'react-use'
+import { FixedNumber } from 'ethers'
 
 import { Button } from '../../shared/Button'
-/** @jsxImportSource @emotion/react */
-import { FixedNumber } from 'ethers'
 import { InputFieldMax } from '../../shared/InputFieldMax'
 import { Txt } from '../../shared/Txt'
-import { etherGlobal } from '../../api/ether'
-import { getCTALabelForApproval } from '../../utils'
 import { useApprovalAction } from '../../shared/hooks/useApprovalAction'
-import { useAsync } from 'react-use'
-import { useState } from 'react'
+import { etherGlobal } from '../../api/ether'
+import { useAddTransaction, useTransaction } from '../../state/hooks'
+import { getCTALabelForApproval } from '../../utils'
+import { Approval, IBaseProps, TransactionType } from '../../types'
 
 interface IDepositWithdrawProps extends IBaseProps {
   tokenAddress: string

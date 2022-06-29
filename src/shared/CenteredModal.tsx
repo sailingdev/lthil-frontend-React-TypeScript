@@ -1,10 +1,10 @@
-import 'twin.macro'
-
-import Modal from 'react-modal'
-import { ReactNode } from 'react'
 /** @jsxImportSource @emotion/react */
-import { X } from 'phosphor-react'
+import 'twin.macro'
 import tw from 'twin.macro'
+
+import { ReactNode } from 'react'
+import Modal from 'react-modal'
+import { X } from 'phosphor-react'
 
 Modal.setAppElement('#root')
 
@@ -26,7 +26,6 @@ export const CenteredModal = (props: {
       <button
         css={[
           tw`border-0 rounded-md cursor-pointer px-2.5 py-2.5 bg-primary-100 width[36px] height[36px] mx-1 absolute right-2 top-4`,
-          // active && tw`bg-action text-primary-100`,
         ]}
         onClick={() => onChange(false)}
       >

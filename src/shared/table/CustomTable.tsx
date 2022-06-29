@@ -1,5 +1,8 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import tw from 'twin.macro'
 
+import React, { ReactNode, useEffect, useState } from 'react'
 import {
   Column,
   useFlexLayout,
@@ -7,15 +10,12 @@ import {
   useSortBy,
   useTable,
 } from 'react-table'
-import React, { ReactNode, useEffect, useState } from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import { css } from '@emotion/react'
 
 import { CustomTablePagination } from './CustomTablePagination'
 import { Txt } from '../Txt'
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
 import { isMobile } from '../../utils'
-import tw from 'twin.macro'
 
 const tableContainerStyle = css`
   .table {

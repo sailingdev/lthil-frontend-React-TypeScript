@@ -1,10 +1,8 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-/** @jsxImportSource @emotion/react */
-import { ChartLine, Info, MagnifyingGlass } from 'phosphor-react'
-import { ISearchParams, StakeToken } from '../../types'
 import { useEffect, useState } from 'react'
-import { useInitStakeTokens, useStakeTokens } from '../../state/hooks'
+import { ChartLine, Info, MagnifyingGlass } from 'phosphor-react'
 
 import { Button } from '../../shared/Button'
 import { ContentContainer } from '../../shared/ContentContainer'
@@ -15,6 +13,8 @@ import { TableCell } from '../../shared/table/cells'
 import { Txt } from '../../shared/Txt'
 import { useIsConnected } from '../../shared/hooks/useIsConnected'
 import { useSearch } from '../../shared/hooks/useSearch'
+import { useInitStakeTokens, useStakeTokens } from '../../state/hooks'
+import { ISearchParams, StakeToken } from '../../types'
 
 const initialSearchParams: Partial<ISearchParams> = {
   orderField: 'annualPercentageYield',

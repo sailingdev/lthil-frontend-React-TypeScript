@@ -1,3 +1,7 @@
+import { useWeb3React } from '@web3-react/core'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import { createSelector } from '@reduxjs/toolkit'
+
 import {
   ISearchParams,
   Transaction,
@@ -5,7 +9,6 @@ import {
   TransactionReceipt,
   TransactionType,
 } from '../types'
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import {
   addTransaction,
   finalizeTransaction,
@@ -17,12 +20,10 @@ import {
 } from './network/network.actions'
 
 import { RootState } from './store'
-import { createSelector } from '@reduxjs/toolkit'
 import { initializePositions } from './position/position.actions'
 // @ts-ignore
 import { initializeUserStakes } from './stake/stake.actions'
 import { toggleTheme } from './theme/theme.actions'
-import { useWeb3React } from '@web3-react/core'
 
 const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 

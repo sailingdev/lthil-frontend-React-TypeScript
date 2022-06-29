@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
+import 'twin.macro'
+import tw from 'twin.macro'
 
 import { IBaseProps } from '../types'
 import React from 'react'
-import tw from 'twin.macro'
 
 export interface ITxtProps extends IBaseProps {
   children: any

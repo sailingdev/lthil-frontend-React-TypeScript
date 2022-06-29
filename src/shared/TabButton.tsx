@@ -1,9 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
-
-import { Txt } from '../shared/Txt'
 import tw from 'twin.macro'
 
+import { Txt } from '../shared/Txt'
 export const TabButton = (props: {
   text: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>

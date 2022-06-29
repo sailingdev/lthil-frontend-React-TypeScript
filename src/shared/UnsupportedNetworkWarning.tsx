@@ -1,12 +1,12 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { Txt } from './Txt'
+import { useWeb3React } from '@web3-react/core'
 import { Warning } from 'phosphor-react'
+
+import { Txt } from './Txt'
 import { allowedChainIds } from './test/connectors'
 import { useIsConnected } from './hooks/useIsConnected'
-import { useWeb3React } from '@web3-react/core'
-
-/** @jsxImportSource @emotion/react */
 
 export const UnsupportedNetworkWarning = () => {
   const { chainId } = useWeb3React()

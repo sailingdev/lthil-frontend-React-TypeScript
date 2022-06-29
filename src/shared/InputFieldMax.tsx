@@ -3,10 +3,9 @@ import 'twin.macro'
 import tw from 'twin.macro'
 
 import { useEffect, useState, Dispatch, SetStateAction } from 'react'
-import { etherGlobal } from '../api/ether'
 
+import { etherGlobal } from '../api/ether'
 import { Txt } from './Txt'
-import { BigNumber, ethers } from 'ethers'
 
 interface IInputFieldMaxProps {
   label?: string

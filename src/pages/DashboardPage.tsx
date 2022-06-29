@@ -1,19 +1,19 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { IPosition, ISearchParams, TransactionType } from '../types'
-import { useAddTransaction, usePositions } from '../state/hooks'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { FixedNumber } from 'ethers'
 
 import { Button } from '../shared/Button'
 import { ContentContainer } from '../shared/ContentContainer'
 import { CustomTable } from '../shared/table/CustomTable'
-/** @jsxImportSource @emotion/react */
-import { FixedNumber } from 'ethers'
 import { TableCell } from '../shared/table/cells'
 import { Txt } from '../shared/Txt'
-import { etherGlobal } from '../api/ether'
-import { useNavigate } from 'react-router-dom'
 import { useSearch } from '../shared/hooks/useSearch'
-import { useState } from 'react'
+import { etherGlobal } from '../api/ether'
+import { useAddTransaction, usePositions } from '../state/hooks'
+import { IPosition, ISearchParams, TransactionType } from '../types'
 
 /* eslint-disable */
 const cleanDeep = require('clean-deep')

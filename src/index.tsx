@@ -1,18 +1,20 @@
+/** @jsxImportSource @emotion/react */
+import { Provider } from 'react-redux'
+import ReactDOM from 'react-dom'
+import { ToastContainer } from 'react-toastify'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { Web3ReactProvider } from '@web3-react/core'
+
 import 'react-loading-skeleton/dist/skeleton.css'
 import 'tailwindcss/dist/base.min.css'
 import './index.css'
 
 import { Ether, initializeGlobalInstance } from './api/ether'
-/** @jsxImportSource @emotion/react */
-import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { AppRouter } from './AppRouter'
 import { BrowserRouter } from 'react-router-dom'
 import { ErrorBoundary } from './shared/ErrorBoundary'
-import { Provider } from 'react-redux'
-import ReactDOM from 'react-dom'
-import { ToastContainer } from 'react-toastify'
-import { Web3ReactProvider } from '@web3-react/core'
+
 import { store } from './state/store'
 
 const queryClient = new QueryClient({

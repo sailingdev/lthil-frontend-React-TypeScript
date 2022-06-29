@@ -1,8 +1,7 @@
-/** @jsxImportSource @emotion/react */
+import { useEffect, useState } from 'react'
 
 import { Approval, ApprovalTransactionMeta, TransactionType } from '../../types'
 import { useAddTransaction, useApprovalTransactions } from '../../state/hooks'
-import { useEffect, useState } from 'react'
 
 import { etherGlobal } from '../../api/ether'
 import { isDev } from '../../utils'

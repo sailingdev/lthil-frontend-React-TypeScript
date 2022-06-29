@@ -1,9 +1,6 @@
-import 'twin.macro'
-
-/** @jsxImportSource @emotion/react */
 import { useCallback, useEffect, useRef, useState } from 'react'
-
 import { createChart } from 'lightweight-charts'
+
 import { http } from '../../http'
 import { useTheme } from '../../state/hooks'
 
@@ -69,52 +66,41 @@ export const YearnChart = (props: { tokenAddress: string }) => {
   const ref = useRef<any>()
   const [isMounted, setIsMounted] = useState(false)
 
-  const loadGraph = useCallback(
-    async (opts: any) => {
-      ref.current.innerText = ''
+  const loadGraph = useCallback(async () => {
+    ref.current.innerText = ''
 
-      const chart = createChart(ref.current)
-      const series = chart.addAreaSeries({})
-      const styles = theme ? darkTheme : lightTheme
+    const chart = createChart(ref.current)
+    const series = chart.addAreaSeries({})
+    const styles = theme ? darkTheme : lightTheme
 
-      chart.applyOptions({
-        ...styles.chart,
-        width: ref.current.clientWidth,
-        height: ref.current.clientHeight,
-        timeScale: { timeVisible: true },
-      })
-      // @ts-ignore
-      series.applyOptions(styles.series)
+    chart.applyOptions({
+      ...styles.chart,
+      width: ref.current.clientWidth,
+      height: ref.current.clientHeight,
+      timeScale: { timeVisible: true },
+    })
+    // @ts-ignore
+    series.applyOptions(styles.series)
 
-      const data = await http.getYearnHistoricalEarnings(1, props.tokenAddress)
+    const data = await http.getYearnHistoricalEarnings(1)
+    console.log({ data })
 
-      if (data.length > 0) {
-        series.setData(
-          data,
-          // [{ time: data[0].time, value: 0 }, ...data],
-          // data,
-          // [
-          //   { time: '2022-05-05T00:00:00.000Z', value: 0 },
-          //   { time: '2022-05-05T00:00:00.000Z', value: 2897949877499956087439 },
-          //   { time: '2022-05-06T00:00:00.000Z', value: 2897949877499956087439 },
-          // ],
-        )
-      }
-      chart.timeScale().fitContent()
-    },
-    [theme, props.tokenAddress],
-  )
+    if (data.length > 0) {
+      series.setData(data)
+    }
+    chart.timeScale().fitContent()
+  }, [theme, props.tokenAddress])
 
   useEffect(() => {
     if (isMounted || !ref.current) {
       return
     }
-    loadGraph({})
+    loadGraph()
     setIsMounted(true)
   }, [ref.current])
 
   useEffect(() => {
-    loadGraph({})
+    loadGraph()
   }, [theme, props.tokenAddress])
 
   return <div ref={ref} style={{ height: '100%', width: '100%' }} />

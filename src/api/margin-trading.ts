@@ -117,16 +117,6 @@ export class MarginTrading extends BaseStrategy {
       return error
     }
   }
-  //   getDistanceFromLiquidation(position: IPosition, price: number) {
-  //     const liquidationPrice = BigNumber.from(position.liquidationPrice)
-  //     const currentPrice = BigNumber.from(price)
-  //     const base = liquidationPrice.div(currentPrice)
-  //     if (position.type === 'long') {
-  //       return BigNumber.from(1).sub(base)
-  //     } else {
-  //       return base.sub(BigNumber.from(1))
-  //     }
-  //   }
 
   async computePositionProfit(
     position: IPosition,
@@ -183,10 +173,6 @@ export class MarginTrading extends BaseStrategy {
         : FixedNumber.from(position.amountIn)
             .subUnsafe(quoteAmount)
             .subUnsafe(totalFees)
-
-    // console.log('Amount in:', position.amountIn)
-    // console.log('To borrow:', position.toBorrow)
-    // console.log('Collateral received:', position.collateralReceived)
 
     return [
       profit,

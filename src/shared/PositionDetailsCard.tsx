@@ -1,13 +1,14 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
 import { FixedNumber } from 'ethers'
-/** @jsxImportSource @emotion/react */
+
 import { IPosition } from '../types'
 import { InfoItem } from './InfoItem'
 import { Txt } from './Txt'
 import { formatDate } from '../utils'
 import { usePositionProfit } from './hooks/usePositionProfit'
+import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
 
 interface IPositionDetailsCard {
   position: IPosition

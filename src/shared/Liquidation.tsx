@@ -39,16 +39,6 @@ export const Liquidation = (props: ILiquidation) => {
         placeholder='0'
         value={inputValue}
         onChange={(value) => inputOnChange(value)}
-        // renderRight={
-        //   <Button
-        //     css={[
-        //       tw`bg-primary-400 dark:bg-primary-300 h-6 tablet:h-7 desktop:h-8`,
-        //     ]}
-        //     text={tokenSymbol}
-        //     leftIcon={CurrEth}
-        //     rightIcon={ArrowDown}
-        //   />
-        // }
       />
       <Button text='Top up' action full bold onClick={onClick} />
     </div>

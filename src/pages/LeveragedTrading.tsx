@@ -1,36 +1,36 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
+import { useEffect, useState } from 'react'
+import { useAsync } from 'react-use'
+import { FixedNumber } from 'ethers'
+import { FadersHorizontal } from 'phosphor-react'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
+import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
+
+import { Button } from '../shared/Button'
+import { ContentContainer } from '../shared/ContentContainer'
+import { InfoItem } from '../shared/InfoItem'
+import { InputField } from '../shared/InputField'
+import { SliderBar } from '../shared/SliderBar'
+import { TabsSwitch } from '../shared/TabsSwitch'
+import { TokenInputField } from './TokenInputField'
+import { Txt } from '../shared/Txt'
+import { YearnChart } from '../shared/charts/YearnChart'
+import { showErrorNotification } from '../shared/notification'
+import { useApprovalAction } from '../shared/hooks/useApprovalAction'
+import { useIsConnected } from '../shared/hooks/useIsConnected'
+import { useAddTransaction, useTransaction } from '../state/hooks'
 import {
   Approval,
   TokenDetails,
   TransactionType,
   YearnOpenPositionMeta,
 } from '../types'
-import { useAddTransaction, useTransaction } from '../state/hooks'
-import { useEffect, useState } from 'react'
-
-import { Button } from '../shared/Button'
-import { ContentContainer } from '../shared/ContentContainer'
-import { FadersHorizontal } from 'phosphor-react'
-/** @jsxImportSource @emotion/react */
-import { FixedNumber } from 'ethers'
-import { InfoItem } from '../shared/InfoItem'
-import { InputField } from '../shared/InputField'
-import { ReactComponent as LidoLogo } from '../assets/images/lido.svg'
-import { SliderBar } from '../shared/SliderBar'
-import { TabsSwitch } from '../shared/TabsSwitch'
-import { TokenInputField } from './TokenInputField'
-import { Txt } from '../shared/Txt'
-import { YearnChart } from '../shared/charts/YearnChart'
-import { ReactComponent as YearnLogo } from '../assets/images/yearn.svg'
-import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
-import { etherGlobal } from '../api/ether'
 import { getCTALabelForApproval } from '../utils'
-import { showErrorNotification } from '../shared/notification'
-import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
-import { useApprovalAction } from '../shared/hooks/useApprovalAction'
-import { useAsync } from 'react-use'
-import { useIsConnected } from '../shared/hooks/useIsConnected'
+import { etherGlobal } from '../api/ether'
+import { ReactComponent as YearnLogo } from '../assets/images/yearn.svg'
+import { ReactComponent as LidoLogo } from '../assets/images/lido.svg'
 
 export const LeveragedTradingPage = () => {
   const addTx = useAddTransaction<YearnOpenPositionMeta>()
@@ -123,11 +123,6 @@ export const LeveragedTradingPage = () => {
         <div tw='w-full tablet:w-9/12 desktop:w-10/12 flex flex-col items-center'>
           <Txt.Heading1 tw='mb-12'>Leveraged staking </Txt.Heading1>
           <div tw='w-full flex flex-col desktop:flex-row gap-6'>
-            <link
-              href='https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css'
-              rel='stylesheet'
-            />
-
             <div tw='flex flex-col gap-3 flex-grow w-full desktop:w-4/12'>
               <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100 gap-7'>
                 <TabsSwitch
@@ -256,11 +251,6 @@ export const LeveragedTradingPage = () => {
                 </Txt.CaptionMedium>
               </div>
             </div>
-            {/* <ChartCard
-              firstToken={obtainedToken}
-              secondToken={spentToken}
-              disableTrading={false}
-            /> */}
             <div tw='w-full height[500px] tablet:height[500px] desktop:height[700px] desktop:w-8/12 flex flex-col justify-between items-center rounded-xl p-5 desktop:p-10 bg-primary-100'>
               <YearnChart tokenAddress={token.address} />
             </div>

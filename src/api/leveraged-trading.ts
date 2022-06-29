@@ -32,15 +32,6 @@ export class LeveragedTrading extends BaseStrategy {
   }
   async closePosition(position: IPosition): Promise<Transaction> {
     try {
-      const p = await this.contract.positions(position.positionId)
-      // const fees = p.fees as BigNumber
-      // const allowance = p.allowance as BigNumber
-      // const principal = p.principal as BigNumber
-      // const maxOrMin =
-      //   position.collateralToken.name != position.spentToken.name
-      //     ? principal.add(fees)
-      //     : allowance
-
       return this.contract.closePosition(position.positionId)
     } catch (error) {
       console.error(error)

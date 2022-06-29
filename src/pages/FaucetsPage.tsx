@@ -1,19 +1,19 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import tw from 'twin.macro'
+
+import React from 'react'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 
 import {
   showErrorNotification,
   showInfoNotification,
 } from '../shared/notification'
-
-/** @jsxImportSource @emotion/react */
 import { ContentContainer } from '../shared/ContentContainer'
-import { ContractFactory } from '../api/contract-factory'
-import React from 'react'
 import { Txt } from '../shared/Txt'
-import { etherGlobal } from '../api/ether'
-import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
-import tw from 'twin.macro'
 import { useIsConnected } from '../shared/hooks/useIsConnected'
+import { ContractFactory } from '../api/contract-factory'
+import { etherGlobal } from '../api/ether'
 
 export const FaucetsPage = () => {
   const isConnected = useIsConnected()

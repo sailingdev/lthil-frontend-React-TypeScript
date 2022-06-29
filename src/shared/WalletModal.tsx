@@ -1,10 +1,12 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import tw from 'twin.macro'
+
+import { useWeb3React } from '@web3-react/core'
 
 import { CenteredModal } from './CenteredModal'
 import { Txt } from './Txt'
 import { connectors } from './test/connectors'
-import tw from 'twin.macro'
-import { useWeb3React } from '@web3-react/core'
 
 interface IWalletModal {
   modalIsOpen: boolean

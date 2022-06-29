@@ -1,10 +1,10 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { useTheme, useToggleTheme } from '../state/hooks'
-
-import { IBaseProps } from '../types'
-/** @jsxImportSource @emotion/react */
 import Switch from 'react-switch'
+
+import { useTheme, useToggleTheme } from '../state/hooks'
+import { IBaseProps } from '../types'
 import { ReactComponent as SwitchDark } from '../assets/images/switchDark.svg'
 import { ReactComponent as SwitchLight } from '../assets/images/switchLight.svg'
 
