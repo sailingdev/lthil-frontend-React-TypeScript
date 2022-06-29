@@ -1,4 +1,5 @@
-/** @jsxImportSource @emotion/react */
+import { useWeb3React } from '@web3-react/core'
+import { useAsync } from 'react-use'
 
 import { Ether, etherGlobal } from '../../api/ether'
 import {
@@ -7,9 +8,7 @@ import {
   usePendingTransactions,
 } from '../../state/hooks'
 
-import { useAsync } from 'react-use'
 import { useIsConnected } from './useIsConnected'
-import { useWeb3React } from '@web3-react/core'
 
 export const useVerifyTransaction = () => {
   const { library, chainId } = useWeb3React<Ether>()

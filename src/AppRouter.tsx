@@ -1,5 +1,8 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import tw from 'twin.macro'
 
+import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { ChartsPage } from './pages/ChartsPage'
@@ -14,15 +17,11 @@ import { StakePage } from './pages/stake-page/StakePage'
 import { TradePage } from './pages/TradePage'
 import { UnsupportedNetworkWarning } from './shared/UnsupportedNetworkWarning'
 import { isDesktop } from './utils'
-import tw from 'twin.macro'
 import { useBlockNumberListener } from './shared/hooks/useBlockNumberListener'
 import { useEagerConnect } from './shared/hooks/useEagerConnect'
-import { useEffect } from 'react'
 import { useInitSetup } from './shared/hooks/useInitSetup'
 import { useNetworkListener } from './shared/hooks/useNetworkListener'
 import { useVerifyTransaction } from './shared/hooks/useVerifyTransactions'
-
-/** @jsxImportSource @emotion/react */
 
 export const AppRouter = () => {
   useEagerConnect()

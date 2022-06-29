@@ -1,6 +1,8 @@
-import { FC } from 'react'
 /** @jsxImportSource @emotion/react */
+import 'twin.macro'
 import tw from 'twin.macro'
+
+import { FC } from 'react'
 
 export const ContentContainer: FC = ({ children }: any) => {
   return (

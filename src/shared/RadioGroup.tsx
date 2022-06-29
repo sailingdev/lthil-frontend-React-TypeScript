@@ -1,13 +1,13 @@
-import 'rc-slider/assets/index.css'
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import tw from 'twin.macro'
 
 import { ReactComponent as RadioButtonNotSelected } from '../assets/images/radioButton/notSelected.svg'
 import { ReactComponent as RadioButtonSelected } from '../assets/images/radioButton/selected.svg'
 import { Tooltip } from './Tooltip'
 import { Txt } from './Txt'
-import tw from 'twin.macro'
 
-/** @jsxImportSource @emotion/react */
+import 'rc-slider/assets/index.css'
 
 interface IRadioItem {
   label: string

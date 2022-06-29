@@ -1,11 +1,13 @@
 /** @jsxImportSource @emotion/react */
+import 'twin.macro'
 import tw from 'twin.macro'
+
 import { useState } from 'react'
+import { Question } from 'phosphor-react'
 
 import { Txt } from './Txt'
 import { isDesktop } from '../utils'
 import { SliderBar } from './SliderBar'
-import { Question } from 'phosphor-react'
 
 const Text = (props: { value: string | number; bold?: boolean }) => {
   return isDesktop ? (
@@ -20,11 +22,7 @@ const Text = (props: { value: string | number; bold?: boolean }) => {
 }
 
 export const CollateralCard = () => {
-  const [sliderValue, setSliderValue] = useState(100)
-
-  const onSliderChange = (value: number) => {
-    setSliderValue(value)
-  }
+  const [sliderValue] = useState(100)
 
   return (
     <div tw='flex flex-col justify-between items-center rounded-xl p-5 bg-primary-100'>
@@ -39,14 +37,7 @@ export const CollateralCard = () => {
         <Text bold value={`${sliderValue}%`} />
       </div>
 
-      <SliderBar
-        tw='my-2'
-        min={50}
-        max={150}
-        step={0.1}
-        value={sliderValue}
-        // onChange={onSliderChange}
-      />
+      <SliderBar tw='my-2' min={50} max={150} step={0.1} value={sliderValue} />
       <div tw='w-full flex flex-row justify-between'>
         <Txt.CaptionMedium tw='text-font-100'>Withdraw</Txt.CaptionMedium>
         <Txt.CaptionMedium tw='text-font-100'>Top up</Txt.CaptionMedium>

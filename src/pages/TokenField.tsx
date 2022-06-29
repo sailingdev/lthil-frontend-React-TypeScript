@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
+import 'twin.macro'
+import tw from 'twin.macro'
+
+import { useState } from 'react'
+import { CaretDown } from 'phosphor-react'
 
 import { Button } from '../shared/Button'
-import { CaretDown } from 'phosphor-react'
-import { TokenDetails } from '../types'
 import { TokenModal } from '../shared/TokenModal'
-import tw from 'twin.macro'
-import { useState } from 'react'
-
+import { TokenDetails } from '../types'
 interface ITokenField {
   onTokenChange(token: TokenDetails): void
   token: TokenDetails

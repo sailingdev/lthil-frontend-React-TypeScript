@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-
 import { useWeb3React } from '@web3-react/core'
 
 export const useIsConnected = () => {

@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
+import { useWeb3React } from '@web3-react/core'
 import { ArrowSquareOut, Check, Copy } from 'phosphor-react'
-import { useAccountAddress, useTransactions } from '../state/hooks'
 
+import { useAccountAddress, useTransactions } from '../state/hooks'
 import { CenteredModal } from './CenteredModal'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { Txt } from './Txt'
 import { getTransactionLabel } from '../utils'
 import { showInfoNotification } from './notification'
 import { useProviderInfo } from './hooks/useProviderInfo'
-import { useWeb3React } from '@web3-react/core'
 
 interface IAccountModal {
   modalIsOpen: boolean

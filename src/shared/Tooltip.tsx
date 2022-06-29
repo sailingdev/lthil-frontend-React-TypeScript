@@ -1,18 +1,13 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-/** @jsxImportSource @emotion/react */
+import { useState } from 'react'
 import { Question } from 'phosphor-react'
 import ReactTooltip from 'react-tooltip'
-import { Txt } from './Txt'
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import tw from 'twin.macro'
-import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-const defaultStyles = css`
-  ${tw`inline-block align-text-bottom`}
-`
+import { Txt } from './Txt'
+
 interface ITooltip {
   text: string
 }

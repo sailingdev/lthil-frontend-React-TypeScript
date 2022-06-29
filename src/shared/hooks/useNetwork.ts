@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-
 import { allNetworks } from '../test/connectors'
 import { useWeb3React } from '@web3-react/core'
 

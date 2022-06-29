@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import 'twin.macro'
+import tw from 'twin.macro'
 
 import { Tooltip } from './Tooltip'
 import { Txt } from './Txt'
 import { isDesktop } from '../utils'
-import tw from 'twin.macro'
 
 const InfoItemText = (props: { value: string | number }) => {
   return isDesktop ? (

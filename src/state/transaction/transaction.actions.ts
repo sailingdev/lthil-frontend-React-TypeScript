@@ -1,8 +1,8 @@
-import { CreatableTransaction, FinalizableTransaction } from '../../types'
-
 import { createAsyncThunk } from '@reduxjs/toolkit'
+
 import { getTransactionLabel } from '../../utils'
 import { showInfoNotification } from '../../shared/notification'
+import { CreatableTransaction, FinalizableTransaction } from '../../types'
 
 export const addTransaction = createAsyncThunk<
   CreatableTransaction,

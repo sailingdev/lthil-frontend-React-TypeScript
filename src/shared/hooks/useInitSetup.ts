@@ -1,4 +1,4 @@
-/** @jsxImportSource @emotion/react */
+import { useAsync } from 'react-use'
 
 import {
   useInitAccountAddress,
@@ -7,7 +7,6 @@ import {
   useUpdateBlock,
 } from '../../state/hooks'
 
-import { useAsync } from 'react-use'
 import { useIsConnected } from './useIsConnected'
 
 export const useInitSetup = () => {

@@ -1,7 +1,8 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-import { MtsClosePositionMeta, TransactionType } from '../../types'
-import { useAddTransaction, usePosition } from '../../state/hooks'
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { ChartCard } from '../../shared/charts/ChartCard'
 import { ClosePosition } from '../../shared/ClosePosition'
@@ -10,9 +11,8 @@ import { PositionDetailsCard } from '../../shared/PositionDetailsCard'
 import { TopUp } from '../../shared/TopUp'
 import { Txt } from '../../shared/Txt'
 import { etherGlobal } from '../../api/ether'
-import { useParams } from 'react-router-dom'
-/** @jsxImportSource @emotion/react */
-import { useState } from 'react'
+import { useAddTransaction, usePosition } from '../../state/hooks'
+import { MtsClosePositionMeta, TransactionType } from '../../types'
 
 export const MarginPositionPage = () => {
   const { positionId } = useParams<{ positionId: string }>()
@@ -70,24 +70,6 @@ export const MarginPositionPage = () => {
                       editPosition(liquidationInput, collateralToken.address)
                     }
                   />
-                  {/* <CollateralCard />
-                  <Liquidation
-                    // liquidationToken1={liquidationToken1}
-                    // liquidationToken2={liquidationToken2}
-                    liquidationToken1={spentToken.symbol}
-                    liquidationToken2={obtainedToken.symbol}
-                    // liquidationPrice={Ether.utils.formatTokenUnits(
-                    //   position.liquidationPrice,
-                    //   collateralToken.address,
-                    // )}
-                    liquidationPrice='TODOTODOTOD'
-                    inputValue={liquidationInput}
-                    inputOnChange={(value) => setLiquidationInput(value)}
-                    onClick={() =>
-                      editPosition(liquidationInput, collateralToken.address)
-                    }
-                    // tokenSymbol={collateralToken.symbol as string}
-                  /> */}
                   <ClosePosition
                     token={collateralToken.symbol as string}
                     value={3000}

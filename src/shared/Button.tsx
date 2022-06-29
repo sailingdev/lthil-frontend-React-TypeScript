@@ -1,11 +1,12 @@
-import 'twin.macro'
-
-import { ClipLoader } from 'react-spinners'
-import { ICSSProps } from '../types'
 /** @jsxImportSource @emotion/react */
-import { MouseEventHandler } from 'react'
-import { Txt } from './Txt'
+import 'twin.macro'
 import tw from 'twin.macro'
+
+import { MouseEventHandler } from 'react'
+import { ClipLoader } from 'react-spinners'
+
+import { ICSSProps } from '../types'
+import { Txt } from './Txt'
 
 interface IButtonProps extends ICSSProps {
   type?: any

@@ -1,13 +1,13 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
 import { useEffect, useState } from 'react'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 
 import { CenteredModal } from './CenteredModal'
 import { InputField } from './InputField'
-/** @jsxImportSource @emotion/react */
 import { MagnifyingGlass } from 'phosphor-react'
 import { Txt } from './Txt'
-import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 
 interface IToken {
   name: string

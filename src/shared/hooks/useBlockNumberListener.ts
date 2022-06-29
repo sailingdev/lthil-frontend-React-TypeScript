@@ -1,10 +1,9 @@
-/** @jsxImportSource @emotion/react */
+import { useAsync } from 'react-use'
+import { useWeb3React } from '@web3-react/core'
 
 import { Ether } from '../../api/ether'
-import { useAsync } from 'react-use'
 import { useIsConnected } from './useIsConnected'
 import { useUpdateBlock } from '../../state/hooks'
-import { useWeb3React } from '@web3-react/core'
 
 export const useBlockNumberListener = () => {
   const { library } = useWeb3React<Ether>()

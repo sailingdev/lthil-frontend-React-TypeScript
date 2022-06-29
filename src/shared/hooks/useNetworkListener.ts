@@ -1,10 +1,8 @@
-/** @jsxImportSource @emotion/react */
-
-import { useInitAccountAddress, useInitAccountBalance } from '../../state/hooks'
-
-import { injected } from '../test/connectors'
 import { useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
+
+import { useInitAccountAddress, useInitAccountBalance } from '../../state/hooks'
+import { injected } from '../test/connectors'
 
 export const useNetworkListener = () => {
   const { activate } = useWeb3React()

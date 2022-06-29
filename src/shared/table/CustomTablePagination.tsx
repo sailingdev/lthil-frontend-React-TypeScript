@@ -2,8 +2,8 @@
 import 'twin.macro'
 import tw from 'twin.macro'
 
-import { ArrowLeft, ArrowRight } from 'phosphor-react'
 import React, { MouseEventHandler } from 'react'
+import { ArrowLeft, ArrowRight } from 'phosphor-react'
 
 interface ICustomTablePaginationProps {
   currentPage: number

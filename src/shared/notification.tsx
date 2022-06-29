@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
-
-import 'react-toastify/dist/ReactToastify.css'
+import 'twin.macro'
+import tw from 'twin.macro'
 
 import { toast } from 'react-toastify'
-import tw from 'twin.macro'
+
+import 'react-toastify/dist/ReactToastify.css'
 
 export const showErrorNotification = (text: string) =>
   toast(

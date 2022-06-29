@@ -1,6 +1,6 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
-/** @jsxImportSource @emotion/react */
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { TabButton } from '../../TabButton'

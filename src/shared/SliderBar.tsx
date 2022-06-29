@@ -1,10 +1,13 @@
-import 'rc-slider/assets/index.css'
-
 /** @jsxImportSource @emotion/react */
+import 'twin.macro'
+import tw from 'twin.macro'
+
 import Slider from 'rc-slider'
+
 import { Tooltip } from './Tooltip'
 import { Txt } from './Txt'
-import tw from 'twin.macro'
+
+import 'rc-slider/assets/index.css'
 
 interface ISliderProps {
   label?: string

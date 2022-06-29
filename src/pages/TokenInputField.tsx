@@ -1,12 +1,14 @@
 /** @jsxImportSource @emotion/react */
+import 'twin.macro'
+import tw from 'twin.macro'
 
+import { useState } from 'react'
 import { ArrowDown } from 'phosphor-react'
+
 import { Button } from '../shared/Button'
 import { InputField } from '../shared/InputField'
-import { TokenDetails } from '../types'
 import { TokenModal } from '../shared/TokenModal'
-import tw from 'twin.macro'
-import { useState } from 'react'
+import { TokenDetails } from '../types'
 
 interface ITokenInputField {
   label: string
@@ -49,7 +51,7 @@ export const TokenInputField = (props: ITokenInputField) => {
       <TokenModal
         availableTokens={props.availableTokens}
         modalIsOpen={isModalOpen}
-        onModalChange={(value) => {
+        onModalChange={() => {
           setIsModalOpen(false)
         }}
         onSelect={(token) => {

@@ -1,11 +1,11 @@
-import 'twin.macro'
-
 /** @jsxImportSource @emotion/react */
+import 'twin.macro'
+import tw from 'twin.macro'
+
 import { useEffect, useState } from 'react'
 
 import { Tooltip } from './Tooltip'
 import { Txt } from './Txt'
-import tw from 'twin.macro'
 
 interface IInputFieldProps {
   label?: string

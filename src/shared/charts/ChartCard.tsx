@@ -1,12 +1,13 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
+
+import { useState } from 'react'
 
 import { TabButton } from '../TabButton'
 import { TokenDetails } from '../../types'
 import { TradingViewAdvancedChart } from './trading-view-widgets/TradingViewAdvancedChart'
 import { TradingViewBasicChart } from './trading-view-widgets/TradingViewBasicWidget'
 import { Txt } from '../Txt'
-/** @jsxImportSource @emotion/react */
-import { useState } from 'react'
 
 export interface IChartCardProps {
   firstToken: TokenDetails

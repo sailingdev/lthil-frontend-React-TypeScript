@@ -1,8 +1,11 @@
+/** @jsxImportSource @emotion/react */
+import 'twin.macro'
+import tw from 'twin.macro'
+
 import { MouseEventHandler } from 'react'
+
 import { PositionType } from '../types'
 import { Txt } from './Txt'
-/** @jsxImportSource @emotion/react */
-import tw from 'twin.macro'
 
 interface ITab {
   title: string

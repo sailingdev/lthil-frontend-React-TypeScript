@@ -1,10 +1,9 @@
-/** @jsxImportSource @emotion/react */
-
-import { FixedNumber } from 'ethers'
-import { IPosition } from '../../types'
-import { etherGlobal } from '../../api/ether'
 import { useAsync } from 'react-use'
 import { useState } from 'react'
+import { FixedNumber } from 'ethers'
+
+import { IPosition } from '../../types'
+import { etherGlobal } from '../../api/ether'
 
 export const usePositionProfit = (position?: IPosition) => {
   const [profit, setProfit] = useState<[FixedNumber, FixedNumber] | undefined>()

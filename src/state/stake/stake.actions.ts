@@ -1,7 +1,7 @@
-import { StakeToken } from '../../types'
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { etherGlobal } from '../../api/ether'
 import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
+import { etherGlobal } from '../../api/ether'
+import { StakeToken } from '../../types'
 
 export const initializeUserStakes = createAsyncThunk<any, number>(
   'stake/initializeUserStakes',

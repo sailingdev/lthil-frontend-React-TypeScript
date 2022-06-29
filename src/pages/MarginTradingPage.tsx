@@ -1,32 +1,32 @@
+/** @jsxImportSource @emotion/react */
 import 'twin.macro'
 
+import { useState } from 'react'
+import { useAsync } from 'react-use'
+import { FixedNumber } from 'ethers'
 import { ArrowRight, FadersHorizontal, XCircle } from 'phosphor-react'
-import { Priority, TokenDetails, TransactionType } from '../types'
+import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
+import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
 
-import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
 import { Button } from '../shared/Button'
 import { ChartCard } from '../shared/charts/ChartCard'
 import { ContentContainer } from '../shared/ContentContainer'
-/** @jsxImportSource @emotion/react */
-import { FixedNumber } from 'ethers'
 import { InfoItem } from '../shared/InfoItem'
 import { InputField } from '../shared/InputField'
 import { InputFieldMax } from '../shared/InputFieldMax'
 import { RadioGroup } from '../shared/RadioGroup'
 import { SliderBar } from '../shared/SliderBar'
 import { TabsSwitch } from '../shared/TabsSwitch'
-import { TokenField } from './TokenField'
+import { useIsConnected } from '../shared/hooks/useIsConnected'
 import { Txt } from '../shared/Txt'
-import { addresses } from '@ithil-protocol/deployed/latest/addresses.json'
+import { showErrorNotification } from '../shared/notification'
+import { useApprovalAction } from '../shared/hooks/useApprovalAction'
+import { TokenField } from './TokenField'
 import { etherGlobal } from '../api/ether'
 import { getCTALabelForApproval } from '../utils'
-import { showErrorNotification } from '../shared/notification'
-import { tokens } from '@ithil-protocol/deployed/latest/tokenlist.json'
 import { useAddTransaction } from '../state/hooks'
-import { useApprovalAction } from '../shared/hooks/useApprovalAction'
-import { useAsync } from 'react-use'
-import { useIsConnected } from '../shared/hooks/useIsConnected'
-import { useState } from 'react'
+import { Priority, TokenDetails, TransactionType } from '../types'
+import AdvancedSectionImg from '../assets/images/advancedSectionImage.png'
 
 export const MarginTradingPage = () => {
   const addTx = useAddTransaction()
@@ -88,9 +88,7 @@ export const MarginTradingPage = () => {
     slippage,
   ])
 
-  const [openPositionHash, setOpenPositionHash] = useState<string | undefined>(
-    undefined,
-  )
+  const [, setOpenPositionHash] = useState<string | undefined>(undefined)
 
   const CreatePosition = async (tokenAddress: string) => {
     const getMax = await etherGlobal.getMaxDepositAmount(tokenAddress)
@@ -130,7 +128,6 @@ export const MarginTradingPage = () => {
             position.hash,
           )
         } while (txReceipt?.status == undefined || txReceipt?.status == null)
-
         if (txReceipt?.status != 0) {
           setStatus('Transaction Verified')
           setisLoading(false)

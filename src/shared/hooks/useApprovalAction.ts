@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-
 import { useEffect, useState } from 'react'
 
 import { Approval } from '../../types'
