@@ -4,7 +4,6 @@ import { Approval, ApprovalTransactionMeta, TransactionType } from '../../types'
 import { useAddTransaction, useApprovalTransactions } from '../../state/hooks'
 
 import { etherGlobal, maxApproval } from '../../api/ether'
-import { isDev } from '../../utils'
 import { useIsConnected } from './useIsConnected'
 
 type ApprovalFunction = (
