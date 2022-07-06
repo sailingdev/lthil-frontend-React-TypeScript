@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react'
 import { Approval, ApprovalTransactionMeta, TransactionType } from '../../types'
 import { useAddTransaction, useApprovalTransactions } from '../../state/hooks'
 
-import { etherGlobal } from '../../api/ether'
-import { isDev } from '../../utils'
+import { etherGlobal, maxApproval } from '../../api/ether'
 import { useIsConnected } from './useIsConnected'
 
 type ApprovalFunction = (
@@ -59,7 +58,7 @@ export const useLazyApproval = () => {
         const transaction = await etherGlobal.approve(
           token,
           destination,
-          isDev ? Number.MAX_SAFE_INTEGER : amount,
+          maxApproval,
         )
         if (!transaction) {
           return Approval.DENIED

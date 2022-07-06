@@ -137,7 +137,7 @@ export class Ether {
   async approve(
     tokenAddress: string,
     destinationAddress: string,
-    amount: number,
+    amount: BigNumber,
   ): Promise<Transaction | null> {
     try {
       const tokenContract = ContractFactory.getTokenContract(
@@ -165,7 +165,7 @@ export class Ether {
   async getApprovalGasEstimation(
     tokenAddress: string,
     destinationAddress: string,
-    amount: number,
+    amount: BigNumber,
   ) {
     const tokenContract = ContractFactory.getTokenContract(
       tokenAddress,
@@ -173,7 +173,7 @@ export class Ether {
     )
     const gas = await tokenContract.estimateGas.approve(
       destinationAddress,
-      Ether.utils.parseTokenUnits(amount.toString(), tokenAddress),
+      amount.toString(),
     )
     return gas.mul(120).div(100)
   }
